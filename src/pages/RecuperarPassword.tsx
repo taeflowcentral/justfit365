@@ -73,7 +73,15 @@ export default function RecuperarPassword() {
     if (db[dni]) {
       db[dni].password = password;
       localStorage.setItem(USERS_DB_KEY, JSON.stringify(db));
-      setStep('listo');
+      // Verificar que se guardo
+      const verify = JSON.parse(localStorage.getItem(USERS_DB_KEY) || '{}');
+      if (verify[dni] && verify[dni].password === password) {
+        setStep('listo');
+      } else {
+        setError('Error al guardar. Intent\u00e1 de nuevo.');
+      }
+    } else {
+      setError('Usuario no encontrado en la base de datos.');
     }
   };
 

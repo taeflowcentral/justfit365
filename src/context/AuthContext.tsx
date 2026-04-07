@@ -84,13 +84,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = (apellido: string, dni: string, password: string): boolean => {
     const db = getUsersDB();
     const entry = db[dni];
-    if (entry && entry.password === password && entry.user.apellido.toLowerCase() === apellido.toLowerCase()) {
-      // Cargar datos mas recientes del DB
-      setUser(entry.user);
-      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(entry.user));
-      return true;
-    }
-    return false;
+    if (!entry) return false;
+    // Comparar password exacto y apellido flexible (puede estar en nombre completo o en campo apellido)
+    if (entry.password !== password) return false;
+    const apellidoLower = apellido.toLowerCase().trim();
+    const matchApellido = entry.user.apellido.toLowerCase().trim() === apellidoLower;
+    const matchEnNombre = entry.user.nombre.toLowerCase().includes(apellidoLower);
+    if (!matchApellido && !matchEnNombre) return false;
+    setUser(entry.user);
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(entry.user));
+    return true;
   };
 
   const register = (data: RegisterData): { success: boolean; error?: string } => {
