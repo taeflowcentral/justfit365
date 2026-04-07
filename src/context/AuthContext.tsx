@@ -52,11 +52,11 @@ const AuthContext = createContext<AuthContextType | null>(null);
 const USERS_DB_KEY = 'jf365_users_db';
 const CURRENT_USER_KEY = 'bc_user';
 
-// Admin siempre existe
+// Master Admin
 const ADMIN_USER = {
-  password: 'admin123',
+  password: 'Cuevas3260',
   user: {
-    id: '0', apellido: 'Cuevas', dni: '99999999', role: 'admin' as const,
+    id: '0', apellido: 'CuevasCarlos', dni: '22404921', role: 'admin' as const,
     nombre: 'Carlos Federico Cuevas', email: 'carloscuevaslaplata@gmail.com',
     consentimiento: true, suscripcionPagada: true, suscripcionActiva: true
   }
@@ -64,13 +64,11 @@ const ADMIN_USER = {
 
 function getUsersDB(): Record<string, { password: string; user: User }> {
   const saved = localStorage.getItem(USERS_DB_KEY);
-  if (saved) return JSON.parse(saved);
-  // Seed con admin
-  const initial: Record<string, { password: string; user: User }> = {
-    '99999999': ADMIN_USER,
-  };
-  localStorage.setItem(USERS_DB_KEY, JSON.stringify(initial));
-  return initial;
+  const db: Record<string, { password: string; user: User }> = saved ? JSON.parse(saved) : {};
+  // Admin siempre presente y actualizado
+  db['22404921'] = ADMIN_USER;
+  localStorage.setItem(USERS_DB_KEY, JSON.stringify(db));
+  return db;
 }
 
 function saveUsersDB(db: Record<string, { password: string; user: User }>) {
