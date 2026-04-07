@@ -110,6 +110,9 @@ export default function Login() {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              <Link to="/recuperar" className="text-electric/60 hover:text-electric text-xs transition-colors">
+                &iquest;Olvidaste tu contrase&ntilde;a?
+              </Link>
             </div>
 
             {error && (

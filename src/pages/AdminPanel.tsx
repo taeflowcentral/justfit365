@@ -1,7 +1,29 @@
 import { useState } from 'react';
-import { Settings, DollarSign, Users, Mail, Send, CheckCircle, AlertTriangle, Shield, Bell } from 'lucide-react';
+import { Settings, DollarSign, Users, Mail, Send, CheckCircle, AlertTriangle, Shield, Bell, KeyRound, Trash2 } from 'lucide-react';
 import { getPrecioAnual, setPrecioAnual, getPrecioMensualGym, setPrecioMensualGym } from '../components/PaymentModal';
 import { getAllUsers } from '../context/AuthContext';
+
+const USERS_DB_KEY = 'jf365_users_db';
+
+function blanquearPassword(dni: string): boolean {
+  const db = JSON.parse(localStorage.getItem(USERS_DB_KEY) || '{}');
+  if (db[dni] && db[dni].user.role !== 'admin') {
+    delete db[dni];
+    localStorage.setItem(USERS_DB_KEY, JSON.stringify(db));
+    return true;
+  }
+  return false;
+}
+
+function resetPassword(dni: string, newPassword: string): boolean {
+  const db = JSON.parse(localStorage.getItem(USERS_DB_KEY) || '{}');
+  if (db[dni] && db[dni].user.role !== 'admin') {
+    db[dni].password = newPassword;
+    localStorage.setItem(USERS_DB_KEY, JSON.stringify(db));
+    return true;
+  }
+  return false;
+}
 
 export default function AdminPanel() {
   const allUsers = getAllUsers().filter(u => u.role !== 'admin');
@@ -183,7 +205,7 @@ export default function AdminPanel() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-dark-border">
-                {['Nombre', 'Email', 'DNI', 'Tipo', 'Fecha Pago', 'Estado'].map(h => (
+                {['Nombre', 'Email', 'DNI', 'Tipo', 'Estado', 'Acciones'].map(h => (
                   <th key={h} className="text-left px-4 py-3 text-[10px] text-white/30 uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
@@ -195,11 +217,36 @@ export default function AdminPanel() {
                   <td className="px-4 py-3 text-sm text-white/50 font-mono text-xs">{u.email || '-'}</td>
                   <td className="px-4 py-3 text-sm text-white/40 font-mono">{u.dni}</td>
                   <td className="px-4 py-3 text-sm text-white/40">{u.role === 'gimnasio' ? 'Gym' : 'Individual'}</td>
-                  <td className="px-4 py-3 text-sm text-white/40">{u.fechaSuscripcion || '-'}</td>
                   <td className="px-4 py-3">
                     <span className={`text-xs px-2 py-0.5 rounded-full ${u.suscripcionPagada ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
                       {u.suscripcionPagada ? 'Pagado' : 'Pendiente'}
                     </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-1">
+                      <button onClick={() => {
+                        const np = prompt(`Nueva contrase\u00f1a para ${u.nombre} (DNI: ${u.dni}):`);
+                        if (np && np.length >= 6) {
+                          if (resetPassword(u.dni, np)) {
+                            alert(`Contrase\u00f1a de ${u.nombre} reseteada a: ${np}`);
+                          }
+                        } else if (np) {
+                          alert('La contrase\u00f1a debe tener al menos 6 caracteres.');
+                        }
+                      }} className="p-1.5 text-white/20 hover:text-amber-400 transition-colors rounded-lg hover:bg-white/5" title="Resetear contrase\u00f1a">
+                        <KeyRound className="w-4 h-4" />
+                      </button>
+                      <button onClick={() => {
+                        if (confirm(`\u00bfBlanquear a ${u.nombre} (DNI: ${u.dni})? Se elimina su cuenta y deber\u00e1 registrarse de nuevo.`)) {
+                          if (blanquearPassword(u.dni)) {
+                            alert(`${u.nombre} fue blanqueado. Deber\u00e1 registrarse nuevamente.`);
+                            window.location.reload();
+                          }
+                        }
+                      }} className="p-1.5 text-white/20 hover:text-danger transition-colors rounded-lg hover:bg-white/5" title="Blanquear (eliminar usuario)">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
