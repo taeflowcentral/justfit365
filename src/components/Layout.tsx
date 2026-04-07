@@ -86,6 +86,20 @@ export default function Layout() {
           <Outlet />
         </main>
       </div>
+
+      {/* Boton flotante Claude - solo admin */}
+      {user?.role === 'admin' && (
+        <a href="https://claude.ai/new" target="_blank" rel="noopener noreferrer"
+          className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-[#d97706] to-[#b45309] rounded-2xl shadow-2xl shadow-amber-500/30 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group"
+          title="Abrir Claude AI">
+          <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 3c-4.97 0-9 3.13-9 7 0 2.38 1.45 4.5 3.68 5.83L5 21l4.53-2.27c.8.17 1.62.27 2.47.27 4.97 0 9-3.13 9-7s-4.03-7-9-7z"/>
+          </svg>
+          <span className="absolute -top-10 right-0 bg-dark-800 border border-dark-border text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
+            Chat con Claude AI
+          </span>
+        </a>
+      )}
     </div>
   );
 }
