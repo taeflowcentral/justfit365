@@ -129,30 +129,31 @@ export default function Suscripcion() {
             </div>
           </div>
 
-          {/* Datos para renovacion */}
+          {/* Renovacion con Mercado Pago */}
           <div className="bg-dark-800 border border-dark-border rounded-2xl p-6">
-            <h3 className="text-white font-bold mb-3">Para renovar tu suscripci&oacute;n {esGimnasio ? 'mensual' : ''}</h3>
-            <p className="text-white/40 text-sm mb-4">Transfer&iacute; al siguiente alias y envi&aacute; el comprobante por email.</p>
-            <div className="flex items-center justify-between p-4 bg-dark-700 rounded-xl mb-3">
-              <div>
-                <p className="text-white/30 text-[10px] uppercase tracking-wider">Alias Mercado Pago</p>
-                <p className="text-electric font-mono font-bold text-lg">ventanasdepapel</p>
+            <h3 className="text-white font-bold mb-3">Renovar suscripci&oacute;n {esGimnasio ? 'mensual' : 'anual'}</h3>
+            <p className="text-white/40 text-sm mb-4">Pag&aacute; directamente con Mercado Pago (tarjeta, transferencia o efectivo).</p>
+
+            <a href={esGimnasio ? 'https://mpago.la/1Cs5Cfe' : 'https://mpago.la/2Y1yV4Z'} target="_blank" rel="noopener noreferrer"
+              className="w-full py-4 bg-[#00b1ea] hover:bg-[#009dd4] text-white font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-[#00b1ea]/20 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] mb-4">
+              <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><rect width="24" height="24" rx="4" fill="white" fillOpacity="0.2"/><text x="12" y="17" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">MP</text></svg>
+              Renovar USD {precio.toFixed(2)} con Mercado Pago
+            </a>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between p-3 bg-dark-700 rounded-xl">
+                <div>
+                  <p className="text-white/30 text-[10px] uppercase tracking-wider">Alias alternativo</p>
+                  <p className="text-electric font-mono font-bold">ventanasdepapel</p>
+                </div>
+                <button onClick={copyAlias} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${copied ? 'bg-emerald-500/20 text-emerald-400' : 'bg-electric/10 text-electric hover:bg-electric/20'}`}>
+                  {copied ? <><CheckCircle className="w-3 h-3 inline mr-1" />Copiado</> : <><Copy className="w-3 h-3 inline mr-1" />Copiar</>}
+                </button>
               </div>
-              <button onClick={copyAlias} className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${copied ? 'bg-emerald-500/20 text-emerald-400' : 'bg-electric/10 text-electric hover:bg-electric/20'}`}>
-                {copied ? <><CheckCircle className="w-3 h-3 inline mr-1" />Copiado</> : <><Copy className="w-3 h-3 inline mr-1" />Copiar</>}
-              </button>
-            </div>
-            <div className="p-3 bg-dark-700 rounded-xl mb-3">
-              <p className="text-white/30 text-[10px] uppercase tracking-wider">Titular</p>
-              <p className="text-white font-medium text-sm">Carlos Federico Cuevas</p>
-            </div>
-            <div className="p-3 bg-dark-700 rounded-xl mb-3">
-              <p className="text-white/30 text-[10px] uppercase tracking-wider">Monto a transferir</p>
-              <p className="text-emerald-400 font-black text-lg">USD {precio.toFixed(2)}</p>
-            </div>
-            <div className="p-3 bg-dark-700 rounded-xl">
-              <p className="text-white/30 text-[10px] uppercase tracking-wider">Enviar comprobante a</p>
-              <p className="text-electric font-medium text-sm">carloscuevaslaplata@gmail.com</p>
+              <div className="p-3 bg-dark-700 rounded-xl">
+                <p className="text-white/30 text-[10px] uppercase tracking-wider">Comprobante a</p>
+                <p className="text-electric font-medium text-sm">carloscuevaslaplata@gmail.com</p>
+              </div>
             </div>
           </div>
         </>
