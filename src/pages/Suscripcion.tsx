@@ -134,10 +134,10 @@ export default function Suscripcion() {
             <h3 className="text-white font-bold mb-3">Renovar suscripci&oacute;n {esGimnasio ? 'mensual' : 'anual'}</h3>
             <p className="text-white/40 text-sm mb-4">Pag&aacute; directamente con Mercado Pago (tarjeta, transferencia o efectivo).</p>
 
-            <a href={esGimnasio ? 'https://mpago.la/1Cs5Cfe' : 'https://mpago.la/2Y1yV4Z'} target="_blank" rel="noopener noreferrer"
+            <a href="https://link.mercadopago.com.ar/ventanasdepapel" target="_blank" rel="noopener noreferrer"
               className="w-full py-4 bg-[#00b1ea] hover:bg-[#009dd4] text-white font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-[#00b1ea]/20 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] mb-4">
               <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><rect width="24" height="24" rx="4" fill="white" fillOpacity="0.2"/><text x="12" y="17" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">MP</text></svg>
-              Renovar USD {precio.toFixed(2)} con Mercado Pago
+              Renovar con Mercado Pago (USD {precio.toFixed(2)})
             </a>
 
             <div className="space-y-2">

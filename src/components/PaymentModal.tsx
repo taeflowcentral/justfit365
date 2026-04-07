@@ -212,12 +212,13 @@ export default function PaymentModal() {
                 </div>
               </div>
 
-              {/* Boton Mercado Pago - Pago directo */}
-              <a href={esGimnasio ? 'https://mpago.la/1Cs5Cfe' : 'https://mpago.la/2Y1yV4Z'} target="_blank" rel="noopener noreferrer"
+              {/* Boton Mercado Pago - Link de pago */}
+              <a href="https://link.mercadopago.com.ar/ventanasdepapel" target="_blank" rel="noopener noreferrer"
                 className="w-full py-4 bg-[#00b1ea] hover:bg-[#009dd4] text-white font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-[#00b1ea]/20 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98]">
                 <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><rect width="24" height="24" rx="4" fill="white" fillOpacity="0.2"/><text x="12" y="17" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">MP</text></svg>
-                Pagar USD {precio.toFixed(2)} con Mercado Pago
+                Pagar con Mercado Pago
               </a>
+              <p className="text-white/20 text-[10px] text-center">Monto a pagar: <strong className="text-white/40">USD {precio.toFixed(2)}</strong></p>
 
               <div className="bg-electric/5 border border-electric/10 rounded-xl p-3 text-xs text-white/40 space-y-1">
                 <p className="flex items-center gap-1"><Mail className="w-3 h-3 text-electric" /> Envi&aacute; el comprobante a: <strong className="text-electric">{emailDestino}</strong></p>
