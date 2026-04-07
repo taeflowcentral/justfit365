@@ -1,4 +1,4 @@
-import { Dumbbell, Clock, Flame, Play, CheckCircle, RotateCcw, ChevronDown, Plus, Trash2, Edit3, Save, X, GripVertical } from 'lucide-react';
+import { Dumbbell, Clock, Flame, CheckCircle, RotateCcw, ChevronDown, Plus, Trash2, Edit3, Save, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { ExerciseThumbnail, ExerciseModal } from '../components/ExerciseIllustration';
 import ShareButtons, { generateRutinaText, shareWhatsApp, printContent } from '../components/ShareButtons';

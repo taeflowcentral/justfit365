@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Zap, Dumbbell, Apple, MessageSquare, Camera, Stethoscope, BarChart3, Shield, Users, Play, ChevronRight, Star } from 'lucide-react';
+import { Zap, Dumbbell, Apple, MessageSquare, Camera, Stethoscope, Users, Play, ChevronRight, Star } from 'lucide-react';
 
 const slides = [
   {
@@ -122,7 +122,7 @@ const slides = [
     color: 'from-amber-500 to-orange-500',
     mockup: (
       <div className="space-y-2 px-3">
-        {['Lucas M.', 'Sofia L.', 'Pedro R.'].map((n, i) => (
+        {['Lucas M.', 'Sofia L.', 'Pedro R.'].map((n) => (
           <div key={n} className="flex items-center gap-2 p-2 bg-amber-500/5 rounded-lg border border-amber-500/10">
             <div className="w-6 h-6 bg-gradient-to-br from-amber-500/30 to-orange-500/30 rounded-full text-[7px] text-amber-400/70 flex items-center justify-center font-bold">{n[0]}</div>
             <div className="flex-1"><div className="h-1.5 bg-white/15 rounded-full w-16" /></div>

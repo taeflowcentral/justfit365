@@ -4,7 +4,7 @@ import { AlertTriangle, CreditCard, Copy, CheckCircle, Shield, LogOut } from 'lu
 import { getPrecioMensualGym } from './PaymentModal';
 
 export default function GymInactiveModal() {
-  const { user, updateUser, logout } = useAuth();
+  const { updateUser, logout } = useAuth();
   const [processing, setProcessing] = useState(false);
   const [copied, setCopied] = useState(false);
   const [done, setDone] = useState(false);

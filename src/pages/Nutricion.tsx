@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, X, Zap, Sparkles, RotateCcw, Target } from 'lucide-react';
+import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, Zap, Sparkles, RotateCcw, Target } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import ShareButtons, { generateNutricionText, shareWhatsApp, printContent } from '../components/ShareButtons';
 

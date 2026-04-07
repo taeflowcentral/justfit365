@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Users, Plus, Search, Dumbbell, Utensils, Trash2, Edit3, Save, ChevronDown, User, Phone, Target, Activity, X, Send, MessageCircle } from 'lucide-react';
+import { Users, Plus, Search, Dumbbell, Utensils, Trash2, User, Phone, Target, Activity, MessageCircle } from 'lucide-react';
 
 interface ClienteRutina {
   id: number;

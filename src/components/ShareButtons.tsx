@@ -1,4 +1,4 @@
-import { Printer, Share2, MessageCircle } from 'lucide-react';
+import { Printer, MessageCircle } from 'lucide-react';
 
 interface ShareButtonsProps {
   onPrint: () => void;
