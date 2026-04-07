@@ -25,7 +25,7 @@ export function setPrecioMensualGym(precio: number) {
 }
 
 export default function PaymentModal() {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
   const [step, setStep] = useState<'demo' | 'info' | 'datos' | 'confirmado'>('demo');
   const [email, setEmail] = useState(user?.email || '');
   const [nombre, setNombre] = useState(`${user?.nombre || ''}`);
@@ -157,10 +157,16 @@ export default function PaymentModal() {
                 Continuar al Pago
               </button>
 
-              <button onClick={() => setStep('demo')}
-                className="w-full py-2.5 text-white/30 hover:text-electric text-xs flex items-center justify-center gap-1.5 transition-colors">
-                <Play className="w-3 h-3" /> Volver a ver el demo
-              </button>
+              <div className="flex items-center justify-center gap-4 mt-1">
+                <button onClick={() => setStep('demo')}
+                  className="text-white/30 hover:text-electric text-xs flex items-center gap-1.5 transition-colors">
+                  <Play className="w-3 h-3" /> Ver demo
+                </button>
+                <button onClick={logout}
+                  className="text-white/20 hover:text-danger text-xs transition-colors">
+                  Salir
+                </button>
+              </div>
             </div>
           )}
 

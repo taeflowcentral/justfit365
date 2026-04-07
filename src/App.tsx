@@ -26,8 +26,8 @@ function AppRoutes() {
 
   return (
     <Routes>
-      <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
-      <Route path="/registro" element={isAuthenticated ? <Navigate to="/" /> : <Registro />} />
+      <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
+      <Route path="/registro" element={isAuthenticated ? <Navigate to="/" replace /> : <Registro />} />
       <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route index element={user?.role === 'gimnasio' ? <GymDashboard /> : <Dashboard />} />
         <Route path="nutricion" element={<Nutricion />} />
