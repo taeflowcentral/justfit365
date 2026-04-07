@@ -1,19 +1,9 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { CreditCard, Zap, Shield, CheckCircle, Copy, Mail, Calendar, Play } from 'lucide-react';
 import DemoShowcase from './DemoShowcase';
 
-// Preference IDs de Mercado Pago
-const MP_PREFERENCE_ANUAL = '298094579-058e0891-adc2-4205-8c67-336f50886771';
-const MP_PREFERENCE_MENSUAL = '298094579-44854631-17e8-4269-b03c-707f378f8780';
-
-declare global {
-  interface Window {
-    MercadoPago: new (publicKey: string, options?: { locale: string }) => {
-      checkout: (options: { preference: { id: string }; render: { container: string; label: string } }) => void;
-    };
-  }
-}
+const MP_LINK = 'https://link.mercadopago.com.ar/ventanasdepapel';
 
 const PRECIO_ANUAL_KEY = 'bc_precio_anual';
 const PRECIO_MENSUAL_GYM_KEY = 'bc_precio_mensual_gym';
@@ -34,69 +24,6 @@ export function getPrecioMensualGym(): number {
 
 export function setPrecioMensualGym(precio: number) {
   localStorage.setItem(PRECIO_MENSUAL_GYM_KEY, precio.toString());
-}
-
-function MercadoPagoButton({ preferenceId }: { preferenceId: string }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-    containerRef.current.innerHTML = '';
-    setLoading(true);
-    setError(false);
-
-    const initMP = () => {
-      try {
-        if (window.MercadoPago) {
-          const mp = new window.MercadoPago('APP_USR-058e0891-adc2-4205-8c67-336f50886771', { locale: 'es-AR' });
-          mp.checkout({
-            preference: { id: preferenceId },
-            render: { container: '#mp-btn-' + preferenceId.slice(-8), label: 'Pagar con Mercado Pago' },
-          });
-          setLoading(false);
-        } else {
-          setError(true);
-          setLoading(false);
-        }
-      } catch {
-        setError(true);
-        setLoading(false);
-      }
-    };
-
-    // Esperar a que cargue el SDK
-    if (window.MercadoPago) {
-      initMP();
-    } else {
-      const timer = setTimeout(initMP, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [preferenceId]);
-
-  if (error) {
-    // Fallback: abrir checkout directo via URL
-    return (
-      <a href={`https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=${preferenceId}`} target="_blank" rel="noopener noreferrer"
-        className="w-full py-4 bg-[#00b1ea] hover:bg-[#009dd4] text-white font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-[#00b1ea]/20 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98]">
-        <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><rect width="24" height="24" rx="4" fill="white" fillOpacity="0.2"/><text x="12" y="17" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">MP</text></svg>
-        Pagar con Mercado Pago
-      </a>
-    );
-  }
-
-  return (
-    <div className="space-y-2">
-      {loading && (
-        <div className="w-full py-4 bg-[#00b1ea]/50 text-white rounded-xl flex items-center justify-center gap-2 text-sm">
-          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-          Cargando Mercado Pago...
-        </div>
-      )}
-      <div ref={containerRef} id={`mp-btn-${preferenceId.slice(-8)}`} className="w-full [&_.mercadopago-button]:w-full [&_.mercadopago-button]:py-4 [&_.mercadopago-button]:rounded-xl [&_.mercadopago-button]:font-bold [&_.mercadopago-button]:text-sm" />
-    </div>
-  );
 }
 
 export default function PaymentModal() {
@@ -164,10 +91,10 @@ export default function PaymentModal() {
           <div className="bg-electric/5 border border-electric/10 rounded-xl p-3 mb-6">
             <p className="text-electric/60 text-xs flex items-center gap-2 justify-center">
               <Mail className="w-3 h-3" />
-              Se enviar&aacute; confirmaci&oacute;n a {email} y a {emailDestino}
+              Envi&aacute; el comprobante a {emailDestino}
             </p>
           </div>
-          <p className="text-white/20 text-xs">Te recordaremos 10 d&iacute;as antes del vencimiento.</p>
+          <p className="text-white/20 text-xs">Te recordaremos antes del vencimiento.</p>
         </div>
       </div>
     );
@@ -287,8 +214,17 @@ export default function PaymentModal() {
                 </div>
               </div>
 
-              {/* Checkout Mercado Pago oficial */}
-              <MercadoPagoButton preferenceId={esGimnasio ? MP_PREFERENCE_MENSUAL : MP_PREFERENCE_ANUAL} />
+              {/* Boton Mercado Pago */}
+              <a href={MP_LINK} target="_blank" rel="noopener noreferrer"
+                onClick={() => {
+                  // Abrir en ventana nueva para evitar bloqueos de popup
+                  window.open(MP_LINK, 'MercadoPago', 'width=600,height=700,scrollbars=yes,resizable=yes');
+                }}
+                className="w-full py-4 bg-[#009ee3] hover:bg-[#008bcf] text-white font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-[#009ee3]/30 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98]">
+                <svg viewBox="0 0 48 48" className="w-7 h-7"><circle cx="24" cy="24" r="24" fill="white" fillOpacity="0.15"/><path d="M34.2 18.8c0-4.5-3.6-8.1-8.1-8.1h-8.5c-.7 0-1.3.5-1.4 1.2l-3.5 22c-.1.5.3 1 .9 1h5.1l1.3-8.1-.1.3c.1-.7.7-1.2 1.4-1.2h2.9c5.7 0 10.2-2.3 11.5-9 0-.2.1-.4.1-.5.3-2.2 0-3.7-1.6-5" fill="white" opacity="0.9"/></svg>
+                Pagar con Mercado Pago
+              </a>
+              <p className="text-white/20 text-[10px] text-center">Se abre Mercado Pago en una nueva ventana. Ingres&aacute; el monto USD {precio.toFixed(2)}</p>
 
               <div className="bg-electric/5 border border-electric/10 rounded-xl p-3 text-xs text-white/40 space-y-1">
                 <p className="flex items-center gap-1"><Mail className="w-3 h-3 text-electric" /> Envi&aacute; el comprobante a: <strong className="text-electric">{emailDestino}</strong></p>
