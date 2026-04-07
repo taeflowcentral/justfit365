@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { CreditCard, Zap, Shield, CheckCircle, Copy, Mail, Calendar, DollarSign, Play } from 'lucide-react';
+import { CreditCard, Zap, Shield, CheckCircle, Copy, Mail, Calendar, Play } from 'lucide-react';
 import DemoShowcase from './DemoShowcase';
 
 const PRECIO_ANUAL_KEY = 'bc_precio_anual';
@@ -26,8 +26,7 @@ export function setPrecioMensualGym(precio: number) {
 
 export default function PaymentModal() {
   const { user, updateUser } = useAuth();
-  const [step, setStep] = useState<'demo' | 'info' | 'metodo' | 'datos' | 'confirmado'>('demo');
-  const [metodo, setMetodo] = useState('');
+  const [step, setStep] = useState<'demo' | 'info' | 'datos' | 'confirmado'>('demo');
   const [email, setEmail] = useState(user?.email || '');
   const [nombre, setNombre] = useState(`${user?.nombre || ''}`);
   const [processing, setProcessing] = useState(false);
@@ -153,7 +152,7 @@ export default function PaymentModal() {
                 Vencimiento: {fechaVenc} &mdash; Recordatorio autom&aacute;tico {esGimnasio ? '5' : '10'} d&iacute;as antes
               </div>
 
-              <button onClick={() => setStep('metodo')}
+              <button onClick={() => setStep('datos')}
                 className="w-full py-4 bg-gradient-to-r from-electric to-neon text-black font-black text-sm uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all shadow-lg shadow-electric/20">
                 Continuar al Pago
               </button>
@@ -161,34 +160,6 @@ export default function PaymentModal() {
               <button onClick={() => setStep('demo')}
                 className="w-full py-2.5 text-white/30 hover:text-electric text-xs flex items-center justify-center gap-1.5 transition-colors">
                 <Play className="w-3 h-3" /> Volver a ver el demo
-              </button>
-            </div>
-          )}
-
-          {step === 'metodo' && (
-            <div className="space-y-4">
-              <p className="text-white/50 text-sm mb-2">Eleg&iacute; tu m&eacute;todo de pago:</p>
-              {[
-                { id: 'transferencia', label: 'Transferencia / Alias', desc: `Alias: ${alias}`, icon: DollarSign },
-                { id: 'mercadopago', label: 'Mercado Pago', desc: 'Link de pago directo', icon: CreditCard },
-                { id: 'tarjeta', label: 'Tarjeta Cr\u00e9dito / D\u00e9bito', desc: 'Visa, Mastercard, AMEX', icon: CreditCard },
-                { id: 'efectivo', label: 'Efectivo (Rapipago / Pago F\u00e1cil)', desc: 'Se genera c\u00f3digo de pago', icon: DollarSign },
-              ].map(m => (
-                <button key={m.id} onClick={() => { setMetodo(m.id); setStep('datos'); }}
-                  className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all text-left hover:border-electric/30 hover:bg-electric/5 ${
-                    metodo === m.id ? 'bg-electric/10 border-electric/30' : 'bg-black/20 border-dark-border'
-                  }`}>
-                  <div className="w-10 h-10 bg-electric/10 rounded-xl flex items-center justify-center shrink-0">
-                    <m.icon className="w-5 h-5 text-electric" />
-                  </div>
-                  <div>
-                    <p className="text-white font-bold text-sm">{m.label}</p>
-                    <p className="text-white/30 text-xs">{m.desc}</p>
-                  </div>
-                </button>
-              ))}
-              <button onClick={() => setStep('info')} className="w-full py-2 text-white/30 text-xs hover:text-white/50 transition-colors">
-                &larr; Volver
               </button>
             </div>
           )}
@@ -248,7 +219,7 @@ export default function PaymentModal() {
               </div>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep('metodo')} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors border border-dark-border">
+                <button onClick={() => setStep('info')} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors border border-dark-border">
                   Volver
                 </button>
                 <button onClick={confirmarPago} disabled={!email || !nombre || processing}
