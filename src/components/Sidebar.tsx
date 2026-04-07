@@ -34,6 +34,14 @@ const gymLinks = [
 const adminLinks = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/admin', icon: ShieldCheck, label: 'Admin Panel' },
+  { to: '/nutricion', icon: Utensils, label: 'Nutrici\u00f3n' },
+  { to: '/rutina', icon: Dumbbell, label: 'Rutinas' },
+  { to: '/bio-coach', icon: MessageSquare, label: 'JustFit Coach' },
+  { to: '/progreso', icon: Camera, label: 'Progreso' },
+  { to: '/analisis', icon: Stethoscope, label: 'An\u00e1lisis M\u00e9dicos' },
+  { to: '/clientes', icon: Users, label: 'Clientes Gym' },
+  { to: '/config-gym', icon: Settings, label: 'Config Gym' },
+  { to: '/perfil', icon: UserCog, label: 'Mi Perfil' },
   { to: '/suscripcion', icon: CreditCard, label: 'Suscripciones' },
 ];
 
