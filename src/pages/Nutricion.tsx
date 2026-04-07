@@ -1,0 +1,503 @@
+import { useState } from 'react';
+import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, X, Zap, Sparkles, RotateCcw, Target } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import ShareButtons, { generateNutricionText, shareWhatsApp, printContent } from '../components/ShareButtons';
+
+interface Alimento {
+  id: number;
+  alimento: string;
+  porcion: string;
+  cal: number;
+  prot: number;
+  carb: number;
+  grasa: number;
+}
+
+interface Comida {
+  id: number;
+  nombre: string;
+  hora: string;
+  items: Alimento[];
+}
+
+const PLAN_KEY = 'bc_plan_nutricional';
+
+function generarPlanIA(peso: number, altura: number, edad: number, objetivo: string, nivel: string): { comidas: Comida[]; nota: string } {
+  const tmb = Math.round(10 * peso + 6.25 * altura - 5 * edad + 5);
+  const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
+  const tdee = Math.round(tmb * (factores[nivel] || 1.55));
+
+  let calObjetivo = tdee;
+  let protPorKg = 1.8;
+  let notaObj = '';
+
+  if (objetivo === 'Hipertrofia' || objetivo === 'Fuerza') {
+    calObjetivo = tdee + 300;
+    protPorKg = 2.0;
+    notaObj = `Super\u00e1vit cal\u00f3rico moderado (+300 kcal sobre TDEE de ${tdee} kcal) para maximizar s\u00edntesis proteica sin acumular grasa excesiva.`;
+  } else if (objetivo === 'Perdida de grasa') {
+    calObjetivo = tdee - 400;
+    protPorKg = 2.2;
+    notaObj = `D\u00e9ficit cal\u00f3rico controlado (-400 kcal bajo TDEE de ${tdee} kcal). Prote\u00edna elevada para preservar masa muscular durante el corte.`;
+  } else if (objetivo === 'Tonificacion') {
+    calObjetivo = tdee;
+    protPorKg = 1.8;
+    notaObj = `Mantenimiento cal\u00f3rico (TDEE: ${tdee} kcal) con prote\u00edna moderada-alta para recomposici\u00f3n corporal.`;
+  } else {
+    calObjetivo = tdee;
+    protPorKg = 1.6;
+    notaObj = `Plan de mantenimiento basado en tu TDEE de ${tdee} kcal. Distribuci\u00f3n equilibrada de macronutrientes.`;
+  }
+
+  const protTotal = Math.round(peso * protPorKg);
+  const grasaTotal = Math.round((calObjetivo * 0.25) / 9);
+  const carbTotal = Math.round((calObjetivo - protTotal * 4 - grasaTotal * 9) / 4);
+
+  const protPorComida = Math.round(protTotal / 5);
+
+  const comidas: Comida[] = [
+    {
+      id: 1, nombre: 'Desayuno', hora: '07:30', items: [
+        { id: 101, alimento: 'Avena con leche descremada', porcion: `${Math.round(calObjetivo * 0.04)}g avena + 200ml leche`, cal: Math.round(calObjetivo * 0.14), prot: protPorComida - 8, carb: Math.round(carbTotal * 0.2), grasa: 6 },
+        { id: 102, alimento: 'Banana', porcion: '1 unidad mediana', cal: 105, prot: 1, carb: 27, grasa: 0 },
+        { id: 103, alimento: 'Mantequilla de man\u00ed natural', porcion: '15g', cal: 95, prot: 4, carb: 3, grasa: 8 },
+      ]
+    },
+    {
+      id: 2, nombre: 'Almuerzo', hora: '12:30', items: [
+        { id: 201, alimento: 'Pechuga de pollo grillada', porcion: `${Math.round(protPorComida * 3.2)}g`, cal: Math.round(protPorComida * 5.3), prot: protPorComida, carb: 0, grasa: Math.round(protPorComida * 0.12) },
+        { id: 202, alimento: 'Arroz integral', porcion: `${Math.round(carbTotal * 0.35)}g cocido`, cal: Math.round(carbTotal * 0.35 * 1.1), prot: 4, carb: Math.round(carbTotal * 0.25), grasa: 1 },
+        { id: 203, alimento: 'Ensalada mixta + aceite oliva', porcion: '200g + 10ml', cal: 130, prot: 3, carb: 8, grasa: 10 },
+        { id: 204, alimento: 'Fruta de estaci\u00f3n', porcion: '1 unidad', cal: 60, prot: 1, carb: 14, grasa: 0 },
+      ]
+    },
+    {
+      id: 3, nombre: 'Merienda Pre-Entreno', hora: '16:00', items: [
+        { id: 301, alimento: 'Tostada integral con queso untable', porcion: '2 rebanadas + 30g queso', cal: 200, prot: 10, carb: Math.round(carbTotal * 0.1), grasa: 5 },
+        { id: 302, alimento: 'Whey Protein con agua', porcion: '1 scoop (30g)', cal: 120, prot: 24, carb: 3, grasa: 1 },
+      ]
+    },
+    {
+      id: 4, nombre: 'Cena', hora: '20:30', items: [
+        { id: 401, alimento: objetivo === 'Perdida de grasa' ? 'Merluza al horno' : 'Salm\u00f3n al horno', porcion: `${Math.round(protPorComida * 4.5)}g`, cal: Math.round(protPorComida * (objetivo === 'Perdida de grasa' ? 4 : 8.7)), prot: protPorComida, carb: 0, grasa: Math.round(protPorComida * (objetivo === 'Perdida de grasa' ? 0.1 : 0.5)) },
+        { id: 402, alimento: 'Batata asada', porcion: `${Math.round(carbTotal * 0.22 * 4.7)}g`, cal: Math.round(carbTotal * 0.22 * 1.1), prot: 2, carb: Math.round(carbTotal * 0.22), grasa: 0 },
+        { id: 403, alimento: 'Br\u00f3coli al vapor', porcion: '150g', cal: 50, prot: 4, carb: 8, grasa: 0 },
+      ]
+    },
+    {
+      id: 5, nombre: 'Colaci\u00f3n Nocturna', hora: '22:00', items: [
+        { id: 501, alimento: 'Case\u00edna o yogur griego', porcion: '200g', cal: 130, prot: 20, carb: 6, grasa: 3 },
+        { id: 502, alimento: 'Almendras', porcion: '15g', cal: 90, prot: 3, carb: 2, grasa: 8 },
+      ]
+    },
+  ];
+
+  const nota = `**Plan generado por JustFit Coach** para ${peso}kg, ${altura}cm, ${edad} a\u00f1os.\n\n**Objetivo:** ${objetivo} | **Nivel:** ${nivel}\n**TMB:** ${tmb} kcal | **TDEE:** ${tdee} kcal | **Objetivo cal\u00f3rico:** ${calObjetivo} kcal\n**Macros:** ${protTotal}g P / ${carbTotal}g C / ${grasaTotal}g G\n\n${notaObj}\n\nProte\u00edna distribuida en 5 tomas de ~${protPorComida}g para optimizar MPS (s\u00edntesis proteica muscular).\n\n*Ref: ISSN Position Stand on Diets & Body Composition (2017); Morton et al. (2018) - Br J Sports Med*`;
+
+  return { comidas, nota };
+}
+
+export default function Nutricion() {
+  const { user } = useAuth();
+  const perfil = user?.perfil;
+
+  const [comidas, setComidas] = useState<Comida[]>(() => {
+    const saved = localStorage.getItem(PLAN_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [notaIA, setNotaIA] = useState(() => localStorage.getItem(PLAN_KEY + '_nota') || '');
+  const [editandoComida, setEditandoComida] = useState<number | null>(null);
+  const [editandoItem, setEditandoItem] = useState<number | null>(null);
+  const [generando, setGenerando] = useState(false);
+  const [showAddComida, setShowAddComida] = useState(false);
+  const [showAddItem, setShowAddItem] = useState<number | null>(null);
+  const [nuevaComida, setNuevaComida] = useState({ nombre: '', hora: '12:00' });
+  const [nuevoItem, setNuevoItem] = useState<Alimento>({ id: 0, alimento: '', porcion: '', cal: 0, prot: 0, carb: 0, grasa: 0 });
+
+  const guardar = (c: Comida[]) => {
+    setComidas(c);
+    localStorage.setItem(PLAN_KEY, JSON.stringify(c));
+  };
+
+  const guardarNota = (n: string) => {
+    setNotaIA(n);
+    localStorage.setItem(PLAN_KEY + '_nota', n);
+  };
+
+  const generarPlan = () => {
+    if (!perfil) return;
+    setGenerando(true);
+    setTimeout(() => {
+      const { comidas: plan, nota } = generarPlanIA(perfil.peso, perfil.altura, perfil.edad, perfil.objetivo, perfil.nivelActividad);
+      guardar(plan);
+      guardarNota(nota);
+      setGenerando(false);
+    }, 2000);
+  };
+
+  const updateItem = (comidaId: number, itemId: number, field: keyof Alimento, value: string | number) => {
+    const updated = comidas.map(c => c.id === comidaId ? { ...c, items: c.items.map(it => it.id === itemId ? { ...it, [field]: value } : it) } : c);
+    guardar(updated);
+  };
+
+  const deleteItem = (comidaId: number, itemId: number) => {
+    const updated = comidas.map(c => c.id === comidaId ? { ...c, items: c.items.filter(it => it.id !== itemId) } : c);
+    guardar(updated);
+  };
+
+  const deleteComida = (comidaId: number) => {
+    guardar(comidas.filter(c => c.id !== comidaId));
+  };
+
+  const updateComida = (comidaId: number, field: 'nombre' | 'hora', value: string) => {
+    guardar(comidas.map(c => c.id === comidaId ? { ...c, [field]: value } : c));
+  };
+
+  const addComida = () => {
+    if (!nuevaComida.nombre.trim()) return;
+    guardar([...comidas, { id: Date.now(), nombre: nuevaComida.nombre, hora: nuevaComida.hora, items: [] }]);
+    setNuevaComida({ nombre: '', hora: '12:00' });
+    setShowAddComida(false);
+  };
+
+  const addItem = (comidaId: number) => {
+    if (!nuevoItem.alimento.trim()) return;
+    const updated = comidas.map(c => c.id === comidaId ? { ...c, items: [...c.items, { ...nuevoItem, id: Date.now() }] } : c);
+    guardar(updated);
+    setNuevoItem({ id: 0, alimento: '', porcion: '', cal: 0, prot: 0, carb: 0, grasa: 0 });
+    setShowAddItem(null);
+  };
+
+  // Calcular macros totales
+  const totalCal = comidas.reduce((a, c) => a + c.items.reduce((b, it) => b + (Number(it.cal) || 0), 0), 0);
+  const totalProt = comidas.reduce((a, c) => a + c.items.reduce((b, it) => b + (Number(it.prot) || 0), 0), 0);
+  const totalCarb = comidas.reduce((a, c) => a + c.items.reduce((b, it) => b + (Number(it.carb) || 0), 0), 0);
+  const totalGrasa = comidas.reduce((a, c) => a + c.items.reduce((b, it) => b + (Number(it.grasa) || 0), 0), 0);
+
+  const tmb = perfil ? Math.round(10 * perfil.peso + 6.25 * perfil.altura - 5 * perfil.edad + 5) : 0;
+  const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
+  const tdee = tmb ? Math.round(tmb * (factores[perfil?.nivelActividad || 'Intermedio'] || 1.55)) : 2500;
+  const calSugerido = perfil?.objetivo === 'Hipertrofia' || perfil?.objetivo === 'Fuerza' ? tdee + 300 : perfil?.objetivo === 'Perdida de grasa' ? tdee - 400 : tdee;
+
+  const [calObjetivo, setCalObjetivo] = useState(() => {
+    const saved = localStorage.getItem(PLAN_KEY + '_cal_objetivo');
+    return saved ? parseInt(saved) : calSugerido;
+  });
+  const [editandoCal, setEditandoCal] = useState(false);
+
+  const guardarCalObjetivo = (val: number) => {
+    setCalObjetivo(val);
+    localStorage.setItem(PLAN_KEY + '_cal_objetivo', val.toString());
+  };
+
+  // Sin plan generado
+  if (comidas.length === 0) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">
+            <Apple className="w-7 h-7 text-emerald-400" /> Mi Plan Nutricional
+          </h1>
+        </div>
+        <div className="bg-dark-800 border border-dark-border rounded-2xl p-12 text-center">
+          <Zap className="w-16 h-16 text-electric/20 mx-auto mb-4" />
+          <h3 className="text-white font-bold text-lg mb-2">Sin plan nutricional</h3>
+          <p className="text-white/40 text-sm mb-2 max-w-md mx-auto">
+            La IA va a generar un plan personalizado basado en tu perfil metab&oacute;lico
+            {perfil ? ` (${perfil.peso}kg, ${perfil.altura}cm, ${perfil.edad} a\u00f1os, objetivo: ${perfil.objetivo}).` : '. Configur\u00e1 tu perfil primero.'}
+          </p>
+          {perfil && (
+            <div className="bg-black/40 border border-dark-border rounded-xl p-3 max-w-sm mx-auto mb-6 text-xs text-white/40 space-y-1">
+              <p>TMB: {tmb} kcal | TDEE: {tdee} kcal</p>
+              <p>Objetivo cal&oacute;rico: <strong className="text-white">{calObjetivo} kcal</strong></p>
+            </div>
+          )}
+          <button onClick={generarPlan} disabled={!perfil || generando}
+            className="px-8 py-4 bg-gradient-to-r from-electric to-neon text-black font-black text-sm uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all shadow-lg shadow-electric/20 disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-2 mx-auto">
+            {generando ? <><Sparkles className="w-5 h-5 animate-spin" /> Generando plan...</> : <><Zap className="w-5 h-5" /> Generar Plan con 365</>}
+          </button>
+          {!perfil && <p className="text-warning text-xs mt-4">And&aacute; a "Mi Perfil" y complet&aacute; tus datos f&iacute;sicos primero.</p>}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">
+          <Apple className="w-7 h-7 text-emerald-400" /> Mi Plan Nutricional
+        </h1>
+        <p className="text-white/40 text-sm mt-1">Objetivo: {perfil?.objetivo || '-'} &mdash; Editable</p>
+        <div className="flex items-center gap-2 flex-wrap mt-3">
+          <ShareButtons
+            onPrint={() => {
+              let html = `<p class="subtitle">Plan nutricional personalizado &mdash; Objetivo: ${calObjetivo} kcal</p>`;
+              comidas.forEach(c => {
+                const cc = c.items.reduce((a, it) => a + (Number(it.cal) || 0), 0);
+                html += `<h2>${c.nombre} (${c.hora} hs) &mdash; ${cc} kcal</h2><table><tr><th>Alimento</th><th>Porci\u00f3n</th><th>Cal</th><th>Prot</th><th>Carb</th><th>Grasa</th></tr>`;
+                c.items.forEach(it => { html += `<tr><td>${it.alimento}</td><td>${it.porcion}</td><td>${it.cal}</td><td>${it.prot}g</td><td>${it.carb}g</td><td>${it.grasa}g</td></tr>`; });
+                html += `</table>`;
+              });
+              html += `<div class="note"><strong>Totales:</strong> ${totalCal} kcal | ${totalProt}g P | ${totalCarb}g C | ${totalGrasa}g G</div>`;
+              printContent('Mi Plan Nutricional - JustFit365', html);
+            }}
+            onWhatsApp={() => shareWhatsApp(generateNutricionText(comidas, calObjetivo))}
+          />
+          <button onClick={() => setShowAddComida(true)} className="flex items-center gap-2 px-3 py-2 bg-emerald-500/15 border border-emerald-500/20 text-emerald-400 rounded-xl text-xs font-bold hover:bg-emerald-500/25 transition-colors">
+            <Plus className="w-3 h-3" /> Comida
+          </button>
+          <button onClick={generarPlan} disabled={!perfil || generando}
+            className="flex items-center gap-2 px-3 py-2 bg-electric/15 border border-electric/20 text-electric rounded-xl text-xs font-bold hover:bg-electric/25 transition-colors disabled:opacity-30">
+            {generando ? <Sparkles className="w-3 h-3 animate-spin" /> : <RotateCcw className="w-3 h-3" />} Regenerar
+          </button>
+        </div>
+      </div>
+
+
+      {/* Objetivo calorico editable */}
+      <div className="bg-dark-800 border border-dark-border rounded-2xl p-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center">
+            <Target className="w-5 h-5 text-orange-400" />
+          </div>
+          <div>
+            <p className="text-white/40 text-xs uppercase tracking-wider">Objetivo cal&oacute;rico diario</p>
+            {editandoCal ? (
+              <div className="flex items-center gap-2 mt-1">
+                <input type="number" min="800" max="8000" step="50" value={calObjetivo}
+                  onChange={e => guardarCalObjetivo(parseInt(e.target.value) || calSugerido)}
+                  className="w-28 px-3 py-1.5 bg-black/60 border border-electric/30 rounded-lg text-white text-lg font-black focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                <span className="text-white/30 text-sm">kcal</span>
+                <button onClick={() => setEditandoCal(false)} className="p-1 text-emerald-400 hover:text-emerald-300"><Save className="w-4 h-4" /></button>
+              </div>
+            ) : (
+              <p className="text-white font-black text-xl">{calObjetivo} <span className="text-white/30 text-sm font-normal">kcal</span></p>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="text-right text-xs text-white/30 hidden sm:block">
+            <p>TMB: {tmb} kcal</p>
+            <p>TDEE: {tdee} kcal</p>
+            <p>Sugerido IA: {calSugerido} kcal</p>
+          </div>
+          {!editandoCal && (
+            <button onClick={() => setEditandoCal(true)} className="p-2 text-white/20 hover:text-electric transition-colors rounded-xl hover:bg-white/5">
+              <Edit3 className="w-5 h-5" />
+            </button>
+          )}
+          {editandoCal && calObjetivo !== calSugerido && (
+            <button onClick={() => { guardarCalObjetivo(calSugerido); setEditandoCal(false); }}
+              className="px-3 py-1.5 bg-electric/10 border border-electric/20 text-electric text-xs rounded-lg hover:bg-electric/20 transition-colors">
+              Usar sugerido
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Macros calculados */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {[
+          { label: 'Calor\u00edas', value: totalCal, max: calObjetivo, color: 'text-orange-400', gradient: 'from-orange-500 to-red-500', icon: Flame },
+          { label: 'Prote\u00edna', value: totalProt, max: Math.round((perfil?.peso || 75) * 2), color: 'text-electric', gradient: 'from-electric to-neon', icon: Droplets },
+          { label: 'Carbohidratos', value: totalCarb, max: Math.round((calObjetivo * 0.45) / 4), color: 'text-amber-400', gradient: 'from-amber-400 to-yellow-400', icon: Wheat },
+          { label: 'Grasas', value: totalGrasa, max: Math.round((calObjetivo * 0.25) / 9), color: 'text-pink-400', gradient: 'from-pink-500 to-rose-500', icon: Droplet },
+        ].map(m => (
+          <div key={m.label} className="bg-dark-800 border border-dark-border rounded-2xl p-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <m.icon className={`w-4 h-4 ${m.color}`} />
+                <span className="text-white/50 text-xs uppercase tracking-wider">{m.label}</span>
+              </div>
+              <span className="text-white font-bold text-sm">{m.value}<span className="text-white/30 font-normal">/{m.max}</span></span>
+            </div>
+            <div className="w-full h-2 bg-dark-600 rounded-full overflow-hidden">
+              <div className={`h-full rounded-full bg-gradient-to-r ${m.gradient}`} style={{ width: `${Math.min((m.value / m.max) * 100, 100)}%` }} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Comidas */}
+      <div className="space-y-4">
+        {comidas.map(c => {
+          const comidaCal = c.items.reduce((a, it) => a + (Number(it.cal) || 0), 0);
+          const isEditingComida = editandoComida === c.id;
+
+          return (
+            <div key={c.id} className="bg-dark-800 border border-dark-border rounded-2xl overflow-hidden hover:border-white/10 transition-all">
+              {/* Header comida */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-dark-border">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  {isEditingComida ? (
+                    <div className="flex items-center gap-2">
+                      <input type="text" value={c.nombre} onChange={e => updateComida(c.id, 'nombre', e.target.value)}
+                        className="px-2 py-1 bg-black/60 border border-dark-border rounded-lg text-white text-sm font-bold focus:outline-none focus:ring-2 focus:ring-electric/30 w-40" />
+                      <input type="time" value={c.hora} onChange={e => updateComida(c.id, 'hora', e.target.value)}
+                        className="px-2 py-1 bg-black/60 border border-dark-border rounded-lg text-white text-xs focus:outline-none focus:ring-2 focus:ring-electric/30 w-24" />
+                    </div>
+                  ) : (
+                    <div>
+                      <h3 className="text-white font-bold text-sm">{c.nombre}</h3>
+                      <p className="text-white/30 text-xs">{c.hora} hs</p>
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-orange-400 font-bold text-sm">{comidaCal} kcal</span>
+                  <button onClick={() => setEditandoComida(isEditingComida ? null : c.id)} className="p-1.5 text-white/20 hover:text-electric transition-colors rounded-lg hover:bg-white/5">
+                    {isEditingComida ? <Save className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
+                  </button>
+                  <button onClick={() => setShowAddItem(c.id)} className="p-1.5 text-white/20 hover:text-emerald-400 transition-colors rounded-lg hover:bg-white/5">
+                    <Plus className="w-4 h-4" />
+                  </button>
+                  <button onClick={() => deleteComida(c.id)} className="p-1.5 text-white/20 hover:text-danger transition-colors rounded-lg hover:bg-white/5">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Items */}
+              <div className="divide-y divide-dark-border/50">
+                {c.items.map(item => {
+                  const isEditing = editandoItem === item.id;
+                  return (
+                    <div key={item.id} className="px-5 py-3 hover:bg-white/[0.02] transition-colors">
+                      {isEditing ? (
+                        <div className="space-y-2">
+                          <div className="grid grid-cols-2 gap-2">
+                            <input type="text" value={item.alimento} onChange={e => updateItem(c.id, item.id, 'alimento', e.target.value)} placeholder="Alimento"
+                              className="px-2 py-1.5 bg-black/60 border border-dark-border rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                            <input type="text" value={item.porcion} onChange={e => updateItem(c.id, item.id, 'porcion', e.target.value)} placeholder="Porci\u00f3n"
+                              className="px-2 py-1.5 bg-black/60 border border-dark-border rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                          </div>
+                          <div className="grid grid-cols-4 gap-2">
+                            {[
+                              { field: 'cal' as const, label: 'Cal', color: 'text-orange-400' },
+                              { field: 'prot' as const, label: 'Prot (g)', color: 'text-electric' },
+                              { field: 'carb' as const, label: 'Carb (g)', color: 'text-amber-400' },
+                              { field: 'grasa' as const, label: 'Grasa (g)', color: 'text-pink-400' },
+                            ].map(f => (
+                              <div key={f.field}>
+                                <label className={`block text-[9px] ${f.color} uppercase tracking-wider mb-0.5`}>{f.label}</label>
+                                <input type="number" min="0" value={item[f.field]} onChange={e => updateItem(c.id, item.id, f.field, parseInt(e.target.value) || 0)}
+                                  className="w-full px-2 py-1.5 bg-black/60 border border-dark-border rounded-lg text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                              </div>
+                            ))}
+                          </div>
+                          <button onClick={() => setEditandoItem(null)} className="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1"><Save className="w-3 h-3" /> Listo</button>
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <p className="text-white/80 text-sm truncate flex-1 mr-2">{item.alimento}</p>
+                            <div className="flex items-center gap-1 shrink-0">
+                              <button onClick={() => setEditandoItem(item.id)} className="p-1 text-white/15 hover:text-electric transition-colors"><Edit3 className="w-3 h-3" /></button>
+                              <button onClick={() => deleteItem(c.id, item.id)} className="p-1 text-white/15 hover:text-danger transition-colors"><Trash2 className="w-3 h-3" /></button>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 text-[11px] mt-0.5">
+                            <span className="text-white/25">{item.porcion}</span>
+                            <span className="text-white/10">|</span>
+                            <span className="text-orange-400/70">{item.cal}cal</span>
+                            <span className="text-electric/70">{item.prot}gP</span>
+                            <span className="text-amber-400/70">{item.carb}gC</span>
+                            <span className="text-pink-400/70">{item.grasa}gG</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Nota IA */}
+      {notaIA && (
+        <div className="bg-electric/5 border border-electric/20 rounded-2xl p-4 flex items-start gap-3">
+          <Zap className="w-5 h-5 text-electric shrink-0 mt-0.5" />
+          <div className="text-sm text-white/70 whitespace-pre-line leading-relaxed">
+            {notaIA.split(/(\*\*.*?\*\*)/).map((part, i) =>
+              part.startsWith('**') && part.endsWith('**')
+                ? <strong key={i} className="text-white font-bold">{part.slice(2, -2)}</strong>
+                : <span key={i}>{part}</span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Modal agregar comida */}
+      {showAddComida && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => setShowAddComida(false)}>
+          <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-sm p-6" onClick={e => e.stopPropagation()}>
+            <h2 className="text-lg font-black text-white mb-4 flex items-center gap-2"><Plus className="w-5 h-5 text-emerald-400" /> Nueva Comida</h2>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Nombre</label>
+                <input type="text" value={nuevaComida.nombre} onChange={e => setNuevaComida(p => ({ ...p, nombre: e.target.value }))} placeholder="Ej: Snack Post-Entreno"
+                  className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
+              </div>
+              <div>
+                <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Hora</label>
+                <input type="time" value={nuevaComida.hora} onChange={e => setNuevaComida(p => ({ ...p, hora: e.target.value }))}
+                  className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button onClick={() => setShowAddComida(false)} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
+                <button onClick={addComida} disabled={!nuevaComida.nombre.trim()} className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-400 text-black rounded-xl text-sm font-black uppercase tracking-wider disabled:opacity-30">Agregar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal agregar alimento */}
+      {showAddItem !== null && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => setShowAddItem(null)}>
+          <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
+            <h2 className="text-lg font-black text-white mb-4 flex items-center gap-2"><Plus className="w-5 h-5 text-emerald-400" /> Agregar Alimento</h2>
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Alimento</label>
+                  <input type="text" value={nuevoItem.alimento} onChange={e => setNuevoItem(p => ({ ...p, alimento: e.target.value }))} placeholder="Ej: Huevo duro"
+                    className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                </div>
+                <div>
+                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Porci&oacute;n</label>
+                  <input type="text" value={nuevoItem.porcion} onChange={e => setNuevoItem(p => ({ ...p, porcion: e.target.value }))} placeholder="Ej: 2 unidades"
+                    className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                </div>
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                {[
+                  { field: 'cal' as const, label: 'Calor\u00edas' },
+                  { field: 'prot' as const, label: 'Prot (g)' },
+                  { field: 'carb' as const, label: 'Carb (g)' },
+                  { field: 'grasa' as const, label: 'Grasa (g)' },
+                ].map(f => (
+                  <div key={f.field}>
+                    <label className="block text-[10px] text-white/40 uppercase tracking-wider mb-1">{f.label}</label>
+                    <input type="number" min="0" value={nuevoItem[f.field] || ''} onChange={e => setNuevoItem(p => ({ ...p, [f.field]: parseInt(e.target.value) || 0 }))}
+                      className="w-full px-2 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                  </div>
+                ))}
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button onClick={() => setShowAddItem(null)} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
+                <button onClick={() => addItem(showAddItem)} disabled={!nuevoItem.alimento.trim()} className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-400 text-black rounded-xl text-sm font-black uppercase tracking-wider disabled:opacity-30">Agregar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
