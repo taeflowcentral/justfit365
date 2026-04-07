@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Eye, EyeOff, Zap, ShieldCheck, Fingerprint } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Login() {
   const { login } = useAuth();
@@ -136,10 +137,10 @@ export default function Login() {
           {/* Registro */}
           <div className="mt-6 pt-6 border-t border-dark-border text-center">
             <p className="text-white/30 text-sm mb-3">&iquest;No ten&eacute;s cuenta?</p>
-            <a href="/registro"
+            <Link to="/registro"
               className="w-full inline-flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-electric/10 text-white/60 hover:text-electric border border-dark-border hover:border-electric/20 rounded-xl text-sm font-bold transition-all">
               Crear cuenta nueva
-            </a>
+            </Link>
           </div>
         </div>
 

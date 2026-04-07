@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Zap, Eye, EyeOff, Fingerprint, UserPlus, Building2, User, Mail } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Registro() {
   const { register } = useAuth();
@@ -180,9 +180,9 @@ export default function Registro() {
           </form>
 
           <div className="mt-5 text-center">
-            <a href="/login" className="text-white/30 text-sm hover:text-electric transition-colors">
+            <Link to="/login" className="text-white/30 text-sm hover:text-electric transition-colors">
               Ya tengo cuenta &mdash; <strong className="text-white/50">Iniciar Sesi&oacute;n</strong>
-            </a>
+            </Link>
           </div>
         </div>
 
