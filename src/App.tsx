@@ -14,6 +14,7 @@ import Progreso from './pages/Progreso';
 import AnalisisMedico from './pages/AnalisisMedico';
 import AdminPanel from './pages/AdminPanel';
 import GymClientes from './pages/GymClientes';
+import Registro from './pages/Registro';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -26,6 +27,7 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
+      <Route path="/registro" element={isAuthenticated ? <Navigate to="/" /> : <Registro />} />
       <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route index element={user?.role === 'gimnasio' ? <GymDashboard /> : <Dashboard />} />
         <Route path="nutricion" element={<Nutricion />} />

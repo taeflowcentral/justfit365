@@ -133,26 +133,13 @@ export default function Login() {
             </button>
           </form>
 
-          {/* Demo */}
-          <div className="mt-8 pt-6 border-t border-dark-border">
-            <p className="text-[10px] text-white/30 mb-3 uppercase tracking-[0.2em] font-bold">Cuentas de prueba</p>
-            <div className="space-y-2">
-              {[
-                { label: 'Usuario', apellido: 'Martinez', dni: '30123456', pass: 'user123' },
-                { label: 'Gimnasio', apellido: 'Fernandez', dni: '25987654', pass: 'gym123' },
-                { label: 'Usr + Gym', apellido: 'Lopez', dni: '35456789', pass: 'user123' },
-              ].map(c => (
-                <button
-                  key={c.dni}
-                  type="button"
-                  onClick={() => { setApellido(c.apellido); setDni(c.dni); setPassword(c.pass); }}
-                  className="w-full flex items-center justify-between px-3 py-2.5 bg-white/[0.03] hover:bg-electric/10 rounded-xl text-white/50 hover:text-white transition-all group border border-transparent hover:border-electric/20"
-                >
-                  <span className="text-electric/70 group-hover:text-electric text-xs font-bold uppercase">{c.label}</span>
-                  <span className="font-mono text-xs">{c.apellido} &middot; {c.dni}</span>
-                </button>
-              ))}
-            </div>
+          {/* Registro */}
+          <div className="mt-6 pt-6 border-t border-dark-border text-center">
+            <p className="text-white/30 text-sm mb-3">&iquest;No ten&eacute;s cuenta?</p>
+            <a href="/registro"
+              className="w-full inline-flex items-center justify-center gap-2 py-3 bg-white/5 hover:bg-electric/10 text-white/60 hover:text-electric border border-dark-border hover:border-electric/20 rounded-xl text-sm font-bold transition-all">
+              Crear cuenta nueva
+            </a>
           </div>
         </div>
 

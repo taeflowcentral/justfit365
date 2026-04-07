@@ -195,62 +195,68 @@ export default function PaymentModal() {
 
           {step === 'datos' && (
             <div className="space-y-5">
+              {/* Datos del usuario */}
+              <div className="space-y-3">
+                <div>
+                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Tu nombre completo</label>
+                  <input type="text" value={nombre} onChange={e => setNombre(e.target.value)}
+                    className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                </div>
+                <div>
+                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Tu email (para comprobante)</label>
+                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com"
+                    className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
+                </div>
+              </div>
+
               {/* Datos de pago */}
               <div className="bg-black/40 border border-dark-border rounded-xl p-4 space-y-3">
                 <h4 className="text-white font-bold text-sm flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-emerald-400" /> Datos para el pago
+                  <Shield className="w-4 h-4 text-emerald-400" /> Datos para transferir
                 </h4>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between p-3 bg-dark-700 rounded-lg">
                     <div>
                       <p className="text-white/30 text-[10px] uppercase tracking-wider">Alias Mercado Pago</p>
-                      <p className="text-electric font-mono font-bold">{alias}</p>
+                      <p className="text-electric font-mono font-bold text-lg">{alias}</p>
                     </div>
                     <button onClick={copyAlias} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${copied ? 'bg-emerald-500/20 text-emerald-400' : 'bg-electric/10 text-electric hover:bg-electric/20'}`}>
                       {copied ? <><CheckCircle className="w-3 h-3 inline mr-1" />Copiado</> : <><Copy className="w-3 h-3 inline mr-1" />Copiar</>}
                     </button>
                   </div>
                   <div className="p-3 bg-dark-700 rounded-lg">
-                    <p className="text-white/30 text-[10px] uppercase tracking-wider">Titular de la cuenta</p>
+                    <p className="text-white/30 text-[10px] uppercase tracking-wider">Titular</p>
                     <p className="text-white font-medium text-sm">{titular}</p>
                   </div>
                   <div className="p-3 bg-dark-700 rounded-lg">
-                    <p className="text-white/30 text-[10px] uppercase tracking-wider">Monto a transferir</p>
+                    <p className="text-white/30 text-[10px] uppercase tracking-wider">Monto</p>
                     <p className="text-emerald-400 font-black text-lg">USD {precio.toFixed(2)}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Datos del usuario */}
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Nombre completo</label>
-                  <input type="text" value={nombre} onChange={e => setNombre(e.target.value)}
-                    className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
-                </div>
-                <div>
-                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Email para comprobante</label>
-                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com"
-                    className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
-                </div>
-              </div>
+              {/* Boton Mercado Pago */}
+              <a href={`https://www.mercadopago.com.ar/transfer/${alias}`} target="_blank" rel="noopener noreferrer"
+                className="w-full py-4 bg-[#00b1ea] hover:bg-[#009dd4] text-white font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-[#00b1ea]/20 flex items-center justify-center gap-3">
+                <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><rect width="24" height="24" rx="4" fill="white" fillOpacity="0.2"/><text x="12" y="17" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">MP</text></svg>
+                Abrir Mercado Pago y Transferir
+              </a>
 
               <div className="bg-electric/5 border border-electric/10 rounded-xl p-3 text-xs text-white/40 space-y-1">
-                <p className="flex items-center gap-1"><Mail className="w-3 h-3 text-electric" /> Confirmaci&oacute;n a: <strong className="text-white/60">{email}</strong></p>
-                <p className="flex items-center gap-1"><Mail className="w-3 h-3 text-electric" /> Notificaci&oacute;n al admin: <strong className="text-white/60">{emailDestino}</strong></p>
-                <p className="flex items-center gap-1"><Calendar className="w-3 h-3 text-electric" /> Recordatorio autom&aacute;tico: <strong className="text-white/60">10 d&iacute;as antes del vencimiento</strong></p>
+                <p className="flex items-center gap-1"><Mail className="w-3 h-3 text-electric" /> Envi&aacute; el comprobante a: <strong className="text-electric">{emailDestino}</strong></p>
+                <p className="flex items-center gap-1"><Calendar className="w-3 h-3 text-electric" /> Recordatorio: <strong className="text-white/60">{esGimnasio ? '5' : '10'} d&iacute;as antes del vencimiento</strong></p>
               </div>
 
               <div className="flex gap-3">
                 <button onClick={() => setStep('metodo')} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold hover:bg-white/10 transition-colors border border-dark-border">
                   Volver
                 </button>
-                <button onClick={confirmarPago} disabled={!email || processing}
-                  className="flex-1 py-3 bg-gradient-to-r from-electric to-neon text-black rounded-xl text-sm font-black uppercase tracking-wider hover:scale-[1.02] transition-all shadow-lg shadow-electric/20 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                <button onClick={confirmarPago} disabled={!email || !nombre || processing}
+                  className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-400 text-black rounded-xl text-sm font-black uppercase tracking-wider hover:scale-[1.02] transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                   {processing ? (
                     <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
                   ) : (
-                    <><CheckCircle className="w-4 h-4" /> Confirmar Pago</>
+                    <><CheckCircle className="w-4 h-4" /> Ya Transfer&iacute;</>
                   )}
                 </button>
               </div>

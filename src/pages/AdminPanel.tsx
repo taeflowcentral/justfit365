@@ -1,14 +1,10 @@
 import { useState } from 'react';
 import { Settings, DollarSign, Users, Mail, Send, CheckCircle, AlertTriangle, Shield, Bell } from 'lucide-react';
 import { getPrecioAnual, setPrecioAnual, getPrecioMensualGym, setPrecioMensualGym } from '../components/PaymentModal';
-
-const usuariosRegistrados = [
-  { nombre: 'Lucas Martinez', email: 'lucas.martinez@email.com', dni: '30123456', suscripcion: '06/04/2026', vencimiento: '06/04/2027', estado: 'activo' },
-  { nombre: 'Sofia Lopez', email: 'sofia.lopez@email.com', dni: '35456789', suscripcion: '06/04/2026', vencimiento: '06/04/2027', estado: 'activo' },
-  { nombre: 'Iron Gym', email: 'info@irongym.com', dni: '25987654', suscripcion: '15/01/2026', vencimiento: '15/01/2027', estado: 'activo' },
-];
+import { getAllUsers } from '../context/AuthContext';
 
 export default function AdminPanel() {
+  const allUsers = getAllUsers().filter(u => u.role !== 'admin');
   const [precio, setPrecio] = useState(getPrecioAnual().toString());
   const [precioSaved, setPrecioSaved] = useState(false);
   const [emailsSent, setEmailsSent] = useState(false);
@@ -140,7 +136,7 @@ export default function AdminPanel() {
         <div className="space-y-3">
           <div className="bg-black/40 border border-dark-border rounded-xl p-4">
             <p className="text-white/30 text-xs mb-2 uppercase tracking-wider">Destinatarios</p>
-            <p className="text-white text-sm">{usuariosRegistrados.length} usuarios registrados recibir&aacute;n la notificaci&oacute;n por email</p>
+            <p className="text-white text-sm">{allUsers.length} usuarios registrados recibir&aacute;n la notificaci&oacute;n por email</p>
           </div>
           <div className="bg-black/40 border border-dark-border rounded-xl p-4">
             <p className="text-white/30 text-xs mb-2 uppercase tracking-wider">Vista previa del email</p>
@@ -167,7 +163,7 @@ export default function AdminPanel() {
             {sending ? (
               <><div className="w-4 h-4 border-2 border-electric/30 border-t-electric rounded-full animate-spin" /> Enviando...</>
             ) : emailsSent ? (
-              <><CheckCircle className="w-4 h-4" /> Emails enviados a {usuariosRegistrados.length} usuarios</>
+              <><CheckCircle className="w-4 h-4" /> Emails enviados a {allUsers.length} usuarios</>
             ) : (
               <><Send className="w-4 h-4" /> Enviar Notificaci&oacute;n a Todos los Usuarios</>
             )}
@@ -181,27 +177,29 @@ export default function AdminPanel() {
           <h3 className="text-white font-bold flex items-center gap-2">
             <Users className="w-5 h-5 text-purple-400" /> Usuarios Registrados
           </h3>
-          <span className="text-white/30 text-xs">{usuariosRegistrados.length} usuarios</span>
+          <span className="text-white/30 text-xs">{allUsers.length} usuarios</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-dark-border">
-                {['Nombre', 'Email', 'DNI', 'Suscripci\u00f3n', 'Vencimiento', 'Estado'].map(h => (
+                {['Nombre', 'Email', 'DNI', 'Tipo', 'Fecha Pago', 'Estado'].map(h => (
                   <th key={h} className="text-left px-4 py-3 text-[10px] text-white/30 uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-dark-border/50">
-              {usuariosRegistrados.map(u => (
+              {allUsers.map(u => (
                 <tr key={u.dni} className="hover:bg-white/[0.02] transition-colors">
                   <td className="px-4 py-3 text-sm text-white font-medium">{u.nombre}</td>
-                  <td className="px-4 py-3 text-sm text-white/50 font-mono">{u.email}</td>
+                  <td className="px-4 py-3 text-sm text-white/50 font-mono text-xs">{u.email || '-'}</td>
                   <td className="px-4 py-3 text-sm text-white/40 font-mono">{u.dni}</td>
-                  <td className="px-4 py-3 text-sm text-white/40">{u.suscripcion}</td>
-                  <td className="px-4 py-3 text-sm text-white/40">{u.vencimiento}</td>
+                  <td className="px-4 py-3 text-sm text-white/40">{u.role === 'gimnasio' ? 'Gym' : 'Individual'}</td>
+                  <td className="px-4 py-3 text-sm text-white/40">{u.fechaSuscripcion || '-'}</td>
                   <td className="px-4 py-3">
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400">{u.estado}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full ${u.suscripcionPagada ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                      {u.suscripcionPagada ? 'Pagado' : 'Pendiente'}
+                    </span>
                   </td>
                 </tr>
               ))}
