@@ -1,23 +1,23 @@
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import ConsentModal from './ConsentModal';
 import PaymentModal from './PaymentModal';
 import GymInactiveModal from './GymInactiveModal';
 import { useAuth } from '../context/AuthContext';
-import { Bell, Search, AlertTriangle } from 'lucide-react';
+import { Bell, AlertTriangle, Menu } from 'lucide-react';
 
 export default function Layout() {
   const { user } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const esGimnasio = user?.role === 'gimnasio';
 
-  // Logica de vencimiento para usuarios (anual, recordatorio 10 dias antes)
   const diasParaVencerAnual = user?.fechaSuscripcion && !esGimnasio
     ? Math.ceil((new Date(new Date(user.fechaSuscripcion).setFullYear(new Date(user.fechaSuscripcion).getFullYear() + 1)).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
     : null;
   const mostrarRecordatorioAnual = diasParaVencerAnual !== null && diasParaVencerAnual <= 10 && diasParaVencerAnual > 0 && user?.suscripcionPagada;
 
-  // Logica de vencimiento para gimnasios (mensual)
   const diasDesdeUltimoPagoGym = esGimnasio && user?.fechaUltimoPago
     ? Math.floor((Date.now() - new Date(user.fechaUltimoPago).getTime()) / (1000 * 60 * 60 * 24))
     : 0;
@@ -25,32 +25,45 @@ export default function Layout() {
   const gymInactivo = esGimnasio && user?.suscripcionPagada && mesesSinPagarGym >= 2;
   const gymProximoVencimiento = esGimnasio && user?.suscripcionPagada && !gymInactivo && diasDesdeUltimoPagoGym >= 25;
 
-  // Mostrar modal de pago si no pago aun
   const mostrarPayment = user && user.consentimiento && !user.suscripcionPagada && user.role !== 'admin';
 
   return (
-    <div className="flex min-h-screen bg-black">
+    <div className="flex min-h-screen min-h-[100dvh] bg-black">
       {user && !user.consentimiento && <ConsentModal />}
       {mostrarPayment && <PaymentModal />}
       {gymInactivo && <GymInactiveModal />}
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        {/* Top bar */}
-        <header className="h-16 bg-dark-900/50 backdrop-blur border-b border-dark-border flex items-center justify-between px-6">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
-            <input
-              type="text"
-              placeholder="Buscar..."
-              className="pl-10 pr-4 py-2 bg-dark-800 border border-dark-border rounded-xl text-sm text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-electric/30 w-full max-w-80"
-            />
+
+      {/* Sidebar desktop */}
+      <div className="hidden md:block">
+        <Sidebar onNavigate={() => {}} />
+      </div>
+
+      {/* Sidebar mobile overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div className="absolute inset-0 bg-black/70" onClick={() => setMobileMenuOpen(false)} />
+          <div className="absolute left-0 top-0 h-full w-64 z-10">
+            <Sidebar onNavigate={() => setMobileMenuOpen(false)} />
           </div>
-          <div className="flex items-center gap-4">
+        </div>
+      )}
+
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Top bar */}
+        <header className="h-14 md:h-16 bg-dark-900/50 backdrop-blur border-b border-dark-border flex items-center justify-between px-3 md:px-6 shrink-0">
+          <div className="flex items-center gap-2">
+            {/* Hamburger mobile */}
+            <button onClick={() => setMobileMenuOpen(true)} className="md:hidden p-2 text-white/40 hover:text-white rounded-xl transition-colors">
+              <Menu className="w-5 h-5" />
+            </button>
+            <span className="md:hidden text-white font-black text-sm tracking-tighter">Just<span className="text-electric">Fit</span>365</span>
+          </div>
+          <div className="flex items-center gap-2 md:gap-4">
             <button className="relative p-2 text-white/30 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-electric rounded-full animate-pulse" />
             </button>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-dark-800 rounded-xl border border-dark-border">
+            <div className="flex items-center gap-2 px-2 md:px-3 py-1.5 bg-dark-800 rounded-xl border border-dark-border">
               {user?.foto ? (
                 <img src={user.foto} alt="" className="w-7 h-7 rounded-full object-cover" />
               ) : (
@@ -58,28 +71,27 @@ export default function Layout() {
                   {user?.nombre?.charAt(0)}
                 </div>
               )}
-              <span className="text-sm text-white/70 font-medium">{user?.nombre}</span>
+              <span className="text-sm text-white/70 font-medium hidden sm:inline">{user?.nombre}</span>
             </div>
           </div>
         </header>
-        <main className="flex-1 p-6 overflow-auto">
-          {/* Recordatorio anual (usuarios) */}
+
+        <main className="flex-1 p-3 md:p-6 overflow-auto">
           {mostrarRecordatorioAnual && (
-            <div className="mb-4 bg-warning/10 border border-warning/20 rounded-2xl p-4 flex items-center gap-3">
+            <div className="mb-4 bg-warning/10 border border-warning/20 rounded-2xl p-3 md:p-4 flex items-center gap-3">
               <AlertTriangle className="w-5 h-5 text-warning shrink-0" />
               <div className="flex-1">
                 <p className="text-white font-bold text-sm">Tu suscripci&oacute;n vence en {diasParaVencerAnual} d&iacute;as</p>
-                <p className="text-white/40 text-xs">Renov&aacute; tu plan anual para no perder acceso a JustFit365.</p>
+                <p className="text-white/40 text-xs">Renov&aacute; tu plan para no perder acceso.</p>
               </div>
             </div>
           )}
-          {/* Recordatorio mensual (gimnasios) */}
           {gymProximoVencimiento && (
-            <div className="mb-4 bg-warning/10 border border-warning/20 rounded-2xl p-4 flex items-center gap-3">
+            <div className="mb-4 bg-warning/10 border border-warning/20 rounded-2xl p-3 md:p-4 flex items-center gap-3">
               <AlertTriangle className="w-5 h-5 text-warning shrink-0" />
               <div className="flex-1">
                 <p className="text-white font-bold text-sm">Tu pago mensual vence pronto</p>
-                <p className="text-white/40 text-xs">Renov&aacute; tu suscripci&oacute;n mensual. Al 2do mes impago tu cuenta se inactivar&aacute;.</p>
+                <p className="text-white/40 text-xs">Al 2do mes impago tu cuenta se inactivar&aacute;.</p>
               </div>
             </div>
           )}
@@ -90,14 +102,11 @@ export default function Layout() {
       {/* Boton flotante Claude - solo admin */}
       {user?.role === 'admin' && (
         <a href="https://claude.ai/new" target="_blank" rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-[#d97706] to-[#b45309] rounded-2xl shadow-2xl shadow-amber-500/30 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group"
-          title="Abrir Claude AI">
-          <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          className="fixed bottom-6 right-6 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#d97706] to-[#b45309] rounded-2xl shadow-2xl shadow-amber-500/30 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40"
+          title="Chat con Claude AI">
+          <svg className="w-6 h-6 md:w-7 md:h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 3c-4.97 0-9 3.13-9 7 0 2.38 1.45 4.5 3.68 5.83L5 21l4.53-2.27c.8.17 1.62.27 2.47.27 4.97 0 9-3.13 9-7s-4.03-7-9-7z"/>
           </svg>
-          <span className="absolute -top-10 right-0 bg-dark-800 border border-dark-border text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
-            Chat con Claude AI
-          </span>
         </a>
       )}
     </div>

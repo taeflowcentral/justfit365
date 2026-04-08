@@ -45,7 +45,7 @@ const adminLinks = [
   { to: '/suscripcion', icon: CreditCard, label: 'Suscripciones' },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onNavigate }: { onNavigate: () => void }) {
   const { user, logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const links = user?.role === 'admin' ? adminLinks : user?.role === 'gimnasio' ? gymLinks : userLinks;
@@ -82,6 +82,7 @@ export default function Sidebar() {
             key={link.to + link.label}
             to={link.to}
             end={link.to === '/'}
+            onClick={onNavigate}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 isActive
