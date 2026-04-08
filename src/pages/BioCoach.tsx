@@ -10,7 +10,7 @@ interface Message {
   timestamp: string;
 }
 
-const GEMINI_KEY = 'AIzaSyBR97C-s1lrKd9ML-UFQ8aQb79ANtfhfT0';
+const GEMINI_KEY = 'AIzaSyDtb1TRhcjXCkCmnw80sF_K04n1dyt_CWo';
 
 function buildSystemPrompt(perfil: { edad: number; peso: number; altura: number; objetivo: string; nivelActividad: string } | undefined) {
   const tmb = perfil ? Math.round(10 * perfil.peso + 6.25 * perfil.altura - 5 * perfil.edad + 5) : 0;
