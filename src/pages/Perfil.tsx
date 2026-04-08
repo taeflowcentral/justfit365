@@ -286,8 +286,20 @@ export default function Perfil() {
           {/* TMB/TDEE calculados */}
           <div className="bg-electric/5 border border-electric/10 rounded-xl p-3 flex flex-col justify-center">
             <p className="text-white/30 text-[10px] uppercase tracking-wider">C&aacute;lculo autom&aacute;tico</p>
-            <p className="text-white text-sm font-bold mt-1">TMB: {tmb || '---'} kcal</p>
-            <p className="text-electric text-sm font-bold">TDEE: {tdee || '---'} kcal</p>
+            <div className="relative group/tmb mt-1 cursor-help">
+              <p className="text-white text-sm font-bold">TMB: {tmb || '---'} kcal</p>
+              <div className="absolute bottom-full left-0 mb-2 w-64 bg-dark-800 border border-dark-border rounded-xl p-3 shadow-2xl opacity-0 group-hover/tmb:opacity-100 pointer-events-none group-hover/tmb:pointer-events-auto transition-opacity z-10">
+                <p className="text-electric text-xs font-bold mb-1">TMB - Tasa Metab&oacute;lica Basal</p>
+                <p className="text-white/60 text-[11px] leading-relaxed">Es la cantidad de calor&iacute;as que tu cuerpo quema en reposo absoluto para mantener funciones vitales: respiraci&oacute;n, circulaci&oacute;n, temperatura corporal y funcionamiento de &oacute;rganos. Se calcula con la f&oacute;rmula Mifflin-St Jeor usando tu peso, altura, edad y sexo.</p>
+              </div>
+            </div>
+            <div className="relative group/tdee cursor-help">
+              <p className="text-electric text-sm font-bold">TDEE: {tdee || '---'} kcal</p>
+              <div className="absolute bottom-full left-0 mb-2 w-64 bg-dark-800 border border-dark-border rounded-xl p-3 shadow-2xl opacity-0 group-hover/tdee:opacity-100 pointer-events-none group-hover/tdee:pointer-events-auto transition-opacity z-10">
+                <p className="text-electric text-xs font-bold mb-1">TDEE - Gasto Energ&eacute;tico Total Diario</p>
+                <p className="text-white/60 text-[11px] leading-relaxed">Es el total de calor&iacute;as que quem&aacute;s por d&iacute;a incluyendo toda tu actividad: TMB + ejercicio + movimiento diario + digesti&oacute;n. Se calcula multiplicando tu TMB por un factor de actividad. Si com&eacute;s menos que tu TDEE, baj&aacute;s de peso. Si com&eacute;s m&aacute;s, sub&iacute;s.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
