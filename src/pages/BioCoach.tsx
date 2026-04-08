@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Zap, Send, User, Sparkles, BookOpen, Database, FlaskConical, Activity } from 'lucide-react';
+import { Zap, Send, User, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 interface Message {
@@ -7,424 +7,265 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: string;
-  refs?: string[];
-  sources?: string[];
 }
-
-// =====================================================
-// BASE DE CONOCIMIENTO - JustFit Coach IA
-// Fuentes: Examine.com, USDA FoodData Central, PubMed,
-// Cochrane Library, ISSN, ACSM, NSCA, ExerciseDB,
-// Open Food Facts, Terra API
-// =====================================================
 
 interface KnowledgeEntry {
   keywords: string[];
   content: string;
-  refs: string[];
-  sources: string[];
 }
 
 const knowledgeBase: KnowledgeEntry[] = [
-  // === SUPLEMENTACION ===
   {
     keywords: ['creatina'],
-    content: `**Creatina Monohidratada - An\u00e1lisis basado en evidencia**
+    content: `**Creatina: el suplemento m\u00e1s seguro que existe**
 
-Seg\u00fan el meta-an\u00e1lisis m\u00e1s completo disponible (Examine.com, 2024), la creatina es el suplemento ergog\u00e9nico con mayor respaldo cient\u00edfico para rendimiento deportivo.
+Mir\u00e1, la creatina monohidratada es b\u00e1sicamente lo m\u00e1s estudiado en el mundo de los suplementos. No es magia, pero funciona muy bien.
 
-**Dosis \u00f3ptima para tu perfil ({peso} kg):**
-- Mantenimiento: **3-5g diarios** (sin necesidad de fase de carga)
-- La fase de carga (20g/d\u00eda x 5 d\u00edas) solo acelera la saturaci\u00f3n, no mejora el resultado final
-- Timing: cualquier momento del d\u00eda con una comida
+**Para vos ({peso} kg), la dosis es simple:**
+- **3 a 5 gramos por d\u00eda**, todos los d\u00edas, y listo
+- No necesit\u00e1s fase de carga (eso es un mito viejo)
+- Tomala cuando quieras, con la comida, despu\u00e9s de entrenar, como te quede c\u00f3modo
 
-**Efectos demostrados (nivel de evidencia A):**
-- Fuerza m\u00e1xima: +5-10% (meta-an\u00e1lisis de 22 estudios)
-- Masa magra: +1-2 kg en 12 semanas
-- Rendimiento en ejercicio de alta intensidad: +10-20%
-- Neuroprotecci\u00f3n y funci\u00f3n cognitiva (evidencia emergente)
+**\u00bfQu\u00e9 vas a notar?**
+- M\u00e1s fuerza en los ejercicios pesados
+- Un poquito m\u00e1s de volumen muscular (retiene agua dentro del m\u00fasculo, no hincha)
+- Mejor rendimiento en series cortas e intensas
+- Incluso ayuda un poco a nivel cerebral
 
-**Seguridad (Cochrane Review):**
-- Sin evidencia de da\u00f1o renal en personas sanas (>500 estudios revisados)
-- Sin evidencia de deshidrataci\u00f3n ni calambres
-- Segura para uso cr\u00f3nico (estudios de hasta 5 a\u00f1os)
+**\u00bfEs segura?** Totalmente. Hay cientos de estudios y no hay evidencia de que haga da\u00f1o renal en personas sanas. Es de los suplementos m\u00e1s seguros que pod\u00e9s tomar, incluso a largo plazo.
 
-**Consideraciones USDA:** La creatina se encuentra naturalmente en carnes rojas (~2g/500g) y pescado. Una dieta omnivora provee ~1g/d\u00eda, insuficiente para saturaci\u00f3n muscular.`,
-    refs: [
-      'Kreider et al. (2017) - ISSN Position Stand: Safety and Efficacy of Creatine - J Int Soc Sports Nutr',
-      'Rawson & Volek (2003) - Effects of Creatine on Strength - J Strength Cond Res 17(4)',
-      'Branch (2003) - Creatine Meta-Analysis - J Sport Sci Med 2(4)',
-      'Cochrane Review (2012) - Creatine for Exercise Performance',
-    ],
-    sources: ['Examine.com', 'PubMed/MEDLINE', 'Cochrane Library', 'ISSN'],
+\u00bfAlguna otra duda sobre suplemen? \ud83d\udcaa`
   },
   {
     keywords: ['whey', 'proteina suero', 'conviene whey', 'tomar whey'],
-    content: `**Whey Protein (Prote\u00edna de Suero) - An\u00e1lisis Cient\u00edfico**
+    content: `**Whey Protein: \u00bfte conviene o no?**
 
-Seg\u00fan Examine.com y la revisi\u00f3n sistem\u00e1tica de Cochrane, el whey protein es el suplemento proteico con mayor biodisponibilidad y velocidad de absorci\u00f3n.
+A ver, el whey no es m\u00e1gico. Es simplemente prote\u00edna de buena calidad en formato pr\u00e1ctico. La pregunta clave es: **\u00bflleg\u00e1s a comer suficiente prote\u00edna solo con comida?**
 
-**\u00bfTe conviene para tu perfil ({objetivo}, {peso} kg)?**
-- Tu requerimiento proteico es **{protReq}g/d\u00eda** ({protKg} g/kg)
-- Si alcanz\u00e1s esa cifra solo con comida, el whey NO es necesario
-- Si te cuesta llegar, 1-2 scoops/d\u00eda son una soluci\u00f3n pr\u00e1ctica y econ\u00f3mica
+**Para tu objetivo ({objetivo}) necesit\u00e1s ~{protReq}g de prote\u00edna por d\u00eda.**
 
-**Ventajas del whey vs otras fuentes (USDA FoodData):**
-- PDCAAS: 1.0 (m\u00e1xima puntuaci\u00f3n de calidad proteica)
-- Rico en leucina: ~2.5g por scoop (30g) - clave para activar mTOR
-- Absorci\u00f3n r\u00e1pida: pico de amino\u00e1cidos en 60-90 min
-- Whey concentrado vs aislado: la diferencia es m\u00ednima (80% vs 90% prote\u00edna), a menos que seas intolerante a la lactosa
+Si con pollo, carne, huevos, l\u00e1cteos y legumbres ya lleg\u00e1s... el whey no es necesario. Pero si te cuesta llegar (y a muchos nos pasa), 1-2 scoops por d\u00eda te re solucionan la vida.
 
-**Cu\u00e1ndo tomarlo (seg\u00fan ISSN):**
-- La "ventana anab\u00f3lica" post-entreno es m\u00e1s amplia de lo que se cre\u00eda (4-6 horas)
-- Lo importante es la ingesta total diaria, no el timing exacto
-- Pre-sue\u00f1o: case\u00edna > whey (absorci\u00f3n lenta = balance nitrogenado nocturno)
+**Tips posta:**
+- Eleg\u00ed whey concentrado que es m\u00e1s barato y funciona igual (a menos que seas intolerante a la lactosa, ah\u00ed and\u00e1 por aislado)
+- Fijate que no tenga mucha az\u00facar agregada (menos de 5g por scoop)
+- El "cu\u00e1ndo tomarlo" no importa tanto como te dicen. La ventana anab\u00f3lica es mucho m\u00e1s amplia de lo que se cre\u00eda
+- Si quer\u00e9s algo para antes de dormir, mejor case\u00edna que se absorbe lento
 
-**Open Food Facts:** Cuidado con whey de baja calidad - verificar que no contenga exceso de az\u00facares a\u00f1adidos (>5g/scoop) ni amino-spiking (glicina/taurina a\u00f1adidos para inflar % proteico).`,
-    refs: [
-      'Morton et al. (2018) - Systematic Review: Protein Supplementation - Br J Sports Med 52(6)',
-      'ISSN Position Stand on Protein and Exercise (2017) - J Int Soc Sports Nutr 14:20',
-      'Schoenfeld & Aragon (2018) - Protein Timing Meta-Analysis - J Int Soc Sports Nutr 15:10',
-      'USDA FoodData Central - Whey Protein Nutrient Profile (NDB #01114)',
-    ],
-    sources: ['Examine.com', 'PubMed/MEDLINE', 'USDA FoodData Central', 'ISSN', 'Open Food Facts'],
+No te vuelvas loco con las marcas. Que tenga buen perfil de amino\u00e1cidos y listo. \ud83e\udd1b`
   },
   {
     keywords: ['proteina', 'cuanta proteina', 'prote\u00edna'],
-    content: `**Requerimiento Proteico Personalizado**
+    content: `**Prote\u00edna: cu\u00e1nta necesit\u00e1s posta**
 
-Seg\u00fan el meta-an\u00e1lisis de Morton et al. (2018) con datos de PubMed/MEDLINE, y las gu\u00edas ISSN:
+Con tus datos ({peso} kg, {objetivo}, nivel {nivel}), tu rango ideal es:
 
-**Tu requerimiento ({peso} kg, {objetivo}, {nivel}):**
-- Rango \u00f3ptimo: **{protKg} g/kg/d\u00eda = {protReq}g diarios**
-- Distribuci\u00f3n: 4-5 tomas de {protToma}g cada una
-- Leucina m\u00ednima por toma: 2.5g (umbral de activaci\u00f3n de mTOR)
+**{protKg} gramos por kilo = {protReq}g por d\u00eda**
 
-**Rangos seg\u00fan objetivo (ISSN 2017):**
-- Hipertrofia/Fuerza: 1.6-2.2 g/kg/d\u00eda
-- P\u00e9rdida de grasa (preservar m\u00fasculo): 2.2-3.1 g/kg/d\u00eda
-- Mantenimiento: 1.4-1.6 g/kg/d\u00eda
-- Resistencia: 1.2-1.4 g/kg/d\u00eda
+**\u00bfC\u00f3mo distribuirla?**
+- Lo ideal son 4-5 comidas con ~{protToma}g de prote\u00edna cada una
+- No hace falta ser perfecto, pero trat\u00e1 de que cada comida tenga una buena fuente de prote
 
-**Fuentes de mayor valor biol\u00f3gico (USDA FoodData):**
-| Alimento | Prote\u00edna/100g | PDCAAS |
-|----------|--------------|--------|
-| Whey isolate | 90g | 1.00 |
-| Huevo entero | 13g | 1.00 |
-| Pechuga pollo | 31g | 0.92 |
-| Salm\u00f3n | 20g | 0.94 |
-| Leche | 3.4g | 1.00 |
-| Lentejas | 9g | 0.52 |
+**Las mejores fuentes (de mayor a menor calidad):**
+- Huevo entero \u2014 el cl\u00e1sico, nunca falla
+- Pechuga de pollo \u2014 31g por cada 100g
+- Carne roja \u2014 adem\u00e1s te da hierro y creatina natural
+- Pescado \u2014 el salm\u00f3n te suma omega-3 de regalo
+- L\u00e1cteos \u2014 yogur griego es un golazo
+- Legumbres \u2014 ojo que son prote\u00edna incompleta, combinalas con cereales
 
-**Cochrane Review:** La suplementaci\u00f3n proteica por encima de 1.6g/kg muestra rendimientos decrecientes. El beneficio m\u00e1ximo se logra alrededor de 1.6g/kg; ir m\u00e1s arriba solo es \u00fatil en d\u00e9ficit cal\u00f3rico.`,
-    refs: [
-      'Morton et al. (2018) - Br J Sports Med 52(6):376-384',
-      'ISSN Position Stand on Protein (2017) - J Int Soc Sports Nutr 14:20',
-      'Phillips & Van Loon (2011) - Dietary Protein for Athletes - J Sports Sci 29:S29-S38',
-      'USDA FoodData Central - Protein Quality Scores',
-    ],
-    sources: ['PubMed/MEDLINE', 'Cochrane Library', 'ISSN', 'USDA FoodData Central'],
+**Dato importante:** Si est\u00e1s en d\u00e9ficit cal\u00f3rico (queriendo bajar grasa), sub\u00ed la prote\u00edna a 2.2g/kg para no perder m\u00fasculo. Es clave.
+
+\u00bfQuer\u00e9s que te arme un ejemplo de c\u00f3mo llegar a esos gramos en el d\u00eda? \ud83c\udf57`
   },
   {
     keywords: ['magnesio'],
-    content: `**Magnesio - Revisi\u00f3n basada en evidencia**
+    content: `**Magnesio: el mineral que casi todos tienen bajo**
 
-Seg\u00fan Examine.com y la base de datos USDA, el magnesio es un mineral esencial involucrado en +300 reacciones enzim\u00e1ticas.
+El magnesio es clave para m\u00e1s de 300 procesos en el cuerpo, y la mayor\u00eda de la gente no llega a la cantidad que necesita.
 
-**\u00bfLo necesit\u00e1s? ({peso} kg, {nivel}):**
-- RDA: 400-420mg/d\u00eda (hombres), 310-320mg (mujeres)
-- Deportistas: necesidad aumentada un 10-20% por p\u00e9rdida en sudor
-- ~68% de la poblaci\u00f3n no alcanza la RDA (USDA Dietary Guidelines)
+**\u00bfPara qu\u00e9 te sirve como deportista?**
+- **Dormir mejor** \u2014 es lo primero que vas a notar
+- Menos calambres y contracturas
+- Mejor recuperaci\u00f3n muscular
+- Ayuda a mantener la testosterona si ten\u00e9s deficiencia
 
-**Beneficios demostrados para deportistas (PubMed):**
-- Mejora calidad del sue\u00f1o (meta-an\u00e1lisis: -17min para dormirse)
-- Reducci\u00f3n de calambres musculares
-- Apoyo a la producci\u00f3n de testosterona (si hay deficiencia)
-- Mejor recuperaci\u00f3n y reducci\u00f3n de inflamaci\u00f3n post-ejercicio
-- Regulaci\u00f3n de glucosa e insulina
+**\u00bfCu\u00e1l comprar?** Esto es importante:
+- **Bisglicinato** \u2192 el mejor para dormir y relajar, no te afloja la panza
+- **Citrato** \u2192 buena absorci\u00f3n pero puede ser laxante
+- **\u00d3xido** \u2192 olvidate, se absorbe muy poco
 
-**Formas seg\u00fan Examine.com:**
-- **Magnesio bisglicinato:** Mejor para sue\u00f1o y relajaci\u00f3n (alta biodisponibilidad, no causa diarrea)
-- **Magnesio citrato:** Buena absorci\u00f3n, puede ser laxante en dosis altas
-- **Magnesio \u00f3xido:** Baja biodisponibilidad (~4%), no recomendado
-- **Magnesio treonato:** Cruza barrera hematoencef\u00e1lica, mejor para funci\u00f3n cognitiva
+**Dosis:** 200-400mg antes de dormir. Vas a notar la diferencia en el sue\u00f1o en pocos d\u00edas.
 
-**Fuentes alimentarias (USDA FoodData):**
-- Semillas de calabaza: 550mg/100g
-- Almendras: 270mg/100g
-- Espinaca: 79mg/100g
-- Chocolate negro >70%: 228mg/100g
-- Banana: 27mg/unidad
+**Tambi\u00e9n pod\u00e9s comer m\u00e1s:** semillas de calabaza, almendras, espinaca, chocolate negro. Pero generalmente no alcanza solo con la dieta.
 
-**Recomendaci\u00f3n:** 200-400mg de magnesio bisglicinato antes de dormir.`,
-    refs: [
-      'Examine.com (2024) - Magnesium Supplement Guide - Human Effect Matrix',
-      'Zhang et al. (2017) - Magnesium and Sleep - Nutrients 9(5):429',
-      'Cinar et al. (2011) - Magnesium and Testosterone - Biol Trace Elem Res 140:18-23',
-      'USDA FoodData Central - Magnesium in Foods',
-    ],
-    sources: ['Examine.com', 'PubMed/MEDLINE', 'USDA FoodData Central'],
+\u00bfTe interesa saber sobre alg\u00fan otro suplemento? \ud83d\ude34`
   },
   {
     keywords: ['omega', 'omega3', 'aceite pescado', 'fish oil'],
-    content: `**Omega-3 (EPA/DHA) - An\u00e1lisis cient\u00edfico completo**
+    content: `**Omega-3: el antiinflamatorio natural**
 
-Seg\u00fan Examine.com y m\u00faltiples revisiones sistem\u00e1ticas de Cochrane:
+El omega-3 (EPA y DHA) es uno de esos suplementos que beneficia a casi todo el mundo, hagas o no deporte.
 
-**Beneficios para deportistas (evidencia A-B):**
-- **Antiinflamatorio:** Reduce marcadores de inflamaci\u00f3n post-ejercicio (IL-6, TNF-\u03b1)
-- **Recuperaci\u00f3n muscular:** Reduce DOMS (dolor muscular tard\u00edo) ~15%
-- **Salud cardiovascular:** Reduce triglic\u00e9ridos -15-30%
-- **Funci\u00f3n cerebral:** Mejora funci\u00f3n cognitiva y estado de \u00e1nimo
-- **Salud articular:** Reduce rigidez y dolor articular
+**\u00bfPara qu\u00e9 sirve?**
+- Reduce la inflamaci\u00f3n post-entreno (menos dolor muscular)
+- Mejora la salud cardiovascular
+- Ayuda al cerebro y al estado de \u00e1nimo
+- Mejora la salud de las articulaciones
 
-**Dosis recomendada (ISSN/Examine):**
-- **2-3g de EPA+DHA combinados/d\u00eda** (no 2g de aceite de pescado total)
-- Proporci\u00f3n ideal: EPA:DHA de 2:1 para antiinflamaci\u00f3n
-- Tomar CON comidas grasas (mejora absorci\u00f3n 3x)
+**La dosis que funciona:**
+- **2 a 3 gramos de EPA+DHA combinados por d\u00eda** (ojo, no 2g de aceite de pescado, sino de EPA+DHA que est\u00e1 adentro)
+- Tomalo siempre con una comida que tenga grasa, as\u00ed se absorbe 3 veces mejor
 
-**\u00bfDe d\u00f3nde obtenerlo? (USDA FoodData):**
-| Fuente | EPA+DHA/100g |
-|--------|-------------|
-| Salm\u00f3n salvaje | 2.2g |
-| Caballa | 2.6g |
-| Sardinas | 1.5g |
-| At\u00fan | 0.9g |
-| Suplemento (c\u00e1psula) | ~0.5g/c\u00e1psula |
+**\u00bfComida o suplemento?**
+Si com\u00e9s pescado graso (salm\u00f3n, caballa, sardinas) 2-3 veces por semana, quiz\u00e1s no necesit\u00e9s suplemento. Si no, las c\u00e1psulas te resuelven.
 
-**Open Food Facts:** Cuidado con suplementos oxidados (olor rancio). Buscar certificaci\u00f3n IFOS (International Fish Oil Standards). Preferir forma triglic\u00e9rido sobre \u00e9ster et\u00edlico.
+**Tip:** si la c\u00e1psula tiene olor a pescado rancio, tir\u00e1la. Significa que est\u00e1 oxidada y no sirve.
 
-**Si sos vegetariano/vegano:** Omega-3 de algas (DHA directo, sin conversi\u00f3n). Dosis: 250-500mg DHA/d\u00eda.`,
-    refs: [
-      'Examine.com (2024) - Fish Oil / Omega-3 Human Effect Matrix',
-      'Cochrane Review (2020) - Omega-3 Fatty Acids for CVD Prevention',
-      'Jouris et al. (2011) - Omega-3 and Delayed Onset Muscle Soreness - Clin J Sport Med',
-      'ISSN Position on Omega-3 for Athletes (2019) - Sports Med 49:S73',
-      'USDA FoodData Central - Fatty Acid Profiles',
-    ],
-    sources: ['Examine.com', 'Cochrane Library', 'PubMed/MEDLINE', 'USDA FoodData Central', 'Open Food Facts'],
+**\u00bfSos vegetariano/vegano?** Omega-3 de algas, te da DHA directo sin conversi\u00f3n. \ud83d\udc1f`
   },
   {
     keywords: ['se\u00f1al metab\u00f3lica', 'metabolica', 'metabolismo'],
-    content: `**Se\u00f1al Metab\u00f3lica - Lo que deb\u00e9s saber**
+    content: `**Se\u00f1al metab\u00f3lica: c\u00f3mo tu cuerpo regula todo**
 
-La "se\u00f1al metab\u00f3lica" se refiere a c\u00f3mo tu cuerpo comunica internamente su estado energ\u00e9tico y regula la composici\u00f3n corporal. Es un concepto clave en fisiolog\u00eda del ejercicio.
+Esto es re interesante. Tu cuerpo tiene un sistema de "se\u00f1ales" hormonales que le dicen si est\u00e1 todo bien o si hay que activar modo ahorro.
 
-**Hormonas clave (PubMed - Endocrinolog\u00eda del Ejercicio):**
+**Las hormonas que ten\u00e9s que conocer:**
 
-**1. Leptina (se\u00f1al de saciedad):**
-- Producida por el tejido adiposo, indica "reservas llenas"
-- En d\u00e9ficit cal\u00f3rico prolongado, cae -40-50% \u2192 hambre, fatiga, metabolismo lento
-- Soluci\u00f3n: refeeds peri\u00f3dicos (1 d\u00eda de mantenimiento/semana)
+**Leptina** (la de "estoy lleno"):
+- La produce la grasa corporal. Cuando baj\u00e1s mucho de peso o hac\u00e9s dieta mucho tiempo, baja un mont\u00f3n
+- Resultado: hambre, cansancio, metabolismo m\u00e1s lento
+- Soluci\u00f3n: meter un d\u00eda de mantenimiento por semana (refeed)
 
-**2. Ghrelina (se\u00f1al de hambre):**
-- Producida por el est\u00f3mago, aumenta en d\u00e9ficit cal\u00f3rico
-- Se normaliza con comidas regulares y fibra adecuada
+**Cortisol** (la del estr\u00e9s):
+- Si est\u00e1 cr\u00f3nicamente alto = perd\u00e9s m\u00fasculo y acumul\u00e1s grasa en la panza
+- Se baja durmiendo bien, meditando, y no pasarte con el entreno
 
-**3. Insulina (se\u00f1al anab\u00f3lica):**
-- Facilita entrada de nutrientes al m\u00fasculo
-- Sensibilidad insul\u00ednica: mejorada por ejercicio de fuerza y aer\u00f3bico
-- Tu objetivo: mantener alta sensibilidad insul\u00ednica
+**Insulina** (la anab\u00f3lica):
+- Mete nutrientes al m\u00fasculo. El ejercicio de fuerza la mantiene funcionando bien
+- Lo peor que pod\u00e9s hacer: sedentarismo + ultraprocesados = resistencia a la insulina
 
-**4. Cortisol (se\u00f1al de estr\u00e9s):**
-- Cr\u00f3nicamente elevado = catabolismo muscular + acumulaci\u00f3n grasa abdominal
-- Ratio testosterona/cortisol: marcador de recuperaci\u00f3n
+**mTOR** (la de construir m\u00fasculo):
+- Se activa con prote\u00edna (especialmente leucina) y entrenamiento
+- Se apaga con d\u00e9ficit cal\u00f3rico excesivo y demasiado cardio
 
-**5. mTOR (se\u00f1al de s\u00edntesis proteica):**
-- Se activa con leucina (2.5g), entrenamiento mec\u00e1nico y estado energ\u00e9tico positivo
-- Se inhibe con AMPK (activada por d\u00e9ficit cal\u00f3rico y cardio excesivo)
-
-**C\u00f3mo optimizar tu se\u00f1al metab\u00f3lica ({objetivo}):**
-1. No hacer d\u00e9ficits >500 kcal (preserva leptina)
-2. Entrenar fuerza 3-5x/semana (mejora sensibilidad insul\u00ednica)
-3. Dormir 7-9h (regula cortisol y hormona de crecimiento)
-4. Leucina en cada comida (activa mTOR)
-5. Manejar estr\u00e9s (meditar, caminar, respiraci\u00f3n)`,
-    refs: [
-      'Hackney et al. (2020) - Exercise Endocrinology - Springer',
-      'Trexler et al. (2014) - Metabolic Adaptation - J Int Soc Sports Nutr 11:7',
-      'Rosenbaum & Leibel (2010) - Adaptive Thermogenesis in Humans - Int J Obes 34:S47',
-      'ACSM Position Stand - Hormonal Responses to Exercise (2022)',
-    ],
-    sources: ['PubMed/MEDLINE', 'ACSM', 'Examine.com'],
+**Tip para vos ({objetivo}):** no hagas d\u00e9ficits de m\u00e1s de 500 kcal, entren\u00e1 fuerza, dorm\u00ed bien y met\u00e9 prote\u00edna en cada comida. As\u00ed manten\u00e9s las se\u00f1ales a tu favor. \u2728`
   },
   {
     keywords: ['carbo', 'carbohidrato', 'cuando carbos', 'qu\u00e9 carbos', 'ingerir carbos'],
-    content: `**Carbohidratos: Cu\u00e1ndo, cu\u00e1nto y cu\u00e1les**
+    content: `**Carbohidratos: no son el enemigo**
 
-Seg\u00fan ISSN, ACSM y datos de USDA FoodData Central:
+Primero lo primero: **los carbos no engordan**. Lo que engorda es comer m\u00e1s calor\u00edas de las que gast\u00e1s, vengan de donde vengan.
 
-**Tu requerimiento ({peso} kg, {objetivo}, {nivel}):**
-- Rango: **{carbReq}g/d\u00eda** ({carbKg} g/kg)
-- Esto representa ~{carbPct}% de tus calor\u00edas totales
+**Para vos ({peso} kg, {objetivo}, {nivel}):**
+Tu rango ideal: **{carbReq}g por d\u00eda** (~{carbKg}g/kg)
 
-**Cu\u00e1ndo ingerirlos (Nutrient Timing - ISSN):**
-- **Pre-entreno (2-3h antes):** 1-1.5g/kg de carbos complejos
-- **Intra-entreno (>90min):** 30-60g/h de carbos simples (solo si entren\u00e1s >90min)
-- **Post-entreno (0-2h):** 0.8-1.2g/kg para reponer gluc\u00f3geno
-- **Resto del d\u00eda:** distribuir seg\u00fan preferencia, priorizando complejos
+**\u00bfCu\u00e1ndo comerlos?**
+- **2-3 horas antes de entrenar:** carbos complejos (avena, batata, arroz integral). Te dan energ\u00eda sostenida
+- **Despu\u00e9s de entrenar:** carbos m\u00e1s r\u00e1pidos est\u00e1n bien (arroz blanco, banana). Reponen el gluc\u00f3geno
+- **El resto del d\u00eda:** repartilos como quieras
 
-**Cu\u00e1les elegir (clasificaci\u00f3n USDA + Open Food Facts):**
+**Los mejores carbos:**
+- Avena \u2014 el desayuno cl\u00e1sico del fit
+- Batata \u2014 golazo de nutrientes
+- Arroz integral \u2014 vers\u00e1til y barato
+- Frutas \u2014 nunca le tengas miedo a la fruta
+- Legumbres \u2014 carbos + prote\u00edna + fibra, combo genial
 
-**Complejos (bajo IG - priorizar):**
-- Avena (IG: 55) - 66g carbs/100g
-- Batata (IG: 54) - 20g carbs/100g
-- Arroz integral (IG: 50) - 23g carbs/100g (cocido)
-- Quinoa (IG: 53) - 21g carbs/100g
-- Legumbres (IG: 30-40) - fibra + prote\u00edna
+**Los que conviene evitar:**
+- Galletitas, facturas, cereales azucarados
+- Bebidas azucaradas (lo peor que hay)
+- Pan blanco industrial todos los d\u00edas
 
-**Simples (alto IG - solo peri-entreno):**
-- Banana madura (IG: 62) - r\u00e1pida absorci\u00f3n
-- Arroz blanco (IG: 73) - ideal post-entreno
-- Miel (IG: 58) - fructosa + glucosa
-
-**Evitar (Open Food Facts - ultraprocesados):**
-- Cereales azucarados (Nutri-Score D-E)
-- Pan blanco industrial con aditivos
-- Bebidas azucaradas (spike de insulina sin nutrientes)
-
-**Nota sobre p\u00e9rdida de grasa:** Los carbos NO engordan per se. Lo que importa es el balance cal\u00f3rico total. Reducir carbos puede ayudar a crear d\u00e9ficit, pero no es obligatorio.`,
-    refs: [
-      'ISSN Position Stand on Nutrient Timing (2017) - J Int Soc Sports Nutr 14:33',
-      'Burke et al. (2011) - Carbohydrates for Training and Competition - J Sports Sci 29:S17',
-      'ACSM/AND/DC Joint Position: Nutrition for Athletic Performance (2016)',
-      'USDA FoodData Central - Glycemic Index Database',
-      'Open Food Facts - Nutri-Score Classification Algorithm',
-    ],
-    sources: ['ISSN', 'PubMed/MEDLINE', 'ACSM', 'USDA FoodData Central', 'Open Food Facts'],
+**Si quer\u00e9s bajar de peso:** no necesit\u00e1s eliminar los carbos, solo reducirlos un poco y priorizar los de buena calidad. \ud83c\udf5a`
   },
   {
     keywords: ['d\u00e9ficit', 'super\u00e1vit', 'deficit', 'superavit', 'como saber'],
-    content: `**\u00bfEst\u00e1s en d\u00e9ficit o super\u00e1vit cal\u00f3rico?**
+    content: `**\u00bfEst\u00e1s en d\u00e9ficit o super\u00e1vit? Te lo explico f\u00e1cil**
 
-Determinar tu estado energ\u00e9tico es fundamental. Te doy herramientas cient\u00edficas para saberlo:
+Con tus datos ({peso}kg, {altura}cm, {edad} a\u00f1os, nivel {nivel}):
+- Tu cuerpo en reposo gasta: **{tmb} kcal** (TMB)
+- Con tu actividad, gast\u00e1s: **{tdee} kcal por d\u00eda** (TDEE)
 
-**1. C\u00e1lculo te\u00f3rico (tu perfil: {peso}kg, {altura}cm, {edad}a):**
-- TMB (Mifflin-St Jeor): **{tmb} kcal/d\u00eda**
-- TDEE (x factor {nivel}): **{tdee} kcal/d\u00eda**
-- Si com\u00e9s < {tdee} kcal = D\u00c9FICIT
-- Si com\u00e9s > {tdee} kcal = SUPER\u00c1VIT
+**La cuenta es simple:**
+- Com\u00e9s MENOS que {tdee} = **d\u00e9ficit** = baj\u00e1s de peso
+- Com\u00e9s M\u00c1S que {tdee} = **super\u00e1vit** = sub\u00eds de peso
 
-**2. Se\u00f1ales corporales de D\u00c9FICIT:**
-- Peso baja (>0.5% por semana = d\u00e9ficit agresivo)
-- Hambre constante, pensar en comida
-- Energ\u00eda baja, irritabilidad
-- Rendimiento en gym estancado o baja
-- Libido reducida
-- Sue\u00f1o alterado
+**\u00bfC\u00f3mo saber en cu\u00e1l est\u00e1s? El m\u00e9todo que funciona:**
+1. Pesate todos los d\u00edas en ayunas (s\u00ed, todos)
+2. Al final de la semana sac\u00e1 el promedio
+3. Compar\u00e1 promedios semana a semana
+4. Si baja \u2192 est\u00e1s en d\u00e9ficit. Si sube \u2192 super\u00e1vit
 
-**3. Se\u00f1ales de SUPER\u00c1VIT:**
-- Peso sube sostenidamente
-- Fuerza aumenta sesi\u00f3n a sesi\u00f3n
-- Buena energ\u00eda y recuperaci\u00f3n
-- Hambre controlada
+**No te asustes** por las variaciones diarias. Es normal subir 1-2 kg de un d\u00eda al otro por agua, sal, fibra. Lo que importa es la TENDENCIA semanal.
 
-**4. M\u00e9todo pr\u00e1ctico (Gold Standard - Examine.com):**
-- Pes\u00e1te 7 d\u00edas seguidos en ayunas
-- Sacar promedio semanal
-- Comparar promedios semana a semana
-- Si promedio baja: est\u00e1s en d\u00e9ficit
-- Si sube: est\u00e1s en super\u00e1vit
-- Fluctuaciones diarias de 0.5-2kg son NORMALES (agua, sodio, fibra)
+**Se\u00f1ales de que est\u00e1s en d\u00e9ficit:** hambre constante, menos energ\u00eda, fuerza estancada.
+**Se\u00f1ales de super\u00e1vit:** fuerza subiendo, buena energ\u00eda, hambre controlada.
 
-**5. Datos biom\u00e9tricos (Terra API / wearables):**
-- Si us\u00e1s smartwatch: las calor\u00edas "quemadas" tienen margen de error del 20-30%
-- Mejor indicador: tendencia de peso + rendimiento en gym + fotos
+**Para tu objetivo ({objetivo}):**
+- Hipertrofia: super\u00e1vit chiquito, +200-300 kcal
+- Bajar grasa: d\u00e9ficit moderado, -300 a -500 kcal
+- Mantener: com\u00e9 en tu TDEE
 
-**\u00bfQu\u00e9 hacer seg\u00fan tu objetivo ({objetivo})?**
-- Hipertrofia: super\u00e1vit moderado +200-300 kcal
-- P\u00e9rdida de grasa: d\u00e9ficit moderado -300-500 kcal
-- Recomposici\u00f3n: mantenimiento o leve d\u00e9ficit -100 kcal (solo principiantes)`,
-    refs: [
-      'Examine.com (2024) - Caloric Deficit Guide - Evidence-Based',
-      'Hall et al. (2012) - Quantification of Energy Balance - Am J Clin Nutr 95(4)',
-      'Trexler et al. (2014) - Metabolic Adaptation to Weight Loss - JISSN 11:7',
-      'ACSM Position Stand on Weight Loss in Athletes (2021)',
-      'Terra API Documentation - Wearable Data Accuracy Studies',
-    ],
-    sources: ['Examine.com', 'PubMed/MEDLINE', 'ACSM', 'Terra API'],
+\u00bfNecesit\u00e1s ayuda para calcular tus comidas? \ud83d\udcca`
   },
   {
     keywords: ['recuperaci\u00f3n', 'recuperacion', 'descanso', 'sobreentrenamiento'],
-    content: `**Recuperaci\u00f3n y Prevenci\u00f3n del Sobreentrenamiento**
+    content: `**Recuperaci\u00f3n: ac\u00e1 es donde crec\u00e9s**
 
-Seg\u00fan ACSM, NSCA y revisiones de PubMed:
+Esto es algo que mucha gente no entiende: **no crec\u00e9s entrenando, crec\u00e9s descansando**. El entreno es el est\u00edmulo, la recuperaci\u00f3n es donde pasa la magia.
 
-**Pilares de la recuperaci\u00f3n (orden de importancia):**
+**Los 5 pilares, en orden de importancia:**
 
-**1. Sue\u00f1o (el factor #1):**
-- 7-9 horas de sue\u00f1o de calidad
-- GH (hormona de crecimiento) se libera 70% durante sue\u00f1o profundo
-- D\u00e9ficit de sue\u00f1o = -15% s\u00edntesis proteica, +20% cortisol
-- Temperatura ideal: 18-20\u00b0C, oscuridad total
+**1. Sue\u00f1o (el n\u00famero 1 lejos):**
+- 7 a 9 horas de sue\u00f1o de calidad
+- La hormona de crecimiento se libera mayormente mientras dorm\u00eds
+- Dormir mal = menos s\u00edntesis de prote\u00edna + m\u00e1s cortisol
+- Tip: pieza oscura, fr\u00eda (18-20\u00b0C), sin celular 30 min antes
 
 **2. Nutrici\u00f3n post-entreno:**
-- Prote\u00edna: 30-40g dentro de las 4h post-entreno
-- Carbohidratos: 0.8-1.2g/kg para reponer gluc\u00f3geno
-- Hidrataci\u00f3n: 500ml por cada 0.5kg perdido en entrenamiento
+- 30-40g de prote\u00edna despu\u00e9s de entrenar (no hace falta que sea inmediato, ten\u00e9s varias horas)
+- Carbohidratos para reponer energ\u00eda
+- Hidrataci\u00f3n: 500ml por cada medio kilo que perd\u00e9s entrenando
 
 **3. Manejo del estr\u00e9s:**
-- Cortisol cr\u00f3nico = catabolismo + grasa abdominal
-- T\u00e9cnicas: meditaci\u00f3n, caminatas, respiraci\u00f3n diafragm\u00e1tica
-- HRV (variabilidad de frecuencia card\u00edaca): indicador objetivo
+- El cortisol cr\u00f3nico es tu peor enemigo
+- Caminar, meditar, respirar profundo... lo que te sirva
 
-**4. Periodizaci\u00f3n del entrenamiento:**
-- Deload cada 4-6 semanas (reducir volumen 40-50%)
-- No entrenar al fallo en TODAS las series
-- RPE 7-8 para la mayor\u00eda de las series
+**4. Deload cada 4-6 semanas:**
+- Una semana de bajar el volumen un 40-50%
+- No es "no entrenar", es entrenar m\u00e1s tranqui
 
-**5. Suplementos para recuperaci\u00f3n (evidencia A-B):**
-- Creatina: 5g/d\u00eda (reduce da\u00f1o muscular)
-- Omega-3: 2-3g EPA+DHA (antiinflamatorio)
-- Tart Cherry Juice: reduce DOMS -20% (meta-an\u00e1lisis)
-- Magnesio: 200-400mg antes de dormir
+**5. Suplementos que ayudan:**
+- Creatina (5g/d\u00eda)
+- Magnesio antes de dormir
+- Omega-3
 
-**Se\u00f1ales de sobreentrenamiento (ACSM):**
-- Rendimiento estancado >2 semanas
-- Frecuencia card\u00edaca en reposo elevada
-- Insomnio a pesar de fatiga
-- Lesiones recurrentes
-- P\u00e9rdida de motivaci\u00f3n`,
-    refs: [
-      'ACSM Position Stand on Overtraining Syndrome (2021)',
-      'Dattilo et al. (2011) - Sleep and Muscle Recovery - Med Sci Sports Exerc',
-      'NSCA Essentials of Strength Training, 4th Ed (2016) - Ch. 22',
-      'Examine.com (2024) - Recovery Supplements Ranked',
-    ],
-    sources: ['ACSM', 'NSCA', 'PubMed/MEDLINE', 'Examine.com', 'Terra API'],
+**\u00bfSe\u00f1ales de que te est\u00e1s pasando?** Rendimiento estancado, insomnio, lesiones seguidas, cero ganas de entrenar. Si te pasa, frena una semana. \ud83d\udca4`
   },
   {
     keywords: ['macro', 'macros', 'ajustar', 'calcular'],
-    content: `**C\u00e1lculo y Ajuste de Macronutrientes Personalizado**
+    content: `**Tus macros calculados al detalle**
 
-Usando f\u00f3rmulas validadas por ACSM y datos de USDA:
+Dale, te lo armo con tus datos ({peso}kg, {altura}cm, {edad} a\u00f1os, {objetivo}, {nivel}):
 
-**Tu perfil: {peso}kg | {altura}cm | {edad}a | {objetivo} | {nivel}**
+**Paso a paso:**
+1. Tu metabolismo basal (TMB): **{tmb} kcal**
+2. Con tu actividad (TDEE): **{tdee} kcal**
+3. Tu objetivo cal\u00f3rico: **{calObj} kcal**
 
-**C\u00e1lculo paso a paso:**
-1. TMB (Mifflin-St Jeor): **{tmb} kcal**
-2. TDEE (factor actividad): **{tdee} kcal**
-3. Calor\u00edas objetivo: **{calObj} kcal**
+**Distribuci\u00f3n recomendada:**
+- **Prote\u00edna:** {protReq}g \u2192 {protCal} kcal ({protPct}%)
+- **Grasas:** {grasaReq}g \u2192 {grasaCal} kcal ({grasaPct}%)
+- **Carbohidratos:** {carbReq}g \u2192 {carbCal} kcal ({carbPct}%)
 
-**Distribuci\u00f3n de macros recomendada:**
-- **Prote\u00edna:** {protReq}g ({protKg}g/kg) = {protCal} kcal ({protPct}%)
-- **Grasas:** {grasaReq}g = {grasaCal} kcal ({grasaPct}%)
-- **Carbohidratos:** {carbReq}g = {carbCal} kcal ({carbPct}%)
+**\u00bfC\u00f3mo ajustar?**
+- Si no baj\u00e1s de peso en 2 semanas: sac\u00e1 200 kcal de carbos
+- Si no sub\u00eds de peso: sum\u00e1 200 kcal (mitad carbos, mitad grasas)
+- Si perd\u00e9s fuerza haciendo d\u00e9ficit: sub\u00ed la prote a 2.5g/kg
+- **Nunca bajes** las grasas de 0.5g/kg (se te desarman las hormonas)
 
-**Reglas de ajuste (ISSN/Examine):**
-- Si NO baj\u00e1s de peso: reducir 200 kcal de carbos
-- Si NO sub\u00eds de peso: agregar 200 kcal (100 carbos + 100 grasas)
-- Si perd\u00e9s fuerza en d\u00e9ficit: subir prote\u00edna a 2.5g/kg
-- NUNCA bajar grasas de 0.5g/kg (salud hormonal)
-
-**Ajustar cada 2-3 semanas** seg\u00fan tendencia de peso promedio semanal.`,
-    refs: [
-      'Mifflin et al. (1990) - Predictive Equation for Resting Energy Expenditure',
-      'ISSN Position Stand on Diets and Body Composition (2017)',
-      'Helms, Aragon & Fitschen (2014) - Evidence-Based Recommendations for Contest Prep - JISSN',
-      'ACSM/AND/DC Joint Position on Nutrition for Athletes (2016)',
-    ],
-    sources: ['ISSN', 'ACSM', 'PubMed/MEDLINE', 'USDA FoodData Central'],
+Ajust\u00e1 cada 2-3 semanas seg\u00fan c\u00f3mo venga la balanza y el espejo. No cambies todo de golpe. \ud83d\udcdd`
   },
 ];
 
@@ -434,8 +275,8 @@ function personalizeContent(content: string, perfil: { peso: number; altura: num
   const tmb = Math.round(10 * peso + 6.25 * altura - 5 * edad + 5);
   const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
   const tdee = Math.round(tmb * (factores[nivel] || 1.55));
-  const calObj = objetivo === 'Hipertrofia' || objetivo === 'Fuerza' ? tdee + 300 : objetivo === 'Perdida de grasa' ? tdee - 400 : tdee;
-  const protKg = objetivo === 'Perdida de grasa' ? 2.2 : objetivo === 'Hipertrofia' || objetivo === 'Fuerza' ? 2.0 : 1.6;
+  const calObj = objetivo.includes('Hipertrofia') || objetivo.includes('Fuerza') ? tdee + 300 : objetivo.includes('grasa') ? tdee - 400 : tdee;
+  const protKg = objetivo.includes('grasa') ? 2.2 : objetivo.includes('Hipertrofia') || objetivo.includes('Fuerza') ? 2.0 : 1.6;
   const protReq = Math.round(peso * protKg);
   const protCal = protReq * 4;
   const protPct = Math.round((protCal / calObj) * 100);
@@ -448,29 +289,15 @@ function personalizeContent(content: string, perfil: { peso: number; altura: num
   const carbKg = (carbReq / peso).toFixed(1);
 
   return content
-    .replace(/\{peso\}/g, peso.toString())
-    .replace(/\{altura\}/g, altura.toString())
-    .replace(/\{edad\}/g, edad.toString())
-    .replace(/\{objetivo\}/g, objetivo)
-    .replace(/\{nivel\}/g, nivel)
-    .replace(/\{tmb\}/g, tmb.toString())
-    .replace(/\{tdee\}/g, tdee.toString())
-    .replace(/\{calObj\}/g, calObj.toString())
-    .replace(/\{protKg\}/g, protKg.toString())
-    .replace(/\{protReq\}/g, protReq.toString())
-    .replace(/\{protToma\}/g, Math.round(protReq / 5).toString())
-    .replace(/\{protCal\}/g, protCal.toString())
-    .replace(/\{protPct\}/g, protPct.toString())
-    .replace(/\{grasaReq\}/g, grasaReq.toString())
-    .replace(/\{grasaCal\}/g, grasaCal.toString())
-    .replace(/\{grasaPct\}/g, grasaPct.toString())
-    .replace(/\{carbReq\}/g, carbReq.toString())
-    .replace(/\{carbCal\}/g, carbCal.toString())
-    .replace(/\{carbPct\}/g, carbPct.toString())
-    .replace(/\{carbKg\}/g, carbKg);
+    .replace(/\{peso\}/g, peso.toString()).replace(/\{altura\}/g, altura.toString()).replace(/\{edad\}/g, edad.toString())
+    .replace(/\{objetivo\}/g, objetivo).replace(/\{nivel\}/g, nivel).replace(/\{tmb\}/g, tmb.toString()).replace(/\{tdee\}/g, tdee.toString())
+    .replace(/\{calObj\}/g, calObj.toString()).replace(/\{protKg\}/g, protKg.toString()).replace(/\{protReq\}/g, protReq.toString())
+    .replace(/\{protToma\}/g, Math.round(protReq / 5).toString()).replace(/\{protCal\}/g, protCal.toString()).replace(/\{protPct\}/g, protPct.toString())
+    .replace(/\{grasaReq\}/g, grasaReq.toString()).replace(/\{grasaCal\}/g, grasaCal.toString()).replace(/\{grasaPct\}/g, grasaPct.toString())
+    .replace(/\{carbReq\}/g, carbReq.toString()).replace(/\{carbCal\}/g, carbCal.toString()).replace(/\{carbPct\}/g, carbPct.toString()).replace(/\{carbKg\}/g, carbKg);
 }
 
-function findResponse(query: string, perfil: typeof knowledgeBase[0] extends { content: string } ? Parameters<typeof personalizeContent>[1] : never): { content: string; refs: string[]; sources: string[] } {
+function findResponse(query: string, perfil: Parameters<typeof personalizeContent>[1]): string {
   const lower = query.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   let bestMatch: KnowledgeEntry | null = null;
   let bestScore = 0;
@@ -480,41 +307,48 @@ function findResponse(query: string, perfil: typeof knowledgeBase[0] extends { c
     for (const kw of entry.keywords) {
       const kwNorm = kw.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       if (lower.includes(kwNorm)) score += 10;
-      // Partial match
-      const words = kwNorm.split(' ');
-      for (const w of words) {
+      for (const w of kwNorm.split(' ')) {
         if (lower.includes(w) && w.length > 3) score += 3;
       }
     }
-    if (score > bestScore) {
-      bestScore = score;
-      bestMatch = entry;
-    }
+    if (score > bestScore) { bestScore = score; bestMatch = entry; }
   }
 
   if (bestMatch && bestScore >= 3) {
-    return {
-      content: personalizeContent(bestMatch.content, perfil),
-      refs: bestMatch.refs,
-      sources: bestMatch.sources,
-    };
+    return personalizeContent(bestMatch.content, perfil);
   }
 
-  // Default response personalizada
-  return {
-    content: personalizeContent(`Buena pregunta. Basandome en tu perfil ({peso}kg, {objetivo}, {nivel}) y consultando las bases de datos cient\u00edficas:\n\nTu programa actual est\u00e1 bien encaminado. Para darte una respuesta m\u00e1s precisa, te recomiendo que me preguntes espec\u00edficamente sobre:\n\n- **Suplementaci\u00f3n:** creatina, whey, omega-3, magnesio\n- **Nutrici\u00f3n:** prote\u00ednas, carbohidratos, macros, d\u00e9ficit/super\u00e1vit\n- **Fisiolog\u00eda:** se\u00f1al metab\u00f3lica, recuperaci\u00f3n, sobreentrenamiento\n\nCada respuesta incluye datos personalizados a tu perfil y referencias de fuentes como Examine.com, PubMed, USDA FoodData, Cochrane Library e ISSN.\n\nTu TDEE estimado: {tdee} kcal | Prote\u00edna recomendada: {protReq}g/d\u00eda`, perfil),
-    refs: ['Base de conocimiento JustFit365 - Multi-source RAG'],
-    sources: ['Examine.com', 'PubMed/MEDLINE', 'USDA FoodData Central'],
-  };
+  return personalizeContent(`\u00a1Buena pregunta! Mir\u00e1, con tu perfil ({peso}kg, {objetivo}, nivel {nivel}) te puedo ayudar con varias cosas.
+
+Preguntame sobre:
+- **Suplementos:** creatina, whey, omega-3, magnesio
+- **Nutrici\u00f3n:** prote\u00ednas, carbohidratos, macros
+- **Tu cuerpo:** d\u00e9ficit/super\u00e1vit, se\u00f1al metab\u00f3lica, recuperaci\u00f3n
+
+Tu TDEE (lo que gast\u00e1s por d\u00eda): {tdee} kcal
+Prote\u00edna recomendada: {protReq}g/d\u00eda
+
+Preguntame lo que quieras que estoy para ayudarte \ud83d\udcaa`, perfil);
 }
 
 const initialMessages: Message[] = [
   {
     id: 1,
     role: 'assistant',
-    content: `\u00a1Hola! Soy tu **JustFit Coach IA**, potenciado por bases de datos cient\u00edficas de primer nivel.\n\nMi conocimiento proviene de:\n- **Examine.com** \u2014 Est\u00e1ndar de oro en suplementaci\u00f3n basada en evidencia\n- **USDA FoodData Central** \u2014 Datos bioqu\u00edmicos oficiales de nutrientes\n- **PubMed/MEDLINE** \u2014 +35 millones de papers de medicina deportiva\n- **Cochrane Library** \u2014 Revisiones sistem\u00e1ticas con m\u00e1ximo rigor\n- **ISSN, ACSM, NSCA** \u2014 Position Stands de las principales organizaciones\n- **Open Food Facts** \u2014 Clasificaci\u00f3n Nutri-Score y detecci\u00f3n de ultraprocesados\n- **ExerciseDB** \u2014 +1.300 ejercicios con targets musculares\n\nCada respuesta es personalizada a tu perfil y cita las fuentes espec\u00edficas.\n\n\u00bfEn qu\u00e9 puedo ayudarte?`,
+    content: `\u00a1Hola! Soy tu **JustFit Coach** \ud83d\udcaa
+
+Estoy ac\u00e1 para ayudarte con todo lo que necesites sobre entrenamiento, nutrici\u00f3n y suplementos. Mis respuestas est\u00e1n basadas en la mejor evidencia cient\u00edfica disponible, pero te las cuento como un amigo que sabe del tema.
+
+Pod\u00e9s preguntarme sobre:
+- Creatina, whey, omega-3, magnesio
+- Cu\u00e1nta prote\u00edna comer y c\u00f3mo distribuirla
+- Carbohidratos: cu\u00e1ndo y cu\u00e1les
+- C\u00f3mo saber si est\u00e1s en d\u00e9ficit o super\u00e1vit
+- Recuperaci\u00f3n y descanso
+- Ajuste de macros personalizado
+
+\u00bfEn qu\u00e9 te puedo dar una mano?`,
     timestamp: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
-    sources: ['Examine.com', 'USDA FoodData', 'PubMed', 'Cochrane', 'ISSN', 'ACSM', 'NSCA'],
   }
 ];
 
@@ -543,47 +377,30 @@ export default function BioCoach() {
     setIsTyping(true);
 
     setTimeout(() => {
-      const resp = findResponse(query, user?.perfil);
       const aiMsg: Message = {
         id: Date.now() + 1,
         role: 'assistant',
-        content: resp.content,
+        content: findResponse(query, user?.perfil),
         timestamp: new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }),
-        refs: resp.refs,
-        sources: resp.sources,
       };
       setMessages(prev => [...prev, aiMsg]);
       setIsTyping(false);
-    }, 1800);
+    }, 1500);
   };
 
   return (
     <div className="flex flex-col h-[calc(100vh-7rem)]">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gradient-to-br from-electric to-neon rounded-2xl flex items-center justify-center shadow-lg shadow-electric/20">
-            <Zap className="w-6 h-6 text-black" strokeWidth={2.5} />
-          </div>
-          <div>
-            <h1 className="text-xl font-black text-white tracking-tight">JustFit <span className="text-electric">Coach</span></h1>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-              <span className="text-white/30 text-xs">RAG multi-fuente activo</span>
-            </div>
-          </div>
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-12 h-12 bg-gradient-to-br from-electric to-neon rounded-2xl flex items-center justify-center shadow-lg shadow-electric/20">
+          <Zap className="w-6 h-6 text-black" strokeWidth={2.5} />
         </div>
-        <div className="flex flex-wrap gap-1">
-          {[
-            { icon: FlaskConical, label: 'Examine', color: 'text-emerald-400/50' },
-            { icon: Database, label: 'USDA', color: 'text-blue-400/50' },
-            { icon: BookOpen, label: 'PubMed', color: 'text-amber-400/50' },
-            { icon: Activity, label: 'Cochrane', color: 'text-pink-400/50' },
-          ].map(s => (
-            <span key={s.label} className="flex items-center gap-1 px-2 py-1 bg-white/[0.02] border border-dark-border rounded-lg text-[10px] text-white/25">
-              <s.icon className={`w-2.5 h-2.5 ${s.color}`} />{s.label}
-            </span>
-          ))}
+        <div>
+          <h1 className="text-xl font-black text-white tracking-tight">JustFit <span className="text-electric">Coach</span></h1>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+            <span className="text-white/30 text-xs">Online &middot; Listo para ayudarte</span>
+          </div>
         </div>
       </div>
 
@@ -608,22 +425,6 @@ export default function BioCoach() {
                     : <span key={i}>{part}</span>
                 )}
               </div>
-              {m.sources && (
-                <div className="mt-3 pt-2 border-t border-dark-border/30 flex flex-wrap gap-1">
-                  {m.sources.map((s, i) => (
-                    <span key={i} className="text-[9px] px-1.5 py-0.5 bg-electric/5 text-electric/40 rounded">{s}</span>
-                  ))}
-                </div>
-              )}
-              {m.refs && (
-                <div className="mt-2 space-y-0.5">
-                  {m.refs.map((r, i) => (
-                    <p key={i} className="text-[10px] text-white/20 flex items-start gap-1">
-                      <BookOpen className="w-2.5 h-2.5 shrink-0 mt-0.5" /> {r}
-                    </p>
-                  ))}
-                </div>
-              )}
               <p className="text-white/10 text-[10px] mt-2">{m.timestamp}</p>
             </div>
             {m.role === 'user' && (
@@ -641,7 +442,7 @@ export default function BioCoach() {
             <div className="bg-dark-800 border border-dark-border rounded-2xl px-5 py-4">
               <div className="flex items-center gap-2 text-white/30 text-sm">
                 <Sparkles className="w-4 h-4 animate-spin" />
-                Consultando Examine, PubMed, USDA y Cochrane...
+                Pensando...
               </div>
             </div>
           </div>
@@ -652,11 +453,8 @@ export default function BioCoach() {
       {/* Suggestions */}
       <div className="flex flex-wrap gap-1.5 mt-3 mb-3">
         {['\u00bfDebo tomar creatina?', '\u00bfCu\u00e1nta prote\u00edna necesito?', '\u00bfMe conviene Whey?', '\u00bfDebo tomar magnesio?', '\u00bfDebo tomar Omega3?', '\u00bfSe\u00f1al metab\u00f3lica?', '\u00bfCu\u00e1ndo y qu\u00e9 carbos?', '\u00bfD\u00e9ficit o super\u00e1vit?', 'Recuperaci\u00f3n', 'Ajustar macros'].map(s => (
-          <button
-            key={s}
-            onClick={() => { setInput(s); }}
-            className="px-2.5 py-1 bg-white/[0.03] border border-dark-border hover:border-electric/30 rounded-lg text-[11px] text-white/40 hover:text-electric transition-all"
-          >
+          <button key={s} onClick={() => setInput(s)}
+            className="px-2.5 py-1 bg-white/[0.03] border border-dark-border hover:border-electric/30 rounded-lg text-[11px] text-white/40 hover:text-electric transition-all">
             {s}
           </button>
         ))}
@@ -664,19 +462,12 @@ export default function BioCoach() {
 
       {/* Input */}
       <div className="flex gap-3">
-        <input
-          type="text"
-          value={input}
-          onChange={e => setInput(e.target.value)}
+        <input type="text" value={input} onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && sendMessage()}
-          placeholder="Preguntale al JustFit Coach..."
-          className="flex-1 px-5 py-4 bg-dark-800 border border-dark-border rounded-2xl text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-electric/30 focus:border-electric/30 text-sm"
-        />
-        <button
-          onClick={sendMessage}
-          disabled={!input.trim() || isTyping}
-          className="w-14 h-14 bg-gradient-to-r from-electric to-neon rounded-2xl flex items-center justify-center text-black hover:scale-[1.05] active:scale-95 transition-all shadow-lg shadow-electric/20 disabled:opacity-30 disabled:cursor-not-allowed"
-        >
+          placeholder="Preguntame lo que quieras..."
+          className="flex-1 px-5 py-4 bg-dark-800 border border-dark-border rounded-2xl text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-electric/30 text-sm" />
+        <button onClick={sendMessage} disabled={!input.trim() || isTyping}
+          className="w-14 h-14 bg-gradient-to-r from-electric to-neon rounded-2xl flex items-center justify-center text-black hover:scale-[1.05] active:scale-95 transition-all shadow-lg shadow-electric/20 disabled:opacity-30 disabled:cursor-not-allowed">
           <Send className="w-5 h-5" />
         </button>
       </div>
