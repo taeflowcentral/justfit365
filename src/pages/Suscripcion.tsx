@@ -113,7 +113,7 @@ export default function Suscripcion() {
             <h3 className="text-white font-bold mb-4">Detalle de suscripci&oacute;n</h3>
             <div className="space-y-3">
               {[
-                { icon: DollarSign, label: 'Monto', value: `USD ${precio.toFixed(2)} /${periodo}` },
+                { icon: DollarSign, label: 'Monto', value: `$${precio.toLocaleString('es-AR')} /${periodo}` },
                 { icon: RotateCcw, label: 'Renovaci\u00f3n', value: esGimnasio ? 'Mensual' : 'Anual' },
                 { icon: Calendar, label: esGimnasio ? '\u00daltimo pago' : 'Fecha de pago', value: (fechaUltimoPago || fechaInicio)?.toLocaleDateString('es-AR') || '-' },
                 { icon: Calendar, label: 'Pr\u00f3ximo vencimiento', value: fechaVenc?.toLocaleDateString('es-AR') || '-' },

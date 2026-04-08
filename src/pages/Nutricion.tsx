@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, Zap, Sparkles, RotateCcw, Target } from 'lucide-react';
+import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, Zap, Sparkles, RotateCcw, Target, ArrowLeftRight } from 'lucide-react';
+import FoodAlternatives, { findAlternatives } from '../components/FoodAlternatives';
 import { useAuth } from '../context/AuthContext';
 import ShareButtons, { generateNutricionText, shareWhatsApp, printContent } from '../components/ShareButtons';
 
@@ -111,6 +112,7 @@ export default function Nutricion() {
   const [generando, setGenerando] = useState(false);
   const [showAddComida, setShowAddComida] = useState(false);
   const [showAddItem, setShowAddItem] = useState<number | null>(null);
+  const [showAlternatives, setShowAlternatives] = useState<{ comidaId: number; itemId: number; nombre: string } | null>(null);
   const [nuevaComida, setNuevaComida] = useState({ nombre: '', hora: '12:00' });
   const [nuevoItem, setNuevoItem] = useState<Alimento>({ id: 0, alimento: '', porcion: '', cal: 0, prot: 0, carb: 0, grasa: 0 });
 
@@ -396,6 +398,9 @@ export default function Nutricion() {
                           <div className="flex items-center justify-between">
                             <p className="text-white/80 text-sm truncate flex-1 mr-2">{item.alimento}</p>
                             <div className="flex items-center gap-1 shrink-0">
+                              {findAlternatives(item.alimento) && (
+                                <button onClick={() => setShowAlternatives({ comidaId: c.id, itemId: item.id, nombre: item.alimento })} className="p-1 text-white/15 hover:text-emerald-400 transition-colors" title="Ver alternativas"><ArrowLeftRight className="w-3 h-3" /></button>
+                              )}
                               <button onClick={() => setEditandoItem(item.id)} className="p-1 text-white/15 hover:text-electric transition-colors"><Edit3 className="w-3 h-3" /></button>
                               <button onClick={() => deleteItem(c.id, item.id)} className="p-1 text-white/15 hover:text-danger transition-colors"><Trash2 className="w-3 h-3" /></button>
                             </div>
@@ -497,6 +502,22 @@ export default function Nutricion() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Modal alternativas */}
+      {showAlternatives && (
+        <FoodAlternatives
+          alimento={showAlternatives.nombre}
+          onSelect={(alt) => {
+            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'alimento', alt.nombre);
+            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'porcion', alt.porcion);
+            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'cal', alt.cal);
+            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'prot', alt.prot);
+            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'carb', alt.carb);
+            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'grasa', alt.grasa);
+          }}
+          onClose={() => setShowAlternatives(null)}
+        />
       )}
     </div>
   );

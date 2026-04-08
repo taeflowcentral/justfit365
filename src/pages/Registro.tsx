@@ -157,13 +157,13 @@ export default function Registro() {
 
             {form.role === 'gimnasio' && (
               <div className="bg-amber-500/5 border border-amber-500/15 rounded-xl p-3 text-xs text-amber-400/60">
-                <strong className="text-amber-400">Plan Gimnasio:</strong> USD 10.00/mes. Incluye gesti&oacute;n de clientes, rutinas y nutrici&oacute;n personalizada.
+                <strong className="text-amber-400">Plan Gimnasio:</strong> $15.000/mes. Incluye gesti&oacute;n de clientes, rutinas y nutrici&oacute;n personalizada.
               </div>
             )}
 
             {form.role === 'usuario' && (
               <div className="bg-electric/5 border border-electric/15 rounded-xl p-3 text-xs text-electric/60">
-                <strong className="text-electric">Plan Individual:</strong> USD 10.00/a&ntilde;o. Acceso completo a todos los m&oacute;dulos.
+                <strong className="text-electric">Plan Individual:</strong> $15.000/a&ntilde;o. Acceso completo a todos los m&oacute;dulos.
               </div>
             )}
 

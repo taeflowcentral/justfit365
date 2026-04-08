@@ -75,9 +75,9 @@ export default function AdminPanel() {
         </h3>
         <div className="flex items-end gap-4">
           <div className="flex-1 max-w-xs">
-            <label className="block text-xs text-white/40 uppercase tracking-wider mb-2">Precio en USD</label>
+            <label className="block text-xs text-white/40 uppercase tracking-wider mb-2">Precio en ARS ($)</label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 font-bold">USD</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 font-bold">$</span>
               <input
                 type="number"
                 min="1"
@@ -87,7 +87,7 @@ export default function AdminPanel() {
                 className="w-full pl-16 pr-4 py-3.5 bg-black/60 border border-dark-border rounded-xl text-white text-lg font-bold focus:outline-none focus:ring-2 focus:ring-electric/30"
               />
             </div>
-            <p className="text-white/20 text-xs mt-1">Precio actual: USD {precioActual.toFixed(2)}</p>
+            <p className="text-white/20 text-xs mt-1">Precio actual: ${precioActual.toLocaleString('es-AR')}</p>
           </div>
 
           {precioCambio ? (
@@ -110,7 +110,7 @@ export default function AdminPanel() {
           <div className="mt-4 bg-amber-500/5 border border-amber-500/20 rounded-xl p-3 flex items-start gap-2">
             <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
             <p className="text-white/50 text-xs">
-              Al cambiar el precio de <strong className="text-white">USD {precioActual.toFixed(2)}</strong> a <strong className="text-amber-400">USD {nuevoPrecio.toFixed(2)}</strong>, se recomienda notificar a todos los usuarios.
+              Al cambiar el precio de <strong className="text-white">$ {precioActual.toFixed(2)}</strong> a <strong className="text-amber-400">$ {nuevoPrecio.toFixed(2)}</strong>, se recomienda notificar a todos los usuarios.
             </p>
           </div>
         )}
@@ -124,13 +124,13 @@ export default function AdminPanel() {
         <p className="text-white/30 text-xs mb-4">Los gimnasios pagan mensualmente. Se inactivan al 2do mes impago y se reactivan al actualizar el pago.</p>
         <div className="flex items-end gap-4">
           <div className="flex-1 max-w-xs">
-            <label className="block text-xs text-white/40 uppercase tracking-wider mb-2">Precio mensual USD</label>
+            <label className="block text-xs text-white/40 uppercase tracking-wider mb-2">Precio mensual ARS ($)</label>
             <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 font-bold">USD</span>
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 font-bold">$</span>
               <input type="number" min="1" step="0.01" value={precioGym} onChange={e => setPrecioGymState(e.target.value)}
                 className="w-full pl-16 pr-4 py-3.5 bg-black/60 border border-dark-border rounded-xl text-white text-lg font-bold focus:outline-none focus:ring-2 focus:ring-electric/30" />
             </div>
-            <p className="text-white/20 text-xs mt-1">Actual: USD {getPrecioMensualGym().toFixed(2)}/mes</p>
+            <p className="text-white/20 text-xs mt-1">Actual: ${getPrecioMensualGym().toLocaleString('es-AR')}/mes</p>
           </div>
           <button onClick={handleSavePrecioGym}
             className={`px-6 py-3.5 rounded-xl text-sm font-black uppercase tracking-wider transition-all ${
@@ -159,7 +159,7 @@ export default function AdminPanel() {
               <p className="text-white font-bold">Asunto: Actualizaci&oacute;n de Suscripci&oacute;n JustFit365</p>
               <hr className="border-dark-border" />
               <p>Hola [nombre del usuario],</p>
-              <p>Te informamos que el precio de la suscripci&oacute;n anual de JustFit365 ha sido actualizado a <strong className="text-electric">USD {(parseFloat(precio) || precioActual).toFixed(2)}</strong>.</p>
+              <p>Te informamos que el precio de la suscripci&oacute;n anual de JustFit365 ha sido actualizado a <strong className="text-electric">${(parseFloat(precio) || precioActual).toLocaleString('es-AR')}</strong>.</p>
               <p>Este cambio aplica a partir de tu pr&oacute;xima renovaci&oacute;n. Tu suscripci&oacute;n actual contin&uacute;a vigente hasta su fecha de vencimiento.</p>
               <p>Datos de pago:<br />
                 Alias: <strong className="text-electric">ventanasdepapel</strong><br />
@@ -287,12 +287,12 @@ export default function AdminPanel() {
             <div className="bg-black/40 border border-dark-border rounded-xl p-4 mb-5 flex items-center justify-center gap-4">
               <div className="text-center">
                 <p className="text-white/30 text-xs">Actual</p>
-                <p className="text-white/50 text-lg font-bold line-through">USD {precioActual.toFixed(2)}</p>
+                <p className="text-white/50 text-lg font-bold line-through">$ {precioActual.toFixed(2)}</p>
               </div>
               <span className="text-white/20 text-2xl">&rarr;</span>
               <div className="text-center">
                 <p className="text-amber-400 text-xs">Nuevo</p>
-                <p className="text-amber-400 text-lg font-black">USD {nuevoPrecio.toFixed(2)}</p>
+                <p className="text-amber-400 text-lg font-black">$ {nuevoPrecio.toFixed(2)}</p>
               </div>
             </div>
             <div className="flex gap-3">
