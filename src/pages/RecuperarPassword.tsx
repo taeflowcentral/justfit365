@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Zap, Mail, MessageCircle, Fingerprint, CheckCircle, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-const USERS_DB_KEY = 'jf365_users_db';
+import { supabase } from '../lib/supabase';
 
 export default function RecuperarPassword() {
   const [step, setStep] = useState<'buscar' | 'codigo' | 'nueva' | 'listo'>('buscar');
@@ -17,21 +16,19 @@ export default function RecuperarPassword() {
   const [emailEncontrado, setEmailEncontrado] = useState('');
   const [nombreEncontrado, setNombreEncontrado] = useState('');
 
-  const buscarUsuario = () => {
+  const buscarUsuario = async () => {
     setError('');
     if (!/^\d{7,8}$/.test(dni)) {
       setError('Ingres\u00e1 un DNI v\u00e1lido (7-8 d\u00edgitos).');
       return;
     }
-    const db = JSON.parse(localStorage.getItem(USERS_DB_KEY) || '{}');
-    const entry = db[dni];
-    if (!entry) {
+    const { data } = await supabase.from('usuarios').select('nombre, email').eq('dni', dni).single();
+    if (!data) {
       setError('No se encontr\u00f3 un usuario con ese DNI.');
       return;
     }
-    setEmailEncontrado(entry.user.email || '');
-    setNombreEncontrado(entry.user.nombre || '');
-    // Generar codigo de 6 digitos
+    setEmailEncontrado(data.email || '');
+    setNombreEncontrado(data.nombre || '');
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     setCodigoGenerado(code);
     setStep('codigo');
@@ -58,7 +55,7 @@ export default function RecuperarPassword() {
     setStep('nueva');
   };
 
-  const cambiarPassword = () => {
+  const cambiarPassword = async () => {
     setError('');
     if (password.length < 6) {
       setError('La contrase\u00f1a debe tener al menos 6 caracteres.');
@@ -68,20 +65,11 @@ export default function RecuperarPassword() {
       setError('Las contrase\u00f1as no coinciden.');
       return;
     }
-    // Actualizar en DB
-    const db = JSON.parse(localStorage.getItem(USERS_DB_KEY) || '{}');
-    if (db[dni]) {
-      db[dni].password = password;
-      localStorage.setItem(USERS_DB_KEY, JSON.stringify(db));
-      // Verificar que se guardo
-      const verify = JSON.parse(localStorage.getItem(USERS_DB_KEY) || '{}');
-      if (verify[dni] && verify[dni].password === password) {
-        setStep('listo');
-      } else {
-        setError('Error al guardar. Intent\u00e1 de nuevo.');
-      }
+    const { error: err } = await supabase.from('usuarios').update({ password_hash: password }).eq('dni', dni);
+    if (err) {
+      setError('Error al guardar: ' + err.message);
     } else {
-      setError('Usuario no encontrado en la base de datos.');
+      setStep('listo');
     }
   };
 

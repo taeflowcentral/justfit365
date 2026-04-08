@@ -17,7 +17,7 @@ export default function Registro() {
 
   const update = (field: string, value: string) => setForm(prev => ({ ...prev, [field]: value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
@@ -31,23 +31,21 @@ export default function Registro() {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      const result = register({
-        nombre: form.nombre,
-        apellido: form.apellido,
-        dni: form.dni,
-        email: form.email,
-        password: form.password,
-        role: form.role,
-        gimnasioNombre: form.gimnasioNombre,
-      });
-      if (result.success) {
-        navigate('/');
-      } else {
-        setError(result.error || 'Error al registrar.');
-      }
-      setLoading(false);
-    }, 800);
+    const result = await register({
+      nombre: form.nombre,
+      apellido: form.apellido,
+      dni: form.dni,
+      email: form.email,
+      password: form.password,
+      role: form.role,
+      gimnasioNombre: form.gimnasioNombre,
+    });
+    if (result.success) {
+      navigate('/');
+    } else {
+      setError(result.error || 'Error al registrar.');
+    }
+    setLoading(false);
   };
 
   return (

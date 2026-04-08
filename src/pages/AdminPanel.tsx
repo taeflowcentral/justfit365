@@ -1,33 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Settings, DollarSign, Users, Mail, Send, CheckCircle, AlertTriangle, Shield, Bell, KeyRound, Trash2 } from 'lucide-react';
 import { getPrecioAnual, setPrecioAnual, getPrecioMensualGym, setPrecioMensualGym } from '../components/PaymentModal';
-import { getAllUsers } from '../context/AuthContext';
+import { getAllUsers, type User } from '../context/AuthContext';
+import { supabase } from '../lib/supabase';
 
-const USERS_DB_KEY = 'jf365_users_db';
-
-function blanquearPassword(dni: string): boolean {
-  const db = JSON.parse(localStorage.getItem(USERS_DB_KEY) || '{}');
-  if (db[dni] && db[dni].user.role !== 'admin') {
-    delete db[dni];
-    localStorage.setItem(USERS_DB_KEY, JSON.stringify(db));
-    return true;
-  }
-  return false;
+async function blanquearUsuario(dni: string): Promise<boolean> {
+  const { error } = await supabase.from('usuarios').delete().eq('dni', dni).neq('role', 'admin');
+  return !error;
 }
 
-function resetPassword(dni: string, newPassword: string): boolean {
-  const db = JSON.parse(localStorage.getItem(USERS_DB_KEY) || '{}');
-  if (db[dni] && db[dni].user.role !== 'admin') {
-    db[dni].password = newPassword;
-    localStorage.setItem(USERS_DB_KEY, JSON.stringify(db));
-    return true;
-  }
-  return false;
+async function resetPasswordDB(dni: string, newPassword: string): Promise<boolean> {
+  const { error } = await supabase.from('usuarios').update({ password_hash: newPassword }).eq('dni', dni).neq('role', 'admin');
+  return !error;
 }
 
 export default function AdminPanel() {
-  const allUsers = getAllUsers().filter(u => u.role !== 'admin');
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [precio, setPrecio] = useState(getPrecioAnual().toString());
+
+  useEffect(() => {
+    getAllUsers().then(users => setAllUsers(users));
+  }, []);
   const [precioSaved, setPrecioSaved] = useState(false);
   const [emailsSent, setEmailsSent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -224,11 +217,13 @@ export default function AdminPanel() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">
-                      <button onClick={() => {
+                      <button onClick={async () => {
                         const np = prompt(`Nueva contrase\u00f1a para ${u.nombre} (DNI: ${u.dni}):`);
                         if (np && np.length >= 6) {
-                          if (resetPassword(u.dni, np)) {
-                            alert(`Contrase\u00f1a de ${u.nombre} reseteada a: ${np}`);
+                          if (await resetPasswordDB(u.dni, np)) {
+                            alert(`Contrase\u00f1a de ${u.nombre} reseteada.`);
+                          } else {
+                            alert('Error al resetear.');
                           }
                         } else if (np) {
                           alert('La contrase\u00f1a debe tener al menos 6 caracteres.');
@@ -236,11 +231,11 @@ export default function AdminPanel() {
                       }} className="p-1.5 text-white/20 hover:text-amber-400 transition-colors rounded-lg hover:bg-white/5" title="Resetear contrase\u00f1a">
                         <KeyRound className="w-4 h-4" />
                       </button>
-                      <button onClick={() => {
+                      <button onClick={async () => {
                         if (confirm(`\u00bfBlanquear a ${u.nombre} (DNI: ${u.dni})? Se elimina su cuenta y deber\u00e1 registrarse de nuevo.`)) {
-                          if (blanquearPassword(u.dni)) {
-                            alert(`${u.nombre} fue blanqueado. Deber\u00e1 registrarse nuevamente.`);
-                            window.location.reload();
+                          if (await blanquearUsuario(u.dni)) {
+                            alert(`${u.nombre} fue blanqueado.`);
+                            getAllUsers().then(users => setAllUsers(users));
                           }
                         }
                       }} className="p-1.5 text-white/20 hover:text-danger transition-colors rounded-lg hover:bg-white/5" title="Blanquear (eliminar usuario)">

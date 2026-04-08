@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
+import { supabase } from '../lib/supabase';
 
 export interface User {
   id: string;
@@ -39,8 +40,8 @@ interface RegisterData {
 
 interface AuthContextType {
   user: User | null;
-  login: (apellido: string, dni: string, password: string) => boolean;
-  register: (data: RegisterData) => { success: boolean; error?: string };
+  login: (apellido: string, dni: string, password: string) => Promise<boolean>;
+  register: (data: RegisterData) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   acceptConsent: () => void;
   updateUser: (data: Partial<User>) => void;
@@ -48,31 +49,34 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
+const CURRENT_USER_KEY = 'jf365_current_user';
 
-const USERS_DB_KEY = 'jf365_users_db';
-const CURRENT_USER_KEY = 'bc_user';
-
-// Master Admin
-const ADMIN_USER = {
-  password: 'Cuevas3260',
-  user: {
-    id: '0', apellido: 'CuevasCarlos', dni: '22404921', role: 'admin' as const,
-    nombre: 'Carlos Federico Cuevas', email: 'carloscuevaslaplata@gmail.com',
-    consentimiento: true, suscripcionPagada: true, suscripcionActiva: true
-  }
-};
-
-function getUsersDB(): Record<string, { password: string; user: User }> {
-  const saved = localStorage.getItem(USERS_DB_KEY);
-  const db: Record<string, { password: string; user: User }> = saved ? JSON.parse(saved) : {};
-  // Admin siempre presente y actualizado
-  db['22404921'] = ADMIN_USER;
-  localStorage.setItem(USERS_DB_KEY, JSON.stringify(db));
-  return db;
-}
-
-function saveUsersDB(db: Record<string, { password: string; user: User }>) {
-  localStorage.setItem(USERS_DB_KEY, JSON.stringify(db));
+function dbRowToUser(row: Record<string, unknown>): User {
+  return {
+    id: row.id as string,
+    apellido: row.apellido as string,
+    dni: row.dni as string,
+    role: row.role as 'usuario' | 'gimnasio' | 'admin',
+    nombre: row.nombre as string,
+    email: (row.email as string) || undefined,
+    gimnasioId: (row.gimnasio_id as string) || undefined,
+    gimnasioNombre: (row.gimnasio_nombre as string) || undefined,
+    consentimiento: row.consentimiento as boolean,
+    suscripcionPagada: row.suscripcion_pagada as boolean,
+    suscripcionActiva: row.suscripcion_activa as boolean,
+    fechaSuscripcion: (row.fecha_suscripcion as string) || undefined,
+    fechaUltimoPago: (row.fecha_ultimo_pago as string) || undefined,
+    mesesImpagos: (row.meses_impagos as number) || 0,
+    foto: (row.foto as string) || undefined,
+    notas: (row.notas as string) || undefined,
+    perfil: (row.perfil_peso as number) ? {
+      edad: (row.perfil_edad as number) || 0,
+      peso: (row.perfil_peso as number) || 0,
+      altura: (row.perfil_altura as number) || 0,
+      objetivo: (row.perfil_objetivo as string) || '',
+      nivelActividad: (row.perfil_nivel as string) || '',
+    } : undefined,
+  };
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -81,58 +85,65 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return saved ? JSON.parse(saved) : null;
   });
 
-  const login = (apellido: string, dni: string, password: string): boolean => {
-    const db = getUsersDB();
-    const entry = db[dni];
-    if (!entry) return false;
-    // Comparar password exacto y apellido flexible (puede estar en nombre completo o en campo apellido)
-    if (entry.password !== password) return false;
+  const login = async (apellido: string, dni: string, password: string): Promise<boolean> => {
+    const { data, error } = await supabase
+      .from('usuarios')
+      .select('*')
+      .eq('dni', dni)
+      .eq('password_hash', password)
+      .single();
+
+    if (error || !data) return false;
+
     const apellidoLower = apellido.toLowerCase().trim();
-    const matchApellido = entry.user.apellido.toLowerCase().trim() === apellidoLower;
-    const matchEnNombre = entry.user.nombre.toLowerCase().includes(apellidoLower);
+    const matchApellido = (data.apellido as string).toLowerCase().trim() === apellidoLower;
+    const matchEnNombre = (data.nombre as string).toLowerCase().includes(apellidoLower);
     if (!matchApellido && !matchEnNombre) return false;
-    setUser(entry.user);
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(entry.user));
+
+    const u = dbRowToUser(data);
+    setUser(u);
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(u));
     return true;
   };
 
-  const register = (data: RegisterData): { success: boolean; error?: string } => {
-    const db = getUsersDB();
-
-    if (!/^\d{7,8}$/.test(data.dni)) {
-      return { success: false, error: 'El DNI debe tener 7 u 8 d\u00edgitos num\u00e9ricos.' };
+  const register = async (regData: RegisterData): Promise<{ success: boolean; error?: string }> => {
+    if (!/^\d{7,8}$/.test(regData.dni)) {
+      return { success: false, error: 'El DNI debe tener 7 u 8 d\u00edgitos.' };
     }
-    if (db[data.dni]) {
-      return { success: false, error: 'Ya existe un usuario registrado con ese DNI.' };
-    }
-    if (!data.nombre.trim() || !data.apellido.trim()) {
+    if (!regData.nombre.trim() || !regData.apellido.trim()) {
       return { success: false, error: 'Nombre y apellido son obligatorios.' };
     }
-    if (!data.email.trim() || !data.email.includes('@')) {
+    if (!regData.email.trim() || !regData.email.includes('@')) {
       return { success: false, error: 'Ingres\u00e1 un email v\u00e1lido.' };
     }
-    if (data.password.length < 6) {
+    if (regData.password.length < 6) {
       return { success: false, error: 'La contrase\u00f1a debe tener al menos 6 caracteres.' };
     }
 
-    const newUser: User = {
-      id: Date.now().toString(),
-      nombre: `${data.nombre} ${data.apellido}`,
-      apellido: data.apellido,
-      dni: data.dni,
-      email: data.email,
-      role: data.role,
-      consentimiento: false,
-      suscripcionPagada: false,
-      suscripcionActiva: false,
-      ...(data.role === 'gimnasio' ? { gimnasioId: `gym-${Date.now()}`, gimnasioNombre: data.gimnasioNombre || data.nombre } : {}),
-    };
+    // Verificar si ya existe
+    const { data: existing } = await supabase.from('usuarios').select('dni').eq('dni', regData.dni).single();
+    if (existing) {
+      return { success: false, error: 'Ya existe un usuario con ese DNI.' };
+    }
 
-    db[data.dni] = { password: data.password, user: newUser };
-    saveUsersDB(db);
+    const { data, error } = await supabase.from('usuarios').insert({
+      dni: regData.dni,
+      apellido: regData.apellido,
+      nombre: `${regData.nombre} ${regData.apellido}`,
+      email: regData.email,
+      password_hash: regData.password,
+      role: regData.role,
+      gimnasio_id: regData.role === 'gimnasio' ? `gym-${Date.now()}` : null,
+      gimnasio_nombre: regData.role === 'gimnasio' ? (regData.gimnasioNombre || regData.nombre) : null,
+    }).select().single();
 
-    setUser(newUser);
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(newUser));
+    if (error) {
+      return { success: false, error: 'Error al registrar: ' + error.message };
+    }
+
+    const u = dbRowToUser(data);
+    setUser(u);
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(u));
     return { success: true };
   };
 
@@ -146,9 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const updated = { ...user, consentimiento: true };
       setUser(updated);
       localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updated));
-      // Actualizar en DB
-      const db = getUsersDB();
-      if (db[user.dni]) { db[user.dni].user = updated; saveUsersDB(db); }
+      supabase.from('usuarios').update({ consentimiento: true }).eq('dni', user.dni).then(() => {});
     }
   };
 
@@ -157,9 +166,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const updated = { ...user, ...data, perfil: data.perfil ? { ...user.perfil, ...data.perfil } : user.perfil };
       setUser(updated);
       localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updated));
-      // Actualizar en DB
-      const db = getUsersDB();
-      if (db[user.dni]) { db[user.dni].user = updated; saveUsersDB(db); }
+      // Sync to Supabase
+      const dbUpdate: Record<string, unknown> = {};
+      if (data.nombre !== undefined) dbUpdate.nombre = data.nombre;
+      if (data.apellido !== undefined) dbUpdate.apellido = data.apellido;
+      if (data.email !== undefined) dbUpdate.email = data.email;
+      if (data.foto !== undefined) dbUpdate.foto = data.foto;
+      if (data.notas !== undefined) dbUpdate.notas = data.notas;
+      if (data.consentimiento !== undefined) dbUpdate.consentimiento = data.consentimiento;
+      if (data.suscripcionPagada !== undefined) dbUpdate.suscripcion_pagada = data.suscripcionPagada;
+      if (data.suscripcionActiva !== undefined) dbUpdate.suscripcion_activa = data.suscripcionActiva;
+      if (data.fechaSuscripcion !== undefined) dbUpdate.fecha_suscripcion = data.fechaSuscripcion;
+      if (data.fechaUltimoPago !== undefined) dbUpdate.fecha_ultimo_pago = data.fechaUltimoPago;
+      if (data.mesesImpagos !== undefined) dbUpdate.meses_impagos = data.mesesImpagos;
+      if (data.perfil) {
+        const p = { ...user.perfil, ...data.perfil };
+        dbUpdate.perfil_edad = p.edad;
+        dbUpdate.perfil_peso = p.peso;
+        dbUpdate.perfil_altura = p.altura;
+        dbUpdate.perfil_objetivo = p.objetivo;
+        dbUpdate.perfil_nivel = p.nivelActividad;
+      }
+      if (Object.keys(dbUpdate).length > 0) {
+        supabase.from('usuarios').update(dbUpdate).eq('dni', user.dni).then(() => {});
+      }
     }
   };
 
@@ -176,8 +206,9 @@ export function useAuth() {
   return ctx;
 }
 
-// Exportar para que el Admin pueda ver todos los usuarios
-export function getAllUsers(): User[] {
-  const db = getUsersDB();
-  return Object.values(db).map(entry => entry.user);
+// Para Admin Panel
+export async function getAllUsers(): Promise<User[]> {
+  const { data } = await supabase.from('usuarios').select('*').neq('role', 'admin');
+  if (!data) return [];
+  return data.map(row => dbRowToUser(row as Record<string, unknown>));
 }

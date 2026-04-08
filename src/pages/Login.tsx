@@ -12,7 +12,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     if (!apellido.trim() || !dni.trim() || !password.trim()) {
@@ -24,12 +24,11 @@ export default function Login() {
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      if (!login(apellido, dni, password)) {
-        setError('Credenciales incorrectas. Verifique apellido, DNI y contrase\u00f1a.');
-      }
-      setLoading(false);
-    }, 900);
+    const ok = await login(apellido, dni, password);
+    if (!ok) {
+      setError('Credenciales incorrectas. Verifique apellido, DNI y contrase\u00f1a.');
+    }
+    setLoading(false);
   };
 
   return (
