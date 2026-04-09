@@ -211,8 +211,11 @@ export default function Rutina() {
 
   const updateDia = (index: number, tipo: string) => {
     setSemana(prev => prev.map((d, i) => i === index ? { ...d, tipo } : d));
-    // Generar nuevos ejercicios para ese dia
-    setEjerciciosPorDia(prev => ({ ...prev, [index]: generarEjerciciosParaDia(tipo) }));
+    // Solo actualiza el calendario, no toca los ejercicios existentes
+    // Si el dia no tiene ejercicios, genera los del nuevo tipo
+    if (!(ejerciciosPorDia[index]?.length > 0)) {
+      setEjerciciosPorDia(prev => ({ ...prev, [index]: generarEjerciciosParaDia(tipo) }));
+    }
   };
 
   const seleccionarDia = (index: number) => {
