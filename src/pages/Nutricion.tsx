@@ -287,7 +287,7 @@ export default function Nutricion() {
           </button>
           <button onClick={() => { generarPlan(false); }} disabled={!perfil || generando}
             className="flex items-center gap-2 px-3 py-2 bg-electric/15 border border-electric/20 text-electric rounded-xl text-xs font-bold hover:bg-electric/25 transition-colors disabled:opacity-30">
-            {generando ? <Sparkles className="w-3 h-3 animate-spin" /> : <RotateCcw className="w-3 h-3" />} Regenerar d\u00eda
+            {generando ? <Sparkles className="w-3 h-3 animate-spin" /> : <RotateCcw className="w-3 h-3" />} Regenerar este plan
           </button>
           <button onClick={() => { generarPlan(true); }} disabled={!perfil || generando}
             className="flex items-center gap-2 px-3 py-2 bg-purple-500/15 border border-purple-500/20 text-purple-400 rounded-xl text-xs font-bold hover:bg-purple-500/25 transition-colors disabled:opacity-30">
@@ -295,7 +295,7 @@ export default function Nutricion() {
           </button>
           <button onClick={borrarDia}
             className="flex items-center gap-2 px-3 py-2 bg-danger/10 border border-danger/20 text-danger/60 rounded-xl text-xs font-bold hover:bg-danger/20 transition-colors">
-            Borrar d\u00eda
+            Borrar este plan
           </button>
           <button onClick={() => setShowMacros(!showMacros)}
             className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${showMacros ? 'bg-amber-500/15 border border-amber-500/20 text-amber-400' : 'bg-white/5 border border-dark-border text-white/40'}`}>
