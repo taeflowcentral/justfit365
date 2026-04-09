@@ -174,7 +174,14 @@ export default function Nutricion() {
   void _copiarDia;
 
   const updateItem = (comidaId: number, itemId: number, field: keyof Alimento, value: string | number) => {
-    const updated = comidas.map(c => c.id === comidaId ? { ...c, items: c.items.map(it => it.id === itemId ? { ...it, [field]: value } : it) } : c);
+    const current = planSemanal[diaActivo] || [];
+    const updated = current.map(c => c.id === comidaId ? { ...c, items: c.items.map(it => it.id === itemId ? { ...it, [field]: value } : it) } : c);
+    guardar(updated);
+  };
+
+  const replaceItem = (comidaId: number, itemId: number, newData: { alimento: string; porcion: string; cal: number; prot: number; carb: number; grasa: number }) => {
+    const current = planSemanal[diaActivo] || [];
+    const updated = current.map(c => c.id === comidaId ? { ...c, items: c.items.map(it => it.id === itemId ? { ...it, ...newData } : it) } : c);
     guardar(updated);
   };
 
@@ -583,12 +590,10 @@ export default function Nutricion() {
         <FoodAlternatives
           alimento={showAlternatives.nombre}
           onSelect={(alt) => {
-            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'alimento', alt.nombre);
-            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'porcion', alt.porcion);
-            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'cal', alt.cal);
-            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'prot', alt.prot);
-            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'carb', alt.carb);
-            updateItem(showAlternatives.comidaId, showAlternatives.itemId, 'grasa', alt.grasa);
+            replaceItem(showAlternatives.comidaId, showAlternatives.itemId, {
+              alimento: alt.nombre, porcion: alt.porcion,
+              cal: alt.cal, prot: alt.prot, carb: alt.carb, grasa: alt.grasa,
+            });
           }}
           onClose={() => setShowAlternatives(null)}
         />
