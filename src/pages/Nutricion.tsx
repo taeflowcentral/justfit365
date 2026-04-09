@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, Zap, Sparkles, RotateCcw, Target, ArrowLeftRight } from 'lucide-react';
+import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, Zap, Sparkles, RotateCcw, Target, ArrowLeftRight, ShoppingCart, MessageCircle, CheckSquare, Square, X } from 'lucide-react';
 import FoodAlternatives, { findAlternatives } from '../components/FoodAlternatives';
 import { useAuth } from '../context/AuthContext';
 import ShareButtons, { generateNutricionText, shareWhatsApp, printContent } from '../components/ShareButtons';
@@ -132,6 +132,40 @@ export default function Nutricion() {
   const [showAddItem, setShowAddItem] = useState<number | null>(null);
   const [showAlternatives, setShowAlternatives] = useState<{ comidaId: number; itemId: number; nombre: string } | null>(null);
   const [showMacros, setShowMacros] = useState(true);
+  const [canasta, setCanasta] = useState<Set<string>>(new Set());
+  const [showCanasta, setShowCanasta] = useState(false);
+
+  const toggleCanasta = (alimento: string) => {
+    setCanasta(prev => {
+      const next = new Set(prev);
+      if (next.has(alimento)) next.delete(alimento); else next.add(alimento);
+      return next;
+    });
+  };
+
+  const generarListaCompras = (): string[] => {
+    // Unificar todos los alimentos de toda la semana
+    const items: Record<string, string> = {};
+    for (let d = 0; d < 7; d++) {
+      const comidasDia = planSemanal[d] || [];
+      comidasDia.forEach(c => {
+        c.items.forEach(it => {
+          const key = it.alimento.toLowerCase();
+          if (!items[key]) items[key] = `${it.alimento} (${it.porcion})`;
+        });
+      });
+    }
+    return Object.values(items).sort();
+  };
+
+  const enviarCanastaWhatsApp = () => {
+    const items = Array.from(canasta);
+    if (items.length === 0) return;
+    let text = '*JUSTFIT365 - Lista de Compras*\n\n';
+    items.forEach((item, i) => { text += `${i + 1}. ${item}\n`; });
+    text += `\nTotal: ${items.length} productos`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  };
   const [nuevaComida, setNuevaComida] = useState({ nombre: '', hora: '12:00' });
   const [nuevoItem, setNuevoItem] = useState<Alimento>({ id: 0, alimento: '', porcion: '', cal: 0, prot: 0, carb: 0, grasa: 0 });
 
@@ -311,6 +345,11 @@ export default function Nutricion() {
             className="flex items-center gap-2 px-3 py-2 bg-danger/10 border border-danger/20 text-danger/60 rounded-xl text-xs font-bold hover:bg-danger/20 transition-colors">
             Borrar este plan
           </button>
+          <button onClick={() => setShowCanasta(true)}
+            className="flex items-center gap-2 px-3 py-2 bg-cyan-500/15 border border-cyan-500/20 text-cyan-400 rounded-xl text-xs font-bold hover:bg-cyan-500/25 transition-colors relative">
+            <ShoppingCart className="w-3 h-3" /> Canasta
+            {canasta.size > 0 && <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-cyan-500 text-black text-[9px] font-black rounded-full flex items-center justify-center">{canasta.size}</span>}
+          </button>
           <button onClick={() => setShowMacros(!showMacros)}
             className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${showMacros ? 'bg-amber-500/15 border border-amber-500/20 text-amber-400' : 'bg-white/5 border border-dark-border text-white/40'}`}>
             {showMacros ? 'Ocultar macros' : 'Mostrar macros'}
@@ -476,6 +515,10 @@ export default function Nutricion() {
                       ) : (
                         <div>
                           <div className="flex items-center justify-between">
+                            <button onClick={() => toggleCanasta(`${item.alimento} (${item.porcion})`)}
+                              className="p-0.5 shrink-0 text-white/15 hover:text-cyan-400 transition-colors" title="Agregar a canasta">
+                              {canasta.has(`${item.alimento} (${item.porcion})`) ? <CheckSquare className="w-3.5 h-3.5 text-cyan-400" /> : <Square className="w-3.5 h-3.5" />}
+                            </button>
                             <button onClick={() => {
                               if (findAlternatives(item.alimento)) {
                                 setShowAlternatives({ comidaId: c.id, itemId: item.id, nombre: item.alimento });
@@ -604,6 +647,78 @@ export default function Nutricion() {
           }}
           onClose={() => setShowAlternatives(null)}
         />
+      )}
+
+      {/* Modal canasta de compras */}
+      {showCanasta && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => setShowCanasta(false)}>
+          <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-md overflow-hidden" onClick={e => e.stopPropagation()}>
+            <div className="px-5 py-4 border-b border-dark-border flex items-center justify-between">
+              <div>
+                <h3 className="text-white font-bold text-sm flex items-center gap-2">
+                  <ShoppingCart className="w-4 h-4 text-cyan-400" /> Canasta de Compras
+                </h3>
+                <p className="text-white/30 text-xs mt-0.5">{canasta.size} productos seleccionados</p>
+              </div>
+              <button onClick={() => setShowCanasta(false)} className="p-1.5 text-white/30 hover:text-white transition-colors"><X className="w-4 h-4" /></button>
+            </div>
+
+            {canasta.size === 0 ? (
+              <div className="p-8 text-center">
+                <ShoppingCart className="w-12 h-12 text-white/10 mx-auto mb-3" />
+                <p className="text-white/40 text-sm mb-2">Canasta vac&iacute;a</p>
+                <p className="text-white/20 text-xs">Seleccion&aacute; los productos que necesit&aacute;s comprar haciendo click en el cuadradito al lado de cada alimento.</p>
+              </div>
+            ) : (
+              <>
+                <div className="max-h-80 overflow-y-auto divide-y divide-dark-border/30">
+                  {Array.from(canasta).map((item, i) => (
+                    <div key={i} className="flex items-center justify-between px-5 py-3">
+                      <div className="flex items-center gap-2">
+                        <CheckSquare className="w-4 h-4 text-cyan-400 shrink-0" />
+                        <span className="text-white text-sm">{item}</span>
+                      </div>
+                      <button onClick={() => toggleCanasta(item)} className="p-1 text-white/15 hover:text-danger transition-colors">
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="p-4 border-t border-dark-border space-y-2">
+                  {/* Agregar todos los del dia */}
+                  <button onClick={() => {
+                    comidas.forEach(c => c.items.forEach(it => {
+                      const key = `${it.alimento} (${it.porcion})`;
+                      setCanasta(prev => new Set([...prev, key]));
+                    }));
+                  }} className="w-full py-2.5 bg-white/5 text-white/50 rounded-xl text-xs font-medium border border-dark-border hover:bg-white/10 transition-colors">
+                    + Agregar todo el {DIAS[diaActivo]}
+                  </button>
+
+                  {/* Agregar toda la semana */}
+                  <button onClick={() => {
+                    const all = generarListaCompras();
+                    setCanasta(new Set(all));
+                  }} className="w-full py-2.5 bg-white/5 text-white/50 rounded-xl text-xs font-medium border border-dark-border hover:bg-white/10 transition-colors">
+                    + Agregar toda la semana
+                  </button>
+
+                  <div className="flex gap-2 pt-1">
+                    <button onClick={() => setCanasta(new Set())}
+                      className="flex-1 py-2.5 bg-danger/10 text-danger/60 rounded-xl text-xs font-medium hover:bg-danger/20 transition-colors">
+                      Vaciar canasta
+                    </button>
+                    <button onClick={enviarCanastaWhatsApp}
+                      className="flex-1 py-2.5 bg-emerald-500/15 text-emerald-400 rounded-xl text-xs font-bold hover:bg-emerald-500/25 transition-colors flex items-center justify-center gap-1.5">
+                      <MessageCircle className="w-3.5 h-3.5" /> Enviar por WhatsApp
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
