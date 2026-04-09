@@ -23,7 +23,7 @@ interface DiaEntrenamiento {
 const RUTINA_KEY = 'bc_rutina_semana';
 const EJERCICIOS_KEY = 'bc_rutina_ejercicios';
 
-const tiposEntrenamiento = ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body', 'Cardio', 'HIIT', 'Funcional', 'Descanso'];
+const tiposEntrenamiento = ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body', 'Cardio', 'HIIT', 'Funcional', 'Running', 'Caminata Activa', 'Yoga', 'Spinning', 'Ciclismo', 'Descanso'];
 const gruposMusculares = ['Pecho', 'Pecho superior', 'Espalda', 'Espalda baja', 'Hombro anterior', 'Hombro lateral', 'Hombro posterior', 'B\u00edceps', 'Tr\u00edceps', 'Antebrazo', 'Cu\u00e1driceps', 'Isquiotibiales', 'Gl\u00fateos', 'Pantorrillas', 'Abdominales', 'Oblicuos', 'Core', 'Pecho / Tr\u00edceps', 'Espalda / B\u00edceps', 'Full Body'];
 
 // Plantillas de ejercicios por tipo de entrenamiento
@@ -95,6 +95,40 @@ const plantillas: Record<string, Ejercicio[]> = {
     { id: 81, nombre: 'Turkish Get Up', series: 3, reps: '3 c/lado', descanso: '60', peso: '12', musculo: 'Full Body', completado: false, notas: '' },
     { id: 82, nombre: 'Farmer Walk', series: 3, reps: '40 metros', descanso: '60', peso: '24 c/u', musculo: 'Core', completado: false, notas: 'Hombros atr\u00e1s, core firme.' },
     { id: 83, nombre: 'Battle Ropes', series: 4, reps: '30 seg', descanso: '30', peso: '-', musculo: 'Full Body', completado: false, notas: '' },
+  ],
+  Running: [
+    { id: 130, nombre: 'Calentamiento caminata', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Ritmo suave para entrar en calor.' },
+    { id: 131, nombre: 'Trote continuo', series: 1, reps: '25 min', descanso: '0', peso: '-', musculo: 'Cu\u00e1driceps', completado: false, notas: 'Ritmo constante 7-9 km/h. Respiraci\u00f3n r\u00edtmica.' },
+    { id: 132, nombre: 'Intervalos de velocidad', series: 6, reps: '1 min r\u00e1pido / 1 min trote', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Sprint al 80-90% de tu capacidad.' },
+    { id: 133, nombre: 'Vuelta a la calma', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Caminata suave + elongaci\u00f3n.' },
+  ],
+  'Caminata Activa': [
+    { id: 140, nombre: 'Caminata r\u00e1pida', series: 1, reps: '30 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Ritmo 6-7 km/h. Brazos activos.' },
+    { id: 141, nombre: 'Caminata con inclinaci\u00f3n', series: 4, reps: '5 min subida', descanso: '2 min llano', peso: '-', musculo: 'Gl\u00fateos', completado: false, notas: 'Buscar pendiente o usar cinta con inclinaci\u00f3n al 8-12%.' },
+    { id: 142, nombre: 'Power Walking', series: 1, reps: '15 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Paso largo y r\u00e1pido sin llegar a trotar.' },
+    { id: 143, nombre: 'Elongaci\u00f3n final', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Isquiotibiales, cu\u00e1driceps, pantorrillas, cadera.' },
+  ],
+  Yoga: [
+    { id: 150, nombre: 'Saludo al sol (Surya Namaskar)', series: 5, reps: '1 ciclo', descanso: '15', peso: '-', musculo: 'Full Body', completado: false, notas: 'Fluir con la respiraci\u00f3n. Inhalar al extender, exhalar al flexionar.' },
+    { id: 151, nombre: 'Guerrero I y II (Virabhadrasana)', series: 3, reps: '30 seg c/lado', descanso: '10', peso: '-', musculo: 'Cu\u00e1driceps', completado: false, notas: 'Rodilla delantera a 90\u00b0. Mantener core activo.' },
+    { id: 152, nombre: 'Plancha a Perro boca abajo', series: 4, reps: '30 seg c/u', descanso: '10', peso: '-', musculo: 'Core', completado: false, notas: 'Transici\u00f3n fluida. Empujar el suelo con las manos.' },
+    { id: 153, nombre: 'Postura del \u00e1rbol (Vrksasana)', series: 2, reps: '30 seg c/lado', descanso: '10', peso: '-', musculo: 'Core', completado: false, notas: 'Fijar la mirada en un punto. Equilibrio y respiraci\u00f3n.' },
+    { id: 154, nombre: 'Torsi\u00f3n espinal sentado', series: 2, reps: '30 seg c/lado', descanso: '10', peso: '-', musculo: 'Espalda', completado: false, notas: 'Girar desde la columna, no forzar.' },
+    { id: 155, nombre: 'Savasana (relajaci\u00f3n)', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Acostado boca arriba, ojos cerrados, respiraci\u00f3n natural.' },
+  ],
+  Spinning: [
+    { id: 160, nombre: 'Calentamiento suave', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Cu\u00e1driceps', completado: false, notas: 'Resistencia baja, cadencia 80-90 RPM.' },
+    { id: 161, nombre: 'Subidas de resistencia', series: 5, reps: '3 min alta / 2 min baja', descanso: '0', peso: '-', musculo: 'Cu\u00e1driceps', completado: false, notas: 'Simular subida. Resistencia al 70-80%. Pedalear de pie si pod\u00e9s.' },
+    { id: 162, nombre: 'Sprint en llano', series: 6, reps: '30 seg sprint / 30 seg suave', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'M\u00e1xima cadencia posible. Resistencia media.' },
+    { id: 163, nombre: 'Pedaleo sentado sostenido', series: 1, reps: '10 min', descanso: '0', peso: '-', musculo: 'Cu\u00e1driceps', completado: false, notas: 'Resistencia media. Cadencia constante 85-95 RPM.' },
+    { id: 164, nombre: 'Vuelta a la calma', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Bajar resistencia gradualmente + estiramientos en la bici.' },
+  ],
+  Ciclismo: [
+    { id: 170, nombre: 'Rodaje suave (calentamiento)', series: 1, reps: '10 min', descanso: '0', peso: '-', musculo: 'Cu\u00e1driceps', completado: false, notas: 'Zona 1-2 de frecuencia card\u00edaca. Pedaleo fluido.' },
+    { id: 171, nombre: 'Intervalos de fuerza', series: 5, reps: '3 min fuerte / 2 min suave', descanso: '0', peso: '-', musculo: 'Cu\u00e1driceps', completado: false, notas: 'Buscar subidas o aumentar resistencia. Cadencia 60-70 RPM.' },
+    { id: 172, nombre: 'Tempo sostenido', series: 1, reps: '20 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Ritmo exigente pero sostenible. Zona 3 card\u00edaca.' },
+    { id: 173, nombre: 'Sprints cortos', series: 4, reps: '20 seg sprint / 40 seg suave', descanso: '0', peso: '-', musculo: 'Cu\u00e1driceps', completado: false, notas: 'Todo lo que puedas. Recuperar pedaleando suave.' },
+    { id: 174, nombre: 'Vuelta a la calma + estiramientos', series: 1, reps: '10 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Pedaleo muy suave + elongar isquios, cu\u00e1driceps y cadera.' },
   ],
   Descanso: [],
 };
