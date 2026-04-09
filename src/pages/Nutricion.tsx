@@ -23,84 +23,141 @@ interface Comida {
 
 const PLAN_KEY = 'bc_plan_nutricional';
 
-function generarPlanIA(peso: number, altura: number, edad: number, objetivo: string, nivel: string): { comidas: Comida[]; nota: string } {
+function generarPlanIA(peso: number, altura: number, edad: number, objetivo: string, nivel: string, tipoEntreno?: string, enfermedades?: string[]): { comidas: Comida[]; nota: string } {
   const tmb = Math.round(10 * peso + 6.25 * altura - 5 * edad + 5);
   const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
   const tdee = Math.round(tmb * (factores[nivel] || 1.55));
 
+  const esDescanso = tipoEntreno === 'Descanso';
+  const esCardio = ['Cardio', 'Running', 'Caminata Activa', 'Spinning', 'Ciclismo'].includes(tipoEntreno || '');
+  const _esFuerza = ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body'].includes(tipoEntreno || '');
+  void _esFuerza;
+  const esYoga = tipoEntreno === 'Yoga';
+  const esHIIT = tipoEntreno === 'HIIT';
+
+  // Ajuste por enfermedades
+  const tieneHipo = enfermedades?.some(e => e.toLowerCase().includes('hipotiroidismo') || e.toLowerCase().includes('hashimoto'));
+  const tieneDiabetes = enfermedades?.some(e => e.toLowerCase().includes('diabetes'));
+  const tieneCeliaca = enfermedades?.some(e => e.toLowerCase().includes('cel\u00edaca') || e.toLowerCase().includes('gluten'));
+  const tieneRenal = enfermedades?.some(e => e.toLowerCase().includes('renal'));
+  const tieneLactosa = enfermedades?.some(e => e.toLowerCase().includes('lactosa'));
+
   let calObjetivo = tdee;
   let protPorKg = 1.8;
   let notaObj = '';
+  const notasExtra: string[] = [];
 
-  if (objetivo === 'Hipertrofia' || objetivo === 'Fuerza') {
+  // Ajuste por objetivo
+  if (objetivo.includes('Hipertrofia') || objetivo.includes('Fuerza')) {
     calObjetivo = tdee + 300;
     protPorKg = 2.0;
-    notaObj = `Super\u00e1vit cal\u00f3rico moderado (+300 kcal sobre TDEE de ${tdee} kcal) para maximizar s\u00edntesis proteica sin acumular grasa excesiva.`;
-  } else if (objetivo === 'Perdida de grasa') {
+    notaObj = `Super\u00e1vit moderado (+300 kcal) para s\u00edntesis proteica.`;
+  } else if (objetivo.includes('grasa')) {
     calObjetivo = tdee - 400;
     protPorKg = 2.2;
-    notaObj = `D\u00e9ficit cal\u00f3rico controlado (-400 kcal bajo TDEE de ${tdee} kcal). Prote\u00edna elevada para preservar masa muscular durante el corte.`;
-  } else if (objetivo === 'Tonificacion') {
+    notaObj = `D\u00e9ficit controlado (-400 kcal). Prote\u00edna alta para preservar m\u00fasculo.`;
+  } else if (objetivo.includes('Tonificacion')) {
     calObjetivo = tdee;
     protPorKg = 1.8;
-    notaObj = `Mantenimiento cal\u00f3rico (TDEE: ${tdee} kcal) con prote\u00edna moderada-alta para recomposici\u00f3n corporal.`;
+    notaObj = `Mantenimiento con prote\u00edna moderada-alta.`;
   } else {
     calObjetivo = tdee;
     protPorKg = 1.6;
-    notaObj = `Plan de mantenimiento basado en tu TDEE de ${tdee} kcal. Distribuci\u00f3n equilibrada de macronutrientes.`;
+    notaObj = `Plan equilibrado de mantenimiento.`;
+  }
+
+  // Ajuste por tipo de entreno del dia
+  if (esDescanso) {
+    calObjetivo = Math.round(calObjetivo * 0.9);
+    notasExtra.push('D\u00eda de descanso: calor\u00edas reducidas un 10%.');
+  } else if (esCardio) {
+    calObjetivo = Math.round(calObjetivo + 150);
+    notasExtra.push(`D\u00eda de ${tipoEntreno}: +150 kcal en carbohidratos para energ\u00eda.`);
+  } else if (esHIIT) {
+    calObjetivo = Math.round(calObjetivo + 200);
+    notasExtra.push('D\u00eda HIIT: +200 kcal. Priorizar carbos r\u00e1pidos post-entreno.');
+  } else if (esYoga) {
+    notasExtra.push('D\u00eda de Yoga: plan equilibrado con alimentos antiinflamatorios.');
+  }
+
+  // Ajuste por enfermedades
+  if (tieneHipo) {
+    calObjetivo = Math.round(calObjetivo * 0.9);
+    notasExtra.push('Hipotiroidismo: calor\u00edas ajustadas -10%. Incluir selenio (nueces de Brasil).');
+  }
+  if (tieneDiabetes) {
+    notasExtra.push('Diabetes: carbohidratos de bajo \u00edndice gluc\u00e9mico. Evitar az\u00facares simples.');
+  }
+  if (tieneRenal) {
+    protPorKg = Math.min(protPorKg, 1.2);
+    notasExtra.push('Condici\u00f3n renal: prote\u00edna limitada a 1.2g/kg.');
   }
 
   const protTotal = Math.round(peso * protPorKg);
   const grasaTotal = Math.round((calObjetivo * 0.25) / 9);
   const carbTotal = Math.round((calObjetivo - protTotal * 4 - grasaTotal * 9) / 4);
+  const protPorComida = Math.round(protTotal / 6);
 
-  const protPorComida = Math.round(protTotal / 5);
+  // Alimentos adaptados
+  const lecheDesayuno = tieneLactosa ? 'Leche de almendras' : 'Leche descremada';
+  const carbAlmuerzo = tieneCeliaca ? 'Quinoa cocida' : (tieneDiabetes ? 'Batata asada' : 'Arroz integral');
+  const carbCena = tieneCeliaca ? 'Papa hervida' : 'Batata asada';
+  const protCena = objetivo.includes('grasa') ? 'Merluza al horno' : (esCardio ? 'Pasta integral con at\u00fan' : 'Salm\u00f3n al horno');
+  const snackNocturno = tieneLactosa ? 'Prote\u00edna vegana con agua' : 'Case\u00edna o yogur griego';
+  const preEntreno = esCardio
+    ? [{ id: 301, alimento: 'Banana + miel', porcion: '1 banana + 15g miel', cal: 140, prot: 1, carb: 35, grasa: 0 },
+       { id: 302, alimento: 'Galletas de arroz con mermelada', porcion: '3 unid + 20g', cal: 130, prot: 2, carb: 30, grasa: 1 }]
+    : [{ id: 301, alimento: 'Tostada integral con queso untable', porcion: '2 rebanadas + 30g queso', cal: 200, prot: 10, carb: Math.round(carbTotal * 0.1), grasa: 5 },
+       { id: 302, alimento: 'Whey Protein con agua', porcion: '1 scoop (30g)', cal: 120, prot: 24, carb: 3, grasa: 1 }];
 
   const comidas: Comida[] = [
     {
       id: 1, nombre: 'Desayuno', hora: '07:30', items: [
-        { id: 101, alimento: 'Avena con leche descremada', porcion: `${Math.round(calObjetivo * 0.04)}g avena + 200ml leche`, cal: Math.round(calObjetivo * 0.14), prot: protPorComida - 8, carb: Math.round(carbTotal * 0.2), grasa: 6 },
+        { id: 101, alimento: `Avena con ${lecheDesayuno.toLowerCase()}`, porcion: `${Math.round(calObjetivo * 0.04)}g avena + 200ml`, cal: Math.round(calObjetivo * 0.14), prot: protPorComida - 8, carb: Math.round(carbTotal * 0.2), grasa: 6 },
         { id: 102, alimento: 'Banana', porcion: '1 unidad mediana', cal: 105, prot: 1, carb: 27, grasa: 0 },
-        { id: 103, alimento: 'Mantequilla de man\u00ed natural', porcion: '15g', cal: 95, prot: 4, carb: 3, grasa: 8 },
+        { id: 103, alimento: tieneHipo ? 'Nueces de Brasil (selenio)' : 'Mantequilla de man\u00ed natural', porcion: '15g', cal: 95, prot: 4, carb: 3, grasa: 8 },
       ]
     },
-    {
-      id: 6, nombre: 'Post-Entreno (ma\u00f1ana)', hora: '09:30', items: [
-        { id: 601, alimento: 'Whey Protein con agua o leche', porcion: '1 scoop (30g) + 250ml', cal: 150, prot: 26, carb: 5, grasa: 2 },
-        { id: 602, alimento: 'Banana madura', porcion: '1 unidad', cal: 105, prot: 1, carb: 27, grasa: 0 },
-        { id: 603, alimento: 'Miel', porcion: '10g', cal: 32, prot: 0, carb: 8, grasa: 0 },
+    ...(!esDescanso ? [{
+      id: 6, nombre: 'Post-Entreno', hora: '09:30', items: [
+        { id: 601, alimento: tieneLactosa ? 'Prote\u00edna vegana con agua' : 'Whey Protein con agua o leche', porcion: '1 scoop (30g) + 250ml', cal: 150, prot: 26, carb: 5, grasa: 2 },
+        { id: 602, alimento: esCardio ? 'Fruta + miel' : 'Banana madura', porcion: esCardio ? '1 fruta + 10g miel' : '1 unidad', cal: esCardio ? 140 : 105, prot: 1, carb: esCardio ? 35 : 27, grasa: 0 },
       ]
-    },
+    }] : []),
     {
       id: 2, nombre: 'Almuerzo', hora: '12:30', items: [
         { id: 201, alimento: 'Pechuga de pollo grillada', porcion: `${Math.round(protPorComida * 3.2)}g`, cal: Math.round(protPorComida * 5.3), prot: protPorComida, carb: 0, grasa: Math.round(protPorComida * 0.12) },
-        { id: 202, alimento: 'Arroz integral', porcion: `${Math.round(carbTotal * 0.35)}g cocido`, cal: Math.round(carbTotal * 0.35 * 1.1), prot: 4, carb: Math.round(carbTotal * 0.25), grasa: 1 },
+        { id: 202, alimento: carbAlmuerzo, porcion: '150g cocido', cal: 170, prot: 4, carb: Math.round(carbTotal * 0.2), grasa: 1 },
         { id: 203, alimento: 'Ensalada mixta + aceite oliva', porcion: '200g + 10ml', cal: 130, prot: 3, carb: 8, grasa: 10 },
         { id: 204, alimento: 'Fruta de estaci\u00f3n', porcion: '1 unidad', cal: 60, prot: 1, carb: 14, grasa: 0 },
       ]
     },
-    {
-      id: 3, nombre: 'Merienda Pre-Entreno', hora: '16:00', items: [
-        { id: 301, alimento: 'Tostada integral con queso untable', porcion: '2 rebanadas + 30g queso', cal: 200, prot: 10, carb: Math.round(carbTotal * 0.1), grasa: 5 },
-        { id: 302, alimento: 'Whey Protein con agua', porcion: '1 scoop (30g)', cal: 120, prot: 24, carb: 3, grasa: 1 },
+    ...(!esDescanso ? [{
+      id: 3, nombre: esCardio ? 'Snack Pre-Cardio' : 'Merienda Pre-Entreno', hora: '16:00', items: preEntreno
+    }] : [{
+      id: 3, nombre: 'Merienda', hora: '16:00', items: [
+        { id: 301, alimento: tieneLactosa ? 'Yogur de coco' : 'Yogur griego', porcion: '200g', cal: 130, prot: tieneLactosa ? 2 : 20, carb: tieneLactosa ? 12 : 6, grasa: tieneLactosa ? 6 : 3 },
+        { id: 302, alimento: 'Frutas secas mix', porcion: '20g', cal: 110, prot: 3, carb: 5, grasa: 9 },
       ]
-    },
+    }]),
     {
       id: 4, nombre: 'Cena', hora: '20:30', items: [
-        { id: 401, alimento: objetivo === 'Perdida de grasa' ? 'Merluza al horno' : 'Salm\u00f3n al horno', porcion: `${Math.round(protPorComida * 4.5)}g`, cal: Math.round(protPorComida * (objetivo === 'Perdida de grasa' ? 4 : 8.7)), prot: protPorComida, carb: 0, grasa: Math.round(protPorComida * (objetivo === 'Perdida de grasa' ? 0.1 : 0.5)) },
-        { id: 402, alimento: 'Batata asada', porcion: `${Math.round(carbTotal * 0.22 * 4.7)}g`, cal: Math.round(carbTotal * 0.22 * 1.1), prot: 2, carb: Math.round(carbTotal * 0.22), grasa: 0 },
+        { id: 401, alimento: protCena, porcion: `${Math.round(protPorComida * 4.5)}g`, cal: Math.round(protPorComida * (objetivo.includes('grasa') ? 4 : 7)), prot: protPorComida, carb: esCardio ? Math.round(carbTotal * 0.15) : 0, grasa: Math.round(protPorComida * 0.3) },
+        { id: 402, alimento: carbCena, porcion: '200g', cal: 180, prot: 2, carb: Math.round(carbTotal * 0.18), grasa: 0 },
         { id: 403, alimento: 'Br\u00f3coli al vapor', porcion: '150g', cal: 50, prot: 4, carb: 8, grasa: 0 },
       ]
     },
     {
       id: 5, nombre: 'Colaci\u00f3n Nocturna', hora: '22:00', items: [
-        { id: 501, alimento: 'Case\u00edna o yogur griego', porcion: '200g', cal: 130, prot: 20, carb: 6, grasa: 3 },
+        { id: 501, alimento: snackNocturno, porcion: '200g', cal: 130, prot: 20, carb: 6, grasa: 3 },
         { id: 502, alimento: 'Almendras', porcion: '15g', cal: 90, prot: 3, carb: 2, grasa: 8 },
       ]
     },
   ];
 
-  const nota = `**Plan generado por JustFit Coach** para ${peso}kg, ${altura}cm, ${edad} a\u00f1os.\n\n**Objetivo:** ${objetivo} | **Nivel:** ${nivel}\n**TMB:** ${tmb} kcal | **TDEE:** ${tdee} kcal | **Objetivo cal\u00f3rico:** ${calObjetivo} kcal\n**Macros:** ${protTotal}g P / ${carbTotal}g C / ${grasaTotal}g G\n\n${notaObj}\n\nProte\u00edna distribuida en 5 tomas de ~${protPorComida}g para optimizar MPS (s\u00edntesis proteica muscular).\n\n*Ref: ISSN Position Stand on Diets & Body Composition (2017); Morton et al. (2018) - Br J Sports Med*`;
+  const tipoLabel = tipoEntreno ? ` | **Entreno del d\u00eda:** ${tipoEntreno}` : '';
+  const enfLabel = notasExtra.length > 0 ? `\n\n**Adaptaciones:** ${notasExtra.join(' ')}` : '';
+  const nota = `**Plan generado por JustFit Coach** para ${peso}kg, ${edad} a\u00f1os.\n\n**Objetivo:** ${objetivo} | **Nivel:** ${nivel}${tipoLabel}\n**TMB:** ${tmb} | **TDEE:** ${tdee} | **Objetivo:** ${calObjetivo} kcal\n**Macros:** ${protTotal}g P / ${carbTotal}g C / ${grasaTotal}g G\n\n${notaObj}${enfLabel}`;
 
   return { comidas, nota };
 }
@@ -180,23 +237,42 @@ export default function Nutricion() {
     localStorage.setItem(PLAN_KEY + '_nota', n);
   };
 
+  // Leer rutina semanal y enfermedades para coordinar plan nutricional
+  const rutinaSemanal: { tipo: string }[] = (() => {
+    try {
+      const saved = localStorage.getItem('bc_rutina_semana');
+      return saved ? JSON.parse(saved) : [
+        { tipo: 'Push' }, { tipo: 'Pull' }, { tipo: 'Descanso' }, { tipo: 'Piernas' },
+        { tipo: 'Upper' }, { tipo: 'Lower' }, { tipo: 'Descanso' }
+      ];
+    } catch { return [{ tipo: 'Push' }, { tipo: 'Pull' }, { tipo: 'Descanso' }, { tipo: 'Piernas' }, { tipo: 'Upper' }, { tipo: 'Lower' }, { tipo: 'Descanso' }]; }
+  })();
+  const enfermedadesUsuario: string[] = (() => {
+    try { return JSON.parse(localStorage.getItem('jf365_enfermedades') || '[]'); } catch { return []; }
+  })();
+
   const generarPlan = (todaLaSemana = false) => {
     if (!perfil) return;
     setGenerando(true);
     setTimeout(() => {
-      const { comidas: plan, nota } = generarPlanIA(perfil.peso, perfil.altura, perfil.edad, perfil.objetivo, perfil.nivelActividad);
+      const tipoHoy = rutinaSemanal[diaActivo]?.tipo || 'Push';
+      const { comidas: plan, nota } = generarPlanIA(perfil.peso, perfil.altura, perfil.edad, perfil.objetivo, perfil.nivelActividad, tipoHoy, enfermedadesUsuario);
       if (todaLaSemana) {
         const semanal: Record<number, Comida[]> = {};
+        let notaFinal = '';
         for (let i = 0; i < 7; i++) {
-          const { comidas: planDia } = generarPlanIA(perfil.peso, perfil.altura, perfil.edad, perfil.objetivo, perfil.nivelActividad);
+          const tipoDia = rutinaSemanal[i]?.tipo || 'Descanso';
+          const { comidas: planDia, nota: notaDia } = generarPlanIA(perfil.peso, perfil.altura, perfil.edad, perfil.objetivo, perfil.nivelActividad, tipoDia, enfermedadesUsuario);
           semanal[i] = planDia;
+          if (i === diaActivo) notaFinal = notaDia;
         }
         setPlanSemanal(semanal);
         localStorage.setItem(PLAN_KEY + '_semanal', JSON.stringify(semanal));
+        guardarNota(notaFinal);
       } else {
         guardar(plan);
+        guardarNota(nota);
       }
-      guardarNota(nota);
       setGenerando(false);
     }, 2000);
   };
