@@ -137,7 +137,7 @@ export default function Suscripcion() {
             <a href="https://link.mercadopago.com.ar/ventanasdepapel" target="_blank" rel="noopener noreferrer"
               className="w-full py-4 bg-[#00b1ea] hover:bg-[#009dd4] text-white font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-[#00b1ea]/20 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] mb-4">
               <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><rect width="24" height="24" rx="4" fill="white" fillOpacity="0.2"/><text x="12" y="17" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">MP</text></svg>
-              Renovar con Mercado Pago (USD {precio.toFixed(2)})
+              Renovar con Mercado Pago (AR$ {precio.toLocaleString('es-AR')})
             </a>
 
             <div className="space-y-2">
