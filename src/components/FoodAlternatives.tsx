@@ -145,6 +145,21 @@ const alternativas: Record<string, { nombre: string; porcion: string; cal: numbe
     { nombre: 'Tortilla de ma\u00edz', porcion: '2 unidades', cal: 120, prot: 3, carb: 24, grasa: 2 },
     { nombre: 'Galletas de avena', porcion: '3 unidades', cal: 150, prot: 4, carb: 26, grasa: 4 },
   ],
+  'miel': [
+    { nombre: 'Mermelada light', porcion: '15g', cal: 25, prot: 0, carb: 6, grasa: 0 },
+    { nombre: 'Dulce de membrillo', porcion: '20g', cal: 50, prot: 0, carb: 12, grasa: 0 },
+    { nombre: 'Jarabe de arce', porcion: '10ml', cal: 35, prot: 0, carb: 9, grasa: 0 },
+    { nombre: 'Pasta de d\u00e1tiles', porcion: '15g', cal: 40, prot: 0, carb: 10, grasa: 0 },
+    { nombre: 'Az\u00facar mascabo', porcion: '10g', cal: 38, prot: 0, carb: 10, grasa: 0 },
+  ],
+  'yogur': [
+    { nombre: 'Yogur griego natural', porcion: '200g', cal: 130, prot: 20, carb: 6, grasa: 3 },
+    { nombre: 'Yogur descremado', porcion: '200g', cal: 80, prot: 8, carb: 12, grasa: 0 },
+    { nombre: 'Kefir', porcion: '200ml', cal: 100, prot: 6, carb: 8, grasa: 4 },
+    { nombre: 'Queso cottage', porcion: '200g', cal: 190, prot: 24, carb: 6, grasa: 7 },
+    { nombre: 'Ricota descremada', porcion: '200g', cal: 160, prot: 20, carb: 8, grasa: 4 },
+    { nombre: 'Leche descremada', porcion: '300ml', cal: 100, prot: 10, carb: 15, grasa: 1 },
+  ],
 };
 
 function findAlternatives(alimentoNombre: string): { nombre: string; porcion: string; cal: number; prot: number; carb: number; grasa: number }[] | null {

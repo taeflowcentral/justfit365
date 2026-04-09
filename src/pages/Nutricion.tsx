@@ -65,6 +65,13 @@ function generarPlanIA(peso: number, altura: number, edad: number, objetivo: str
       ]
     },
     {
+      id: 6, nombre: 'Post-Entreno (ma\u00f1ana)', hora: '09:30', items: [
+        { id: 601, alimento: 'Whey Protein con agua o leche', porcion: '1 scoop (30g) + 250ml', cal: 150, prot: 26, carb: 5, grasa: 2 },
+        { id: 602, alimento: 'Banana madura', porcion: '1 unidad', cal: 105, prot: 1, carb: 27, grasa: 0 },
+        { id: 603, alimento: 'Miel', porcion: '10g', cal: 32, prot: 0, carb: 8, grasa: 0 },
+      ]
+    },
+    {
       id: 2, nombre: 'Almuerzo', hora: '12:30', items: [
         { id: 201, alimento: 'Pechuga de pollo grillada', porcion: `${Math.round(protPorComida * 3.2)}g`, cal: Math.round(protPorComida * 5.3), prot: protPorComida, carb: 0, grasa: Math.round(protPorComida * 0.12) },
         { id: 202, alimento: 'Arroz integral', porcion: `${Math.round(carbTotal * 0.35)}g cocido`, cal: Math.round(carbTotal * 0.35 * 1.1), prot: 4, carb: Math.round(carbTotal * 0.25), grasa: 1 },
