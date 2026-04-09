@@ -161,7 +161,6 @@ export default function FoodAlternatives({ alimento, onSelect, onClose }: {
   onClose: () => void;
 }) {
   const alts = findAlternatives(alimento);
-  if (!alts) return null;
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={onClose}>
@@ -175,22 +174,29 @@ export default function FoodAlternatives({ alimento, onSelect, onClose }: {
           </div>
           <button onClick={onClose} className="p-1.5 text-white/30 hover:text-white transition-colors"><X className="w-4 h-4" /></button>
         </div>
-        <div className="max-h-80 overflow-y-auto divide-y divide-dark-border/30">
-          {alts.map((alt, i) => (
-            <button key={i} onClick={() => { onSelect(alt); onClose(); }}
-              className="w-full px-5 py-3 text-left hover:bg-emerald-500/5 transition-colors">
-              <p className="text-white text-sm font-medium">{alt.nombre}</p>
-              <div className="flex items-center gap-2 text-[11px] mt-0.5">
-                <span className="text-white/30">{alt.porcion}</span>
-                <span className="text-white/10">|</span>
-                <span className="text-orange-400/60">{alt.cal}cal</span>
-                <span className="text-electric/60">{alt.prot}gP</span>
-                <span className="text-amber-400/60">{alt.carb}gC</span>
-                <span className="text-pink-400/60">{alt.grasa}gG</span>
-              </div>
-            </button>
-          ))}
-        </div>
+        {alts ? (
+          <div className="max-h-80 overflow-y-auto divide-y divide-dark-border/30">
+            {alts.map((alt, i) => (
+              <button key={i} onClick={() => { onSelect(alt); onClose(); }}
+                className="w-full px-5 py-3 text-left hover:bg-emerald-500/5 transition-colors">
+                <p className="text-white text-sm font-medium">{alt.nombre}</p>
+                <div className="flex items-center gap-2 text-[11px] mt-0.5">
+                  <span className="text-white/30">{alt.porcion}</span>
+                  <span className="text-white/10">|</span>
+                  <span className="text-orange-400/60">{alt.cal}cal</span>
+                  <span className="text-electric/60">{alt.prot}gP</span>
+                  <span className="text-amber-400/60">{alt.carb}gC</span>
+                  <span className="text-pink-400/60">{alt.grasa}gG</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="p-8 text-center">
+            <p className="text-white/40 text-sm mb-2">No hay alternativas predefinidas para este alimento.</p>
+            <p className="text-white/20 text-xs">Pod&eacute;s editarlo manualmente con el bot&oacute;n del l&aacute;piz.</p>
+          </div>
+        )}
         <div className="px-5 py-3 border-t border-dark-border">
           <p className="text-white/15 text-[10px] text-center">Click en una alternativa para reemplazar</p>
         </div>

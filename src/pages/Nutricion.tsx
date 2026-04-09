@@ -462,11 +462,17 @@ export default function Nutricion() {
                       ) : (
                         <div>
                           <div className="flex items-center justify-between">
-                            <p className="text-white/80 text-sm truncate flex-1 mr-2">{item.alimento}</p>
+                            <button onClick={() => {
+                              if (findAlternatives(item.alimento)) {
+                                setShowAlternatives({ comidaId: c.id, itemId: item.id, nombre: item.alimento });
+                              } else {
+                                setEditandoItem(item.id);
+                              }
+                            }} className="text-white/80 text-sm truncate flex-1 mr-2 text-left hover:text-emerald-400 transition-colors cursor-pointer">
+                              {item.alimento} {findAlternatives(item.alimento) && <ArrowLeftRight className="w-3 h-3 inline ml-1 text-emerald-400/40" />}
+                            </button>
                             <div className="flex items-center gap-1 shrink-0">
-                              {findAlternatives(item.alimento) && (
-                                <button onClick={() => setShowAlternatives({ comidaId: c.id, itemId: item.id, nombre: item.alimento })} className="p-1 text-white/15 hover:text-emerald-400 transition-colors" title="Ver alternativas"><ArrowLeftRight className="w-3 h-3" /></button>
-                              )}
+                              <button onClick={() => setShowAlternatives({ comidaId: c.id, itemId: item.id, nombre: item.alimento })} className="p-1 text-white/15 hover:text-emerald-400 transition-colors" title="Ver alternativas"><ArrowLeftRight className="w-3 h-3" /></button>
                               <button onClick={() => setEditandoItem(item.id)} className="p-1 text-white/15 hover:text-electric transition-colors"><Edit3 className="w-3 h-3" /></button>
                               <button onClick={() => deleteItem(c.id, item.id)} className="p-1 text-white/15 hover:text-danger transition-colors"><Trash2 className="w-3 h-3" /></button>
                             </div>
