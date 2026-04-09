@@ -6,6 +6,10 @@ const alternativas: Record<string, { nombre: string; porcion: string; cal: numbe
     { nombre: 'Pan integral tostado', porcion: '2 rebanadas', cal: 180, prot: 8, carb: 30, grasa: 2 },
     { nombre: 'Quinoa cocida', porcion: '150g', cal: 180, prot: 6, carb: 30, grasa: 3 },
     { nombre: 'Cereales integrales', porcion: '50g', cal: 190, prot: 5, carb: 38, grasa: 2 },
+    { nombre: 'Tortitas de arroz', porcion: '4 unidades', cal: 140, prot: 3, carb: 30, grasa: 1 },
+    { nombre: 'Amaranto inflado', porcion: '40g', cal: 160, prot: 6, carb: 28, grasa: 3 },
+    { nombre: 'Muesli sin az\u00facar', porcion: '50g', cal: 185, prot: 5, carb: 32, grasa: 5 },
+    { nombre: 'Polenta cocida', porcion: '200g', cal: 150, prot: 4, carb: 32, grasa: 1 },
   ],
   'pollo': [
     { nombre: 'Pavo/Pavita', porcion: '200g', cal: 280, prot: 58, carb: 0, grasa: 4 },
@@ -13,6 +17,11 @@ const alternativas: Record<string, { nombre: string; porcion: string; cal: numbe
     { nombre: 'Merluza al horno', porcion: '250g', cal: 220, prot: 50, carb: 0, grasa: 2 },
     { nombre: 'Tofu firme', porcion: '250g', cal: 300, prot: 36, carb: 4, grasa: 16 },
     { nombre: 'Cerdo magro (lomo)', porcion: '200g', cal: 300, prot: 54, carb: 0, grasa: 8 },
+    { nombre: 'Conejo', porcion: '200g', cal: 260, prot: 52, carb: 0, grasa: 6 },
+    { nombre: 'Langostinos', porcion: '200g', cal: 200, prot: 42, carb: 2, grasa: 2 },
+    { nombre: 'Carne vacuna magra', porcion: '200g', cal: 320, prot: 52, carb: 0, grasa: 12 },
+    { nombre: 'Tempeh', porcion: '200g', cal: 380, prot: 38, carb: 18, grasa: 16 },
+    { nombre: 'Seit\u00e1n', porcion: '150g', cal: 180, prot: 38, carb: 6, grasa: 2 },
   ],
   'arroz': [
     { nombre: 'Fideos integrales', porcion: '150g cocidos', cal: 175, prot: 6, carb: 34, grasa: 1 },
@@ -20,75 +29,121 @@ const alternativas: Record<string, { nombre: string; porcion: string; cal: numbe
     { nombre: 'Quinoa cocida', porcion: '150g', cal: 180, prot: 6, carb: 30, grasa: 3 },
     { nombre: 'Papa hervida', porcion: '200g', cal: 170, prot: 4, carb: 38, grasa: 0 },
     { nombre: 'Cous cous', porcion: '150g cocido', cal: 170, prot: 6, carb: 33, grasa: 0 },
+    { nombre: 'Trigo burgol', porcion: '150g cocido', cal: 170, prot: 6, carb: 30, grasa: 1 },
+    { nombre: 'Lentejas cocidas', porcion: '150g', cal: 170, prot: 13, carb: 28, grasa: 1 },
+    { nombre: 'Garbanzos cocidos', porcion: '150g', cal: 240, prot: 13, carb: 36, grasa: 4 },
+    { nombre: 'Polenta', porcion: '200g cocida', cal: 150, prot: 4, carb: 32, grasa: 1 },
+    { nombre: 'Mandioca hervida', porcion: '150g', cal: 200, prot: 2, carb: 48, grasa: 0 },
   ],
   'banana': [
     { nombre: 'Manzana', porcion: '1 grande', cal: 95, prot: 0, carb: 25, grasa: 0 },
     { nombre: 'Pera', porcion: '1 mediana', cal: 100, prot: 1, carb: 26, grasa: 0 },
     { nombre: 'Naranja', porcion: '1 grande', cal: 85, prot: 1, carb: 21, grasa: 0 },
     { nombre: 'Durazno', porcion: '2 medianos', cal: 80, prot: 2, carb: 19, grasa: 0 },
+    { nombre: 'Kiwi', porcion: '2 unidades', cal: 84, prot: 2, carb: 20, grasa: 0 },
+    { nombre: 'Mango', porcion: '1/2 unidad', cal: 100, prot: 1, carb: 25, grasa: 0 },
+    { nombre: 'Uvas', porcion: '150g', cal: 100, prot: 1, carb: 26, grasa: 0 },
+    { nombre: 'Frutillas', porcion: '200g', cal: 64, prot: 2, carb: 14, grasa: 0 },
+    { nombre: 'Sand\u00eda', porcion: '300g', cal: 90, prot: 2, carb: 22, grasa: 0 },
   ],
   'salm\u00f3n': [
     { nombre: 'Trucha', porcion: '180g', cal: 300, prot: 38, carb: 0, grasa: 16 },
     { nombre: 'Caballa', porcion: '180g', cal: 340, prot: 36, carb: 0, grasa: 22 },
     { nombre: 'At\u00fan fresco', porcion: '180g', cal: 260, prot: 42, carb: 0, grasa: 10 },
     { nombre: 'Sardinas', porcion: '150g', cal: 250, prot: 30, carb: 0, grasa: 14 },
-    { nombre: 'Pechuga de pollo + omega-3', porcion: '200g pollo + 2 c\u00e1ps omega', cal: 340, prot: 62, carb: 0, grasa: 9 },
+    { nombre: 'Pechuga + omega-3', porcion: '200g + c\u00e1ps', cal: 340, prot: 62, carb: 0, grasa: 9 },
+    { nombre: 'Bondiola de cerdo', porcion: '150g', cal: 300, prot: 34, carb: 0, grasa: 18 },
+    { nombre: 'Surub\u00ed', porcion: '200g', cal: 220, prot: 40, carb: 0, grasa: 6 },
+    { nombre: 'Corvina', porcion: '200g', cal: 200, prot: 38, carb: 0, grasa: 4 },
   ],
   'huevo': [
     { nombre: 'Claras de huevo', porcion: '6 claras', cal: 100, prot: 22, carb: 0, grasa: 0 },
     { nombre: 'Queso cottage', porcion: '150g', cal: 145, prot: 18, carb: 5, grasa: 5 },
     { nombre: 'Yogur griego', porcion: '200g', cal: 130, prot: 20, carb: 6, grasa: 3 },
+    { nombre: 'Ricota descremada', porcion: '150g', cal: 120, prot: 16, carb: 6, grasa: 3 },
+    { nombre: 'Queso port salut light', porcion: '60g', cal: 140, prot: 16, carb: 2, grasa: 8 },
+    { nombre: 'Revuelto de tofu', porcion: '200g', cal: 160, prot: 18, carb: 4, grasa: 8 },
   ],
   'man\u00ed': [
     { nombre: 'Mantequilla de almendras', porcion: '15g', cal: 95, prot: 3, carb: 3, grasa: 8 },
     { nombre: 'Palta/Aguacate', porcion: '50g', cal: 80, prot: 1, carb: 4, grasa: 7 },
     { nombre: 'Semillas de ch\u00eda', porcion: '15g', cal: 70, prot: 3, carb: 5, grasa: 5 },
     { nombre: 'Tahini', porcion: '15g', cal: 90, prot: 3, carb: 3, grasa: 8 },
+    { nombre: 'Semillas de lino', porcion: '15g', cal: 75, prot: 3, carb: 4, grasa: 6 },
+    { nombre: 'Aceite de coco', porcion: '10ml', cal: 90, prot: 0, carb: 0, grasa: 10 },
+    { nombre: 'Aceite de oliva', porcion: '10ml', cal: 88, prot: 0, carb: 0, grasa: 10 },
+    { nombre: 'Nueces pecanas', porcion: '15g', cal: 105, prot: 1, carb: 2, grasa: 11 },
   ],
   'batata': [
     { nombre: 'Calabaza asada', porcion: '250g', cal: 110, prot: 2, carb: 26, grasa: 0 },
     { nombre: 'Arroz integral', porcion: '150g cocido', cal: 170, prot: 4, carb: 36, grasa: 1 },
     { nombre: 'Choclo', porcion: '1 unidad grande', cal: 130, prot: 4, carb: 28, grasa: 2 },
     { nombre: 'Papa hervida', porcion: '200g', cal: 170, prot: 4, carb: 38, grasa: 0 },
+    { nombre: 'Zanahoria asada', porcion: '250g', cal: 100, prot: 2, carb: 24, grasa: 0 },
+    { nombre: 'Remolacha cocida', porcion: '200g', cal: 88, prot: 3, carb: 20, grasa: 0 },
+    { nombre: 'Zapallo anco asado', porcion: '250g', cal: 110, prot: 2, carb: 28, grasa: 0 },
   ],
   'br\u00f3coli': [
     { nombre: 'Espinaca salteada', porcion: '200g', cal: 46, prot: 6, carb: 4, grasa: 1 },
     { nombre: 'Coliflor al vapor', porcion: '200g', cal: 50, prot: 4, carb: 8, grasa: 0 },
     { nombre: 'Zucchini/Zapallito', porcion: '200g', cal: 34, prot: 2, carb: 6, grasa: 0 },
-    { nombre: 'Espárragos', porcion: '200g', cal: 40, prot: 4, carb: 6, grasa: 0 },
+    { nombre: 'Esp\u00e1rragos', porcion: '200g', cal: 40, prot: 4, carb: 6, grasa: 0 },
+    { nombre: 'Chauchas al vapor', porcion: '200g', cal: 62, prot: 4, carb: 12, grasa: 0 },
+    { nombre: 'Repollo salteado', porcion: '200g', cal: 50, prot: 3, carb: 10, grasa: 0 },
+    { nombre: 'Kale salteado', porcion: '150g', cal: 50, prot: 4, carb: 6, grasa: 1 },
+    { nombre: 'Berenjena grillada', porcion: '200g', cal: 70, prot: 2, carb: 12, grasa: 2 },
   ],
   'whey': [
     { nombre: 'Case\u00edna', porcion: '1 scoop (30g)', cal: 120, prot: 24, carb: 4, grasa: 1 },
     { nombre: 'Prote\u00edna vegana (arvejas)', porcion: '1 scoop (35g)', cal: 125, prot: 22, carb: 4, grasa: 2 },
-    { nombre: 'Yogur griego + claras', porcion: '150g yogur + 3 claras', cal: 140, prot: 26, carb: 5, grasa: 2 },
+    { nombre: 'Yogur griego + claras', porcion: '150g + 3 claras', cal: 140, prot: 26, carb: 5, grasa: 2 },
     { nombre: 'Queso cottage', porcion: '200g', cal: 190, prot: 24, carb: 6, grasa: 7 },
+    { nombre: 'Leche descremada', porcion: '500ml', cal: 170, prot: 17, carb: 25, grasa: 1 },
+    { nombre: 'Prote\u00edna de arroz + arvejas', porcion: '1 scoop (35g)', cal: 130, prot: 24, carb: 3, grasa: 2 },
   ],
   'case\u00edna': [
     { nombre: 'Yogur griego', porcion: '200g', cal: 130, prot: 20, carb: 6, grasa: 3 },
     { nombre: 'Queso cottage', porcion: '200g', cal: 190, prot: 24, carb: 6, grasa: 7 },
     { nombre: 'Leche descremada', porcion: '400ml', cal: 140, prot: 14, carb: 20, grasa: 1 },
+    { nombre: 'Ricota descremada', porcion: '200g', cal: 160, prot: 20, carb: 8, grasa: 4 },
+    { nombre: 'Queso blanco', porcion: '100g', cal: 160, prot: 18, carb: 4, grasa: 8 },
+    { nombre: 'Leche de soja', porcion: '400ml', cal: 160, prot: 14, carb: 8, grasa: 8 },
   ],
   'almendra': [
     { nombre: 'Nueces', porcion: '15g', cal: 100, prot: 2, carb: 2, grasa: 10 },
-    { nombre: 'Castañas de caj\u00fa', porcion: '15g', cal: 85, prot: 3, carb: 5, grasa: 7 },
+    { nombre: 'Casta\u00f1as de caj\u00fa', porcion: '15g', cal: 85, prot: 3, carb: 5, grasa: 7 },
     { nombre: 'Semillas de calabaza', porcion: '15g', cal: 85, prot: 4, carb: 2, grasa: 7 },
     { nombre: 'Pistachos', porcion: '15g', cal: 85, prot: 3, carb: 4, grasa: 7 },
+    { nombre: 'Semillas de girasol', porcion: '15g', cal: 85, prot: 3, carb: 3, grasa: 7 },
+    { nombre: 'Man\u00ed tostado', porcion: '15g', cal: 85, prot: 4, carb: 2, grasa: 7 },
+    { nombre: 'Avellanas', porcion: '15g', cal: 95, prot: 2, carb: 2, grasa: 9 },
+    { nombre: 'Nuez de macadamia', porcion: '15g', cal: 110, prot: 1, carb: 2, grasa: 11 },
   ],
   'ensalada': [
     { nombre: 'Verduras salteadas', porcion: '200g', cal: 100, prot: 3, carb: 12, grasa: 5 },
     { nombre: 'Sopa de verduras', porcion: '300ml', cal: 90, prot: 3, carb: 14, grasa: 2 },
-    { nombre: 'Tomate cherry + r\u00facula + queso', porcion: '200g', cal: 120, prot: 6, carb: 8, grasa: 7 },
+    { nombre: 'Tomate + r\u00facula + queso', porcion: '200g', cal: 120, prot: 6, carb: 8, grasa: 7 },
+    { nombre: 'Wok de vegetales', porcion: '250g', cal: 120, prot: 4, carb: 14, grasa: 6 },
+    { nombre: 'Gazpacho', porcion: '300ml', cal: 80, prot: 2, carb: 12, grasa: 3 },
+    { nombre: 'Ensalada de repollo', porcion: '200g', cal: 70, prot: 2, carb: 10, grasa: 3 },
   ],
   'leche': [
     { nombre: 'Leche de almendras', porcion: '200ml', cal: 30, prot: 1, carb: 1, grasa: 3 },
     { nombre: 'Leche de soja', porcion: '200ml', cal: 80, prot: 7, carb: 4, grasa: 4 },
     { nombre: 'Leche de avena', porcion: '200ml', cal: 90, prot: 2, carb: 14, grasa: 3 },
     { nombre: 'Yogur natural', porcion: '200ml', cal: 120, prot: 8, carb: 10, grasa: 5 },
+    { nombre: 'Leche de coco', porcion: '200ml', cal: 40, prot: 0, carb: 2, grasa: 4 },
+    { nombre: 'Leche de arroz', porcion: '200ml', cal: 90, prot: 1, carb: 18, grasa: 2 },
+    { nombre: 'Kefir', porcion: '200ml', cal: 100, prot: 6, carb: 8, grasa: 4 },
   ],
   'tostada': [
     { nombre: 'Galletas de arroz', porcion: '4 unidades', cal: 140, prot: 3, carb: 30, grasa: 1 },
     { nombre: 'Wrap integral', porcion: '1 unidad', cal: 130, prot: 4, carb: 24, grasa: 3 },
     { nombre: 'Crackers integrales', porcion: '6 unidades', cal: 120, prot: 3, carb: 22, grasa: 3 },
+    { nombre: 'Pan de centeno', porcion: '2 rebanadas', cal: 160, prot: 6, carb: 30, grasa: 2 },
+    { nombre: 'Pan pita integral', porcion: '1 unidad', cal: 140, prot: 5, carb: 28, grasa: 1 },
+    { nombre: 'Tortilla de ma\u00edz', porcion: '2 unidades', cal: 120, prot: 3, carb: 24, grasa: 2 },
+    { nombre: 'Galletas de avena', porcion: '3 unidades', cal: 150, prot: 4, carb: 26, grasa: 4 },
   ],
 };
 
@@ -106,7 +161,6 @@ export default function FoodAlternatives({ alimento, onSelect, onClose }: {
   onClose: () => void;
 }) {
   const alts = findAlternatives(alimento);
-
   if (!alts) return null;
 
   return (
@@ -138,7 +192,7 @@ export default function FoodAlternatives({ alimento, onSelect, onClose }: {
           ))}
         </div>
         <div className="px-5 py-3 border-t border-dark-border">
-          <p className="text-white/15 text-[10px] text-center">Click en una alternativa para reemplazar el alimento</p>
+          <p className="text-white/15 text-[10px] text-center">Click en una alternativa para reemplazar</p>
         </div>
       </div>
     </div>

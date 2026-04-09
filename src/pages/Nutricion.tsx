@@ -102,10 +102,21 @@ export default function Nutricion() {
   const { user } = useAuth();
   const perfil = user?.perfil;
 
-  const [comidas, setComidas] = useState<Comida[]>(() => {
-    const saved = localStorage.getItem(PLAN_KEY);
-    return saved ? JSON.parse(saved) : [];
+  const DIAS = ['Lun', 'Mar', 'Mi\u00e9', 'Jue', 'Vie', 'S\u00e1b', 'Dom'];
+  const [diaActivo, setDiaActivo] = useState(0);
+  const [planSemanal, setPlanSemanal] = useState<Record<number, Comida[]>>(() => {
+    const saved = localStorage.getItem(PLAN_KEY + '_semanal');
+    if (saved) return JSON.parse(saved);
+    // Migrar plan viejo si existe
+    const old = localStorage.getItem(PLAN_KEY);
+    if (old) {
+      const initial: Record<number, Comida[]> = {};
+      for (let i = 0; i < 7; i++) initial[i] = JSON.parse(old);
+      return initial;
+    }
+    return {};
   });
+  const comidas = planSemanal[diaActivo] || [];
   const [notaIA, setNotaIA] = useState(() => localStorage.getItem(PLAN_KEY + '_nota') || '');
   const [editandoComida, setEditandoComida] = useState<number | null>(null);
   const [editandoItem, setEditandoItem] = useState<number | null>(null);
@@ -113,12 +124,14 @@ export default function Nutricion() {
   const [showAddComida, setShowAddComida] = useState(false);
   const [showAddItem, setShowAddItem] = useState<number | null>(null);
   const [showAlternatives, setShowAlternatives] = useState<{ comidaId: number; itemId: number; nombre: string } | null>(null);
+  const [showMacros, setShowMacros] = useState(true);
   const [nuevaComida, setNuevaComida] = useState({ nombre: '', hora: '12:00' });
   const [nuevoItem, setNuevoItem] = useState<Alimento>({ id: 0, alimento: '', porcion: '', cal: 0, prot: 0, carb: 0, grasa: 0 });
 
   const guardar = (c: Comida[]) => {
-    setComidas(c);
-    localStorage.setItem(PLAN_KEY, JSON.stringify(c));
+    const updated = { ...planSemanal, [diaActivo]: c };
+    setPlanSemanal(updated);
+    localStorage.setItem(PLAN_KEY + '_semanal', JSON.stringify(updated));
   };
 
   const guardarNota = (n: string) => {
@@ -126,16 +139,39 @@ export default function Nutricion() {
     localStorage.setItem(PLAN_KEY + '_nota', n);
   };
 
-  const generarPlan = () => {
+  const generarPlan = (todaLaSemana = false) => {
     if (!perfil) return;
     setGenerando(true);
     setTimeout(() => {
       const { comidas: plan, nota } = generarPlanIA(perfil.peso, perfil.altura, perfil.edad, perfil.objetivo, perfil.nivelActividad);
-      guardar(plan);
+      if (todaLaSemana) {
+        const semanal: Record<number, Comida[]> = {};
+        for (let i = 0; i < 7; i++) {
+          const { comidas: planDia } = generarPlanIA(perfil.peso, perfil.altura, perfil.edad, perfil.objetivo, perfil.nivelActividad);
+          semanal[i] = planDia;
+        }
+        setPlanSemanal(semanal);
+        localStorage.setItem(PLAN_KEY + '_semanal', JSON.stringify(semanal));
+      } else {
+        guardar(plan);
+      }
       guardarNota(nota);
       setGenerando(false);
     }, 2000);
   };
+
+  const borrarDia = () => {
+    guardar([]);
+  };
+
+  const _copiarDia = (desde: number) => {
+    const comidasOrigen = planSemanal[desde];
+    if (comidasOrigen) {
+      const copia = comidasOrigen.map(c => ({ ...c, id: Date.now() + Math.random(), items: c.items.map(it => ({ ...it, id: Date.now() + Math.random() })) }));
+      guardar(copia);
+    }
+  };
+  void _copiarDia;
 
   const updateItem = (comidaId: number, itemId: number, field: keyof Alimento, value: string | number) => {
     const updated = comidas.map(c => c.id === comidaId ? { ...c, items: c.items.map(it => it.id === itemId ? { ...it, [field]: value } : it) } : c);
@@ -214,9 +250,9 @@ export default function Nutricion() {
               <p>Objetivo cal&oacute;rico: <strong className="text-white">{calObjetivo} kcal</strong></p>
             </div>
           )}
-          <button onClick={generarPlan} disabled={!perfil || generando}
+          <button onClick={() => { generarPlan(true); }} disabled={!perfil || generando}
             className="px-8 py-4 bg-gradient-to-r from-electric to-neon text-black font-black text-sm uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all shadow-lg shadow-electric/20 disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-2 mx-auto">
-            {generando ? <><Sparkles className="w-5 h-5 animate-spin" /> Generando plan...</> : <><Zap className="w-5 h-5" /> Generar Plan con 365</>}
+            {generando ? <><Sparkles className="w-5 h-5 animate-spin" /> Generando plan...</> : <><Zap className="w-5 h-5" /> Generar Plan Semanal con 365</>}
           </button>
           {!perfil && <p className="text-warning text-xs mt-4">And&aacute; a "Mi Perfil" y complet&aacute; tus datos f&iacute;sicos primero.</p>}
         </div>
@@ -249,11 +285,41 @@ export default function Nutricion() {
           <button onClick={() => setShowAddComida(true)} className="flex items-center gap-2 px-3 py-2 bg-emerald-500/15 border border-emerald-500/20 text-emerald-400 rounded-xl text-xs font-bold hover:bg-emerald-500/25 transition-colors">
             <Plus className="w-3 h-3" /> Comida
           </button>
-          <button onClick={generarPlan} disabled={!perfil || generando}
+          <button onClick={() => { generarPlan(false); }} disabled={!perfil || generando}
             className="flex items-center gap-2 px-3 py-2 bg-electric/15 border border-electric/20 text-electric rounded-xl text-xs font-bold hover:bg-electric/25 transition-colors disabled:opacity-30">
-            {generando ? <Sparkles className="w-3 h-3 animate-spin" /> : <RotateCcw className="w-3 h-3" />} Regenerar
+            {generando ? <Sparkles className="w-3 h-3 animate-spin" /> : <RotateCcw className="w-3 h-3" />} Regenerar d\u00eda
+          </button>
+          <button onClick={() => { generarPlan(true); }} disabled={!perfil || generando}
+            className="flex items-center gap-2 px-3 py-2 bg-purple-500/15 border border-purple-500/20 text-purple-400 rounded-xl text-xs font-bold hover:bg-purple-500/25 transition-colors disabled:opacity-30">
+            Generar semana
+          </button>
+          <button onClick={borrarDia}
+            className="flex items-center gap-2 px-3 py-2 bg-danger/10 border border-danger/20 text-danger/60 rounded-xl text-xs font-bold hover:bg-danger/20 transition-colors">
+            Borrar d\u00eda
+          </button>
+          <button onClick={() => setShowMacros(!showMacros)}
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${showMacros ? 'bg-amber-500/15 border border-amber-500/20 text-amber-400' : 'bg-white/5 border border-dark-border text-white/40'}`}>
+            {showMacros ? 'Ocultar macros' : 'Mostrar macros'}
           </button>
         </div>
+      </div>
+
+      {/* Tabs de dias */}
+      <div className="flex gap-1.5">
+        {DIAS.map((dia, i) => {
+          const tieneComidas = (planSemanal[i] || []).length > 0;
+          return (
+            <button key={dia} onClick={() => { setDiaActivo(i); setEditandoComida(null); setEditandoItem(null); }}
+              className={`flex-1 text-center py-2.5 rounded-xl text-xs font-bold transition-all ${
+                i === diaActivo ? 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-400' :
+                tieneComidas ? 'bg-dark-800 border border-dark-border text-white/50 hover:border-white/10' :
+                'bg-dark-800 border border-dark-border text-white/20 hover:border-white/10'
+              }`}>
+              <p>{dia}</p>
+              {tieneComidas && <span className="block w-1.5 h-1.5 bg-emerald-400/50 rounded-full mx-auto mt-0.5" />}
+            </button>
+          );
+        })}
       </div>
 
 
@@ -407,11 +473,13 @@ export default function Nutricion() {
                           </div>
                           <div className="flex items-center gap-2 text-[11px] mt-0.5">
                             <span className="text-white/25">{item.porcion}</span>
-                            <span className="text-white/10">|</span>
-                            <span className="text-orange-400/70">{item.cal}cal</span>
-                            <span className="text-electric/70">{item.prot}gP</span>
-                            <span className="text-amber-400/70">{item.carb}gC</span>
-                            <span className="text-pink-400/70">{item.grasa}gG</span>
+                            {showMacros && <>
+                              <span className="text-white/10">|</span>
+                              <span className="text-orange-400/70">{item.cal}cal</span>
+                              <span className="text-electric/70">{item.prot}gP</span>
+                              <span className="text-amber-400/70">{item.carb}gC</span>
+                              <span className="text-pink-400/70">{item.grasa}gG</span>
+                            </>}
                           </div>
                         </div>
                       )}

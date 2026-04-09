@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import {
   User as UserIcon, Camera, Save, Trash2, StickyNote, Ruler,
-  Weight, Calendar, Target, Activity, Fingerprint, Mail, Phone
+  Weight, Calendar, Target, Activity, Fingerprint, Mail, Phone, HeartPulse, Plus, X
 } from 'lucide-react';
 
 export default function Perfil() {
@@ -22,6 +22,48 @@ export default function Perfil() {
     objetivo: user?.perfil?.objetivo || 'Hipertrofia',
     nivelActividad: user?.perfil?.nivelActividad || 'Intermedio',
   });
+
+  const [enfermedades, setEnfermedades] = useState<string[]>(() => {
+    const saved = localStorage.getItem('jf365_enfermedades');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [otraEnfermedad, setOtraEnfermedad] = useState('');
+
+  const ENFERMEDADES_LISTA = [
+    'Hipotiroidismo', 'Hipertiroidismo', 'Diabetes tipo 1', 'Diabetes tipo 2',
+    'Hipertensi\u00f3n arterial', 'Angioedema', 'Asma', 'EPOC',
+    'Enfermedad cel\u00edaca', 'Intolerancia a la lactosa', 'Alergia al gluten',
+    'S\u00edndrome de ovario poliqu\u00edstico (SOP)', 'Endometriosis',
+    'Artritis reumatoide', 'Osteoporosis', 'Osteoartritis',
+    'Fibromialgia', 'Lupus', 'Enfermedad de Crohn', 'Colitis ulcerosa',
+    'S\u00edndrome del intestino irritable (SII)', 'Reflujo gastroesof\u00e1gico (ERGE)',
+    'Insuficiencia renal', 'H\u00edgado graso', 'Cirrosis',
+    'Anemia ferrop\u00e9nica', 'Anemia megalobl\u00e1stica',
+    'Arritmia card\u00edaca', 'Insuficiencia card\u00edaca', 'Cardiopat\u00eda isqu\u00e9mica',
+    'Epilepsia', 'Esclerosis m\u00faltiple', 'Parkinson',
+    'Depresi\u00f3n cl\u00ednica', 'Trastorno de ansiedad generalizada',
+    'Hernia de disco', 'Escoliosis', 'Tendinitis cr\u00f3nica',
+    'S\u00edndrome del t\u00fanel carpiano', 'Psoriasis', 'Dermatitis at\u00f3pica',
+    'Apnea del sue\u00f1o', 'Hiperlipidemia', 'Gota',
+    'Hashimoto', 'Addison', 'Cushing',
+  ].filter(e => !enfermedades.includes(e));
+
+  const toggleEnfermedad = (enf: string) => {
+    const updated = enfermedades.includes(enf)
+      ? enfermedades.filter(e => e !== enf)
+      : [...enfermedades, enf];
+    setEnfermedades(updated);
+    localStorage.setItem('jf365_enfermedades', JSON.stringify(updated));
+  };
+
+  const agregarOtra = () => {
+    if (otraEnfermedad.trim() && !enfermedades.includes(otraEnfermedad.trim())) {
+      const updated = [...enfermedades, otraEnfermedad.trim()];
+      setEnfermedades(updated);
+      localStorage.setItem('jf365_enfermedades', JSON.stringify(updated));
+      setOtraEnfermedad('');
+    }
+  };
 
   useEffect(() => {
     setFotoPreview(user?.foto || '');
@@ -301,6 +343,48 @@ export default function Perfil() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Condiciones preexistentes */}
+      <div className="bg-dark-800 border border-dark-border rounded-2xl p-6">
+        <h3 className="text-white font-bold mb-2 flex items-center gap-2">
+          <HeartPulse className="w-4 h-4 text-red-400" /> Condiciones Preexistentes
+        </h3>
+        <p className="text-white/30 text-xs mb-4">Seleccion&aacute; las condiciones que ten&eacute;s. Se usan para personalizar tu plan nutricional y de entrenamiento.</p>
+
+        {/* Seleccionadas */}
+        {enfermedades.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mb-4">
+            {enfermedades.map(e => (
+              <button key={e} onClick={() => toggleEnfermedad(e)}
+                className="flex items-center gap-1 px-2.5 py-1.5 bg-red-500/15 text-red-400 border border-red-500/20 rounded-lg text-xs font-medium hover:bg-red-500/25 transition-colors">
+                {e} <X className="w-3 h-3" />
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Listado para agregar */}
+        <div className="flex flex-wrap gap-1.5 mb-4 max-h-40 overflow-y-auto">
+          {ENFERMEDADES_LISTA.map(e => (
+            <button key={e} onClick={() => toggleEnfermedad(e)}
+              className="px-2.5 py-1.5 bg-white/[0.03] text-white/40 border border-dark-border rounded-lg text-xs hover:border-red-500/20 hover:text-red-400 transition-colors">
+              {e}
+            </button>
+          ))}
+        </div>
+
+        {/* Agregar otra */}
+        <div className="flex gap-2">
+          <input type="text" value={otraEnfermedad} onChange={e => setOtraEnfermedad(e.target.value)}
+            placeholder="Otra condici\u00f3n no listada..."
+            onKeyDown={e => e.key === 'Enter' && agregarOtra()}
+            className="flex-1 px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
+          <button onClick={agregarOtra} disabled={!otraEnfermedad.trim()}
+            className="px-3 py-2.5 bg-electric/15 text-electric rounded-xl text-xs font-bold hover:bg-electric/25 transition-colors disabled:opacity-30">
+            <Plus className="w-4 h-4" />
+          </button>
         </div>
       </div>
 
