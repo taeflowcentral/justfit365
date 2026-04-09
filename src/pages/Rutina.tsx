@@ -153,7 +153,11 @@ export default function Rutina() {
     const saved = localStorage.getItem(RUTINA_KEY);
     return saved ? JSON.parse(saved) : semanaDefault;
   });
-  const [diaActivo, setDiaActivo] = useState(0);
+  const [diaActivo, setDiaActivo] = useState(() => {
+    // 0=Lun, 1=Mar, ..., 6=Dom. JS: 0=Dom, 1=Lun, ..., 6=Sab
+    const jsDay = new Date().getDay();
+    return jsDay === 0 ? 6 : jsDay - 1;
+  });
 
   // Ejercicios guardados por dia (indice 0-6)
   const [ejerciciosPorDia, setEjerciciosPorDia] = useState<Record<number, Ejercicio[]>>(() => {
