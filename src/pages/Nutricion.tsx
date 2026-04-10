@@ -28,12 +28,17 @@ function generarPlanIA(peso: number, altura: number, edad: number, objetivo: str
   const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
   const tdee = Math.round(tmb * (factores[nivel] || 1.55));
 
-  const esDescanso = tipoEntreno === 'Descanso';
-  const esCardio = ['Cardio', 'Running', 'Caminata Activa', 'Spinning', 'Ciclismo'].includes(tipoEntreno || '');
-  const _esFuerza = ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body'].includes(tipoEntreno || '');
-  void _esFuerza;
-  const esYoga = tipoEntreno === 'Yoga';
-  const esHIIT = tipoEntreno === 'HIIT';
+  // Soporte para multiples actividades por dia (ej: "Push + Running")
+  const actividades = (tipoEntreno || '').split(' + ').filter(Boolean);
+  const esDescanso = actividades.length === 0 || actividades.every(t => t === 'Descanso');
+  const tieneCardio = actividades.some(t => ['Cardio', 'Running', 'Caminata Activa', 'Spinning', 'Ciclismo'].includes(t));
+  const tieneFuerza = actividades.some(t => ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body'].includes(t));
+  const esYoga = actividades.some(t => t === 'Yoga');
+  const esHIIT = actividades.some(t => t === 'HIIT');
+  const tieneFuncional = actividades.some(t => t === 'Funcional');
+  // Para compatibilidad con logica existente
+  const esCardio = tieneCardio && !tieneFuerza;
+  void tieneFuerza; void tieneFuncional;
 
   // Ajuste por enfermedades
   const tieneHipo = enfermedades?.some(e => e.toLowerCase().includes('hipotiroidismo') || e.toLowerCase().includes('hashimoto'));
@@ -66,18 +71,27 @@ function generarPlanIA(peso: number, altura: number, edad: number, objetivo: str
     notaObj = `Plan equilibrado de mantenimiento.`;
   }
 
-  // Ajuste por tipo de entreno del dia
+  // Ajuste por tipo de entreno del dia (soporte multiple)
   if (esDescanso) {
     calObjetivo = Math.round(calObjetivo * 0.9);
     notasExtra.push('D\u00eda de descanso: calor\u00edas reducidas un 10%.');
-  } else if (esCardio) {
-    calObjetivo = Math.round(calObjetivo + 150);
-    notasExtra.push(`D\u00eda de ${tipoEntreno}: +150 kcal en carbohidratos para energ\u00eda.`);
-  } else if (esHIIT) {
-    calObjetivo = Math.round(calObjetivo + 200);
-    notasExtra.push('D\u00eda HIIT: +200 kcal. Priorizar carbos r\u00e1pidos post-entreno.');
-  } else if (esYoga) {
-    notasExtra.push('D\u00eda de Yoga: plan equilibrado con alimentos antiinflamatorios.');
+  } else {
+    let extraKcal = 0;
+    const detalles: string[] = [];
+    if (tieneFuerza) detalles.push('fuerza');
+    if (tieneCardio) { extraKcal += 150; detalles.push('cardio'); }
+    if (tieneFuerza && tieneCardio) extraKcal += 100;
+    if (esHIIT) { extraKcal += 200; detalles.push('HIIT'); }
+    if (tieneFuncional) { extraKcal += 100; detalles.push('funcional'); }
+    if (esYoga && detalles.length === 0) detalles.push('yoga');
+    calObjetivo = Math.round(calObjetivo + extraKcal);
+    if (actividades.length > 1) {
+      notasExtra.push(`Combinaci\u00f3n ${actividades.join(' + ')}: +${extraKcal} kcal extra para cubrir el gasto de m\u00faltiples actividades.`);
+    } else if (extraKcal > 0) {
+      notasExtra.push(`D\u00eda de ${detalles.join(', ')}: +${extraKcal} kcal para energ\u00eda.`);
+    } else if (esYoga) {
+      notasExtra.push('D\u00eda de Yoga: plan equilibrado con alimentos antiinflamatorios.');
+    }
   }
 
   // Ajuste por enfermedades

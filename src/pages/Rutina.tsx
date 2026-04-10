@@ -189,6 +189,31 @@ export default function Rutina() {
   const [expandido, setExpandido] = useState<number | null>(null);
   const [editando, setEditando] = useState<number | null>(null);
   const [editSemana, setEditSemana] = useState(false);
+  const [editandoDia, setEditandoDia] = useState<number | null>(null);
+
+  const toggleTipoEnDia = (index: number, tipo: string) => {
+    const tiposActuales = (semana[index]?.tipo || '').split(' + ').filter(Boolean);
+    let nuevos: string[];
+    if (tipo === 'Descanso') {
+      nuevos = ['Descanso'];
+    } else if (tiposActuales.includes(tipo)) {
+      nuevos = tiposActuales.filter(t => t !== tipo && t !== 'Descanso');
+    } else {
+      nuevos = [...tiposActuales.filter(t => t !== 'Descanso'), tipo];
+    }
+    if (nuevos.length === 0) nuevos = ['Descanso'];
+    const tipoFinal = nuevos.join(' + ');
+    setSemana(prev => prev.map((d, i) => i === index ? { ...d, tipo: tipoFinal } : d));
+    if (!(ejerciciosPorDia[index]?.length > 0) && tipoFinal !== 'Descanso') {
+      // Cargar ejercicios de todos los tipos seleccionados
+      const ejs: typeof ejerciciosPorDia[0] = [];
+      nuevos.forEach(t => {
+        const base = generarEjerciciosParaDia(t);
+        base.forEach(e => ejs.push({ ...e, id: e.id + Math.random() }));
+      });
+      setEjerciciosPorDia(prev => ({ ...prev, [index]: ejs }));
+    }
+  };
   const [showAddModal, setShowAddModal] = useState(false);
   const [showIllustration, setShowIllustration] = useState<string | null>(null);
   const [nuevoEj, setNuevoEj] = useState<Ejercicio>({ id: 0, nombre: '', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Pecho', completado: false, notas: '' });
@@ -228,14 +253,6 @@ export default function Rutina() {
     setShowAddModal(false);
   };
 
-  const updateDia = (index: number, tipo: string) => {
-    setSemana(prev => prev.map((d, i) => i === index ? { ...d, tipo } : d));
-    // Solo actualiza el calendario, no toca los ejercicios existentes
-    // Si el dia no tiene ejercicios, genera los del nuevo tipo
-    if (!(ejerciciosPorDia[index]?.length > 0)) {
-      setEjerciciosPorDia(prev => ({ ...prev, [index]: generarEjerciciosParaDia(tipo) }));
-    }
-  };
 
   const seleccionarDia = (index: number) => {
     if (!editSemana) {
@@ -287,7 +304,7 @@ export default function Rutina() {
       <div>
         <div className="flex items-center justify-between mb-2">
           <span className="text-white/30 text-xs uppercase tracking-wider">
-            {editSemana ? 'Cambi\u00e1 el tipo de cada d\u00eda (los ejercicios se actualizan autom\u00e1ticamente)' : 'Click en un d\u00eda para ver su rutina'}
+            {editSemana ? 'Click en un d\u00eda y eleg\u00ed una o m\u00e1s actividades' : 'Click en un d\u00eda para ver su rutina'}
           </span>
           <button onClick={() => setEditSemana(!editSemana)} className="text-xs text-electric/60 hover:text-electric flex items-center gap-1 transition-colors">
             <Edit3 className="w-3 h-3" /> {editSemana ? 'Listo' : 'Editar d\u00edas'}
@@ -295,30 +312,45 @@ export default function Rutina() {
         </div>
         <div className="flex gap-2">
           {semana.map((d, i) => (
-            <button key={d.dia} onClick={() => seleccionarDia(i)}
+            <button key={d.dia} onClick={() => editSemana ? setEditandoDia(editandoDia === i ? null : i) : seleccionarDia(i)}
               className={`flex-1 text-center py-3 rounded-xl border transition-all ${
                 i === diaActivo
                   ? 'bg-purple-500/15 border-purple-500/30 text-purple-400 shadow-lg shadow-purple-500/10'
                   : d.tipo === 'Descanso'
                     ? 'bg-dark-800 border-dark-border text-white/20 hover:border-white/10'
                     : 'bg-dark-800 border-dark-border text-white/40 hover:border-white/10 hover:bg-dark-700'
-              } ${editSemana ? 'cursor-default' : 'cursor-pointer'}`}>
+              } cursor-pointer`}>
               <p className="text-xs font-bold uppercase">{d.dia}</p>
-              {editSemana ? (
-                <select
-                  value={d.tipo}
-                  onChange={e => updateDia(i, e.target.value)}
-                  onClick={e => e.stopPropagation()}
-                  className="bg-transparent text-[10px] mt-0.5 text-center focus:outline-none w-full appearance-none cursor-pointer"
-                >
-                  {tiposEntrenamiento.map(t => <option key={t} value={t} className="bg-dark-800 text-white">{t}</option>)}
-                </select>
-              ) : (
-                <p className="text-[10px] mt-0.5 opacity-60">{d.tipo}</p>
-              )}
+              <p className="text-[9px] mt-0.5 opacity-60 leading-tight">{d.tipo}</p>
             </button>
           ))}
         </div>
+
+        {/* Panel de seleccion multiple cuando se edita un dia */}
+        {editSemana && editandoDia !== null && (
+          <div className="mt-3 bg-dark-800 border border-electric/20 rounded-2xl p-4">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-white font-bold text-sm">Actividades para {semana[editandoDia]?.dia}</p>
+              <span className="text-white/30 text-xs">Pod\u00e9s elegir varias</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {tiposEntrenamiento.map(t => {
+                const activo = (semana[editandoDia]?.tipo || '').split(' + ').includes(t);
+                return (
+                  <button key={t} onClick={() => toggleTipoEnDia(editandoDia, t)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                      activo
+                        ? t === 'Descanso' ? 'bg-white/15 text-white/70 border border-white/20' : 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                        : 'bg-black/40 text-white/40 border border-dark-border hover:border-white/20'
+                    }`}>
+                    {t}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-white/20 text-[10px] mt-3">Ejemplo: pod\u00e9s combinar "Push" con "Running" para un d\u00eda de fuerza + cardio.</p>
+          </div>
+        )}
       </div>
 
       {/* Descanso */}
