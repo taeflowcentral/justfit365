@@ -185,6 +185,49 @@ const exercises: Record<string, ExerciseData> = {
     musculos: ['Full Body', 'Cu\u00e1driceps', 'Gl\u00fateos', 'Cardiovascular'],
     instrucciones: 'Movimiento fluido sin impacto. Usar brazos activamente. Mantener postura erguida sin apoyarse en los mangos.',
   },
+  // Cardio extras
+  'Remo ergometro': {
+    folder: 'Rowing_Stationary',
+    musculos: ['Espalda', 'B\u00edceps', 'Cu\u00e1driceps', 'Core'],
+    instrucciones: 'Empujar con piernas primero, luego tirar con espalda. Cadencia 24-28 SPM. No redondear la espalda.',
+  },
+  'Saltar la soga': {
+    folder: 'Rope_Jumping',
+    musculos: ['Pantorrillas', 'Hombros', 'Cardiovascular'],
+    instrucciones: 'Saltos peque\u00f1os sobre las puntas de los pies. Girar la soga con las mu\u00f1ecas, no con los brazos.',
+  },
+  'Escalador (StairMaster)': {
+    folder: 'Stairmaster',
+    musculos: ['Gl\u00fateos', 'Cu\u00e1driceps', 'Pantorrillas'],
+    instrucciones: 'Paso completo sin apoyar las manos. Mantener el core activado y la postura erguida.',
+  },
+  // HIIT extras
+  'Box Jumps': {
+    folder: 'Box_Jump_Multiple_Response',
+    musculos: ['Cu\u00e1driceps', 'Gl\u00fateos', 'Pantorrillas'],
+    instrucciones: 'Saltar al caj\u00f3n con ambos pies. Aterrizar suave con rodillas flexionadas. Bajar caminando.',
+  },
+  'Plancha con toque de hombro': {
+    folder: 'Plank',
+    musculos: ['Core', 'Hombros', 'Pecho'],
+    instrucciones: 'Posici\u00f3n de plancha alta. Tocar hombro contrario alternando. Minimizar rotaci\u00f3n de cadera.',
+  },
+  // Funcional extras
+  'Clean and Press con Kettlebell': {
+    folder: 'Clean_and_Press',
+    musculos: ['Full Body', 'Hombros', 'Gl\u00fateos'],
+    instrucciones: 'Movimiento desde el suelo hasta extensi\u00f3n completa arriba. Bisagra de cadera explosiva en el clean.',
+  },
+  'Goblet Squat': {
+    folder: 'Goblet_Squat',
+    musculos: ['Cu\u00e1driceps', 'Gl\u00fateos', 'Core'],
+    instrucciones: 'Kettlebell o mancuerna al pecho. Codos adentro. Sentadilla profunda con espalda recta.',
+  },
+  'Plancha din\u00e1mica': {
+    folder: 'Push_Up_to_Side_Plank',
+    musculos: ['Core', 'Hombros', 'Tr\u00edceps'],
+    instrucciones: 'Alternar entre plancha alta y baja. Mantener core firme sin balancear.',
+  },
 };
 
 // Mapeo extendido para ejercicios comunes que el usuario pueda agregar
