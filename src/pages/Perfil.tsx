@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { getUserItem, setUserItem } from '../lib/storage';
 import {
   User as UserIcon, Camera, Save, Trash2, StickyNote, Ruler,
   Weight, Calendar, Target, Activity, Fingerprint, Mail, Phone, HeartPulse, Plus, X
@@ -24,7 +25,7 @@ export default function Perfil() {
   });
 
   const [enfermedades, setEnfermedades] = useState<string[]>(() => {
-    const saved = localStorage.getItem('jf365_enfermedades');
+    const saved = getUserItem('jf365_enfermedades');
     return saved ? JSON.parse(saved) : [];
   });
   const [otraEnfermedad, setOtraEnfermedad] = useState('');
@@ -60,7 +61,7 @@ export default function Perfil() {
     if (otraEnfermedad.trim() && !enfermedades.includes(otraEnfermedad.trim())) {
       const updated = [...enfermedades, otraEnfermedad.trim()];
       setEnfermedades(updated);
-      localStorage.setItem('jf365_enfermedades', JSON.stringify(updated));
+      setUserItem('jf365_enfermedades', JSON.stringify(updated));
       setOtraEnfermedad('');
     }
   };

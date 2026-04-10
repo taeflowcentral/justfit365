@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Camera, Video, Upload, Calendar, Trash2, Zap, Sparkles, ChevronDown, Plus, TrendingUp, Scale, Ruler, Activity } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { getUserItem, setUserItem } from '../lib/storage';
 
 interface MediaEntry {
   id: number;
@@ -39,7 +40,7 @@ function calcularIMC(peso: number, alturaCm: number): { valor: number; categoria
 export default function Progreso() {
   const { user } = useAuth();
   const [media, setMedia] = useState<MediaEntry[]>(() => {
-    const saved = localStorage.getItem(PROGRESO_KEY);
+    const saved = getUserItem(PROGRESO_KEY);
     return saved ? JSON.parse(saved) : [];
   });
   const [expandido, setExpandido] = useState<number | null>(null);
@@ -54,7 +55,7 @@ export default function Progreso() {
   const [showComparativa, setShowComparativa] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem(PROGRESO_KEY, JSON.stringify(media));
+    setUserItem(PROGRESO_KEY, JSON.stringify(media));
   }, [media]);
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>, tipo: 'foto' | 'video') => {

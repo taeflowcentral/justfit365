@@ -2,6 +2,7 @@ import { Dumbbell, Clock, Flame, CheckCircle, RotateCcw, ChevronDown, Plus, Tras
 import { useState, useEffect } from 'react';
 import { ExerciseThumbnail, ExerciseModal } from '../components/ExerciseIllustration';
 import ShareButtons, { generateRutinaText, shareWhatsApp, printContent } from '../components/ShareButtons';
+import { getUserItem, setUserItem } from '../lib/storage';
 
 interface Ejercicio {
   id: number;
@@ -165,7 +166,7 @@ const semanaDefault: DiaEntrenamiento[] = [
 
 export default function Rutina() {
   const [semana, setSemana] = useState<DiaEntrenamiento[]>(() => {
-    const saved = localStorage.getItem(RUTINA_KEY);
+    const saved = getUserItem(RUTINA_KEY);
     return saved ? JSON.parse(saved) : semanaDefault;
   });
   const [diaActivo, setDiaActivo] = useState(() => {
@@ -176,7 +177,7 @@ export default function Rutina() {
 
   // Ejercicios guardados por dia (indice 0-6)
   const [ejerciciosPorDia, setEjerciciosPorDia] = useState<Record<number, Ejercicio[]>>(() => {
-    const saved = localStorage.getItem(EJERCICIOS_KEY);
+    const saved = getUserItem(EJERCICIOS_KEY);
     if (saved) return JSON.parse(saved);
     const initial: Record<number, Ejercicio[]> = {};
     semanaDefault.forEach((d, i) => { initial[i] = generarEjerciciosParaDia(d.tipo); });
@@ -220,10 +221,10 @@ export default function Rutina() {
 
   // Persistir
   useEffect(() => {
-    localStorage.setItem(RUTINA_KEY, JSON.stringify(semana));
+    setUserItem(RUTINA_KEY, JSON.stringify(semana));
   }, [semana]);
   useEffect(() => {
-    localStorage.setItem(EJERCICIOS_KEY, JSON.stringify(ejerciciosPorDia));
+    setUserItem(EJERCICIOS_KEY, JSON.stringify(ejerciciosPorDia));
   }, [ejerciciosPorDia]);
 
   const setEjercicios = (updater: Ejercicio[] | ((prev: Ejercicio[]) => Ejercicio[])) => {

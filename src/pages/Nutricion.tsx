@@ -3,6 +3,7 @@ import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plu
 import FoodAlternatives, { findAlternatives } from '../components/FoodAlternatives';
 import { useAuth } from '../context/AuthContext';
 import ShareButtons, { generateNutricionText, shareWhatsApp, printContent } from '../components/ShareButtons';
+import { getUserItem, setUserItem } from '../lib/storage';
 
 interface Alimento {
   id: number;
@@ -187,10 +188,10 @@ export default function Nutricion() {
     return jsDay === 0 ? 6 : jsDay - 1;
   });
   const [planSemanal, setPlanSemanal] = useState<Record<number, Comida[]>>(() => {
-    const saved = localStorage.getItem(PLAN_KEY + '_semanal');
+    const saved = getUserItem(PLAN_KEY + '_semanal');
     if (saved) return JSON.parse(saved);
     // Migrar plan viejo si existe
-    const old = localStorage.getItem(PLAN_KEY);
+    const old = getUserItem(PLAN_KEY);
     if (old) {
       const initial: Record<number, Comida[]> = {};
       for (let i = 0; i < 7; i++) initial[i] = JSON.parse(old);
@@ -199,7 +200,7 @@ export default function Nutricion() {
     return {};
   });
   const comidas = planSemanal[diaActivo] || [];
-  const [notaIA, setNotaIA] = useState(() => localStorage.getItem(PLAN_KEY + '_nota') || '');
+  const [notaIA, setNotaIA] = useState(() => getUserItem(PLAN_KEY + '_nota') || '');
   const [editandoComida, setEditandoComida] = useState<number | null>(null);
   const [editandoItem, setEditandoItem] = useState<number | null>(null);
   const [generando, setGenerando] = useState(false);
@@ -247,18 +248,18 @@ export default function Nutricion() {
   const guardar = (c: Comida[]) => {
     const updated = { ...planSemanal, [diaActivo]: c };
     setPlanSemanal(updated);
-    localStorage.setItem(PLAN_KEY + '_semanal', JSON.stringify(updated));
+    setUserItem(PLAN_KEY + '_semanal', JSON.stringify(updated));
   };
 
   const guardarNota = (n: string) => {
     setNotaIA(n);
-    localStorage.setItem(PLAN_KEY + '_nota', n);
+    setUserItem(PLAN_KEY + '_nota', n);
   };
 
   // Leer rutina semanal y enfermedades para coordinar plan nutricional
   const rutinaSemanal: { tipo: string }[] = (() => {
     try {
-      const saved = localStorage.getItem('bc_rutina_semana');
+      const saved = getUserItem('bc_rutina_semana');
       return saved ? JSON.parse(saved) : [
         { tipo: 'Push' }, { tipo: 'Pull' }, { tipo: 'Descanso' }, { tipo: 'Piernas' },
         { tipo: 'Upper' }, { tipo: 'Lower' }, { tipo: 'Descanso' }
@@ -266,7 +267,7 @@ export default function Nutricion() {
     } catch { return [{ tipo: 'Push' }, { tipo: 'Pull' }, { tipo: 'Descanso' }, { tipo: 'Piernas' }, { tipo: 'Upper' }, { tipo: 'Lower' }, { tipo: 'Descanso' }]; }
   })();
   const enfermedadesUsuario: string[] = (() => {
-    try { return JSON.parse(localStorage.getItem('jf365_enfermedades') || '[]'); } catch { return []; }
+    try { return JSON.parse(getUserItem('jf365_enfermedades') || '[]'); } catch { return []; }
   })();
 
   const generarPlan = (todaLaSemana = false) => {
@@ -360,14 +361,14 @@ export default function Nutricion() {
   const calSugerido = perfil?.objetivo === 'Hipertrofia' || perfil?.objetivo === 'Fuerza' ? tdee + 300 : perfil?.objetivo === 'Perdida de grasa' ? tdee - 400 : tdee;
 
   const [calObjetivo, setCalObjetivo] = useState(() => {
-    const saved = localStorage.getItem(PLAN_KEY + '_cal_objetivo');
+    const saved = getUserItem(PLAN_KEY + '_cal_objetivo');
     return saved ? parseInt(saved) : calSugerido;
   });
   const [editandoCal, setEditandoCal] = useState(false);
 
   const guardarCalObjetivo = (val: number) => {
     setCalObjetivo(val);
-    localStorage.setItem(PLAN_KEY + '_cal_objetivo', val.toString());
+    setUserItem(PLAN_KEY + '_cal_objetivo', val.toString());
   };
 
   // Sin plan generado

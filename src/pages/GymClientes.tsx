@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Users, Plus, Search, Dumbbell, Utensils, Trash2, User, Phone, Target, Activity, MessageCircle } from 'lucide-react';
+import { getUserItem, setUserItem } from '../lib/storage';
 
 interface ClienteRutina {
   id: number;
@@ -60,7 +61,7 @@ const clientesDemo: Cliente[] = [
 
 export default function GymClientes() {
   const [clientes, setClientes] = useState<Cliente[]>(() => {
-    const saved = localStorage.getItem(CLIENTES_KEY);
+    const saved = getUserItem(CLIENTES_KEY);
     return saved ? JSON.parse(saved) : clientesDemo;
   });
   const [busqueda, setBusqueda] = useState('');
@@ -73,7 +74,7 @@ export default function GymClientes() {
   const [nuevoEj, setNuevoEj] = useState({ nombre: '', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Pecho', notas: '' });
   const [nuevaComida, setNuevaComida] = useState({ nombre: '', hora: '12:00' });
 
-  const guardar = (c: Cliente[]) => { setClientes(c); localStorage.setItem(CLIENTES_KEY, JSON.stringify(c)); };
+  const guardar = (c: Cliente[]) => { setClientes(c); setUserItem(CLIENTES_KEY, JSON.stringify(c)); };
 
   const cliente = clientes.find(c => c.id === clienteActivo);
   const filtrados = clientes.filter(c => c.nombre.toLowerCase().includes(busqueda.toLowerCase()));

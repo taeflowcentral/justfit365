@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FileText, Upload, Calendar, Trash2, Zap, Sparkles, AlertTriangle, Shield, Plus, Eye, Stethoscope } from 'lucide-react';
+import { getUserItem, setUserItem } from '../lib/storage';
 
 interface Estudio {
   id: number;
@@ -48,7 +49,7 @@ function generarComparativa(estudiosDelTipo: Estudio[]): string {
 
 export default function AnalisisMedico() {
   const [estudios, setEstudios] = useState<Estudio[]>(() => {
-    const saved = localStorage.getItem(ESTUDIOS_KEY);
+    const saved = getUserItem(ESTUDIOS_KEY);
     return saved ? JSON.parse(saved) : [];
   });
   const [expandido, setExpandido] = useState<number | null>(null);
@@ -59,7 +60,7 @@ export default function AnalisisMedico() {
   const [filtroTipo, setFiltroTipo] = useState('todos');
 
   useEffect(() => {
-    localStorage.setItem(ESTUDIOS_KEY, JSON.stringify(estudios));
+    setUserItem(ESTUDIOS_KEY, JSON.stringify(estudios));
   }, [estudios]);
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
