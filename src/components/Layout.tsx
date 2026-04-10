@@ -101,10 +101,10 @@ export default function Layout() {
 
       {/* Boton flotante Claude - solo admin */}
       {user?.role === 'admin' && (
-        <a href="https://claude.ai/new" target="_blank" rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#d97706] to-[#b45309] rounded-2xl shadow-2xl shadow-amber-500/30 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40"
-          title="Chat con Claude AI">
-          <svg className="w-6 h-6 md:w-7 md:h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <a href="https://claude.ai/code" target="_blank" rel="noopener noreferrer"
+          className="fixed bottom-20 right-4 md:bottom-6 md:right-6 w-11 h-11 md:w-14 md:h-14 bg-gradient-to-br from-[#d97706] to-[#b45309] rounded-2xl shadow-2xl shadow-amber-500/30 flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40"
+          title="Abrir Claude Code">
+          <svg className="w-5 h-5 md:w-7 md:h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 3c-4.97 0-9 3.13-9 7 0 2.38 1.45 4.5 3.68 5.83L5 21l4.53-2.27c.8.17 1.62.27 2.47.27 4.97 0 9-3.13 9-7s-4.03-7-9-7z"/>
           </svg>
         </a>
