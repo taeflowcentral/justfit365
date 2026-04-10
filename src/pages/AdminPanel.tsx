@@ -1,8 +1,22 @@
 import { useState, useEffect } from 'react';
-import { Settings, DollarSign, Users, Mail, Send, CheckCircle, AlertTriangle, Shield, Bell, KeyRound, Trash2 } from 'lucide-react';
+import { Settings, DollarSign, Users, Mail, Send, CheckCircle, AlertTriangle, Shield, Bell, KeyRound, Trash2, FileText, Eye } from 'lucide-react';
 import { getPrecioAnual, setPrecioAnual, getPrecioMensualGym, setPrecioMensualGym } from '../components/PaymentModal';
 import { getAllUsers, type User } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
+import { getPagos } from '../lib/pagos';
+
+interface Pago {
+  id: string;
+  dni: string;
+  nombre: string;
+  email: string;
+  plan: string;
+  monto: number;
+  comprobante_base64: string;
+  comprobante_nombre: string;
+  fecha: string;
+  estado: string;
+}
 
 async function blanquearUsuario(dni: string): Promise<boolean> {
   const { error } = await supabase.from('usuarios').delete().eq('dni', dni).neq('role', 'admin');
@@ -16,10 +30,13 @@ async function resetPasswordDB(dni: string, newPassword: string): Promise<boolea
 
 export default function AdminPanel() {
   const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [pagos, setPagos] = useState<Pago[]>([]);
+  const [comprobanteVer, setComprobanteVer] = useState<Pago | null>(null);
   const [precio, setPrecio] = useState(getPrecioAnual().toString());
 
   useEffect(() => {
     getAllUsers().then(users => setAllUsers(users));
+    getPagos().then(p => setPagos(p as Pago[]));
   }, []);
   const [precioSaved, setPrecioSaved] = useState(false);
   const [emailsSent, setEmailsSent] = useState(false);
@@ -185,6 +202,109 @@ export default function AdminPanel() {
           </button>
         </div>
       </div>
+
+      {/* Comprobantes de pago recibidos */}
+      <div className="bg-dark-800 border border-dark-border rounded-2xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-dark-border flex items-center justify-between">
+          <h3 className="text-white font-bold flex items-center gap-2">
+            <FileText className="w-5 h-5 text-emerald-400" /> Comprobantes de Pago Recibidos
+          </h3>
+          <span className="text-white/30 text-xs">{pagos.length} pagos</span>
+        </div>
+        {pagos.length === 0 ? (
+          <div className="px-6 py-8 text-center text-white/30 text-sm">
+            Sin comprobantes de pago todav&iacute;a. Cuando un usuario complete su pago, vas a verlo ac&aacute;.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-dark-border">
+                  {['Fecha', 'Nombre', 'DNI', 'Email', 'Plan', 'Monto', 'Estado', 'Comprobante'].map(h => (
+                    <th key={h} className="text-left px-4 py-3 text-[10px] text-white/30 uppercase tracking-wider">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-dark-border/50">
+                {pagos.map(p => (
+                  <tr key={p.id} className="hover:bg-white/[0.02] transition-colors">
+                    <td className="px-4 py-3 text-sm text-white/40">{new Date(p.fecha).toLocaleDateString('es-AR')}</td>
+                    <td className="px-4 py-3 text-sm text-white font-medium">{p.nombre}</td>
+                    <td className="px-4 py-3 text-sm text-white/40 font-mono">{p.dni}</td>
+                    <td className="px-4 py-3 text-sm text-white/50 font-mono text-xs">{p.email}</td>
+                    <td className="px-4 py-3 text-sm text-white/40">{p.plan}</td>
+                    <td className="px-4 py-3 text-sm text-emerald-400 font-bold">${p.monto?.toLocaleString('es-AR')}</td>
+                    <td className="px-4 py-3">
+                      <span className={`text-xs px-2 py-0.5 rounded-full ${p.estado === 'aprobado' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}`}>
+                        {p.estado}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <button onClick={() => setComprobanteVer(p)} className="flex items-center gap-1 px-2 py-1 bg-electric/10 text-electric rounded-lg text-xs font-medium hover:bg-electric/20 transition-colors">
+                        <Eye className="w-3 h-3" /> Ver
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Modal ver comprobante */}
+      {comprobanteVer && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => setComprobanteVer(null)}>
+          <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-white font-black text-lg">Comprobante de Pago</h3>
+                <p className="text-white/40 text-sm">{comprobanteVer.nombre} &middot; DNI: {comprobanteVer.dni}</p>
+              </div>
+              <button onClick={() => setComprobanteVer(null)} className="p-2 text-white/30 hover:text-white">
+                <Trash2 className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="bg-black/40 rounded-xl p-4 mb-4 grid grid-cols-2 gap-3 text-sm">
+              <div><span className="text-white/40">Email:</span> <span className="text-white">{comprobanteVer.email}</span></div>
+              <div><span className="text-white/40">Plan:</span> <span className="text-white">{comprobanteVer.plan}</span></div>
+              <div><span className="text-white/40">Monto:</span> <span className="text-emerald-400 font-bold">${comprobanteVer.monto?.toLocaleString('es-AR')}</span></div>
+              <div><span className="text-white/40">Fecha:</span> <span className="text-white">{new Date(comprobanteVer.fecha).toLocaleString('es-AR')}</span></div>
+            </div>
+            <div className="bg-white rounded-xl overflow-hidden">
+              {comprobanteVer.comprobante_base64?.startsWith('data:image') ? (
+                <img src={comprobanteVer.comprobante_base64} alt="Comprobante" className="w-full" />
+              ) : (
+                <div className="p-8 text-center">
+                  <FileText className="w-16 h-16 text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-700 font-bold mb-2">{comprobanteVer.comprobante_nombre}</p>
+                  <a href={comprobanteVer.comprobante_base64} download={comprobanteVer.comprobante_nombre} className="inline-block px-4 py-2 bg-electric text-white rounded-xl text-sm font-bold">
+                    Descargar archivo
+                  </a>
+                </div>
+              )}
+            </div>
+            <div className="flex gap-3 mt-4">
+              <button onClick={async () => {
+                await supabase.from('pagos').update({ estado: 'aprobado' }).eq('id', comprobanteVer.id);
+                getPagos().then(p => setPagos(p as Pago[]));
+                setComprobanteVer(null);
+              }} className="flex-1 py-3 bg-emerald-500/20 text-emerald-400 rounded-xl text-sm font-bold border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors">
+                <CheckCircle className="w-4 h-4 inline mr-1" /> Aprobar pago
+              </button>
+              <button onClick={async () => {
+                if (confirm('\u00bfEliminar este comprobante?')) {
+                  await supabase.from('pagos').delete().eq('id', comprobanteVer.id);
+                  getPagos().then(p => setPagos(p as Pago[]));
+                  setComprobanteVer(null);
+                }
+              }} className="flex-1 py-3 bg-danger/10 text-danger/70 rounded-xl text-sm font-bold border border-danger/20 hover:bg-danger/20 transition-colors">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Lista de usuarios */}
       <div className="bg-dark-800 border border-dark-border rounded-2xl overflow-hidden">

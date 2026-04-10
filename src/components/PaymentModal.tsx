@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { guardarComprobante } from '../lib/pagos';
 import { CreditCard, Zap, Shield, CheckCircle, Copy, Mail, Calendar, Play } from 'lucide-react';
 import DemoShowcase from './DemoShowcase';
 
@@ -70,20 +71,45 @@ export default function PaymentModal() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const confirmarPago = () => {
+  const confirmarPago = async () => {
+    if (!comprobante) {
+      alert('Debes adjuntar el comprobante de pago');
+      return;
+    }
     setProcessing(true);
-    setTimeout(() => {
-      updateUser({
-        suscripcionPagada: true,
-        suscripcionActiva: true,
-        email: email,
-        fechaSuscripcion: new Date().toISOString().split('T')[0],
-        fechaUltimoPago: new Date().toISOString().split('T')[0],
-        mesesImpagos: 0,
-      });
-      setStep('confirmado');
-      setProcessing(false);
-    }, 2000);
+
+    // Guardar comprobante en Supabase (lo ves desde el Admin Panel)
+    const result = await guardarComprobante({
+      dni: user?.dni || '',
+      nombre: nombre,
+      email: email,
+      plan: planNombre,
+      monto: precio,
+      comprobanteBase64: comprobante,
+      comprobanteNombre: comprobanteNombre,
+    });
+
+    if (!result.success) {
+      alert('Error al guardar el comprobante: ' + result.error + '\n\nIgual vamos a procesar tu pago. El admin va a revisarlo.');
+    }
+
+    // Tambien abrir email pre-armado para envio manual del comprobante
+    const asunto = encodeURIComponent(`JustFit365 - Comprobante de pago - ${nombre} (DNI: ${user?.dni})`);
+    const cuerpo = encodeURIComponent(
+      `Hola,\n\nAdjunto comprobante de pago de JustFit365:\n\nNombre: ${nombre}\nDNI: ${user?.dni}\nEmail: ${email}\nPlan: ${planNombre}\nMonto: $${precio.toLocaleString('es-AR')}\nFecha: ${new Date().toLocaleDateString('es-AR')}\n\nPor favor adjuntar el archivo de comprobante manualmente.\n\nGracias!`
+    );
+    window.open(`mailto:${emailDestino}?subject=${asunto}&body=${cuerpo}`, '_blank');
+
+    updateUser({
+      suscripcionPagada: true,
+      suscripcionActiva: true,
+      email: email,
+      fechaSuscripcion: new Date().toISOString().split('T')[0],
+      fechaUltimoPago: new Date().toISOString().split('T')[0],
+      mesesImpagos: 0,
+    });
+    setStep('confirmado');
+    setProcessing(false);
   };
 
   if (step === 'confirmado') {
