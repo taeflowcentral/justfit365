@@ -167,7 +167,11 @@ export default function Nutricion() {
   const perfil = user?.perfil;
 
   const DIAS = ['Lun', 'Mar', 'Mi\u00e9', 'Jue', 'Vie', 'S\u00e1b', 'Dom'];
-  const [diaActivo, setDiaActivo] = useState(0);
+  const [diaActivo, setDiaActivo] = useState(() => {
+    // 0=Lun, 1=Mar, ..., 6=Dom. JS: 0=Dom, 1=Lun, ..., 6=Sab
+    const jsDay = new Date().getDay();
+    return jsDay === 0 ? 6 : jsDay - 1;
+  });
   const [planSemanal, setPlanSemanal] = useState<Record<number, Comida[]>>(() => {
     const saved = localStorage.getItem(PLAN_KEY + '_semanal');
     if (saved) return JSON.parse(saved);
