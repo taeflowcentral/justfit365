@@ -63,7 +63,7 @@ export default function Dashboard() {
         {/* Cal chart */}
         <div className="lg:col-span-2 bg-dark-800 border border-dark-border rounded-2xl p-6">
           <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-            <Flame className="w-4 h-4 text-orange-400" /> Calor\u00edas Semanales
+            <Flame className="w-4 h-4 text-orange-400" /> Calor&iacute;as Semanales
           </h3>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={weekData}>
