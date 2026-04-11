@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { FileText, Upload, Calendar, Trash2, Zap, Sparkles, AlertTriangle, Shield, Plus, Eye, Stethoscope } from 'lucide-react';
-import { getUserItem, setUserItem } from '../lib/storage';
+import { getEstudios, addEstudio, updateEstudioIA, deleteEstudio } from '../lib/datos';
 
 interface Estudio {
-  id: number;
+  id: string;
   nombre: string;
   tipo: string;
   archivo: string;
@@ -13,8 +13,6 @@ interface Estudio {
   analisisIA?: string;
   analizando?: boolean;
 }
-
-const ESTUDIOS_KEY = 'jf365_estudios_medicos';
 
 const tiposEstudio = [
   'An\u00e1lisis de sangre (Hemograma)', 'Perfil lip\u00eddico', 'Perfil hormonal',
@@ -48,11 +46,8 @@ function generarComparativa(estudiosDelTipo: Estudio[]): string {
 }
 
 export default function AnalisisMedico() {
-  const [estudios, setEstudios] = useState<Estudio[]>(() => {
-    const saved = getUserItem(ESTUDIOS_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [expandido, setExpandido] = useState<number | null>(null);
+  const [estudios, setEstudios] = useState<Estudio[]>([]);
+  const [expandido, setExpandido] = useState<string | null>(null);
   const [showUpload, setShowUpload] = useState(false);
   const [formTipo, setFormTipo] = useState(tiposEstudio[0]);
   const [formNota, setFormNota] = useState('');
@@ -60,38 +55,61 @@ export default function AnalisisMedico() {
   const [filtroTipo, setFiltroTipo] = useState('todos');
 
   useEffect(() => {
-    setUserItem(ESTUDIOS_KEY, JSON.stringify(estudios));
-  }, [estudios]);
+    cargarEstudios();
+  }, []);
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const cargarEstudios = async () => {
+    const data = await getEstudios();
+    const items: Estudio[] = data.map(d => ({
+      id: d.id,
+      nombre: d.nombre,
+      tipo: d.tipo,
+      archivo: d.archivo,
+      archivoNombre: d.archivo_nombre || '',
+      fecha: d.fecha,
+      nota: d.nota || '',
+      analisisIA: d.analisis_ia,
+    }));
+    setEstudios(items);
+  };
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setShowUpload(false);
     const reader = new FileReader();
-    reader.onloadend = () => {
-      const entry: Estudio = {
-        id: Date.now(), nombre: formNombre || file.name, tipo: formTipo,
-        archivo: reader.result as string, archivoNombre: file.name,
+    reader.onloadend = async () => {
+      const result = await addEstudio({
+        nombre: formNombre || file.name,
+        tipo: formTipo,
+        archivo: reader.result as string,
+        archivo_nombre: file.name,
         fecha: new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
         nota: formNota,
-      };
-      setEstudios(prev => [entry, ...prev]);
-      setFormNombre(''); setFormNota(''); setShowUpload(false);
+      });
+      if (!result.success) {
+        alert('Error al subir: ' + result.error);
+      }
+      await cargarEstudios();
+      setFormNombre(''); setFormNota('');
     };
     reader.readAsDataURL(file);
   };
 
-  const analizarConIA = (id: number) => {
+  const analizarConIA = async (id: string) => {
     setEstudios(prev => prev.map(e => e.id === id ? { ...e, analizando: true } : e));
     const estudio = estudios.find(e => e.id === id);
     const estudiosDelTipo = estudios.filter(e => e.tipo === estudio?.tipo);
-    setTimeout(() => {
+    setTimeout(async () => {
       const analisis = (analisisIA[estudio?.tipo || ''] || analisisIA['default']) + generarComparativa(estudiosDelTipo);
+      await updateEstudioIA(id, analisis);
       setEstudios(prev => prev.map(e => e.id === id ? { ...e, analisisIA: analisis, analizando: false } : e));
       setExpandido(id);
     }, 2500);
   };
 
-  const deleteEstudio = (id: number) => {
+  const handleDeleteEstudio = async (id: string) => {
+    await deleteEstudio(id);
     setEstudios(prev => prev.filter(e => e.id !== id));
   };
 
@@ -192,7 +210,7 @@ export default function AnalisisMedico() {
                 ) : (
                   <button onClick={() => analizarConIA(e.id)} className="p-1.5 text-electric/50 hover:text-electric transition-colors"><Zap className="w-4 h-4" /></button>
                 )}
-                <button onClick={() => deleteEstudio(e.id)} className="p-1.5 text-white/10 hover:text-danger transition-colors"><Trash2 className="w-4 h-4" /></button>
+                <button onClick={() => handleDeleteEstudio(e.id)} className="p-1.5 text-white/10 hover:text-danger transition-colors"><Trash2 className="w-4 h-4" /></button>
               </div>
             </div>
 

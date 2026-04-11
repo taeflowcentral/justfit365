@@ -1,23 +1,20 @@
 import { useState, useEffect } from 'react';
 import { Camera, Video, Upload, Calendar, Trash2, Zap, Sparkles, ChevronDown, Plus, TrendingUp, Scale, Ruler, Activity } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { getUserItem, setUserItem } from '../lib/storage';
+import { getProgreso, addProgreso, updateProgresoIA, deleteProgreso } from '../lib/datos';
 
 interface MediaEntry {
-  id: number;
+  id: string;
   tipo: 'foto' | 'video';
   url: string;
   fecha: string;
   nota: string;
   peso?: number;
   grasaCorporal?: number;
-  masaMuscular?: number;
-  medidas?: { cintura?: number; cadera?: number; pecho?: number; brazo?: number; muslo?: number };
+  medidas?: { cintura?: number; cadera?: number; brazo?: number };
   analisisIA?: string;
   analizando?: boolean;
 }
-
-const PROGRESO_KEY = 'jf365_progreso';
 
 const analisisRespuestas = [
   `**An\u00e1lisis de tu progreso** \ud83d\udcaa\n\nMir\u00e1, comparando con tus registros anteriores se nota mejora:\n\n- **Definici\u00f3n muscular:** se ve m\u00e1s marcada la separaci\u00f3n de los deltoides y el pectoral superior\n- **Composici\u00f3n corporal:** aparente reducci\u00f3n de grasa subcut\u00e1nea en la zona media\n- **Volumen:** se nota aumento en brazos y hombros\n\n**Recomendaciones:**\n1. Segu\u00ed con la progresi\u00f3n de cargas, vas bien encaminado\n2. Si quer\u00e9s m\u00e1s definici\u00f3n, ajust\u00e1 un d\u00e9ficit suave (-200 kcal)\n3. Las fotos son la mejor herramienta de seguimiento, mejor que la balanza sola\n\nSegu\u00ed as\u00ed que se nota el laburo \ud83d\udd25`,
@@ -39,11 +36,8 @@ function calcularIMC(peso: number, alturaCm: number): { valor: number; categoria
 
 export default function Progreso() {
   const { user } = useAuth();
-  const [media, setMedia] = useState<MediaEntry[]>(() => {
-    const saved = getUserItem(PROGRESO_KEY);
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [expandido, setExpandido] = useState<number | null>(null);
+  const [media, setMedia] = useState<MediaEntry[]>([]);
+  const [expandido, setExpandido] = useState<string | null>(null);
   const [showUpload, setShowUpload] = useState(false);
   const [uploadNota, setUploadNota] = useState('');
   const [uploadPeso, setUploadPeso] = useState('');
@@ -54,48 +48,72 @@ export default function Progreso() {
   const [filtro, setFiltro] = useState<'todos' | 'foto' | 'video'>('todos');
   const [showComparativa, setShowComparativa] = useState(false);
 
+  // Cargar desde Supabase al montar
   useEffect(() => {
-    setUserItem(PROGRESO_KEY, JSON.stringify(media));
-  }, [media]);
+    cargarMedia();
+  }, []);
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>, tipo: 'foto' | 'video') => {
+  const cargarMedia = async () => {
+    const data = await getProgreso();
+    const items: MediaEntry[] = data.map(d => ({
+      id: d.id,
+      tipo: d.tipo as 'foto' | 'video',
+      url: d.url,
+      fecha: d.fecha,
+      nota: d.nota || '',
+      peso: d.peso,
+      grasaCorporal: d.grasa_corporal,
+      medidas: (d.cintura || d.cadera || d.brazo) ? { cintura: d.cintura, cadera: d.cadera, brazo: d.brazo } : undefined,
+      analisisIA: d.analisis_ia,
+    }));
+    setMedia(items);
+  };
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>, tipo: 'foto' | 'video') => {
     const files = e.target.files;
     if (!files) return;
-    Array.from(files).forEach(file => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const entry: MediaEntry = {
-          id: Date.now() + Math.random(),
-          tipo, url: reader.result as string,
-          fecha: new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-          nota: uploadNota,
-          peso: parseFloat(uploadPeso) || undefined,
-          grasaCorporal: parseFloat(uploadGrasa) || undefined,
-          medidas: (uploadCintura || uploadCadera || uploadBrazo) ? {
+    setShowUpload(false);
+    for (const file of Array.from(files)) {
+      await new Promise<void>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+          const result = await addProgreso({
+            tipo, url: reader.result as string,
+            fecha: new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+            nota: uploadNota,
+            peso: parseFloat(uploadPeso) || undefined,
+            grasa_corporal: parseFloat(uploadGrasa) || undefined,
             cintura: parseFloat(uploadCintura) || undefined,
             cadera: parseFloat(uploadCadera) || undefined,
             brazo: parseFloat(uploadBrazo) || undefined,
-          } : undefined,
+          });
+          if (!result.success) {
+            alert('Error al subir: ' + result.error);
+          }
+          resolve();
         };
-        setMedia(prev => [entry, ...prev]);
-      };
-      reader.readAsDataURL(file);
-    });
+        reader.readAsDataURL(file);
+      });
+    }
+    await cargarMedia();
     setUploadNota(''); setUploadPeso(''); setUploadGrasa('');
     setUploadCintura(''); setUploadCadera(''); setUploadBrazo('');
-    setShowUpload(false);
   };
 
-  const analizarConIA = (id: number) => {
+  const analizarConIA = async (id: string) => {
     setMedia(prev => prev.map(m => m.id === id ? { ...m, analizando: true } : m));
-    setTimeout(() => {
+    setTimeout(async () => {
       const analisis = analisisRespuestas[Math.floor(Math.random() * analisisRespuestas.length)];
+      await updateProgresoIA(id, analisis);
       setMedia(prev => prev.map(m => m.id === id ? { ...m, analisisIA: analisis, analizando: false } : m));
       setExpandido(id);
     }, 2000);
   };
 
-  const deleteMedia = (id: number) => { setMedia(prev => prev.filter(m => m.id !== id)); };
+  const deleteMedia = async (id: string) => {
+    await deleteProgreso(id);
+    setMedia(prev => prev.filter(m => m.id !== id));
+  };
   const filtradas = media.filter(m => filtro === 'todos' || m.tipo === filtro);
   const conPeso = media.filter(m => m.peso);
   const conGrasa = media.filter(m => m.grasaCorporal);
