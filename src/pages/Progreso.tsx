@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Camera, Video, Upload, Calendar, Trash2, Zap, Sparkles, ChevronDown, Plus, TrendingUp, Scale, Ruler, Activity } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getProgreso, addProgreso, updateProgresoIA, deleteProgreso } from '../lib/datos';
+import { compressImage, base64SizeKB } from '../lib/imageCompress';
 
 interface MediaEntry {
   id: string;
@@ -74,26 +75,39 @@ export default function Progreso() {
     if (!files) return;
     setShowUpload(false);
     for (const file of Array.from(files)) {
-      await new Promise<void>((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = async () => {
-          const result = await addProgreso({
-            tipo, url: reader.result as string,
-            fecha: new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
-            nota: uploadNota,
-            peso: parseFloat(uploadPeso) || undefined,
-            grasa_corporal: parseFloat(uploadGrasa) || undefined,
-            cintura: parseFloat(uploadCintura) || undefined,
-            cadera: parseFloat(uploadCadera) || undefined,
-            brazo: parseFloat(uploadBrazo) || undefined,
-          });
-          if (!result.success) {
-            alert('Error al subir: ' + result.error);
-          }
-          resolve();
-        };
-        reader.readAsDataURL(file);
-      });
+      try {
+        // Validar tamano
+        if (file.size > 50 * 1024 * 1024) {
+          alert(`${file.name} es muy grande (m\u00e1ximo 50MB)`);
+          continue;
+        }
+        // Comprimir imagen, video va tal cual
+        const url = tipo === 'foto'
+          ? await compressImage(file, 1200, 0.7)
+          : await new Promise<string>((res, rej) => { const r = new FileReader(); r.onloadend = () => res(r.result as string); r.onerror = rej; r.readAsDataURL(file); });
+
+        const sizeKB = base64SizeKB(url);
+        if (sizeKB > 800) {
+          alert(`Archivo demasiado grande (${sizeKB}KB). M\u00e1ximo 800KB. Prob\u00e1 con una imagen m\u00e1s chica.`);
+          continue;
+        }
+
+        const result = await addProgreso({
+          tipo, url,
+          fecha: new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+          nota: uploadNota,
+          peso: parseFloat(uploadPeso) || undefined,
+          grasa_corporal: parseFloat(uploadGrasa) || undefined,
+          cintura: parseFloat(uploadCintura) || undefined,
+          cadera: parseFloat(uploadCadera) || undefined,
+          brazo: parseFloat(uploadBrazo) || undefined,
+        });
+        if (!result.success) {
+          alert('Error al guardar en la nube:\n' + (result.error || 'desconocido') + '\n\nVerific\u00e1 que la tabla "progreso" exista en Supabase.');
+        }
+      } catch (err) {
+        alert('Error procesando archivo: ' + (err instanceof Error ? err.message : 'desconocido'));
+      }
     }
     await cargarMedia();
     setUploadNota(''); setUploadPeso(''); setUploadGrasa('');

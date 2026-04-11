@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FileText, Upload, Calendar, Trash2, Zap, Sparkles, AlertTriangle, Shield, Plus, Eye, Stethoscope } from 'lucide-react';
 import { getEstudios, addEstudio, updateEstudioIA, deleteEstudio } from '../lib/datos';
+import { compressImage, base64SizeKB } from '../lib/imageCompress';
 
 interface Estudio {
   id: string;
@@ -77,23 +78,38 @@ export default function AnalisisMedico() {
     const file = e.target.files?.[0];
     if (!file) return;
     setShowUpload(false);
-    const reader = new FileReader();
-    reader.onloadend = async () => {
+    try {
+      if (file.size > 50 * 1024 * 1024) {
+        alert('Archivo muy grande (m\u00e1ximo 50MB)');
+        return;
+      }
+      // Si es imagen, comprimir; si es PDF, leer tal cual
+      const archivo = file.type.startsWith('image/')
+        ? await compressImage(file, 1500, 0.75)
+        : await new Promise<string>((res, rej) => { const r = new FileReader(); r.onloadend = () => res(r.result as string); r.onerror = rej; r.readAsDataURL(file); });
+
+      const sizeKB = base64SizeKB(archivo);
+      if (sizeKB > 800) {
+        alert(`Archivo demasiado grande (${sizeKB}KB). M\u00e1ximo 800KB. Si es PDF, prob\u00e1 con uno m\u00e1s chico o sub\u00ed las p\u00e1ginas como im\u00e1genes.`);
+        return;
+      }
+
       const result = await addEstudio({
         nombre: formNombre || file.name,
         tipo: formTipo,
-        archivo: reader.result as string,
+        archivo,
         archivo_nombre: file.name,
         fecha: new Date().toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }),
         nota: formNota,
       });
       if (!result.success) {
-        alert('Error al subir: ' + result.error);
+        alert('Error al guardar en la nube:\n' + (result.error || 'desconocido') + '\n\nVerific\u00e1 que la tabla "estudios_medicos" exista en Supabase.');
       }
       await cargarEstudios();
       setFormNombre(''); setFormNota('');
-    };
-    reader.readAsDataURL(file);
+    } catch (err) {
+      alert('Error procesando archivo: ' + (err instanceof Error ? err.message : 'desconocido'));
+    }
   };
 
   const analizarConIA = async (id: string) => {
