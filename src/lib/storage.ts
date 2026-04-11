@@ -3,7 +3,9 @@
 
 function getCurrentDni(): string {
   try {
-    const user = JSON.parse(localStorage.getItem('bc_user') || 'null');
+    const saved = localStorage.getItem('jf365_current_user') || localStorage.getItem('bc_user');
+    if (!saved) return 'anon';
+    const user = JSON.parse(saved);
     return user?.dni || 'anon';
   } catch {
     return 'anon';

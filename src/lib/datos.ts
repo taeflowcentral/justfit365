@@ -3,7 +3,10 @@ import { supabase } from './supabase';
 // Helper para obtener el DNI del usuario actual
 function getCurrentDni(): string {
   try {
-    const user = JSON.parse(localStorage.getItem('bc_user') || 'null');
+    // Probar ambas keys por compatibilidad
+    const saved = localStorage.getItem('jf365_current_user') || localStorage.getItem('bc_user');
+    if (!saved) return '';
+    const user = JSON.parse(saved);
     return user?.dni || '';
   } catch {
     return '';
