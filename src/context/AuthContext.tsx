@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
 
 export interface User {
@@ -84,6 +84,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const saved = localStorage.getItem(CURRENT_USER_KEY);
     return saved ? JSON.parse(saved) : null;
   });
+
+  // Refrescar datos del usuario desde Supabase al iniciar y cada 30 segundos
+  useEffect(() => {
+    if (!user) return;
+    let cancelado = false;
+
+    const refrescar = async () => {
+      const { data } = await supabase.from('usuarios').select('*').eq('dni', user.dni).single();
+      if (cancelado || !data) return;
+      const u = dbRowToUser(data);
+      setUser(u);
+      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(u));
+    };
+
+    // Refrescar al cargar
+    refrescar();
+    // Y cada 30 segundos para detectar cambios desde otros dispositivos
+    const interval = setInterval(refrescar, 30000);
+
+    return () => {
+      cancelado = true;
+      clearInterval(interval);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.dni]);
 
   const login = async (apellido: string, dni: string, password: string): Promise<boolean> => {
     const { data, error } = await supabase
