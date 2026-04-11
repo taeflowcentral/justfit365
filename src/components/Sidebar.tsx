@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   Zap, LayoutDashboard, Utensils, Dumbbell, MessageSquare,
   Settings, LogOut, Building2, Users, CreditCard, ChevronLeft, ChevronRight, UserCog,
-  Camera, Stethoscope, ShieldCheck
+  Camera, Stethoscope, ShieldCheck, LifeBuoy
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -114,6 +114,11 @@ export default function Sidebar({ onNavigate }: { onNavigate: () => void }) {
             </div>
           )}
         </div>
+        <a href="mailto:carloscuevaslaplata@gmail.com?subject=JustFit365%20-%20Soporte%20T%C3%A9cnico&body=Hola%2C%20necesito%20ayuda%20con%3A%0A%0A"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-cyan-400/70 hover:bg-cyan-500/10 hover:text-cyan-400 transition-all">
+          <LifeBuoy className="w-5 h-5 shrink-0" />
+          {!collapsed && <span>Soporte T&eacute;cnico</span>}
+        </a>
         <button onClick={logout} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-danger/70 hover:bg-danger/10 transition-all">
           <LogOut className="w-5 h-5 shrink-0" />
           {!collapsed && <span>Cerrar Sesi&oacute;n</span>}
