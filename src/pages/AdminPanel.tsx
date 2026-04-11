@@ -63,13 +63,48 @@ export default function AdminPanel() {
     setTimeout(() => setPrecioGymSaved(false), 3000);
   };
 
-  const enviarNotificacion = () => {
+  const enviarNotificacion = async () => {
     setSending(true);
-    setTimeout(() => {
+    try {
+      // Obtener todos los emails de los usuarios
+      const emails = allUsers.map(u => u.email).filter((e): e is string => !!e);
+
+      if (emails.length === 0) {
+        alert('No hay usuarios con email registrado.');
+        setSending(false);
+        return;
+      }
+
+      // Construir el mensaje
+      const asunto = encodeURIComponent('JustFit365 - Actualizaci\u00f3n de Suscripci\u00f3n');
+      const cuerpo = encodeURIComponent(
+        `Hola,\n\nTe informamos que el precio de la suscripci\u00f3n de JustFit365 ha sido actualizado a $${(parseFloat(precio) || precioActual).toLocaleString('es-AR')}.\n\nEste cambio aplica a partir de tu pr\u00f3xima renovaci\u00f3n. Tu suscripci\u00f3n actual contin\u00faa vigente hasta su fecha de vencimiento.\n\nDatos de pago:\nAlias: ventanasdepapel\nTitular: Carlos Federico Cuevas\nComprobante a: carloscuevaslaplata@gmail.com\n\nSaludos,\nEquipo JustFit365`
+      );
+
+      // Guardar registro de la notificacion en Supabase
+      try {
+        await supabase.from('notificaciones').insert({
+          asunto: 'JustFit365 - Actualizaci\u00f3n de Suscripci\u00f3n',
+          mensaje: decodeURIComponent(cuerpo),
+          destinatarios: emails,
+          fecha: new Date().toISOString(),
+        });
+      } catch (e) {
+        console.error('Error guardando notificacion:', e);
+      }
+
+      // Abrir el cliente de email del admin con todos los destinatarios en BCC
+      const bcc = emails.join(',');
+      window.open(`mailto:?bcc=${bcc}&subject=${asunto}&body=${cuerpo}`, '_blank');
+
       setEmailsSent(true);
       setSending(false);
       setTimeout(() => setEmailsSent(false), 4000);
-    }, 2000);
+    } catch (e) {
+      console.error(e);
+      alert('Error al preparar las notificaciones');
+      setSending(false);
+    }
   };
 
   const precioActual = getPrecioAnual();
@@ -168,7 +203,8 @@ export default function AdminPanel() {
         <div className="space-y-3">
           <div className="bg-black/40 border border-dark-border rounded-xl p-4">
             <p className="text-white/30 text-xs mb-2 uppercase tracking-wider">Destinatarios</p>
-            <p className="text-white text-sm">{allUsers.length} usuarios registrados recibir&aacute;n la notificaci&oacute;n por email</p>
+            <p className="text-white text-sm">{allUsers.filter(u => u.email).length} usuarios con email registrado</p>
+            <p className="text-white/30 text-xs mt-1">Al hacer click se abre tu cliente de email (Gmail/Outlook) con todos los destinatarios en BCC y el mensaje listo. Solo tenes que confirmar el envio.</p>
           </div>
           <div className="bg-black/40 border border-dark-border rounded-xl p-4">
             <p className="text-white/30 text-xs mb-2 uppercase tracking-wider">Vista previa del email</p>
@@ -193,11 +229,11 @@ export default function AdminPanel() {
               'bg-gradient-to-r from-electric to-neon text-black shadow-lg shadow-electric/20 hover:scale-[1.01]'
             }`}>
             {sending ? (
-              <><div className="w-4 h-4 border-2 border-electric/30 border-t-electric rounded-full animate-spin" /> Enviando...</>
+              <><div className="w-4 h-4 border-2 border-electric/30 border-t-electric rounded-full animate-spin" /> Preparando...</>
             ) : emailsSent ? (
-              <><CheckCircle className="w-4 h-4" /> Emails enviados a {allUsers.length} usuarios</>
+              <><CheckCircle className="w-4 h-4" /> Email abierto en tu cliente. Confirm&aacute; el env&iacute;o.</>
             ) : (
-              <><Send className="w-4 h-4" /> Enviar Notificaci&oacute;n a Todos los Usuarios</>
+              <><Send className="w-4 h-4" /> Abrir Email para Enviar a Todos</>
             )}
           </button>
         </div>
