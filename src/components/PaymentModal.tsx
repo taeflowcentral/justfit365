@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { guardarComprobante } from '../lib/pagos';
 import { CreditCard, Zap, Shield, CheckCircle, Copy, Mail, Calendar, Play } from 'lucide-react';
@@ -9,20 +9,22 @@ const PRECIO_MENSUAL_GYM_KEY = 'bc_precio_mensual_gym';
 
 export function getPrecioAnual(): number {
   const saved = localStorage.getItem(PRECIO_ANUAL_KEY);
-  return saved ? parseFloat(saved) : 15000;
+  return saved ? parseFloat(saved) : 57000;
 }
 
 export function setPrecioAnual(precio: number) {
   localStorage.setItem(PRECIO_ANUAL_KEY, precio.toString());
+  window.dispatchEvent(new Event('precios-actualizados'));
 }
 
 export function getPrecioMensualGym(): number {
   const saved = localStorage.getItem(PRECIO_MENSUAL_GYM_KEY);
-  return saved ? parseFloat(saved) : 15000;
+  return saved ? parseFloat(saved) : 19000;
 }
 
 export function setPrecioMensualGym(precio: number) {
   localStorage.setItem(PRECIO_MENSUAL_GYM_KEY, precio.toString());
+  window.dispatchEvent(new Event('precios-actualizados'));
 }
 
 export default function PaymentModal() {
@@ -47,7 +49,18 @@ export default function PaymentModal() {
   };
 
   const esGimnasio = user?.role === 'gimnasio';
-  const precio = esGimnasio ? getPrecioMensualGym() : getPrecioAnual();
+  const [precio, setPrecio] = useState(() => esGimnasio ? getPrecioMensualGym() : getPrecioAnual());
+
+  useEffect(() => {
+    const refrescar = () => setPrecio(esGimnasio ? getPrecioMensualGym() : getPrecioAnual());
+    refrescar();
+    window.addEventListener('storage', refrescar);
+    window.addEventListener('precios-actualizados', refrescar);
+    return () => {
+      window.removeEventListener('storage', refrescar);
+      window.removeEventListener('precios-actualizados', refrescar);
+    };
+  }, [esGimnasio]);
   const periodo = esGimnasio ? '/mes' : '/a\u00f1o';
   const planNombre = esGimnasio ? 'Plan Gimnasio Mensual' : 'Plan Anual Completo';
 

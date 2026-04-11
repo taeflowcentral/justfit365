@@ -11,13 +11,19 @@ export default function Suscripcion() {
   const planNombre = esGimnasio ? 'Plan Gimnasio Mensual' : 'Plan Anual Completo';
   const [copied, setCopied] = useState(false);
 
-  // Refrescar precio cada vez que se monta o cambia el rol
+  // Refrescar precio cada vez que se monta, cambia el rol, o se actualiza desde admin
   useEffect(() => {
-    setPrecio(esGimnasio ? getPrecioMensualGym() : getPrecioAnual());
-    // Escuchar cambios desde otras pestanas
-    const onStorage = () => setPrecio(esGimnasio ? getPrecioMensualGym() : getPrecioAnual());
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
+    const refrescar = () => setPrecio(esGimnasio ? getPrecioMensualGym() : getPrecioAnual());
+    refrescar();
+    window.addEventListener('storage', refrescar);
+    window.addEventListener('precios-actualizados', refrescar);
+    // Polling cada 5 seg como backup
+    const interval = setInterval(refrescar, 5000);
+    return () => {
+      window.removeEventListener('storage', refrescar);
+      window.removeEventListener('precios-actualizados', refrescar);
+      clearInterval(interval);
+    };
   }, [esGimnasio]);
 
   const fechaInicio = user?.fechaSuscripcion ? new Date(user.fechaSuscripcion) : null;
