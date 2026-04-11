@@ -2,6 +2,7 @@ import { Flame, Droplets, Dumbbell, TrendingUp, Target, Zap, Apple, Timer, Arrow
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import HidratacionWidget from '../components/HidratacionWidget';
 
 const weekData = [
   { dia: 'Lun', calorias: 2200, proteina: 140, entrenamiento: 75 },
@@ -49,6 +50,9 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
+
+      {/* Hidratacion Widget */}
+      <HidratacionWidget />
 
       {/* Charts + Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

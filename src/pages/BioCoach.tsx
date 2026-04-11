@@ -402,29 +402,54 @@ No hace falta hacer 40 minutos de yoga despu\u00e9s de cada entreno, pero ignora
 La movilidad es lo que te va a permitir seguir entrenando sin lesiones a largo plazo \ud83e\uddd8`
   },
   {
-    keywords: ['agua', 'hidrataci\u00f3n', 'hidratacion', 'tomar agua', 'cuanta agua'],
-    content: `**Hidrataci\u00f3n: m\u00e1s simple de lo que parece**
+    keywords: ['agua', 'hidrataci\u00f3n', 'hidratacion', 'tomar agua', 'cuanta agua', 'beber agua'],
+    content: `**Hidrataci\u00f3n: el factor m\u00e1s subestimado del rendimiento** \ud83d\udca7
 
-No necesit\u00e1s una app ni cargar una botella de 4 litros a todos lados. Pero s\u00ed prestarle atenci\u00f3n.
+El agua representa el **60% de tu cuerpo** y el **75% de tus m\u00fasculos**. Una deshidrataci\u00f3n del solo 2% ya baja tu rendimiento un 10-20%.
 
 **\u00bfCu\u00e1nta agua para vos ({peso} kg)?**
-- Como regla general: **~{aguaMin}-{aguaMax} litros por d\u00eda**
-- Si entren\u00e1s fuerte, sum\u00e1 500ml por cada hora de ejercicio
-- Si hace calor o transpir\u00e1s mucho, m\u00e1s todav\u00eda
+- F\u00f3rmula b\u00e1sica: **35ml por kg = ~{aguaMin} litros** como m\u00ednimo
+- Si entren\u00e1s: **45-50ml por kg = ~{aguaMax} litros**
+- D\u00eda de mucho calor: sum\u00e1 500ml-1L extra
+- Por cada hora de ejercicio: 500-750ml adicionales
 
-**Se\u00f1ales de que te falta agua:**
-- Pis amarillo oscuro
-- Dolor de cabeza
-- Cansancio sin raz\u00f3n
+**Funciones vitales del agua en tu cuerpo:**
+1. **Regula la temperatura corporal** (sudoraci\u00f3n)
+2. **Transporta nutrientes** a las c\u00e9lulas
+3. **Elimina toxinas** v\u00eda ri\u00f1ones e h\u00edgado
+4. **Lubrica articulaciones** (clave si entren\u00e1s)
+5. **S\u00edntesis proteica** \u2014 el m\u00fasculo necesita agua para crecer
+6. **Funci\u00f3n cognitiva** \u2014 con poca agua pens\u00e1s peor
+7. **Digesti\u00f3n** y absorci\u00f3n de nutrientes
+8. **Volumen sangu\u00edneo** y presi\u00f3n arterial estables
+9. **Recuperaci\u00f3n muscular** post-entreno
+
+**Se\u00f1ales de deshidrataci\u00f3n:**
+- Pis amarillo oscuro o muy poca cantidad
+- Dolor de cabeza o mareo
+- Cansancio inexplicable
+- Boca seca, sed (cuando ten\u00e9s sed ya estabas deshidratado)
+- Calambres musculares
 - Rendimiento bajo en el gym
 
-**Tips:**
-- Arranc\u00e1 el d\u00eda con un vaso grande de agua
-- Llev\u00e1 una botella y tom\u00e1 de a sorbos durante el d\u00eda
-- El caf\u00e9 y el mate s\u00ed hidratan (es un mito que deshidratan)
-- Frutas y verduras tambi\u00e9n suman l\u00edquido
+**Tips para hidratarte mejor:**
+- **Arranc\u00e1 el d\u00eda con 500ml** apenas te despert\u00e1s
+- Llev\u00e1 una **botella** siempre con vos
+- Tom\u00e1 antes/durante/despu\u00e9s del entreno
+- Si entren\u00e1s >1h, agreg\u00e1 electrolitos (sodio, potasio)
+- El **caf\u00e9 y el mate s\u00ed cuentan** (mito que deshidratan)
+- Frutas y verduras aportan ~20% de tu hidrataci\u00f3n diaria
+- Si no te gusta el agua sola: agreg\u00e1 lim\u00f3n, menta o pepino
 
-No es sexy hablar de agua, pero marca una diferencia enorme en el rendimiento \ud83d\udca7`
+**\u00bfCu\u00e1ndo NO tomar mucha agua?**
+- Justo antes de dormir (te despert\u00e1s a hacer pis)
+- Durante las comidas en exceso (diluye los jugos g\u00e1stricos)
+- Excederse cr\u00f3nicamente (>5L/d\u00eda sin actividad puede causar hiponatremia)
+
+**Regla pr\u00e1ctica para vos:**
+Tu objetivo es **{aguaMax} litros = {vasos} vasos de 250ml** por d\u00eda. Distribuilos a lo largo del d\u00eda, no todos juntos.
+
+Hidratarte bien es lo m\u00e1s f\u00e1cil que pod\u00e9s hacer para mejorar tu rendimiento, energ\u00eda, recuperaci\u00f3n y hasta tu \u00e1nimo. No lo subestimes \ud83d\udcaa\ud83d\udca7`
   },
   {
     keywords: ['lesion', 'lesi\u00f3n', 'dolor', 'duele', 'lastim\u00e9'],
@@ -997,6 +1022,7 @@ function personalizeContent(content: string, perfil: { peso: number; altura: num
   const supMax = tdee + 300;
   const aguaMin = (peso * 0.033).toFixed(1);
   const aguaMax = (peso * 0.04).toFixed(1);
+  const vasos = Math.round(peso * 0.04 * 4); // litros * 4 (vasos de 250ml)
 
   return content
     .replace(/\{peso\}/g, peso.toString()).replace(/\{altura\}/g, altura.toString()).replace(/\{edad\}/g, edad.toString())
@@ -1008,7 +1034,7 @@ function personalizeContent(content: string, perfil: { peso: number; altura: num
     .replace(/\{carbKg\}/g, carbKg).replace(/\{cafMin\}/g, cafMin.toString()).replace(/\{cafMax\}/g, cafMax.toString())
     .replace(/\{defMin\}/g, defMin.toString()).replace(/\{defMax\}/g, defMax.toString())
     .replace(/\{supMin\}/g, supMin.toString()).replace(/\{supMax\}/g, supMax.toString())
-    .replace(/\{aguaMin\}/g, aguaMin).replace(/\{aguaMax\}/g, aguaMax);
+    .replace(/\{aguaMin\}/g, aguaMin).replace(/\{aguaMax\}/g, aguaMax).replace(/\{vasos\}/g, vasos.toString());
 }
 
 function findResponse(query: string, perfil: Parameters<typeof personalizeContent>[1]): string {
