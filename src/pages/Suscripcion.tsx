@@ -1,15 +1,24 @@
 import { CreditCard, CheckCircle, Calendar, Shield, Clock, Copy, Mail, DollarSign, Zap, AlertTriangle, RotateCcw } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getPrecioAnual, getPrecioMensualGym } from '../components/PaymentModal';
 
 export default function Suscripcion() {
   const { user } = useAuth();
   const esGimnasio = user?.role === 'gimnasio';
-  const precio = esGimnasio ? getPrecioMensualGym() : getPrecioAnual();
+  const [precio, setPrecio] = useState(() => esGimnasio ? getPrecioMensualGym() : getPrecioAnual());
   const periodo = esGimnasio ? 'mes' : 'a\u00f1o';
   const planNombre = esGimnasio ? 'Plan Gimnasio Mensual' : 'Plan Anual Completo';
   const [copied, setCopied] = useState(false);
+
+  // Refrescar precio cada vez que se monta o cambia el rol
+  useEffect(() => {
+    setPrecio(esGimnasio ? getPrecioMensualGym() : getPrecioAnual());
+    // Escuchar cambios desde otras pestanas
+    const onStorage = () => setPrecio(esGimnasio ? getPrecioMensualGym() : getPrecioAnual());
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [esGimnasio]);
 
   const fechaInicio = user?.fechaSuscripcion ? new Date(user.fechaSuscripcion) : null;
   const fechaUltimoPago = user?.fechaUltimoPago ? new Date(user.fechaUltimoPago) : fechaInicio;
