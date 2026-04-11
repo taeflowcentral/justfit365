@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Zap, Eye, EyeOff, Fingerprint, UserPlus, Building2, User, Mail } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
+import { getPrecioAnual, getPrecioMensualGym } from '../components/PaymentModal';
 
 export default function Registro() {
   const { register } = useAuth();
@@ -140,7 +141,7 @@ export default function Registro() {
                 <label className="block text-xs font-semibold text-white/50 mb-1.5 uppercase tracking-wider">Contrase&ntilde;a</label>
                 <div className="relative">
                   <input type={showPassword ? 'text' : 'password'} value={form.password} onChange={e => update('password', e.target.value)}
-                    placeholder="M\u00edn. 6 caracteres" required minLength={6}
+                    placeholder="Min. 6 caracteres" required minLength={6}
                     className="w-full px-3 py-3 bg-black/60 border border-dark-border rounded-xl text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-electric/50 text-sm pr-10" />
                   <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white">
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -157,13 +158,13 @@ export default function Registro() {
 
             {form.role === 'gimnasio' && (
               <div className="bg-amber-500/5 border border-amber-500/15 rounded-xl p-3 text-xs text-amber-400/60">
-                <strong className="text-amber-400">Plan Gimnasio:</strong> $15.000/mes. Incluye gesti&oacute;n de clientes, rutinas y nutrici&oacute;n personalizada.
+                <strong className="text-amber-400">Plan Gimnasio:</strong> ${getPrecioMensualGym().toLocaleString('es-AR')}/mes. Incluye gesti&oacute;n de clientes, rutinas y nutrici&oacute;n personalizada.
               </div>
             )}
 
             {form.role === 'usuario' && (
               <div className="bg-electric/5 border border-electric/15 rounded-xl p-3 text-xs text-electric/60">
-                <strong className="text-electric">Plan Individual:</strong> $15.000/a&ntilde;o. Acceso completo a todos los m&oacute;dulos.
+                <strong className="text-electric">Plan Individual:</strong> ${getPrecioAnual().toLocaleString('es-AR')}/a&ntilde;o. Acceso completo a todos los m&oacute;dulos.
               </div>
             )}
 
