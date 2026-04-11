@@ -478,7 +478,7 @@ export default function Nutricion() {
             <Target className="w-5 h-5 text-orange-400" />
           </div>
           <div>
-            <p className="text-white/40 text-xs uppercase tracking-wider">Objetivo cal&oacute;rico diario</p>
+            <p className="text-white/40 text-xs uppercase tracking-wider">M&aacute;ximo de calor&iacute;as para mantenimiento</p>
             {editandoCal ? (
               <div className="flex items-center gap-2 mt-1">
                 <input type="number" min="800" max="8000" step="50" value={calObjetivo}
@@ -515,18 +515,30 @@ export default function Nutricion() {
       {/* Macros calculados */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: 'Calor\u00edas', value: totalCal, max: calObjetivo, color: 'text-orange-400', gradient: 'from-orange-500 to-red-500', icon: Flame },
-          { label: 'Prote\u00edna', value: totalProt, max: Math.round((perfil?.peso || 75) * 2), color: 'text-electric', gradient: 'from-electric to-neon', icon: Droplets },
-          { label: 'Carbohidratos', value: totalCarb, max: Math.round((calObjetivo * 0.45) / 4), color: 'text-amber-400', gradient: 'from-amber-400 to-yellow-400', icon: Wheat },
-          { label: 'Grasas', value: totalGrasa, max: Math.round((calObjetivo * 0.25) / 9), color: 'text-pink-400', gradient: 'from-pink-500 to-rose-500', icon: Droplet },
+          { label: 'Calor\u00edas', value: totalCal, min: Math.round(calObjetivo * 0.9), max: calObjetivo, color: 'text-orange-400', gradient: 'from-orange-500 to-red-500', icon: Flame, unit: 'kcal' },
+          { label: 'Prote\u00edna', value: totalProt, min: Math.round((perfil?.peso || 75) * 1.6), max: Math.round((perfil?.peso || 75) * 2.2), color: 'text-electric', gradient: 'from-electric to-neon', icon: Droplets, unit: 'g' },
+          { label: 'Carbohidratos', value: totalCarb, min: Math.round((calObjetivo * 0.35) / 4), max: Math.round((calObjetivo * 0.55) / 4), color: 'text-amber-400', gradient: 'from-amber-400 to-yellow-400', icon: Wheat, unit: 'g' },
+          { label: 'Grasas', value: totalGrasa, min: Math.round((calObjetivo * 0.20) / 9), max: Math.round((calObjetivo * 0.30) / 9), color: 'text-pink-400', gradient: 'from-pink-500 to-rose-500', icon: Droplet, unit: 'g' },
         ].map(m => (
           <div key={m.label} className="bg-dark-800 border border-dark-border rounded-2xl p-4">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <m.icon className={`w-4 h-4 ${m.color}`} />
-                <span className="text-white/50 text-xs uppercase tracking-wider">{m.label}</span>
+            <div className="flex items-center gap-2 mb-1">
+              <m.icon className={`w-4 h-4 ${m.color}`} />
+              <span className="text-white/50 text-xs uppercase tracking-wider">{m.label}</span>
+            </div>
+            <div className="flex items-end justify-between mb-2">
+              <div>
+                <div className="text-[9px] text-white/30 uppercase tracking-wider leading-none mb-0.5">M\u00edn / M\u00e1x</div>
+                <div className="text-white font-bold text-base leading-none">
+                  <span className="text-white/40">{m.min}</span>
+                  <span className="text-white/20 mx-1">/</span>
+                  <span>{m.max}</span>
+                  <span className="text-white/30 text-[10px] font-normal ml-1">{m.unit}</span>
+                </div>
               </div>
-              <span className="text-white font-bold text-sm">{m.value}<span className="text-white/30 font-normal">/{m.max}</span></span>
+              <div className="text-right">
+                <div className="text-[9px] text-white/30 uppercase tracking-wider leading-none mb-0.5">Actual</div>
+                <div className={`font-black text-base leading-none ${m.value >= m.min && m.value <= m.max ? 'text-emerald-400' : m.value > m.max ? 'text-red-400' : m.color}`}>{m.value}</div>
+              </div>
             </div>
             <div className="w-full h-2 bg-dark-600 rounded-full overflow-hidden">
               <div className={`h-full rounded-full bg-gradient-to-r ${m.gradient}`} style={{ width: `${Math.min((m.value / m.max) * 100, 100)}%` }} />
