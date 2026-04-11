@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, Zap, Sparkles, RotateCcw, Target, ArrowLeftRight, ShoppingCart, MessageCircle, CheckSquare, Square, X } from 'lucide-react';
 import FoodAlternatives, { findAlternatives } from '../components/FoodAlternatives';
 import { buscarAlimentos } from '../lib/foodDB';
@@ -173,7 +173,13 @@ function generarPlanIA(peso: number, altura: number, edad: number, objetivo: str
 
   const tipoLabel = tipoEntreno ? ` | **Entreno del d\u00eda:** ${tipoEntreno}` : '';
   const enfLabel = notasExtra.length > 0 ? `\n\n**Adaptaciones:** ${notasExtra.join(' ')}` : '';
-  const nota = `**Plan generado por JustFit Coach** para ${peso}kg, ${edad} a\u00f1os.\n\n**Objetivo:** ${objetivo} | **Nivel:** ${nivel}${tipoLabel}\n**TMB:** ${tmb} | **TDEE:** ${tdee} | **Objetivo:** ${calObjetivo} kcal\n**Macros:** ${protTotal}g P / ${carbTotal}g C / ${grasaTotal}g G\n\n${notaObj}${enfLabel}`;
+  // Determinar tipo energetico segun el ajuste calorico
+  const diferencia = calObjetivo - tdee;
+  let tipoEnergetico = 'Mantenimiento';
+  if (diferencia < -100) tipoEnergetico = `D\u00e9ficit (-${Math.abs(diferencia)} kcal)`;
+  else if (diferencia > 100) tipoEnergetico = `Super\u00e1vit (+${diferencia} kcal)`;
+
+  const nota = `**Plan generado por JustFit Coach** para ${peso}kg, ${edad} a\u00f1os.\n\n**Objetivo:** ${objetivo} (${tipoEnergetico}) | **Nivel:** ${nivel}${tipoLabel}\n**TMB:** ${tmb} kcal | **TDEE:** ${tdee} kcal | **Objetivo cal\u00f3rico:** ${calObjetivo} kcal\n**Macros:** ${protTotal}g P / ${carbTotal}g C / ${grasaTotal}g G\n\n${notaObj}${enfLabel}`;
 
   return { comidas, nota };
 }
@@ -372,7 +378,14 @@ export default function Nutricion() {
   const tmb = perfil ? Math.round(10 * perfil.peso + 6.25 * perfil.altura - 5 * perfil.edad + 5) : 0;
   const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
   const tdee = tmb ? Math.round(tmb * (factores[perfil?.nivelActividad || 'Intermedio'] || 1.55)) : 2500;
-  const calSugerido = perfil?.objetivo === 'Hipertrofia' || perfil?.objetivo === 'Fuerza' ? tdee + 300 : perfil?.objetivo === 'Perdida de grasa' ? tdee - 400 : tdee;
+
+  // Detectar tipo de objetivo segun perfil
+  const objetivosUsuario = (perfil?.objetivo || '').toLowerCase();
+  const esDeficit = objetivosUsuario.includes('perdida') || objetivosUsuario.includes('grasa');
+  const esSuperavit = objetivosUsuario.includes('hipertrofia') || objetivosUsuario.includes('fuerza');
+  const tipoEnergetico = esDeficit ? 'D\u00e9ficit' : esSuperavit ? 'Super\u00e1vit' : 'Mantenimiento';
+  const ajusteCal = esDeficit ? -400 : esSuperavit ? 300 : 0;
+  const calSugerido = tdee + ajusteCal;
 
   const [calObjetivo, setCalObjetivo] = useState(() => {
     const saved = getUserItem(PLAN_KEY + '_cal_objetivo');
@@ -380,10 +393,18 @@ export default function Nutricion() {
   });
   const [editandoCal, setEditandoCal] = useState(false);
 
+  // Sincronizar con cambios del perfil del usuario
+  useEffect(() => {
+    const saved = getUserItem(PLAN_KEY + '_cal_objetivo');
+    // Si nunca lo edito manualmente, usar el sugerido segun perfil actual
+    if (!saved) setCalObjetivo(calSugerido);
+  }, [calSugerido]);
+
   const guardarCalObjetivo = (val: number) => {
     setCalObjetivo(val);
     setUserItem(PLAN_KEY + '_cal_objetivo', val.toString());
   };
+
 
   // Sin plan generado
   if (comidas.length === 0) {
@@ -423,7 +444,7 @@ export default function Nutricion() {
         <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">
           <Apple className="w-7 h-7 text-emerald-400" /> Mi Plan Nutricional
         </h1>
-        <p className="text-white/40 text-sm mt-1">Objetivo: {perfil?.objetivo || '-'} &mdash; Editable</p>
+        <p className="text-white/40 text-sm mt-1">{perfil?.objetivo || '-'} &mdash; <span className={esDeficit ? 'text-red-400' : esSuperavit ? 'text-emerald-400' : 'text-electric'}>{tipoEnergetico} ({calObjetivo} kcal)</span></p>
         <div className="flex items-center gap-2 flex-wrap mt-3">
           <ShareButtons
             onPrint={() => {
