@@ -331,13 +331,26 @@ export default function Nutricion() {
     guardar(comidas.filter(c => c.id !== comidaId));
   };
 
+  // Ordenar comidas por horario (las sin hora van al final)
+  const ordenarPorHora = (lista: Comida[]): Comida[] => {
+    return [...lista].sort((a, b) => {
+      if (!a.hora) return 1;
+      if (!b.hora) return -1;
+      return a.hora.localeCompare(b.hora);
+    });
+  };
+
   const updateComida = (comidaId: number, field: 'nombre' | 'hora', value: string) => {
-    guardar(comidas.map(c => c.id === comidaId ? { ...c, [field]: value } : c));
+    const actualizado = comidas.map(c => c.id === comidaId ? { ...c, [field]: value } : c);
+    // Si cambio la hora, reordenar
+    guardar(field === 'hora' ? ordenarPorHora(actualizado) : actualizado);
   };
 
   const addComida = () => {
     if (!nuevaComida.nombre.trim()) return;
-    guardar([...comidas, { id: Date.now(), nombre: nuevaComida.nombre, hora: nuevaComida.hora, items: [] }]);
+    const nueva = { id: Date.now(), nombre: nuevaComida.nombre, hora: nuevaComida.hora, items: [] };
+    // Insertar y ordenar automaticamente por hora
+    guardar(ordenarPorHora([...comidas, nueva]));
     setNuevaComida({ nombre: '', hora: '12:00' });
     setShowAddComida(false);
   };
