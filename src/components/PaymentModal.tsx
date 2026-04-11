@@ -4,8 +4,6 @@ import { guardarComprobante } from '../lib/pagos';
 import { CreditCard, Zap, Shield, CheckCircle, Copy, Mail, Calendar, Play } from 'lucide-react';
 import DemoShowcase from './DemoShowcase';
 
-const MP_LINK = 'https://link.mercadopago.com.ar/ventanasdepapel';
-
 const PRECIO_ANUAL_KEY = 'bc_precio_anual';
 const PRECIO_MENSUAL_GYM_KEY = 'bc_precio_mensual_gym';
 
@@ -254,16 +252,14 @@ export default function PaymentModal() {
               </div>
 
               {/* Boton Mercado Pago */}
-              <a href={MP_LINK} target="_blank" rel="noopener noreferrer"
-                onClick={() => {
-                  // Abrir en ventana nueva para evitar bloqueos de popup
-                  window.open(MP_LINK, 'MercadoPago', 'width=600,height=700,scrollbars=yes,resizable=yes');
-                }}
+              <a href="https://link.mercadopago.com.ar/ventanasdepapel"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full py-4 bg-[#009ee3] hover:bg-[#008bcf] text-white font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-[#009ee3]/30 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98]">
                 <svg viewBox="0 0 48 48" className="w-7 h-7"><circle cx="24" cy="24" r="24" fill="white" fillOpacity="0.15"/><path d="M34.2 18.8c0-4.5-3.6-8.1-8.1-8.1h-8.5c-.7 0-1.3.5-1.4 1.2l-3.5 22c-.1.5.3 1 .9 1h5.1l1.3-8.1-.1.3c.1-.7.7-1.2 1.4-1.2h2.9c5.7 0 10.2-2.3 11.5-9 0-.2.1-.4.1-.5.3-2.2 0-3.7-1.6-5" fill="white" opacity="0.9"/></svg>
                 Pagar con Mercado Pago
               </a>
-              <p className="text-white/20 text-[10px] text-center">Se abre Mercado Pago en una nueva ventana. Ingres&aacute; el monto ${precio.toLocaleString('es-AR')}</p>
+              <p className="text-white/20 text-[10px] text-center">Se abre Mercado Pago en una nueva pesta&ntilde;a. Ingres&aacute; el monto ${precio.toLocaleString('es-AR')}</p>
 
               {/* Adjuntar comprobante */}
               <div className="bg-black/40 border border-dark-border rounded-xl p-4">
