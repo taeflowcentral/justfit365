@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Settings, DollarSign, Users, Mail, Send, CheckCircle, AlertTriangle, Shield, Bell, KeyRound, Trash2, FileText, Eye } from 'lucide-react';
+import { Settings, DollarSign, Users, Mail, Send, CheckCircle, AlertTriangle, Shield, Bell, KeyRound, Trash2, FileText, Eye, Power, PowerOff } from 'lucide-react';
 import { getPrecioAnual, setPrecioAnual, getPrecioMensualGym, setPrecioMensualGym } from '../components/PaymentModal';
 import { getAllUsers, type User } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
@@ -25,6 +25,21 @@ async function blanquearUsuario(dni: string): Promise<boolean> {
 
 async function resetPasswordDB(dni: string, newPassword: string): Promise<boolean> {
   const { error } = await supabase.from('usuarios').update({ password_hash: newPassword }).eq('dni', dni).neq('role', 'admin');
+  return !error;
+}
+
+async function togglePagoUsuario(dni: string, nuevoEstado: boolean): Promise<boolean> {
+  const updates: Record<string, unknown> = { suscripcion_pagada: nuevoEstado };
+  if (nuevoEstado) {
+    updates.fecha_ultimo_pago = new Date().toISOString().split('T')[0];
+    if (!updates.fecha_suscripcion) updates.fecha_suscripcion = new Date().toISOString().split('T')[0];
+  }
+  const { error } = await supabase.from('usuarios').update(updates).eq('dni', dni).neq('role', 'admin');
+  return !error;
+}
+
+async function toggleActivoUsuario(dni: string, nuevoEstado: boolean): Promise<boolean> {
+  const { error } = await supabase.from('usuarios').update({ suscripcion_activa: nuevoEstado }).eq('dni', dni).neq('role', 'admin');
   return !error;
 }
 
@@ -354,7 +369,7 @@ export default function AdminPanel() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-dark-border">
-                {['Nombre', 'Email', 'DNI', 'Tipo', 'Estado', 'Acciones'].map(h => (
+                {['Nombre', 'Email', 'DNI', 'Tipo', 'Pago', 'Acceso', 'Acciones'].map(h => (
                   <th key={h} className="text-left px-4 py-3 text-[10px] text-white/30 uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
@@ -367,9 +382,28 @@ export default function AdminPanel() {
                   <td className="px-4 py-3 text-sm text-white/40 font-mono">{u.dni}</td>
                   <td className="px-4 py-3 text-sm text-white/40">{u.role === 'gimnasio' ? 'Gym' : 'Individual'}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${u.suscripcionPagada ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
-                      {u.suscripcionPagada ? 'Pagado' : 'Pendiente'}
-                    </span>
+                    <button onClick={async () => {
+                      const accion = u.suscripcionPagada ? 'marcar como PENDIENTE' : 'marcar como PAGADO';
+                      if (confirm(`\u00bf${accion} a ${u.nombre}?`)) {
+                        if (await togglePagoUsuario(u.dni, !u.suscripcionPagada)) {
+                          getAllUsers().then(users => setAllUsers(users));
+                        }
+                      }
+                    }} className={`text-xs px-2 py-1 rounded-full font-bold transition-all hover:scale-105 ${u.suscripcionPagada ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30' : 'bg-red-500/20 text-red-400 hover:bg-red-500/30'}`}>
+                      {u.suscripcionPagada ? '\u2713 Pagado' : '\u2717 Pendiente'}
+                    </button>
+                  </td>
+                  <td className="px-4 py-3">
+                    <button onClick={async () => {
+                      const accion = u.suscripcionActiva ? 'DESHABILITAR' : 'HABILITAR';
+                      if (confirm(`\u00bf${accion} el acceso de ${u.nombre}?`)) {
+                        if (await toggleActivoUsuario(u.dni, !u.suscripcionActiva)) {
+                          getAllUsers().then(users => setAllUsers(users));
+                        }
+                      }
+                    }} className={`text-xs px-2 py-1 rounded-full font-bold transition-all hover:scale-105 flex items-center gap-1 ${u.suscripcionActiva ? 'bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30' : 'bg-white/10 text-white/40 hover:bg-white/20'}`}>
+                      {u.suscripcionActiva ? <><Power className="w-3 h-3" /> Activo</> : <><PowerOff className="w-3 h-3" /> Inactivo</>}
+                    </button>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">

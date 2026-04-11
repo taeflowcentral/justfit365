@@ -26,12 +26,28 @@ export default function Layout() {
   const gymProximoVencimiento = esGimnasio && user?.suscripcionPagada && !gymInactivo && diasDesdeUltimoPagoGym >= 25;
 
   const mostrarPayment = user && user.consentimiento && !user.suscripcionPagada && user.role !== 'admin';
+  const cuentaDeshabilitada = user && user.suscripcionPagada && user.suscripcionActiva === false && user.role !== 'admin';
 
   return (
     <div className="flex min-h-screen min-h-[100dvh] bg-black">
       {user && !user.consentimiento && <ConsentModal />}
       {mostrarPayment && <PaymentModal />}
       {gymInactivo && <GymInactiveModal />}
+      {cuentaDeshabilitada && (
+        <div className="fixed inset-0 bg-black/95 backdrop-blur-lg flex items-center justify-center z-50 p-4">
+          <div className="bg-dark-800 border border-danger/30 rounded-3xl w-full max-w-md p-8 text-center">
+            <div className="w-16 h-16 bg-danger/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertTriangle className="w-8 h-8 text-danger" />
+            </div>
+            <h2 className="text-white font-black text-xl mb-2">Cuenta Deshabilitada</h2>
+            <p className="text-white/60 text-sm mb-6">Tu cuenta fue deshabilitada por el administrador. Para reactivarla, contactate con soporte.</p>
+            <a href="mailto:carloscuevaslaplata@gmail.com?subject=JustFit365%20-%20Cuenta%20Deshabilitada"
+              className="block w-full py-3 bg-electric/15 text-electric rounded-xl text-sm font-bold border border-electric/30 hover:bg-electric/25 transition-colors mb-2">
+              Contactar Soporte
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* Sidebar desktop */}
       <div className="hidden md:block">
