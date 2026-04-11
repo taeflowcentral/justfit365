@@ -527,7 +527,7 @@ export default function Nutricion() {
             </div>
             <div className="flex items-end justify-between mb-2">
               <div>
-                <div className="text-[9px] text-white/30 uppercase tracking-wider leading-none mb-0.5">M\u00edn / M\u00e1x</div>
+                <div className="text-[9px] text-white/30 uppercase tracking-wider leading-none mb-0.5">Min / Max</div>
                 <div className="text-white font-bold text-base leading-none">
                   <span className="text-white/40">{m.min}</span>
                   <span className="text-white/20 mx-1">/</span>
