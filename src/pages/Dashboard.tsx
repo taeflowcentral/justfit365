@@ -3,6 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, A
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import HidratacionWidget from '../components/HidratacionWidget';
+import FraseDelDia from '../components/FraseDelDia';
 
 const weekData = [
   { dia: 'Lun', calorias: 2200, proteina: 140, entrenamiento: 75 },
@@ -32,6 +33,9 @@ export default function Dashboard() {
         </h1>
         <p className="text-white/40 text-sm mt-1">Tu resumen de rendimiento semanal</p>
       </div>
+
+      {/* Frase del dia */}
+      <FraseDelDia />
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
