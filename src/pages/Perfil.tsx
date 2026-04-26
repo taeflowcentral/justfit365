@@ -22,6 +22,8 @@ export default function Perfil() {
     altura: user?.perfil?.altura?.toString() || '',
     objetivo: user?.perfil?.objetivo || 'Hipertrofia',
     nivelActividad: user?.perfil?.nivelActividad || 'Intermedio',
+    pesoMeta: getUserItem('jf365_peso_meta') || '',
+    fechaMeta: getUserItem('jf365_fecha_meta') || '',
   });
 
   const [enfermedades, setEnfermedades] = useState<string[]>(() => {
@@ -108,6 +110,9 @@ export default function Perfil() {
         nivelActividad: form.nivelActividad,
       }
     });
+    // Guardar meta de peso y fecha
+    if (form.pesoMeta) setUserItem('jf365_peso_meta', form.pesoMeta);
+    if (form.fechaMeta) setUserItem('jf365_fecha_meta', form.fechaMeta);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   };
@@ -345,6 +350,61 @@ export default function Perfil() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Meta de peso */}
+      <div className="bg-dark-800 border border-dark-border rounded-2xl p-6">
+        <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+          <Target className="w-4 h-4 text-neon" /> Meta de Peso
+        </h3>
+        <p className="text-white/30 text-xs mb-4">Configur&aacute; el peso que quer&eacute;s alcanzar y la fecha estimada. El Dashboard te va a mostrar si vas por buen camino.</p>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs text-white/40 uppercase tracking-wider mb-2 flex items-center gap-1">
+              <Target className="w-3 h-3" /> Peso deseado
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                min="30"
+                max="250"
+                step="0.5"
+                value={form.pesoMeta}
+                onChange={e => handleChange('pesoMeta', e.target.value)}
+                placeholder={form.peso || '75'}
+                className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30"
+              />
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/20 text-xs">kg</span>
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs text-white/40 uppercase tracking-wider mb-2 flex items-center gap-1">
+              <Calendar className="w-3 h-3" /> Fecha objetivo
+            </label>
+            <input
+              type="date"
+              value={form.fechaMeta}
+              onChange={e => handleChange('fechaMeta', e.target.value)}
+              className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30"
+            />
+          </div>
+        </div>
+        {form.peso && form.pesoMeta && parseFloat(form.pesoMeta) !== parseFloat(form.peso) && (
+          <div className="mt-4 bg-electric/5 border border-electric/10 rounded-xl p-3">
+            <p className="text-white/50 text-xs">
+              {parseFloat(form.peso) > parseFloat(form.pesoMeta)
+                ? `Necesit\u00e1s bajar ${(parseFloat(form.peso) - parseFloat(form.pesoMeta)).toFixed(1)} kg.`
+                : `Necesit\u00e1s subir ${(parseFloat(form.pesoMeta) - parseFloat(form.peso)).toFixed(1)} kg.`}
+              {form.fechaMeta && (() => {
+                const dias = Math.max(1, Math.round((new Date(form.fechaMeta).getTime() - Date.now()) / 86400000));
+                const semanas = Math.max(1, Math.round(dias / 7));
+                const kgDif = Math.abs(parseFloat(form.peso) - parseFloat(form.pesoMeta));
+                const kgSem = kgDif / semanas;
+                return ` En ${semanas} semanas = ${kgSem.toFixed(2)} kg/semana. ${kgSem > 1 ? ' Ritmo agresivo, consider\u00e1 extender la fecha.' : kgSem <= 0.5 ? ' Ritmo saludable y sostenible.' : ' Ritmo moderado.'}`;
+              })()}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Condiciones preexistentes */}
