@@ -61,6 +61,7 @@ function dbRowToUser(row: Record<string, unknown>): User {
     email: (row.email as string) || undefined,
     gimnasioId: (row.gimnasio_id as string) || undefined,
     gimnasioNombre: (row.gimnasio_nombre as string) || undefined,
+    gimnasioLogo: (row.gimnasio_logo as string) || undefined,
     consentimiento: row.consentimiento as boolean,
     suscripcionPagada: row.suscripcion_pagada as boolean,
     suscripcionActiva: row.suscripcion_activa as boolean,
@@ -204,6 +205,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data.fechaSuscripcion !== undefined) dbUpdate.fecha_suscripcion = data.fechaSuscripcion;
       if (data.fechaUltimoPago !== undefined) dbUpdate.fecha_ultimo_pago = data.fechaUltimoPago;
       if (data.mesesImpagos !== undefined) dbUpdate.meses_impagos = data.mesesImpagos;
+      if (data.gimnasioNombre !== undefined) dbUpdate.gimnasio_nombre = data.gimnasioNombre;
+      if (data.gimnasioLogo !== undefined) dbUpdate.gimnasio_logo = data.gimnasioLogo;
       if (data.perfil) {
         const p = { ...user.perfil, ...data.perfil };
         dbUpdate.perfil_edad = p.edad;
