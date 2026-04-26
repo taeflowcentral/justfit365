@@ -63,12 +63,12 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-xs font-semibold text-white/50 mb-2 uppercase tracking-wider">Apellido</label>
+              <label className="block text-xs font-semibold text-white/50 mb-2 uppercase tracking-wider">Usuario</label>
               <input
                 type="text"
                 value={apellido}
                 onChange={e => setApellido(e.target.value)}
-                placeholder="Ingrese su apellido"
+                placeholder="Ingrese su usuario (apellido)"
                 required
                 className="w-full px-4 py-3.5 bg-black/60 border border-dark-border rounded-xl text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-electric/50 focus:border-electric/50 transition-all text-sm"
               />
