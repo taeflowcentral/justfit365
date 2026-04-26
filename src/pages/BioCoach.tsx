@@ -994,6 +994,465 @@ Hay miles de suplementos en el mercado, pero la verdad es que solo unos pocos va
 
 \u00bfQuer\u00e9s que profundice en alguno? \ud83d\udc8a`
   },
+  {
+    keywords: ['colageno', 'col\u00e1geno', 'colageno hidrolizado', 'articulaciones piel', 'rejuvenecer'],
+    content: `**Col\u00e1geno Hidrolizado: mucho m\u00e1s que est\u00e9tica**
+
+El col\u00e1geno es la prote\u00edna m\u00e1s abundante del cuerpo. Despu\u00e9s de los 25 a\u00f1os, la producci\u00f3n natural baja un 1-1.5% por a\u00f1o. A los 40, ya perdiste un 20-30%.
+
+**\u00bfPara qu\u00e9 sirve?**
+- **Articulaciones**: reduce dolor articular en deportistas (estudios con 10g/d\u00eda x 24 semanas)
+- **Tendones y ligamentos**: mejora la s\u00edntesis de tejido conectivo
+- **Piel**: mejora hidrataci\u00f3n y elasticidad (visible en 4-8 semanas)
+- **Huesos**: estimula osteoblastos (c\u00e9lulas que forman hueso)
+- **Intestino**: ayuda a reparar la mucosa intestinal
+
+**Tipos de col\u00e1geno:**
+- **Tipo I**: piel, tendones, huesos (el m\u00e1s com\u00fan, 90% del cuerpo)
+- **Tipo II**: cart\u00edlago articular (ideal para articulaciones)
+- **Tipo III**: piel, vasos sangu\u00edneos, \u00f3rganos
+
+**Dosis recomendada:** 10-15g por d\u00eda de col\u00e1geno hidrolizado (p\u00e9ptidos)
+
+**Tip clave:** Tom\u00e1 el col\u00e1geno con **vitamina C** (un kiwi, naranja o suplemento de 500mg). La vitamina C es esencial para que tu cuerpo sintetice col\u00e1geno nuevo. Sin ella, no funciona igual.
+
+**Marcas recomendadas en Argentina:**
+- **Genacol** (canadiense, muy estudiado)
+- **Nutrilab Col\u00e1geno** (buena relaci\u00f3n precio/calidad)
+- **Vital Proteins** (premium, si lo consegu\u00eds)
+- **Sports Research** (importado, excelente calidad)
+- **Great Lakes / Now Foods** (opciones importadas confiables)
+
+**Cu\u00e1ndo tomarlo:** En ayunas o entre comidas para mejor absorci\u00f3n. Muchos lo toman con el caf\u00e9 de la ma\u00f1ana.
+
+**\u00bfCu\u00e1nto tarda en hacer efecto?**
+- Articulaciones: 8-12 semanas
+- Piel: 4-8 semanas
+- Es acumulativo, la constancia es clave \ud83d\udcaa`
+  },
+  {
+    keywords: ['omega 3 tipo', 'omega tipo', 'epa', 'dha', 'aceite krill', 'omega marcas'],
+    content: `**Omega-3: la gu\u00eda completa de tipos y marcas**
+
+No todos los Omega-3 son iguales. Lo que necesit\u00e1s son **EPA y DHA**, los \u00e1cidos grasos de cadena larga.
+
+**Tipos de Omega-3:**
+- **EPA (Eicosapentaenoico)**: antiinflamatorio potente, ideal post-entreno, mejora recuperaci\u00f3n
+- **DHA (Docosahexaenoico)**: cerebro, retina, sistema nervioso. Fundamental para funci\u00f3n cognitiva
+- **ALA (Alfa-linol\u00e9nico)**: de fuentes vegetales (l\u00ednaza, ch\u00eda). La conversi\u00f3n a EPA/DHA es solo 5-10%, no alcanza
+
+**Dosis recomendada:** 2-3g de EPA+DHA combinados por d\u00eda
+
+**Fuentes de Omega-3 en la dieta:**
+- Salm\u00f3n, caballa, sardinas, at\u00fan (2-3 porciones/semana)
+- Semillas de ch\u00eda y l\u00ednaza (ALA, complementario)
+- Nueces (ALA)
+
+**Aceite de Krill vs Aceite de Pescado:**
+- **Krill**: mejor absorci\u00f3n (forma fosfolip\u00eddica), incluye astaxantina (antioxidante), m\u00e1s caro
+- **Pescado**: m\u00e1s concentrado en EPA/DHA por c\u00e1psula, m\u00e1s econ\u00f3mico
+- Ambos funcionan, el krill es superior pero no indispensable
+
+**Marcas recomendadas:**
+- **Nordic Naturals** (est\u00e1ndar de oro, certificaci\u00f3n IFOS)
+- **NOW Foods Ultra Omega-3** (excelente relaci\u00f3n precio/calidad)
+- **Sports Research Triple Strength** (alta concentraci\u00f3n)
+- **Garden of Life** (si prefer\u00eds fuente vegana de algas)
+- **Carlson Labs** (noruego, altamente purificado)
+
+**Beneficios comprobados:**
+- Reduce inflamaci\u00f3n sist\u00e9mica
+- Mejora perfil lip\u00eddico (triglic\u00e9ridos)
+- Protecci\u00f3n cardiovascular
+- Mejor recuperaci\u00f3n muscular post-entreno
+- Salud cerebral y estado de \u00e1nimo
+
+**Tip:** Elegir aceites con certificaci\u00f3n **IFOS** o **Friend of the Sea** garantiza pureza y bajo contenido de metales pesados \ud83d\udc1f`
+  },
+  {
+    keywords: ['magnesio tipo', 'magnesio cual', 'magnesio marca', 'tipos magnesio', 'magnesio mejor'],
+    content: `**Magnesio: los 7 tipos y cu\u00e1l elegir**
+
+El 70% de la poblaci\u00f3n tiene deficiencia de magnesio. Si entren\u00e1s, es peor porque lo perd\u00e9s por el sudor.
+
+**Tipos de Magnesio y para qu\u00e9 sirve cada uno:**
+
+1. **Citrato de Magnesio** \u2014 El m\u00e1s vers\u00e1til
+   - Buena absorci\u00f3n, accesible
+   - Ideal para: calambres, estre\u00f1imiento, uso general
+   - Dosis: 400-600mg/d\u00eda
+
+2. **Bisglicinato (Glicinato)** \u2014 El mejor para dormir
+   - M\u00e1xima absorci\u00f3n, no causa efecto laxante
+   - Ideal para: sue\u00f1o, ansiedad, recuperaci\u00f3n nocturna
+   - La glicina tiene efecto calmante extra
+
+3. **L-Treonato** \u2014 El cerebral
+   - \u00danico que cruza la barrera hematoencef\u00e1lica
+   - Ideal para: funci\u00f3n cognitiva, memoria, concentraci\u00f3n
+   - M\u00e1s caro pero \u00fanico en su tipo
+
+4. **Taurato** \u2014 El card\u00edaco
+   - Combinaci\u00f3n con taurina
+   - Ideal para: salud cardiovascular, presi\u00f3n arterial
+
+5. **Malato** \u2014 El energ\u00e9tico
+   - Con \u00e1cido m\u00e1lico (ciclo de Krebs)
+   - Ideal para: energ\u00eda, fibromialgia, fatiga cr\u00f3nica
+
+6. **\u00d3xido de Magnesio** \u2014 El PEOR para suplementar
+   - Solo 4% de absorci\u00f3n. Es b\u00e1sicamente un laxante
+   - Evitarlo como suplemento nutricional
+
+7. **Cloruro de Magnesio** \u2014 Popular en Argentina
+   - Absorci\u00f3n moderada, muy accesible
+   - Funciona bien para uso general
+
+**Marcas recomendadas:**
+- **NOW Foods** (glicinato, citrato - econ\u00f3mico y confiable)
+- **Doctor's Best** (bisglicinato de alta absorci\u00f3n)
+- **Life Extension** (treonato para cognici\u00f3n)
+- **Natural Calm** (citrato en polvo, pr\u00e1ctico)
+
+**Mi recomendaci\u00f3n:** Bisglicinato antes de dormir (400mg). Vas a dormir mejor, recuperar m\u00e1s r\u00e1pido y reducir calambres \ud83c\udf19`
+  },
+  {
+    keywords: ['harina', 'harinas', 'azucar', 'az\u00facar', 'az\u00facares', 'refinado', 'procesado', 'ultraprocesado', 'gluten eliminr'],
+    content: `**Harinas y Az\u00facares: por qu\u00e9 son el enemigo silencioso**
+
+Esto no es un capricho fitness. La ciencia es clara: las harinas refinadas y az\u00facares agregados son los principales responsables de la epidemia de obesidad, diabetes tipo 2 e inflamaci\u00f3n cr\u00f3nica.
+
+**\u00bfQu\u00e9 pasa cuando com\u00e9s harina refinada o az\u00facar?**
+1. **Pico de glucosa** \u2192 El p\u00e1ncreas libera insulina masivamente
+2. **Ca\u00edda brusca** \u2192 Hipoglucemia reactiva (cansancio, hambre, irritabilidad)
+3. **Ciclo vicioso** \u2192 Tu cuerpo pide m\u00e1s az\u00facar para compensar
+4. **Inflamaci\u00f3n cr\u00f3nica** \u2192 Retenci\u00f3n de l\u00edquidos, dolor articular, fatiga
+5. **Resistencia a la insulina** \u2192 Tu cuerpo almacena grasa m\u00e1s f\u00e1cilmente
+
+**Los peores alimentos (elimin\u00e1 estos primero):**
+- Pan blanco, galletitas, facturas, medialunas
+- Gaseosas y jugos (hasta los "light" disparan insulina)
+- Fideos y pastas de harina blanca
+- Cereales de desayuno azucarados
+- Salsas comerciales (ketchup, BBQ \u2014 llenas de az\u00facar oculto)
+- Golosinas, helados, postres industriales
+
+**Reemplazos inteligentes:**
+- Pan blanco \u2192 **Pan de masa madre** o **pan de centeno**
+- Fideos \u2192 **Fideos de lentejas** o **zucchini spiralizado**
+- Az\u00facar \u2192 **Stevia**, eritritol o monk fruit
+- Gaseosas \u2192 **Agua con gas + lim\u00f3n**
+- Snacks \u2192 **Frutos secos**, queso, huevo duro
+
+**No es necesario eliminar el 100%.** La regla 80/20 funciona: com\u00e9 limpio el 80% del tiempo y permit\u00edte un 20% flexible. Pero ese 80% tiene que ser real.
+
+**Dato clave:** Una persona promedio consume 70kg de az\u00facar por a\u00f1o. Reducir a menos de 25g/d\u00eda (6 cucharaditas) reduce riesgo cardiovascular un 30% seg\u00fan la OMS.
+
+Para tu objetivo ({objetivo}), eliminar harinas y az\u00facares es probablemente el cambio m\u00e1s impactante que pod\u00e9s hacer \ud83d\udca5`
+  },
+  {
+    keywords: ['alimentacion objetivo', 'como alimentarme', 'dieta objetivo', 'que comer para', 'alimentaci\u00f3n seg\u00fan', 'plan segun objetivo'],
+    content: `**C\u00f3mo alimentarte seg\u00fan tu objetivo ({objetivo})**
+
+Tu TDEE es ~{tdee} kcal y necesit\u00e1s ~{protReq}g de prote\u00edna. Ahora, \u00bfc\u00f3mo estructurar tus comidas?
+
+**Reglas universales (aplican a TODOS los objetivos):**
+1. **Prote\u00edna en cada comida** \u2014 No la dejes para una sola vez
+2. **Vegetales en almuerzo y cena** \u2014 M\u00ednimo 3 porciones diarias
+3. **Grasas saludables todos los d\u00edas** \u2014 Palta, aceite oliva, frutos secos
+4. **Hidrataci\u00f3n** \u2014 {aguaMin}-{aguaMax}L por d\u00eda para tus {peso}kg
+5. **Evitar ultraprocesados** \u2014 Si tiene m\u00e1s de 5 ingredientes que no reconoc\u00e9s, no es comida
+
+**\ud83d\udd34 Si tu objetivo es PERDER GRASA:**
+- Calor\u00edas: {tdee} - 400 = ~{calObj} kcal/d\u00eda
+- Prote\u00edna ALTA: {protReq}g (preserva m\u00fasculo)
+- Carbos: solo en desayuno y post-entreno
+- Cena liviana: prote\u00edna + vegetales (sin carbs)
+- Ayuno intermitente 16:8 puede ayudar (no es obligatorio)
+
+**\ud83d\udfe2 Si tu objetivo es GANAR M\u00daSCULO:**
+- Calor\u00edas: {tdee} + 300 = super\u00e1vit moderado
+- Prote\u00edna: {protReq}g distribuida en 4-5 comidas
+- Carbos abundantes: arroz, avena, batata, banana
+- Post-entreno: whey + carbos r\u00e1pidos (banana + miel)
+- Cena: prote\u00edna + carbos complejos
+
+**\ud83d\udfe1 Si tu objetivo es TONIFICAR:**
+- Calor\u00edas: al nivel del TDEE ({tdee} kcal)
+- Prote\u00edna moderada-alta: {protReq}g
+- Carbos ciclados: m\u00e1s en d\u00edas de entreno, menos en descanso
+- Grasas saludables estables
+
+**Comida modelo para un d\u00eda completo:**
+- **Desayuno:** Avena + whey + banana + canela
+- **Media ma\u00f1ana:** Yogur griego + ar\u00e1ndanos + nueces
+- **Almuerzo:** Pollo/salm\u00f3n + arroz integral + ensalada + aceite oliva
+- **Merienda:** Tostada integral + palta + huevo
+- **Cena:** Merluza/carne magra + verduras al vapor
+
+\u00bfQuer\u00e9s que arme un plan m\u00e1s detallado para vos? \ud83c\udf7d`
+  },
+  {
+    keywords: ['importancia proteina', 'por qu\u00e9 proteina', 'proteina importante', 'prote\u00edna fundamental', 'cuanta proteina necesito'],
+    content: `**La prote\u00edna: el macronutriente m\u00e1s importante para transformar tu cuerpo**
+
+Sin suficiente prote\u00edna, NO pod\u00e9s ganar m\u00fasculo. Punto. Tambi\u00e9n es esencial para mantener m\u00fasculo cuando baj\u00e1s de peso.
+
+**\u00bfPor qu\u00e9 es TAN importante?**
+- Es el \u00fanico macronutriente que **construye y repara m\u00fasculo**
+- Tiene el mayor **efecto t\u00e9rmico**: quem\u00e1s 25-30% de sus calor\u00edas solo digiri\u00e9ndola
+- Genera **m\u00e1s saciedad** que carbs o grasas (com\u00e9s menos naturalmente)
+- Preserva masa muscular durante d\u00e9ficit cal\u00f3rico
+- Fortalece sistema inmune, pelo, u\u00f1as, piel
+
+**\u00bfCu\u00e1nta necesit\u00e1s? ({peso}kg, objetivo: {objetivo})**
+- **Perder grasa:** {peso} x 2.2 = ~{protReq}g/d\u00eda (la m\u00e1s alta, para preservar m\u00fasculo)
+- **Ganar m\u00fasculo:** {peso} x 2.0g/d\u00eda
+- **Mantenimiento:** {peso} x 1.6g/d\u00eda
+
+**Las mejores fuentes de prote\u00edna (ranking):**
+1. **Huevo entero** \u2014 La referencia biol\u00f3gica. 6g por huevo. El m\u00e1s completo
+2. **Pechuga de pollo** \u2014 31g por 100g. Vers\u00e1til y econ\u00f3mica
+3. **Salm\u00f3n** \u2014 22g + Omega-3. Doble beneficio
+4. **Carne vacuna magra** \u2014 26g + hierro + creatina natural
+5. **Yogur griego** \u2014 20g por pote. Ideal para snack
+6. **Whey protein** \u2014 24g por scoop. Pr\u00e1ctico post-entreno
+7. **Lentejas** \u2014 9g por 100g cocida. Mejor fuente vegetal
+8. **At\u00fan** \u2014 25g por lata. Econ\u00f3mico y pr\u00e1ctico
+
+**Distribuci\u00f3n \u00f3ptima:** Repartir en 4-5 comidas de 25-40g cada una. El cuerpo absorbe mejor as\u00ed que todo de golpe.
+
+**Error com\u00fan:** Comer mucha prote\u00edna solo en el almuerzo y cena. El desayuno TIENE que tener prote\u00edna (huevos, yogur griego, whey) \ud83e\udd5a`
+  },
+  {
+    keywords: ['tendencia', 'tendencias', 'novedad', 'nuevo', 'moda fitness', 'trending', 'lo \u00faltimo', '2024', '2025', '2026'],
+    content: `**Tendencias mundiales en fitness y nutrici\u00f3n 2025-2026**
+
+Lo que realmente funciona y lo que es solo marketing:
+
+**\u2705 TENDENCIAS CON EVIDENCIA:**
+
+1. **Entrenamiento de fuerza para TODOS** \u2014 Ya no es "cosa de hombres". La OMS recomienda 2+ sesiones/semana para todas las edades. Previene sarcopenia, osteoporosis y mejora metabolismo.
+
+2. **Prote\u00edna alta y distribuida** \u2014 1.6-2.2g/kg es el nuevo est\u00e1ndar. Desayunar con prote\u00edna ya es mainstream.
+
+3. **Alimentos antiinflamatorios** \u2014 C\u00farcuma, jengibre, ar\u00e1ndanos, omega-3. La inflamaci\u00f3n cr\u00f3nica de baja intensidad est\u00e1 detr\u00e1s de la mayor\u00eda de enfermedades modernas.
+
+4. **Col\u00e1geno hidrolizado** \u2014 Ya no es solo est\u00e9tica. La evidencia para articulaciones y tejido conectivo es s\u00f3lida. 10-15g/d\u00eda.
+
+5. **Entrenamiento Zone 2** \u2014 Cardio de baja intensidad (poder hablar mientras lo hac\u00e9s). Mejora metabolismo de grasas y salud mitocondrial. Peter Attia y Andrew Huberman lo pusieron en el mapa.
+
+6. **Cold exposure / Ba\u00f1os fr\u00edos** \u2014 Mejora recuperaci\u00f3n, grasa parda, sistema inmune. No es m\u00e1gico pero tiene beneficios reales con 2-3 min a 10-15\u00b0C.
+
+7. **Glucosa estable (CGM)** \u2014 Monitorear glucosa continua para optimizar energ\u00eda. Comer fibra/prote\u00edna ANTES de carbos reduce picos 40%.
+
+8. **Suplementaci\u00f3n inteligente** \u2014 Creatina, vitamina D, magnesio bisglicinato, omega-3 de calidad. Menos suplementos pero mejores.
+
+9. **Gut Health (Salud intestinal)** \u2014 Prebios, probios, alimentos fermentados (kefir, chucrut, kimchi). El intestino es el "segundo cerebro".
+
+10. **Longevidad y healthspan** \u2014 No solo vivir m\u00e1s, sino vivir mejor. Entrenamiento de fuerza + cardio zone 2 + sue\u00f1o + nutrici\u00f3n son los 4 pilares.
+
+**\u274c TENDENCIAS HUMO (evitalas):**
+- Detox / jugos detox (tu h\u00edgado ya hace detox gratis)
+- Dieta cetog\u00e9nica para todos (funciona para algunos, no es universal)
+- Suplementos "quemadores de grasa"
+- Entrenamiento de 7 min que "reemplaza el gym"
+- Electroestimulaci\u00f3n como \u00fanico entrenamiento
+
+Lo que nunca pasa de moda: entrenar con pesas, comer prote\u00edna, dormir bien y tomar agua \ud83d\udcaa`
+  },
+  {
+    keywords: ['canela', 'canela ceilon', 'especias', 'curcuma', 'c\u00farcuma', 'jengibre', 'antiinflamatorio natural'],
+    content: `**Especias antiinflamatorias: la farmacia de tu cocina**
+
+Estas especias tienen beneficios comprobados cient\u00edficamente:
+
+**\ud83c\udf4f Canela de Ceil\u00f3n (la verdadera canela)**
+- Regula glucosa en sangre (reduce picos post-comida 20-30%)
+- Mejora sensibilidad a la insulina
+- Antiinflamatoria y antioxidante
+- **IMPORTANTE:** Us\u00e1 canela de **Ceil\u00f3n** (Ceylon), NO canela cassia (la com\u00fan). La cassia tiene cumarina que en exceso da\u00f1a el h\u00edgado.
+- Dosis: 1-3g/d\u00eda (1 cucharadita). Agreg\u00e1 a avena, caf\u00e9, yogur, batidos
+- Marcas: **Simply Organic**, **Frontier Co-op** (que digan "Ceylon")
+
+**\ud83d\udfe1 C\u00farcuma (curcumina)**
+- Antiinflamatorio potente (comparable a ibuprofeno en algunos estudios)
+- Antioxidante, neuroprotector
+- **Clave:** Siempre con pimienta negra (piperina aumenta absorci\u00f3n 2000%)
+- Dosis: 500-1000mg de curcumina/d\u00eda, o 1 cucharadita de c\u00farcuma en comidas
+- Golden milk: leche vegetal + c\u00farcuma + pimienta + canela + miel = antiinflamatorio delicioso
+
+**\u26aa Jengibre**
+- Antiinflamatorio, antinauseoso
+- Mejora digesti\u00f3n y absorci\u00f3n de nutrientes
+- Reduce dolor muscular post-entreno (DOMS) en un 25%
+- Fresco rallado en comidas, t\u00e9 de jengibre, o suplemento
+
+**\ud83d\udfe3 Ar\u00e1ndanos (berry power)**
+- Los antioxidantes m\u00e1s potentes del mundo vegetal
+- Mejoran funci\u00f3n cognitiva y memoria
+- Antiinflamatorios
+- 100-150g/d\u00eda. Frescos o congelados (mismos beneficios)
+
+**Combinaci\u00f3n ganadora para el desayuno:** Avena + canela de Ceil\u00f3n + ar\u00e1ndanos + banana + col\u00e1geno. Antiinflamatorio, nutritivo y delicioso \ud83c\udf1f`
+  },
+  {
+    keywords: ['zinc', 'hierro', 'selenio', 'mineral', 'minerales', 'micronutriente'],
+    content: `**Minerales clave para el deportista**
+
+**\ud83d\udd35 Zinc**
+- Fundamental para testosterona, sistema inmune y s\u00edntesis proteica
+- El 30% de deportistas tiene deficiencia
+- Fuentes: carne roja, ostras, semillas de calabaza, garbanzos
+- Suplemento: 15-30mg/d\u00eda de zinc picolinato o bisglicinato
+- NO tomar junto con hierro (compiten por absorci\u00f3n)
+- Marcas: **NOW Foods Zinc Picolinate**, **Solgar**
+
+**\ud83d\udfe0 Hierro**
+- Transporta ox\u00edgeno a los m\u00fasculos. Sin hierro = fatiga y mal rendimiento
+- Mujeres deportistas son grupo de riesgo (menstruaci\u00f3n + sudor)
+- Fuentes: carne roja, lentejas, espinaca (con lim\u00f3n para absorber)
+- Solo suplementar si hay deficiencia confirmada por an\u00e1lisis de sangre
+- Tomar con vitamina C, lejos del caf\u00e9 y l\u00e1cteos
+
+**\ud83d\udfe1 Selenio**
+- Esencial para tiroides (conversi\u00f3n T4\u2192T3)
+- Antioxidante potente (con vitamina E)
+- 2-3 nueces de Brasil por d\u00eda = dosis completa (la fuente natural m\u00e1s rica)
+- Suplemento: 100-200mcg/d\u00eda m\u00e1ximo
+
+**\ud83d\udfe3 Potasio**
+- Previene calambres, regula presi\u00f3n arterial
+- La mayor\u00eda de la gente no llega al m\u00ednimo (4700mg/d\u00eda)
+- Fuentes: banana, palta, papa, espinaca, yogur
+- Rara vez necesita suplemento si com\u00e9s bien
+
+**Tip:** Antes de suplementar minerales, hac\u00e9 un an\u00e1lisis de sangre completo. Suplementar sin deficiencia puede ser contraproducente \ud83e\ude78`
+  },
+  {
+    keywords: ['probiotico', 'probi\u00f3tico', 'prebiotico', 'intestino', 'flora intestinal', 'microbiota', 'fermentado', 'kefir', 'kombucha'],
+    content: `**Salud Intestinal: el pilar olvidado del fitness**
+
+Tu intestino tiene 100 billones de bacterias que influyen en TODO: absorci\u00f3n de nutrientes, sistema inmune (70% est\u00e1 ah\u00ed), estado de \u00e1nimo, inflamaci\u00f3n y hasta composici\u00f3n corporal.
+
+**\u00bfPor qu\u00e9 importa para el fitness?**
+- Mejor absorci\u00f3n de prote\u00edna y nutrientes
+- Menos inflamaci\u00f3n = mejor recuperaci\u00f3n
+- Mejor sistema inmune = menos enfermedades = m\u00e1s consistencia
+- La serotonina (90%) se produce en el intestino
+
+**Alimentos fermentados (incluir diariamente):**
+- **Kefir**: el campe\u00f3n. M\u00e1s cepas que cualquier yogur. 200ml/d\u00eda
+- **Yogur natural/griego**: con cultivos vivos (no los ultra-azucarados)
+- **Chucrut**: repollo fermentado. 2-3 cucharadas/d\u00eda
+- **Kimchi**: fermentado coreano, potente
+- **Kombucha**: t\u00e9 fermentado. Ojo con las marcas con mucha az\u00facar
+
+**Prebi\u00f3ticos (alimentan a tus bacterias buenas):**
+- Ajo, cebolla, puerro
+- Banana verde, espárragos
+- Avena (beta-glucanos)
+- Semillas de ch\u00eda y l\u00ednaza
+
+**Probi\u00f3ticos en suplemento:**
+- Cepas clave: **Lactobacillus rhamnosus**, **Bifidobacterium lactis**
+- M\u00ednimo 10 billones CFU
+- Marcas: **Seed**, **VSL#3**, **Garden of Life**, **Jarrow Formulas**
+
+**Lo que DESTRUYE tu microbiota:**
+- Antibi\u00f3ticos (necesarios pero devastadores para la flora)
+- Edulcorantes artificiales (sucralosa, aspartamo)
+- Ultraprocesados
+- Estr\u00e9s cr\u00f3nico
+- Alcohol en exceso
+
+**Plan simple:** 1 porci\u00f3n de fermentado por d\u00eda + fibra variada + eliminar ultraprocesados. En 4 semanas not\u00e1s la diferencia \ud83e\uddec`
+  },
+  {
+    keywords: ['vitamina c', 'antioxidante', 'antioxidantes', 'radicales libres'],
+    content: `**Antioxidantes y Vitamina C para deportistas**
+
+Entrenar genera estr\u00e9s oxidativo (radicales libres). Esto es NORMAL y necesario para la adaptaci\u00f3n muscular. Pero demasiado estr\u00e9s oxidativo sin defensa = inflamaci\u00f3n, fatiga, envejecimiento acelerado.
+
+**Vitamina C:**
+- Esencial para s\u00edntesis de col\u00e1geno (tendones, piel, articulaciones)
+- Potente antioxidante
+- Mejora absorci\u00f3n de hierro
+- Fortalece sistema inmune
+- Dosis: 500-1000mg/d\u00eda. No m\u00e1s de 2000mg
+- Fuentes: kiwi (el rey), pimiento morr\u00f3n, frutillas, c\u00edtricos, br\u00f3coli
+- **Tip:** NO tomar megadosis de vitamina C justo post-entreno. Puede interferir con las se\u00f1ales adaptativas del m\u00fasculo. Mejor con las comidas.
+
+**Top antioxidantes naturales:**
+1. **Ar\u00e1ndanos** \u2014 Antocianinas. El m\u00e1s potente fruta
+2. **Cacao puro** \u2014 Flavonoides. 70%+ cacao. No chocolate con leche
+3. **T\u00e9 verde** \u2014 EGCG. 2-3 tazas/d\u00eda
+4. **C\u00farcuma** \u2014 Curcumina. Antiinflamatorio + antioxidante
+5. **Tomate cocido** \u2014 Licopeno. Mejor cocido que crudo
+6. **Nueces** \u2014 Polifenoles + omega-3
+7. **Espinaca** \u2014 Luteina, zeaxantina
+
+**No necesit\u00e1s suplementos antioxidantes caros.** Comer 5+ porciones de frutas y verduras variadas por d\u00eda cubre todo \ud83c\udf52`
+  },
+  {
+    keywords: ['electrolito', 'electrolitos', 'sodio', 'sal', 'calambre', 'calambres', 'sudor'],
+    content: `**Electrolitos: lo que perd\u00e9s cuando sudás**
+
+Si entren\u00e1s fuerte y solo tom\u00e1s agua, est\u00e1s reponiendo volumen pero no minerales. Esto causa calambres, fatiga, mareos y bajo rendimiento.
+
+**Los 4 electrolitos clave:**
+- **Sodio** \u2014 El que m\u00e1s se pierde en el sudor. 500-1000mg durante entreno intenso
+- **Potasio** \u2014 Funci\u00f3n muscular y card\u00edaca. Banana + palta
+- **Magnesio** \u2014 Relajaci\u00f3n muscular, previene calambres. 400mg/d\u00eda
+- **Calcio** \u2014 Contracci\u00f3n muscular. L\u00e1cteos + verduras verdes
+
+**\u00bfCu\u00e1ndo suplementar electrolitos?**
+- Entrenos de +60 min
+- Mucho calor/sudor
+- Entrenamiento en ayunas
+- Si sufr\u00eds calambres frecuentes
+
+**Receta casera de electrolitos (mejor que Gatorade):**
+- 750ml de agua
+- Jugo de 1 lim\u00f3n
+- 1/4 cucharadita de sal marina (sodio)
+- 1 cucharada de miel (glucosa)
+- Opcional: un chorrito de jugo de naranja (potasio)
+
+**Marcas de electrolitos recomendadas:**
+- **LMNT** (sin az\u00facar, buena proporci\u00f3n sodio/potasio/magnesio)
+- **Nuun** (tabletas efervescentes, pr\u00e1cticas)
+- **Pedialyte** (originalmente pedi\u00e1trico pero excelente para deportistas)
+
+**Dato:** La sal NO es el enemigo. Los deportistas necesitan m\u00e1s sodio que el sedentario promedio. Si entren\u00e1s duro, no tengas miedo de la sal \ud83e\uddc2`
+  },
+  {
+    keywords: ['vitamina b', 'complejo b', 'energia', 'energ\u00eda', 'fatiga', 'cansancio cr\u00f3nico'],
+    content: `**Complejo B y Energ\u00eda para el deportista**
+
+Si te sent\u00eds cansado a pesar de dormir bien, puede ser deficiencia de vitaminas B.
+
+**Las vitaminas B clave:**
+- **B1 (Tiamina)** \u2014 Metabolismo de carbohidratos. Sin ella, no us\u00e1s la glucosa bien
+- **B6 (Piridoxina)** \u2014 Metabolismo de prote\u00edna y amino\u00e1cidos. Esencial si com\u00e9s mucha prote\u00edna
+- **B9 (Folato)** \u2014 S\u00edntesis de ADN, gl\u00f3bulos rojos. Importante en mujeres
+- **B12 (Cobalamina)** \u2014 Sistema nervioso, energ\u00eda, gl\u00f3bulos rojos. Los veganos DEBEN suplementar
+
+**\u00bfQui\u00e9nes tienen m\u00e1s riesgo de deficiencia?**
+- Veganos/vegetarianos (B12 casi exclusiva de origen animal)
+- Deportistas de resistencia (mayor gasto metab\u00f3lico)
+- Personas con problemas g\u00e1stricos
+- Adultos mayores (menor absorci\u00f3n)
+
+**Fuentes naturales:**
+- B12: carne, huevos, l\u00e1cteos, h\u00edgado
+- B6: pollo, banana, papa, garbanzos
+- B9: espinaca, lentejas, esp\u00e1rragos, palta
+
+**Suplemento:** Un buen complejo B o B12 metilcobalamina (forma activa) si sos vegano.
+
+**Si el cansancio persiste** a pesar de buena alimentaci\u00f3n, sue\u00f1o y entrenamiento: ped\u00ed un an\u00e1lisis de sangre completo (hemograma, ferritina, B12, vitamina D, tiroides) \u26a1`
+  },
 ];
 
 function personalizeContent(content: string, perfil: { peso: number; altura: number; edad: number; objetivo: string; nivelActividad: string } | undefined): string {
@@ -1194,7 +1653,7 @@ export default function BioCoach() {
       </div>
 
       <div className="flex flex-wrap gap-1.5 mt-3 mb-3">
-        {['Creatina', 'Prote\u00edna', 'Whey', 'Carbos', 'Omega3', 'Magnesio', 'Bajar grasa', 'Ganar m\u00fasculo', 'D\u00e9ficit/Super\u00e1vit', 'Macros', 'Sue\u00f1o', 'Cafe\u00edna', 'Sarcopenia', 'Menopausia', 'Hipotiroidismo', 'Principiante', 'Estancado', 'Suplementos', 'Gl\u00fateos', 'Abs'].map(s => (
+        {['Creatina', 'Prote\u00edna', 'Col\u00e1geno', 'Omega3 tipos', 'Magnesio tipos', 'Harinas y az\u00facar', 'Alimentaci\u00f3n seg\u00fan objetivo', 'Tendencias 2025', 'Canela y especias', 'Electrolitos', 'Salud intestinal', 'Minerales', 'Antioxidantes', 'Complejo B', 'Whey', 'Bajar grasa', 'Ganar m\u00fasculo', 'D\u00e9ficit/Super\u00e1vit', 'Macros', 'Sue\u00f1o', 'Cafe\u00edna', 'Sarcopenia', 'Menopausia', 'Hipotiroidismo', 'Principiante', 'Suplementos', 'Gl\u00fateos', 'Abs'].map(s => (
           <button key={s} onClick={() => setInput(s)}
             className="px-2.5 py-1 bg-white/[0.03] border border-dark-border hover:border-electric/30 rounded-lg text-[11px] text-white/40 hover:text-electric transition-all">
             {s}
