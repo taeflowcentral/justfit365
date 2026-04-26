@@ -36,8 +36,12 @@ interface PesoEntry { fecha: string; peso: number }
 interface Cliente {
   id: number;
   nombre: string;
+  dni: string;
+  direccion: string;
   telefono: string;
   email: string;
+  contactoEmergencia: string;
+  telefonoEmergencia: string;
   objetivo: string;
   nivel: string;
   peso: number;
@@ -47,6 +51,9 @@ interface Cliente {
   fechaMeta: string;
   pesoHistorial: PesoEntry[];
   nivelActividad: string;
+  enfermedades: string[];
+  declaraBuenaSalud: boolean;
+  esMayorDeEdad: boolean;
   rutina: ClienteRutina[];
   nutricion: ClienteComida[];
   notas: string;
@@ -61,7 +68,7 @@ export default function GymClientes() {
     const saved = getUserItem(CLIENTES_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      return parsed.map((c: Cliente) => ({ ...c, email: c.email || '', historial: c.historial || [], pesoMeta: c.pesoMeta || 0, fechaMeta: c.fechaMeta || '', pesoHistorial: c.pesoHistorial || [], nivelActividad: c.nivelActividad || 'Intermedio' }));
+      return parsed.map((c: Cliente) => ({ ...c, email: c.email || '', dni: c.dni || '', direccion: c.direccion || '', contactoEmergencia: c.contactoEmergencia || '', telefonoEmergencia: c.telefonoEmergencia || '', enfermedades: c.enfermedades || [], declaraBuenaSalud: c.declaraBuenaSalud ?? false, esMayorDeEdad: c.esMayorDeEdad ?? true, historial: c.historial || [], pesoMeta: c.pesoMeta || 0, fechaMeta: c.fechaMeta || '', pesoHistorial: c.pesoHistorial || [], nivelActividad: c.nivelActividad || 'Intermedio' }));
     }
     return [];
   });
@@ -72,7 +79,7 @@ export default function GymClientes() {
   const [showAddEj, setShowAddEj] = useState(false);
   const [showAddComida, setShowAddComida] = useState(false);
   const [showAddAlimento, setShowAddAlimento] = useState<number | null>(null);
-  const [nuevoCliente, setNuevoCliente] = useState({ nombre: '', telefono: '', email: '', objetivo: 'Hipertrofia', nivel: 'Principiante', peso: '', altura: '', edad: '' });
+  const [nuevoCliente, setNuevoCliente] = useState({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [] as string[], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', enfermedades: [] as string[], declaraBuenaSalud: false, esMayorDeEdad: false });
   const [nuevoEj, setNuevoEj] = useState({ nombre: '', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Pecho', notas: '' });
   const [nuevaComida, setNuevaComida] = useState({ nombre: '', hora: '12:00' });
   const [nuevoAlimento, setNuevoAlimento] = useState({ alimento: '', porcion: '', cal: 0, prot: 0, carb: 0, grasa: 0 });
@@ -89,14 +96,17 @@ export default function GymClientes() {
   const addCliente = () => {
     if (!nuevoCliente.nombre.trim()) return;
     const nuevo: Cliente = {
-      id: Date.now(), nombre: nuevoCliente.nombre, telefono: nuevoCliente.telefono, email: nuevoCliente.email,
-      objetivo: nuevoCliente.objetivo, nivel: nuevoCliente.nivel,
+      id: Date.now(), nombre: nuevoCliente.nombre, dni: nuevoCliente.dni, direccion: nuevoCliente.direccion,
+      telefono: nuevoCliente.telefono, email: nuevoCliente.email,
+      contactoEmergencia: nuevoCliente.contactoEmergencia, telefonoEmergencia: nuevoCliente.telefonoEmergencia,
+      objetivo: nuevoCliente.objetivo.join(', '), nivel: nuevoCliente.nivel,
       peso: parseFloat(nuevoCliente.peso) || 70, altura: parseInt(nuevoCliente.altura) || 170, edad: parseInt(nuevoCliente.edad) || 25,
-      pesoMeta: 0, fechaMeta: '', pesoHistorial: [], nivelActividad: 'Intermedio',
+      pesoMeta: parseFloat(nuevoCliente.pesoMeta) || 0, fechaMeta: '', pesoHistorial: [], nivelActividad: nuevoCliente.nivel,
+      enfermedades: nuevoCliente.enfermedades, declaraBuenaSalud: nuevoCliente.declaraBuenaSalud, esMayorDeEdad: nuevoCliente.esMayorDeEdad,
       notas: '', rutina: [], nutricion: [], historial: [],
     };
     guardar([...clientes, nuevo]);
-    setNuevoCliente({ nombre: '', telefono: '', email: '', objetivo: 'Hipertrofia', nivel: 'Principiante', peso: '', altura: '', edad: '' });
+    setNuevoCliente({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', enfermedades: [], declaraBuenaSalud: false, esMayorDeEdad: false });
     setShowAddCliente(false);
     setClienteActivo(nuevo.id);
   };
@@ -275,7 +285,7 @@ export default function GymClientes() {
                   </div>
                   <div>
                     <p className="text-white font-bold">{c.nombre}</p>
-                    <p className="text-white/40 text-xs">{c.objetivo} &middot; {c.nivel}</p>
+                    <p className="text-white/40 text-xs">{c.objetivo?.split(',')[0] || '-'} &middot; {c.nivel}{c.dni ? ` \u00b7 DNI ${c.dni}` : ''}</p>
                   </div>
                 </div>
                 <button onClick={(ev) => { ev.stopPropagation(); deleteCliente(c.id); }} className="p-1.5 text-white/15 hover:text-danger transition-colors rounded-lg hover:bg-white/5">
@@ -294,39 +304,117 @@ export default function GymClientes() {
         {/* Modal nuevo cliente */}
         {showAddCliente && (
           <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => setShowAddCliente(false)}>
-            <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
+            <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
               <h2 className="text-lg font-black text-white mb-5 flex items-center gap-2"><Plus className="w-5 h-5 text-electric" /> Nuevo Cliente</h2>
-              <div className="space-y-3">
-                <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Nombre completo</label>
+              <div className="space-y-4">
+                {/* Datos personales */}
+                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1">Datos Personales</p>
+                <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Nombre completo *</label>
                   <input type="text" value={nuevoCliente.nombre} onChange={e => setNuevoCliente(p => ({ ...p, nombre: e.target.value }))} placeholder="Nombre y Apellido" className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">DNI</label>
+                    <input type="text" value={nuevoCliente.dni} onChange={e => setNuevoCliente(p => ({ ...p, dni: e.target.value.replace(/\D/g, '') }))} placeholder="30123456" className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
+                  <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Edad</label>
+                    <input type="number" value={nuevoCliente.edad} onChange={e => setNuevoCliente(p => ({ ...p, edad: e.target.value }))} placeholder="25" className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
+                </div>
+                <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Direcci&oacute;n</label>
+                  <input type="text" value={nuevoCliente.direccion} onChange={e => setNuevoCliente(p => ({ ...p, direccion: e.target.value }))} placeholder="Calle 123, Ciudad" className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
                 <div className="grid grid-cols-2 gap-3">
                   <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Tel&eacute;fono (WhatsApp)</label>
                     <input type="tel" value={nuevoCliente.telefono} onChange={e => setNuevoCliente(p => ({ ...p, telefono: e.target.value }))} placeholder="5492211234567" className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
                   <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Email</label>
                     <input type="email" value={nuevoCliente.email} onChange={e => setNuevoCliente(p => ({ ...p, email: e.target.value }))} placeholder="cliente@email.com" className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
                 </div>
+
+                {/* Contacto de emergencia */}
+                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1 pt-2">Contacto de Emergencia</p>
                 <div className="grid grid-cols-2 gap-3">
-                  <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Objetivo</label>
-                    <select value={nuevoCliente.objetivo} onChange={e => setNuevoCliente(p => ({ ...p, objetivo: e.target.value }))} className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
-                      {['Hipertrofia', 'Tonificacion', 'Perdida de grasa', 'Fuerza', 'Resistencia', 'Salud general'].map(o => <option key={o} value={o} className="bg-dark-800">{o}</option>)}
-                    </select></div>
+                  <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Nombre</label>
+                    <input type="text" value={nuevoCliente.contactoEmergencia} onChange={e => setNuevoCliente(p => ({ ...p, contactoEmergencia: e.target.value }))} placeholder="Familiar o amigo" className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
+                  <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Tel&eacute;fono</label>
+                    <input type="tel" value={nuevoCliente.telefonoEmergencia} onChange={e => setNuevoCliente(p => ({ ...p, telefonoEmergencia: e.target.value }))} placeholder="5492211234567" className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
+                </div>
+
+                {/* Datos fisicos */}
+                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1 pt-2">Datos F&iacute;sicos y Objetivos</p>
+                <div className="grid grid-cols-4 gap-3">
+                  <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Peso (kg)</label>
+                    <input type="number" value={nuevoCliente.peso} onChange={e => setNuevoCliente(p => ({ ...p, peso: e.target.value }))} placeholder="75" className="w-full px-3 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
+                  <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Altura (cm)</label>
+                    <input type="number" value={nuevoCliente.altura} onChange={e => setNuevoCliente(p => ({ ...p, altura: e.target.value }))} placeholder="170" className="w-full px-3 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
+                  <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Peso meta</label>
+                    <input type="number" value={nuevoCliente.pesoMeta} onChange={e => setNuevoCliente(p => ({ ...p, pesoMeta: e.target.value }))} placeholder="70" className="w-full px-3 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
                   <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Nivel</label>
-                    <select value={nuevoCliente.nivel} onChange={e => setNuevoCliente(p => ({ ...p, nivel: e.target.value }))} className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
+                    <select value={nuevoCliente.nivel} onChange={e => setNuevoCliente(p => ({ ...p, nivel: e.target.value }))} className="w-full px-2 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-xs focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
                       {['Principiante', 'Intermedio', 'Avanzado'].map(n => <option key={n} value={n} className="bg-dark-800">{n}</option>)}
                     </select></div>
                 </div>
-                <div className="grid grid-cols-3 gap-3">
-                  <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Peso (kg)</label>
-                    <input type="number" value={nuevoCliente.peso} onChange={e => setNuevoCliente(p => ({ ...p, peso: e.target.value }))} className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" /></div>
-                  <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Altura (cm)</label>
-                    <input type="number" value={nuevoCliente.altura} onChange={e => setNuevoCliente(p => ({ ...p, altura: e.target.value }))} className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" /></div>
-                  <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Edad</label>
-                    <input type="number" value={nuevoCliente.edad} onChange={e => setNuevoCliente(p => ({ ...p, edad: e.target.value }))} className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" /></div>
+
+                {/* Objetivos multiples */}
+                <div>
+                  <label className="block text-xs text-white/50 uppercase tracking-wider mb-2">Objetivos (pod&eacute;s elegir varios)</label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {['Hipertrofia', 'Tonificacion', 'Perdida de grasa', 'Fuerza', 'Resistencia', 'Salud general', 'Rendimiento deportivo', 'Rehabilitacion'].map(obj => {
+                      const activo = nuevoCliente.objetivo.includes(obj);
+                      return (
+                        <button key={obj} type="button" onClick={() => {
+                          setNuevoCliente(p => ({
+                            ...p,
+                            objetivo: activo ? p.objetivo.filter(o => o !== obj) : [...p.objetivo, obj],
+                          }));
+                        }}
+                          className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all ${
+                            activo ? 'bg-electric/15 text-electric border border-electric/30' : 'bg-black/40 text-white/40 border border-dark-border hover:text-white/60'
+                          }`}>
+                          {obj === 'Perdida de grasa' ? 'P\u00e9rdida de grasa' : obj === 'Tonificacion' ? 'Tonificaci\u00f3n' : obj === 'Rehabilitacion' ? 'Rehabilitaci\u00f3n' : obj}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div className="flex gap-3 pt-2">
+
+                {/* Condiciones preexistentes */}
+                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1 pt-2">Condiciones Preexistentes</p>
+                <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto">
+                  {['Hipotiroidismo', 'Diabetes', 'Hipertensi\u00f3n', 'Asma', 'Cel\u00edaca', 'Intolerancia lactosa', 'Artritis', 'Osteoporosis', 'Fibromialgia', 'Hernia de disco', 'Escoliosis', 'Tendinitis', 'Cardiopat\u00eda', 'Epilepsia', 'Depresi\u00f3n', 'Ansiedad', 'Apnea del sue\u00f1o', 'Embarazo', 'Sobrepeso/Obesidad'].map(enf => {
+                    const activo = nuevoCliente.enfermedades.includes(enf);
+                    return (
+                      <button key={enf} type="button" onClick={() => {
+                        setNuevoCliente(p => ({
+                          ...p,
+                          enfermedades: activo ? p.enfermedades.filter(e => e !== enf) : [...p.enfermedades, enf],
+                        }));
+                      }}
+                        className={`px-2 py-1 rounded-lg text-[10px] font-medium transition-all ${
+                          activo ? 'bg-red-500/15 text-red-400 border border-red-500/20' : 'bg-black/30 text-white/30 border border-dark-border hover:text-white/50'
+                        }`}>
+                        {enf}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Declaraciones */}
+                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1 pt-2">Declaraciones</p>
+                <label className="flex items-start gap-3 cursor-pointer group">
+                  <input type="checkbox" checked={nuevoCliente.esMayorDeEdad} onChange={e => setNuevoCliente(p => ({ ...p, esMayorDeEdad: e.target.checked }))}
+                    className="mt-0.5 w-4 h-4 rounded border-dark-border bg-black/60 text-electric focus:ring-electric/30" />
+                  <span className="text-white/60 text-xs leading-relaxed group-hover:text-white/80">Declaro ser <strong className="text-white">mayor de 18 a&ntilde;os</strong> o contar con autorizaci&oacute;n de un tutor legal.</span>
+                </label>
+                <label className="flex items-start gap-3 cursor-pointer group">
+                  <input type="checkbox" checked={nuevoCliente.declaraBuenaSalud} onChange={e => setNuevoCliente(p => ({ ...p, declaraBuenaSalud: e.target.checked }))}
+                    className="mt-0.5 w-4 h-4 rounded border-dark-border bg-black/60 text-electric focus:ring-electric/30" />
+                  <span className="text-white/60 text-xs leading-relaxed group-hover:text-white/80">Declaro gozar de <strong className="text-white">buena salud</strong> y estar en condiciones f&iacute;sicas para realizar actividad deportiva. Cualquier condici&oacute;n fue informada arriba.</span>
+                </label>
+
+                <div className="flex gap-3 pt-3">
                   <button onClick={() => setShowAddCliente(false)} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
-                  <button onClick={addCliente} disabled={!nuevoCliente.nombre.trim()} className="flex-1 py-3 bg-gradient-to-r from-electric to-neon text-black rounded-xl text-sm font-black uppercase tracking-wider disabled:opacity-30">Crear</button>
+                  <button onClick={addCliente} disabled={!nuevoCliente.nombre.trim() || !nuevoCliente.declaraBuenaSalud || !nuevoCliente.esMayorDeEdad}
+                    className="flex-1 py-3 bg-gradient-to-r from-electric to-neon text-black rounded-xl text-sm font-black uppercase tracking-wider disabled:opacity-30">Crear Cliente</button>
                 </div>
+                {(!nuevoCliente.declaraBuenaSalud || !nuevoCliente.esMayorDeEdad) && nuevoCliente.nombre.trim() && (
+                  <p className="text-amber-400/70 text-[10px] text-center">Ambas declaraciones son obligatorias para registrar al cliente.</p>
+                )}
               </div>
             </div>
           </div>
@@ -557,6 +645,18 @@ export default function GymClientes() {
             </div>
             <div className="grid grid-cols-2 gap-3 mt-3">
               <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1">DNI</label>
+                <input type="text" value={c.dni || ''} onChange={e => updateCliente(c.id, { dni: e.target.value.replace(/\D/g, '') })} placeholder="30123456"
+                  className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
+              </div>
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1">Direcci&oacute;n</label>
+                <input type="text" value={c.direccion || ''} onChange={e => updateCliente(c.id, { direccion: e.target.value })} placeholder="Calle 123, Ciudad"
+                  className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mt-3">
+              <div>
                 <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1"><Phone className="w-3 h-3 inline mr-1" />Tel&eacute;fono</label>
                 <input type="tel" value={c.telefono} onChange={e => updateCliente(c.id, { telefono: e.target.value })} placeholder="5492211234567"
                   className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
@@ -565,6 +665,62 @@ export default function GymClientes() {
                 <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1"><Mail className="w-3 h-3 inline mr-1" />Email</label>
                 <input type="email" value={c.email} onChange={e => updateCliente(c.id, { email: e.target.value })} placeholder="cliente@email.com"
                   className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
+              </div>
+            </div>
+          </div>
+
+          {/* Contacto de emergencia */}
+          <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
+            <h3 className="text-white font-bold mb-3 flex items-center gap-2"><Phone className="w-4 h-4 text-red-400" /> Contacto de Emergencia</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1">Nombre</label>
+                <input type="text" value={c.contactoEmergencia || ''} onChange={e => updateCliente(c.id, { contactoEmergencia: e.target.value })} placeholder="Familiar o amigo"
+                  className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
+              </div>
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1">Tel&eacute;fono</label>
+                <input type="tel" value={c.telefonoEmergencia || ''} onChange={e => updateCliente(c.id, { telefonoEmergencia: e.target.value })} placeholder="5492211234567"
+                  className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
+              </div>
+            </div>
+          </div>
+
+          {/* Condiciones preexistentes */}
+          <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
+            <h3 className="text-white font-bold mb-2 flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-amber-400" /> Condiciones Preexistentes</h3>
+            <p className="text-white/30 text-[10px] mb-3">Toc&aacute; para agregar/quitar condiciones.</p>
+            {(c.enfermedades || []).length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-3">
+                {c.enfermedades.map(enf => (
+                  <button key={enf} onClick={() => updateCliente(c.id, { enfermedades: c.enfermedades.filter(e => e !== enf) })}
+                    className="flex items-center gap-1 px-2 py-1 bg-red-500/15 text-red-400 border border-red-500/20 rounded-lg text-[10px] font-medium hover:bg-red-500/25 transition-colors">
+                    {enf} <Trash2 className="w-2.5 h-2.5" />
+                  </button>
+                ))}
+              </div>
+            )}
+            <div className="flex flex-wrap gap-1 max-h-28 overflow-y-auto">
+              {['Hipotiroidismo', 'Diabetes', 'Hipertensi\u00f3n', 'Asma', 'Cel\u00edaca', 'Intolerancia lactosa', 'Artritis', 'Osteoporosis', 'Fibromialgia', 'Hernia de disco', 'Escoliosis', 'Tendinitis', 'Cardiopat\u00eda', 'Epilepsia', 'Depresi\u00f3n', 'Ansiedad', 'Apnea del sue\u00f1o', 'Embarazo', 'Sobrepeso/Obesidad', 'Renal', 'Lupus', 'Crohn'].filter(e => !(c.enfermedades || []).includes(e)).map(enf => (
+                <button key={enf} onClick={() => updateCliente(c.id, { enfermedades: [...(c.enfermedades || []), enf] })}
+                  className="px-2 py-1 bg-black/30 text-white/30 border border-dark-border rounded-lg text-[10px] hover:text-amber-400 hover:border-amber-500/20 transition-colors">
+                  {enf}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Declaraciones */}
+          <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
+            <h3 className="text-white font-bold mb-3 flex items-center gap-2"><CheckCircle className="w-4 h-4 text-emerald-400" /> Declaraciones</h3>
+            <div className="space-y-2">
+              <div className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs ${c.esMayorDeEdad ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
+                {c.esMayorDeEdad ? <CheckCircle className="w-3.5 h-3.5" /> : <AlertTriangle className="w-3.5 h-3.5" />}
+                {c.esMayorDeEdad ? 'Mayor de edad verificado' : 'No declar\u00f3 mayor\u00eda de edad'}
+              </div>
+              <div className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs ${c.declaraBuenaSalud ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'}`}>
+                {c.declaraBuenaSalud ? <CheckCircle className="w-3.5 h-3.5" /> : <AlertTriangle className="w-3.5 h-3.5" />}
+                {c.declaraBuenaSalud ? 'Declaraci\u00f3n de buena salud firmada' : 'Sin declaraci\u00f3n de buena salud'}
               </div>
             </div>
           </div>
