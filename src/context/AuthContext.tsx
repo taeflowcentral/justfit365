@@ -121,10 +121,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (error || !data) return false;
 
-    const apellidoLower = apellido.toLowerCase().trim();
-    const matchApellido = (data.apellido as string).toLowerCase().trim() === apellidoLower;
-    const matchEnNombre = (data.nombre as string).toLowerCase().includes(apellidoLower);
-    if (!matchApellido && !matchEnNombre) return false;
+    const input = apellido.toLowerCase().trim().replace(/\s+/g, '');
+    const dbApellido = (data.apellido as string).toLowerCase().trim().replace(/\s+/g, '');
+    const dbNombre = (data.nombre as string).toLowerCase().trim().replace(/\s+/g, '');
+    const dbNombreFull = (data.nombre as string).toLowerCase().trim();
+    const matchApellido = dbApellido === input;
+    const matchEnNombre = dbNombreFull.includes(apellido.toLowerCase().trim());
+    const matchNombreCompleto = dbNombre === input || input === dbNombre;
+    const matchParcial = dbApellido.includes(input) || input.includes(dbApellido);
+    if (!matchApellido && !matchEnNombre && !matchNombreCompleto && !matchParcial) return false;
 
     const u = dbRowToUser(data);
     setUser(u);
