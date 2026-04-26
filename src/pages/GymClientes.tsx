@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Users, Plus, Search, Dumbbell, Utensils, Trash2, User, Phone, Target, Activity, MessageCircle, Printer, Mail, History, Save, Clock } from 'lucide-react';
+import { Users, Plus, Search, Dumbbell, Utensils, Trash2, User, Phone, Target, Activity, MessageCircle, Printer, Mail, History, Save, Clock, TrendingUp, ArrowDown, ArrowUp, Minus, CheckCircle, AlertTriangle, Weight, Ruler, Calendar } from 'lucide-react';
 import { getUserItem, setUserItem } from '../lib/storage';
 import { useAuth } from '../context/AuthContext';
 import { buscarAlimentos } from '../lib/foodDB';
@@ -31,6 +31,8 @@ interface HistorialEntry {
   nota: string;
 }
 
+interface PesoEntry { fecha: string; peso: number }
+
 interface Cliente {
   id: number;
   nombre: string;
@@ -41,6 +43,10 @@ interface Cliente {
   peso: number;
   altura: number;
   edad: number;
+  pesoMeta: number;
+  fechaMeta: string;
+  pesoHistorial: PesoEntry[];
+  nivelActividad: string;
   rutina: ClienteRutina[];
   nutricion: ClienteComida[];
   notas: string;
@@ -54,9 +60,8 @@ export default function GymClientes() {
   const [clientes, setClientes] = useState<Cliente[]>(() => {
     const saved = getUserItem(CLIENTES_KEY);
     if (saved) {
-      // Migrar clientes viejos que no tengan email/historial
       const parsed = JSON.parse(saved);
-      return parsed.map((c: Cliente) => ({ ...c, email: c.email || '', historial: c.historial || [] }));
+      return parsed.map((c: Cliente) => ({ ...c, email: c.email || '', historial: c.historial || [], pesoMeta: c.pesoMeta || 0, fechaMeta: c.fechaMeta || '', pesoHistorial: c.pesoHistorial || [], nivelActividad: c.nivelActividad || 'Intermedio' }));
     }
     return [];
   });
@@ -87,6 +92,7 @@ export default function GymClientes() {
       id: Date.now(), nombre: nuevoCliente.nombre, telefono: nuevoCliente.telefono, email: nuevoCliente.email,
       objetivo: nuevoCliente.objetivo, nivel: nuevoCliente.nivel,
       peso: parseFloat(nuevoCliente.peso) || 70, altura: parseInt(nuevoCliente.altura) || 170, edad: parseInt(nuevoCliente.edad) || 25,
+      pesoMeta: 0, fechaMeta: '', pesoHistorial: [], nivelActividad: 'Intermedio',
       notas: '', rutina: [], nutricion: [], historial: [],
     };
     guardar([...clientes, nuevo]);
@@ -490,39 +496,236 @@ export default function GymClientes() {
       )}
 
       {/* Tab Perfil */}
-      {tab === 'perfil' && (
+      {tab === 'perfil' && (() => {
+        const c = cliente!;
+        const tmb = Math.round(10 * c.peso + 6.25 * c.altura - 5 * c.edad + 5);
+        const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
+        const tdee = Math.round(tmb * (factores[c.nivelActividad || c.nivel] || 1.55));
+        const kgRestantes = c.pesoMeta > 0 ? Math.abs(c.peso - c.pesoMeta) : 0;
+        const quiereBajar = c.pesoMeta > 0 && c.peso > c.pesoMeta;
+        const quiereSubir = c.pesoMeta > 0 && c.peso < c.pesoMeta; void quiereSubir;
+        const diasRestantes = c.fechaMeta ? Math.max(0, Math.round((new Date(c.fechaMeta).getTime() - Date.now()) / 86400000)) : 0;
+        const semanasRestantes = Math.max(1, Math.round(diasRestantes / 7));
+        const kgPorSemana = kgRestantes > 0 ? kgRestantes / semanasRestantes : 0;
+
+        return (
         <div className="space-y-4">
+          {/* Datos editables */}
           <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
-            <h3 className="text-white font-bold mb-4">Datos del cliente</h3>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { label: 'Peso', value: `${cliente!.peso} kg`, icon: Activity },
-                { label: 'Altura', value: `${cliente!.altura} cm`, icon: User },
-                { label: 'Edad', value: `${cliente!.edad} a\u00f1os`, icon: User },
-                { label: 'Objetivo', value: cliente!.objetivo, icon: Target },
-                { label: 'Nivel', value: cliente!.nivel, icon: Activity },
-                { label: 'Tel\u00e9fono', value: cliente!.telefono || '-', icon: Phone },
-              ].map(d => (
-                <div key={d.label} className="bg-black/30 border border-dark-border/50 rounded-xl p-3">
-                  <p className="text-white/40 text-[10px] uppercase tracking-wider flex items-center gap-1"><d.icon className="w-3 h-3" />{d.label}</p>
-                  <p className="text-white font-bold text-sm mt-1">{d.value}</p>
+            <h3 className="text-white font-bold mb-4 flex items-center gap-2"><User className="w-4 h-4 text-electric" /> Datos del cliente</h3>
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1 flex items-center gap-1"><Weight className="w-3 h-3" /> Peso</label>
+                <div className="relative">
+                  <input type="number" min="30" max="300" step="0.1" value={c.peso} onChange={e => updateCliente(c.id, { peso: parseFloat(e.target.value) || c.peso })}
+                    className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 text-[10px]">kg</span>
                 </div>
-              ))}
+              </div>
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1 flex items-center gap-1"><Ruler className="w-3 h-3" /> Altura</label>
+                <div className="relative">
+                  <input type="number" min="100" max="250" value={c.altura} onChange={e => updateCliente(c.id, { altura: parseInt(e.target.value) || c.altura })}
+                    className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 text-[10px]">cm</span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1 flex items-center gap-1"><Calendar className="w-3 h-3" /> Edad</label>
+                <div className="relative">
+                  <input type="number" min="14" max="99" value={c.edad} onChange={e => updateCliente(c.id, { edad: parseInt(e.target.value) || c.edad })}
+                    className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 text-[10px]">a&ntilde;os</span>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mt-3">
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1 flex items-center gap-1"><Target className="w-3 h-3" /> Objetivo</label>
+                <select value={c.objetivo} onChange={e => updateCliente(c.id, { objetivo: e.target.value })}
+                  className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
+                  {['Hipertrofia', 'Tonificacion', 'Perdida de grasa', 'Fuerza', 'Resistencia', 'Salud general'].map(o => <option key={o} value={o} className="bg-dark-800">{o}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1 flex items-center gap-1"><Activity className="w-3 h-3" /> Nivel de actividad</label>
+                <select value={c.nivelActividad || c.nivel} onChange={e => updateCliente(c.id, { nivelActividad: e.target.value, nivel: e.target.value })}
+                  className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
+                  {['Sedentario', 'Principiante', 'Intermedio', 'Avanzado', 'Elite'].map(n => <option key={n} value={n} className="bg-dark-800">{n}</option>)}
+                </select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mt-3">
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1"><Phone className="w-3 h-3 inline mr-1" />Tel&eacute;fono</label>
+                <input type="tel" value={c.telefono} onChange={e => updateCliente(c.id, { telefono: e.target.value })} placeholder="5492211234567"
+                  className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
+              </div>
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1"><Mail className="w-3 h-3 inline mr-1" />Email</label>
+                <input type="email" value={c.email} onChange={e => updateCliente(c.id, { email: e.target.value })} placeholder="cliente@email.com"
+                  className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
+              </div>
             </div>
           </div>
-          {cliente!.email && (
-            <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
-              <p className="text-white/40 text-xs uppercase tracking-wider flex items-center gap-1"><Mail className="w-3 h-3" /> Email</p>
-              <p className="text-white font-bold text-sm mt-1">{cliente!.email}</p>
+
+          {/* TMB/TDEE */}
+          <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
+            <h3 className="text-white font-bold mb-3 flex items-center gap-2"><Activity className="w-4 h-4 text-emerald-400" /> Perfil Metab&oacute;lico</h3>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-black/40 border border-dark-border rounded-xl p-3 text-center">
+                <p className="text-white/50 text-[10px] uppercase tracking-wider">TMB</p>
+                <p className="text-white font-black text-lg">{tmb}</p>
+                <p className="text-white/30 text-[10px]">kcal</p>
+              </div>
+              <div className="bg-black/40 border border-electric/10 rounded-xl p-3 text-center">
+                <p className="text-white/50 text-[10px] uppercase tracking-wider">TDEE</p>
+                <p className="text-electric font-black text-lg">{tdee}</p>
+                <p className="text-white/30 text-[10px]">kcal</p>
+              </div>
+              <div className="bg-black/40 border border-dark-border rounded-xl p-3 text-center">
+                <p className="text-white/50 text-[10px] uppercase tracking-wider">IMC</p>
+                <p className="text-white font-black text-lg">{(c.peso / ((c.altura / 100) ** 2)).toFixed(1)}</p>
+                <p className="text-white/30 text-[10px]">kg/m&sup2;</p>
+              </div>
             </div>
-          )}
+          </div>
+
+          {/* Meta de peso */}
+          <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
+            <h3 className="text-white font-bold mb-3 flex items-center gap-2"><Target className="w-4 h-4 text-neon" /> Meta de Peso</h3>
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1">Peso deseado</label>
+                <div className="relative">
+                  <input type="number" min="30" max="250" step="0.5" value={c.pesoMeta || ''} onChange={e => updateCliente(c.id, { pesoMeta: parseFloat(e.target.value) || 0 })} placeholder={c.peso.toString()}
+                    className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
+                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/20 text-[10px]">kg</span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1">Fecha objetivo</label>
+                <input type="date" value={c.fechaMeta} onChange={e => updateCliente(c.id, { fechaMeta: e.target.value })}
+                  className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
+              </div>
+            </div>
+
+            {c.pesoMeta > 0 && kgRestantes > 0.1 && (
+              <>
+                {/* Actual / Meta / Faltan */}
+                <div className="grid grid-cols-3 gap-2 mb-3">
+                  <div className="bg-black/40 rounded-xl p-2.5 text-center border border-dark-border">
+                    <p className="text-white/50 text-[10px] uppercase">Actual</p>
+                    <p className="text-white font-black text-lg">{c.peso}</p>
+                    <p className="text-white/30 text-[10px]">kg</p>
+                  </div>
+                  <div className="bg-black/40 rounded-xl p-2.5 text-center border border-electric/15">
+                    <p className="text-white/50 text-[10px] uppercase">Meta</p>
+                    <p className="text-electric font-black text-lg">{c.pesoMeta}</p>
+                    <p className="text-white/30 text-[10px]">kg</p>
+                  </div>
+                  <div className="bg-black/40 rounded-xl p-2.5 text-center border border-dark-border">
+                    <p className="text-white/50 text-[10px] uppercase">Faltan</p>
+                    <p className={`font-black text-lg ${quiereBajar ? 'text-red-400' : 'text-emerald-400'}`}>{kgRestantes.toFixed(1)}</p>
+                    <p className="text-white/30 text-[10px] flex items-center justify-center gap-0.5">kg {quiereBajar ? <ArrowDown className="w-2.5 h-2.5" /> : <ArrowUp className="w-2.5 h-2.5" />}</p>
+                  </div>
+                </div>
+
+                {/* Barra de progreso */}
+                <div className="mb-3">
+                  <div className="w-full h-3 bg-dark-600 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-electric to-neon rounded-full transition-all" style={{ width: `${Math.max(5, Math.min(95, 50))}%` }} />
+                  </div>
+                </div>
+
+                {/* Analisis del ritmo */}
+                {c.fechaMeta && diasRestantes > 0 && (
+                  <div className={`rounded-xl p-3 border ${
+                    kgPorSemana <= 1.0 && kgPorSemana >= 0.1 ? 'bg-emerald-500/10 border-emerald-500/20'
+                    : kgPorSemana > 1.0 ? 'bg-red-500/10 border-red-500/20'
+                    : 'bg-amber-500/10 border-amber-500/20'
+                  }`}>
+                    <div className="flex items-start gap-2">
+                      {kgPorSemana <= 1.0 && kgPorSemana >= 0.1 ? <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                        : kgPorSemana > 1.0 ? <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                        : <Target className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />}
+                      <div>
+                        <p className={`font-bold text-xs ${
+                          kgPorSemana <= 1.0 && kgPorSemana >= 0.1 ? 'text-emerald-400'
+                          : kgPorSemana > 1.0 ? 'text-red-400' : 'text-amber-400'
+                        }`}>
+                          {kgPorSemana <= 1.0 && kgPorSemana >= 0.1 ? 'Ritmo saludable' : kgPorSemana > 1.0 ? 'Ritmo agresivo' : 'Ritmo lento'}
+                        </p>
+                        <p className="text-white/50 text-[11px] mt-0.5">
+                          Necesita {quiereBajar ? 'bajar' : 'subir'} <strong className="text-white/70">{kgPorSemana.toFixed(2)} kg/semana</strong> en {semanasRestantes} semanas ({diasRestantes} d&iacute;as).
+                          {kgPorSemana > 1.0 && <span className="text-red-400"> Recomendado: m&aacute;x 1 kg/sem.</span>}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
+            {c.pesoMeta > 0 && kgRestantes <= 0.1 && (
+              <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-emerald-400" />
+                <p className="text-emerald-400 font-bold text-sm">En su peso objetivo.</p>
+              </div>
+            )}
+          </div>
+
+          {/* Registrar peso (evolucion) */}
+          <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
+            <h3 className="text-white font-bold mb-3 flex items-center gap-2"><TrendingUp className="w-4 h-4 text-electric" /> Evoluci&oacute;n de Peso</h3>
+            <div className="flex gap-2 mb-3">
+              <input type="number" step="0.1" min="30" max="300" placeholder="Peso actual"
+                id={`peso-input-${c.id}`}
+                className="flex-1 px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" />
+              <button onClick={() => {
+                const input = document.getElementById(`peso-input-${c.id}`) as HTMLInputElement;
+                const val = parseFloat(input?.value);
+                if (!val || val < 30) return;
+                const fecha = new Date().toLocaleDateString('es-AR');
+                const hist = [...(c.pesoHistorial || []), { fecha, peso: val }].slice(-20);
+                updateCliente(c.id, { peso: val, pesoHistorial: hist });
+                if (input) input.value = '';
+              }} className="px-4 py-2.5 bg-electric/15 border border-electric/20 text-electric rounded-xl text-xs font-bold hover:bg-electric/25 transition-all flex items-center gap-1.5">
+                <Plus className="w-3.5 h-3.5" /> Registrar
+              </button>
+            </div>
+
+            {(c.pesoHistorial || []).length > 0 ? (
+              <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                {[...(c.pesoHistorial || [])].reverse().map((p, i) => (
+                  <div key={i} className="flex items-center justify-between bg-black/30 rounded-lg px-3 py-2">
+                    <span className="text-white/40 text-xs flex items-center gap-1"><Clock className="w-3 h-3" /> {p.fecha}</span>
+                    <span className="text-white font-bold text-sm">{p.peso} kg</span>
+                    {i < (c.pesoHistorial || []).length - 1 && (() => {
+                      const prev = [...(c.pesoHistorial || [])].reverse()[i + 1];
+                      const diff = p.peso - prev.peso;
+                      if (Math.abs(diff) < 0.05) return <Minus className="w-3 h-3 text-white/20" />;
+                      return diff < 0
+                        ? <ArrowDown className="w-3 h-3 text-emerald-400" />
+                        : <ArrowUp className="w-3 h-3 text-red-400" />;
+                    })()}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-white/30 text-xs text-center py-3">Sin registros. Registr&aacute; el peso del cliente para ver la evoluci&oacute;n.</p>
+            )}
+          </div>
+
+          {/* Notas */}
           <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
             <h3 className="text-white font-bold mb-2">Notas del entrenador</h3>
-            <textarea value={cliente!.notas} onChange={e => updateCliente(cliente!.id, { notas: e.target.value })} rows={4} placeholder="Lesiones, restricciones, observaciones..."
+            <textarea value={c.notas} onChange={e => updateCliente(c.id, { notas: e.target.value })} rows={4} placeholder="Lesiones, restricciones, observaciones..."
               className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30 resize-none" />
           </div>
         </div>
-      )}
+        );
+      })()}
 
       {/* Tab Historial */}
       {tab === 'historial' && (
