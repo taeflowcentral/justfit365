@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, Zap, Sparkles, RotateCcw, Target, ArrowLeftRight, ShoppingCart, MessageCircle, CheckSquare, Square, X } from 'lucide-react';
 import FoodAlternatives, { findAlternatives } from '../components/FoodAlternatives';
-import { buscarAlimentos } from '../lib/foodDB';
+import { buscarAlimentos, type AlimentoBase } from '../lib/foodDB';
 import { useAuth } from '../context/AuthContext';
 import ShareButtons, { generateNutricionText, shareWhatsApp, printContent } from '../components/ShareButtons';
 import { getUserItem, setUserItem } from '../lib/storage';
@@ -251,6 +251,8 @@ export default function Nutricion() {
   };
   const [nuevaComida, setNuevaComida] = useState({ nombre: '', hora: '12:00' });
   const [nuevoItem, setNuevoItem] = useState<Alimento>({ id: 0, alimento: '', porcion: '', cal: 0, prot: 0, carb: 0, grasa: 0 });
+  const [cantidadItem, setCantidadItem] = useState(1);
+  const [alimentoBase, setAlimentoBase] = useState<AlimentoBase | null>(null);
 
   const guardar = (c: Comida[]) => {
     const updated = { ...planSemanal, [diaActivo]: c };
@@ -738,7 +740,7 @@ export default function Nutricion() {
 
       {/* Modal agregar alimento */}
       {showAddItem !== null && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => setShowAddItem(null)}>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => { setShowAddItem(null); setAlimentoBase(null); setCantidadItem(1); }}>
           <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
             <h2 className="text-lg font-black text-white mb-4 flex items-center gap-2"><Plus className="w-5 h-5 text-emerald-400" /> Agregar Alimento</h2>
             <div className="space-y-3">
@@ -746,19 +748,23 @@ export default function Nutricion() {
                 <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Buscar alimento</label>
                 <div className="relative">
                   <input type="text" value={nuevoItem.alimento}
-                    onChange={e => setNuevoItem(p => ({ ...p, alimento: e.target.value }))}
+                    onChange={e => { setNuevoItem(p => ({ ...p, alimento: e.target.value })); setAlimentoBase(null); setCantidadItem(1); }}
                     placeholder="Empez\u00e1 a escribir... ej: Pollo, Avena, Banana"
                     className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
-                  {nuevoItem.alimento.length >= 2 && buscarAlimentos(nuevoItem.alimento).length > 0 && (
+                  {nuevoItem.alimento.length >= 2 && !alimentoBase && buscarAlimentos(nuevoItem.alimento).length > 0 && (
                     <div className="absolute top-full left-0 right-0 mt-1 bg-dark-800 border border-dark-border rounded-xl shadow-2xl max-h-60 overflow-y-auto z-10">
                       {buscarAlimentos(nuevoItem.alimento).map((a, i) => (
                         <button key={i} type="button"
-                          onClick={() => setNuevoItem({
-                            id: 0,
-                            alimento: a.nombre,
-                            porcion: a.porcionDefault,
-                            cal: a.cal, prot: a.prot, carb: a.carb, grasa: a.grasa,
-                          })}
+                          onClick={() => {
+                            setAlimentoBase(a);
+                            setCantidadItem(1);
+                            setNuevoItem({
+                              id: 0,
+                              alimento: a.nombre,
+                              porcion: a.unidad ? `1 ${a.unidad}` : a.porcionDefault,
+                              cal: a.cal, prot: a.prot, carb: a.carb, grasa: a.grasa,
+                            });
+                          }}
                           className="w-full px-3 py-2 text-left hover:bg-emerald-500/10 transition-colors border-b border-dark-border/30 last:border-0">
                           <p className="text-white text-sm">{a.nombre}</p>
                           <p className="text-white/40 text-[10px]">{a.porcionDefault} &middot; {a.cal} cal &middot; {a.prot}g P</p>
@@ -768,29 +774,86 @@ export default function Nutricion() {
                   )}
                 </div>
               </div>
-              <div>
-                <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Porci&oacute;n</label>
-                <input type="text" value={nuevoItem.porcion} onChange={e => setNuevoItem(p => ({ ...p, porcion: e.target.value }))} placeholder="Ej: 2 unidades, 100g"
-                  className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
-              </div>
+
+              {/* Cantidad - solo si tiene unidad contable */}
+              {alimentoBase && (
+                <div>
+                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Cantidad {alimentoBase.unidad ? `(${alimentoBase.unidad}${cantidadItem > 1 ? 's' : ''})` : ''}</label>
+                  <div className="flex items-center gap-3">
+                    <button type="button" onClick={() => {
+                      const n = Math.max(1, cantidadItem - 1);
+                      setCantidadItem(n);
+                      setNuevoItem(p => ({
+                        ...p,
+                        porcion: alimentoBase.unidad ? `${n} ${alimentoBase.unidad}${n > 1 ? 's' : ''}` : alimentoBase.porcionDefault,
+                        cal: Math.round(alimentoBase.cal * n),
+                        prot: Math.round(alimentoBase.prot * n * 10) / 10,
+                        carb: Math.round(alimentoBase.carb * n * 10) / 10,
+                        grasa: Math.round(alimentoBase.grasa * n * 10) / 10,
+                      }));
+                    }} className="w-10 h-10 bg-white/5 hover:bg-white/10 text-white rounded-xl flex items-center justify-center text-xl font-bold border border-dark-border">-</button>
+                    <input type="number" min="1" max="20" value={cantidadItem}
+                      onChange={e => {
+                        const n = Math.max(1, parseInt(e.target.value) || 1);
+                        setCantidadItem(n);
+                        setNuevoItem(p => ({
+                          ...p,
+                          porcion: alimentoBase.unidad ? `${n} ${alimentoBase.unidad}${n > 1 ? 's' : ''}` : alimentoBase.porcionDefault,
+                          cal: Math.round(alimentoBase.cal * n),
+                          prot: Math.round(alimentoBase.prot * n * 10) / 10,
+                          carb: Math.round(alimentoBase.carb * n * 10) / 10,
+                          grasa: Math.round(alimentoBase.grasa * n * 10) / 10,
+                        }));
+                      }}
+                      className="w-20 px-3 py-2.5 bg-black/60 border border-electric/30 rounded-xl text-white text-lg text-center font-black focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                    <button type="button" onClick={() => {
+                      const n = Math.min(20, cantidadItem + 1);
+                      setCantidadItem(n);
+                      setNuevoItem(p => ({
+                        ...p,
+                        porcion: alimentoBase.unidad ? `${n} ${alimentoBase.unidad}${n > 1 ? 's' : ''}` : alimentoBase.porcionDefault,
+                        cal: Math.round(alimentoBase.cal * n),
+                        prot: Math.round(alimentoBase.prot * n * 10) / 10,
+                        carb: Math.round(alimentoBase.carb * n * 10) / 10,
+                        grasa: Math.round(alimentoBase.grasa * n * 10) / 10,
+                      }));
+                    }} className="w-10 h-10 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 rounded-xl flex items-center justify-center text-xl font-bold border border-emerald-500/20">+</button>
+                    <span className="text-white/30 text-xs">{alimentoBase.unidad || alimentoBase.porcionDefault}</span>
+                  </div>
+                </div>
+              )}
+
+              {!alimentoBase && (
+                <div>
+                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Porci&oacute;n</label>
+                  <input type="text" value={nuevoItem.porcion} onChange={e => setNuevoItem(p => ({ ...p, porcion: e.target.value }))} placeholder="Ej: 2 unidades, 100g"
+                    className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                </div>
+              )}
+
               <div className="grid grid-cols-4 gap-2">
                 {[
-                  { field: 'cal' as const, label: 'Cal' },
-                  { field: 'prot' as const, label: 'g P' },
-                  { field: 'carb' as const, label: 'g C' },
-                  { field: 'grasa' as const, label: 'g G' },
+                  { field: 'cal' as const, label: 'Cal', color: 'text-orange-400' },
+                  { field: 'prot' as const, label: 'g P', color: 'text-electric' },
+                  { field: 'carb' as const, label: 'g C', color: 'text-amber-400' },
+                  { field: 'grasa' as const, label: 'g G', color: 'text-pink-400' },
                 ].map(f => (
                   <div key={f.field}>
-                    <label className="block text-[10px] text-white/40 uppercase tracking-wider mb-1">{f.label}</label>
-                    <input type="number" min="0" value={nuevoItem[f.field] || ''} onChange={e => setNuevoItem(p => ({ ...p, [f.field]: parseInt(e.target.value) || 0 }))}
+                    <label className={`block text-[10px] ${f.color} uppercase tracking-wider mb-1`}>{f.label}</label>
+                    <input type="number" min="0" value={nuevoItem[f.field] || ''} onChange={e => { setNuevoItem(p => ({ ...p, [f.field]: parseInt(e.target.value) || 0 })); setAlimentoBase(null); }}
                       className="w-full px-2 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" />
                   </div>
                 ))}
               </div>
-              <p className="text-white/30 text-[10px] text-center">Los valores se completan autom&aacute;ticamente al elegir un alimento de la lista. Pod&eacute;s ajustarlos manualmente.</p>
+              {alimentoBase && cantidadItem > 1 && (
+                <p className="text-emerald-400/60 text-[10px] text-center">
+                  {cantidadItem} x {alimentoBase.nombre} = {nuevoItem.cal} cal, {nuevoItem.prot}g P, {nuevoItem.carb}g C, {nuevoItem.grasa}g G
+                </p>
+              )}
+              {!alimentoBase && <p className="text-white/30 text-[10px] text-center">Los valores se completan autom&aacute;ticamente al elegir un alimento de la lista. Pod&eacute;s ajustarlos manualmente.</p>}
               <div className="flex gap-3 pt-2">
-                <button onClick={() => setShowAddItem(null)} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
-                <button onClick={() => addItem(showAddItem)} disabled={!nuevoItem.alimento.trim()} className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-400 text-black rounded-xl text-sm font-black uppercase tracking-wider disabled:opacity-30">Agregar</button>
+                <button onClick={() => { setShowAddItem(null); setAlimentoBase(null); setCantidadItem(1); }} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
+                <button onClick={() => { addItem(showAddItem); setAlimentoBase(null); setCantidadItem(1); }} disabled={!nuevoItem.alimento.trim()} className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-400 text-black rounded-xl text-sm font-black uppercase tracking-wider disabled:opacity-30">Agregar</button>
               </div>
             </div>
           </div>

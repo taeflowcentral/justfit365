@@ -10,6 +10,7 @@ export interface AlimentoBase {
   grasa: number;
   // Si tiene factor, los valores son por la porcionDefault
   // Si no, son por 100g y se ajustan
+  unidad?: string; // unidad contable (ej: "unidad", "scoop", "rebanada")
 }
 
 const alimentosDB: AlimentoBase[] = [
@@ -37,13 +38,13 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Langostinos', porcionDefault: '100g', cal: 100, prot: 21, carb: 1, grasa: 1 },
 
   // Huevos y lacteos
-  { nombre: 'Huevo entero', porcionDefault: '1 unidad', cal: 70, prot: 6, carb: 1, grasa: 5 },
-  { nombre: 'Clara de huevo', porcionDefault: '1 clara', cal: 17, prot: 4, carb: 0, grasa: 0 },
-  { nombre: 'Yema de huevo', porcionDefault: '1 yema', cal: 55, prot: 3, carb: 1, grasa: 5 },
+  { nombre: 'Huevo entero', porcionDefault: '1 unidad', cal: 70, prot: 6, carb: 1, grasa: 5, unidad: 'unidad' },
+  { nombre: 'Clara de huevo', porcionDefault: '1 clara', cal: 17, prot: 4, carb: 0, grasa: 0, unidad: 'clara' },
+  { nombre: 'Yema de huevo', porcionDefault: '1 yema', cal: 55, prot: 3, carb: 1, grasa: 5, unidad: 'yema' },
   { nombre: 'Leche descremada', porcionDefault: '200ml', cal: 70, prot: 7, carb: 10, grasa: 1 },
   { nombre: 'Leche entera', porcionDefault: '200ml', cal: 130, prot: 7, carb: 10, grasa: 7 },
   { nombre: 'Yogur natural', porcionDefault: '200g', cal: 120, prot: 8, carb: 12, grasa: 5 },
-  { nombre: 'Yogur griego', porcionDefault: '200g', cal: 130, prot: 20, carb: 6, grasa: 3 },
+  { nombre: 'Yogur griego', porcionDefault: '1 pote (200g)', cal: 130, prot: 20, carb: 6, grasa: 3, unidad: 'pote' },
   { nombre: 'Yogur descremado', porcionDefault: '200g', cal: 80, prot: 8, carb: 12, grasa: 0 },
   { nombre: 'Queso cottage', porcionDefault: '100g', cal: 95, prot: 12, carb: 3, grasa: 4 },
   { nombre: 'Ricota descremada', porcionDefault: '100g', cal: 80, prot: 10, carb: 4, grasa: 2 },
@@ -51,8 +52,9 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Queso cremoso', porcionDefault: '100g', cal: 290, prot: 18, carb: 2, grasa: 24 },
   { nombre: 'Queso untable light', porcionDefault: '100g', cal: 150, prot: 12, carb: 4, grasa: 10 },
   { nombre: 'Mozzarella', porcionDefault: '100g', cal: 280, prot: 22, carb: 2, grasa: 20 },
-  { nombre: 'Caseina', porcionDefault: '1 scoop (30g)', cal: 120, prot: 24, carb: 4, grasa: 1 },
-  { nombre: 'Whey protein', porcionDefault: '1 scoop (30g)', cal: 120, prot: 24, carb: 3, grasa: 1 },
+  { nombre: 'Caseina', porcionDefault: '1 scoop (30g)', cal: 120, prot: 24, carb: 4, grasa: 1, unidad: 'scoop' },
+  { nombre: 'Whey protein', porcionDefault: '1 scoop (30g)', cal: 120, prot: 24, carb: 3, grasa: 1, unidad: 'scoop' },
+  { nombre: 'Colageno hidrolizado', porcionDefault: '1 scoop (10g)', cal: 36, prot: 9, carb: 0, grasa: 0, unidad: 'scoop' },
 
   // Cereales y granos
   { nombre: 'Avena', porcionDefault: '50g secos', cal: 190, prot: 7, carb: 33, grasa: 3 },
@@ -63,12 +65,12 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Fideos integrales cocidos', porcionDefault: '150g', cal: 175, prot: 6, carb: 34, grasa: 1 },
   { nombre: 'Cous cous cocido', porcionDefault: '150g', cal: 170, prot: 6, carb: 33, grasa: 0 },
   { nombre: 'Polenta cocida', porcionDefault: '200g', cal: 150, prot: 4, carb: 32, grasa: 1 },
-  { nombre: 'Pan integral', porcionDefault: '2 rebanadas', cal: 160, prot: 8, carb: 28, grasa: 2 },
+  { nombre: 'Pan integral', porcionDefault: '1 rebanada', cal: 80, prot: 4, carb: 14, grasa: 1, unidad: 'rebanada' },
   { nombre: 'Pan blanco', porcionDefault: '2 rebanadas', cal: 180, prot: 6, carb: 34, grasa: 2 },
   { nombre: 'Pan de centeno', porcionDefault: '2 rebanadas', cal: 160, prot: 6, carb: 30, grasa: 2 },
-  { nombre: 'Tortilla de maiz', porcionDefault: '1 unidad', cal: 60, prot: 2, carb: 12, grasa: 1 },
-  { nombre: 'Wrap integral', porcionDefault: '1 unidad', cal: 130, prot: 4, carb: 24, grasa: 3 },
-  { nombre: 'Galletas de arroz', porcionDefault: '4 unidades', cal: 140, prot: 3, carb: 30, grasa: 1 },
+  { nombre: 'Tortilla de maiz', porcionDefault: '1 unidad', cal: 60, prot: 2, carb: 12, grasa: 1, unidad: 'unidad' },
+  { nombre: 'Wrap integral', porcionDefault: '1 unidad', cal: 130, prot: 4, carb: 24, grasa: 3, unidad: 'unidad' },
+  { nombre: 'Galletas de arroz', porcionDefault: '1 unidad', cal: 35, prot: 1, carb: 8, grasa: 0, unidad: 'unidad' },
 
   // Tuberculos y feculas
   { nombre: 'Papa hervida', porcionDefault: '200g', cal: 170, prot: 4, carb: 38, grasa: 0 },
@@ -104,7 +106,7 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Ensalada mixta', porcionDefault: '200g', cal: 30, prot: 2, carb: 6, grasa: 0 },
 
   // Frutas
-  { nombre: 'Banana', porcionDefault: '1 unidad', cal: 105, prot: 1, carb: 27, grasa: 0 },
+  { nombre: 'Banana', porcionDefault: '1 unidad', cal: 105, prot: 1, carb: 27, grasa: 0, unidad: 'unidad' },
   { nombre: 'Manzana', porcionDefault: '1 unidad', cal: 95, prot: 0, carb: 25, grasa: 0 },
   { nombre: 'Pera', porcionDefault: '1 unidad', cal: 100, prot: 1, carb: 26, grasa: 0 },
   { nombre: 'Naranja', porcionDefault: '1 unidad', cal: 65, prot: 1, carb: 16, grasa: 0 },
@@ -118,7 +120,7 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Sandia', porcionDefault: '300g', cal: 90, prot: 2, carb: 22, grasa: 0 },
   { nombre: 'Melon', porcionDefault: '300g', cal: 100, prot: 2, carb: 24, grasa: 0 },
   { nombre: 'Anana', porcionDefault: '150g', cal: 75, prot: 1, carb: 20, grasa: 0 },
-  { nombre: 'Palta', porcionDefault: '1/2 unidad', cal: 160, prot: 2, carb: 9, grasa: 15 },
+  { nombre: 'Palta', porcionDefault: '1/2 unidad', cal: 160, prot: 2, carb: 9, grasa: 15, unidad: 'mitad' },
 
   // Frutos secos y semillas
   { nombre: 'Almendras', porcionDefault: '15g', cal: 90, prot: 3, carb: 3, grasa: 8 },
@@ -145,6 +147,14 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Mermelada light', porcionDefault: '15g', cal: 25, prot: 0, carb: 6, grasa: 0 },
   { nombre: 'Hummus', porcionDefault: '50g', cal: 85, prot: 4, carb: 7, grasa: 5 },
   { nombre: 'Granola sin azucar', porcionDefault: '60g', cal: 280, prot: 8, carb: 45, grasa: 8 },
+  { nombre: 'Canela de Ceilon', porcionDefault: '1 cdta (3g)', cal: 6, prot: 0, carb: 2, grasa: 0, unidad: 'cdta' },
+  { nombre: 'Arandanos secos', porcionDefault: '30g', cal: 90, prot: 0, carb: 22, grasa: 0 },
+  { nombre: 'Crema de mani', porcionDefault: '15g', cal: 90, prot: 4, carb: 3, grasa: 8, unidad: 'cda' },
+  { nombre: 'Dulce de batata', porcionDefault: '30g', cal: 70, prot: 0, carb: 17, grasa: 0 },
+  { nombre: 'Queso crema light', porcionDefault: '30g', cal: 50, prot: 3, carb: 2, grasa: 4 },
+  { nombre: 'Leche de almendras', porcionDefault: '200ml', cal: 30, prot: 1, carb: 1, grasa: 3 },
+  { nombre: 'Cafe solo', porcionDefault: '1 taza', cal: 2, prot: 0, carb: 0, grasa: 0, unidad: 'taza' },
+  { nombre: 'Te verde', porcionDefault: '1 taza', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'taza' },
 ];
 
 function normalizar(s: string): string {
