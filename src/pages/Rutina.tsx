@@ -205,8 +205,10 @@ export default function Rutina() {
     if (nuevos.length === 0) nuevos = ['Descanso'];
     const tipoFinal = nuevos.join(' + ');
     setSemana(prev => prev.map((d, i) => i === index ? { ...d, tipo: tipoFinal } : d));
-    if (!(ejerciciosPorDia[index]?.length > 0) && tipoFinal !== 'Descanso') {
-      // Cargar ejercicios de todos los tipos seleccionados
+    // Regenerar ejercicios cuando cambia el tipo de entrenamiento
+    if (tipoFinal === 'Descanso') {
+      setEjerciciosPorDia(prev => ({ ...prev, [index]: [] }));
+    } else {
       const ejs: typeof ejerciciosPorDia[0] = [];
       nuevos.forEach(t => {
         const base = generarEjerciciosParaDia(t);
@@ -214,6 +216,17 @@ export default function Rutina() {
       });
       setEjerciciosPorDia(prev => ({ ...prev, [index]: ejs }));
     }
+  };
+
+  const regenerarEjerciciosDia = () => {
+    const tipos = (semana[diaActivo]?.tipo || '').split(' + ').filter(t => t && t !== 'Descanso');
+    if (tipos.length === 0) return;
+    const ejs: typeof ejerciciosPorDia[0] = [];
+    tipos.forEach(t => {
+      const base = generarEjerciciosParaDia(t);
+      base.forEach(e => ejs.push({ ...e, id: e.id + Math.random() }));
+    });
+    setEjerciciosPorDia(prev => ({ ...prev, [diaActivo]: ejs }));
   };
   const [showAddModal, setShowAddModal] = useState(false);
   const [showIllustration, setShowIllustration] = useState<string | null>(null);
@@ -275,9 +288,14 @@ export default function Rutina() {
             <Dumbbell className="w-7 h-7 text-purple-400" /> Mi Rutina
           </h1>
           {tipoActivo !== 'Descanso' && (
-            <button onClick={() => setShowAddModal(true)} className="flex items-center gap-1.5 px-3 py-2 bg-electric/15 border border-electric/20 text-electric rounded-xl text-xs font-bold hover:bg-electric/25 transition-all">
-              <Plus className="w-3.5 h-3.5" /> Ejercicio
-            </button>
+            <div className="flex gap-2">
+              <button onClick={regenerarEjerciciosDia} className="flex items-center gap-1.5 px-3 py-2 bg-purple-500/15 border border-purple-500/20 text-purple-400 rounded-xl text-xs font-bold hover:bg-purple-500/25 transition-all">
+                <RotateCcw className="w-3.5 h-3.5" /> Regenerar
+              </button>
+              <button onClick={() => setShowAddModal(true)} className="flex items-center gap-1.5 px-3 py-2 bg-electric/15 border border-electric/20 text-electric rounded-xl text-xs font-bold hover:bg-electric/25 transition-all">
+                <Plus className="w-3.5 h-3.5" /> Ejercicio
+              </button>
+            </div>
           )}
         </div>
         <p className="text-white/40 text-sm mt-1">
@@ -461,7 +479,7 @@ export default function Rutina() {
           <div className="bg-purple-500/5 border border-purple-500/20 rounded-2xl p-4 flex items-start gap-3">
             <Dumbbell className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
             <p className="text-white/70 text-sm">
-              <strong className="text-white">Tip:</strong> Click en un d&iacute;a de la semana para ver su rutina. "Editar d&iacute;as" cambia el tipo y genera ejercicios autom&aacute;ticamente. Todos los cambios que hagas se guardan.
+              <strong className="text-white">Tip:</strong> Usa "Editar dias" para cambiar el tipo de entrenamiento de cada dia. Los ejercicios se actualizan automaticamente. "Regenerar" recarga los ejercicios sugeridos para el tipo actual. Podes agregar, editar o eliminar ejercicios individuales.
             </p>
           </div>
         </>
