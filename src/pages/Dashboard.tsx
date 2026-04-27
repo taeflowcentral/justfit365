@@ -86,6 +86,7 @@ export default function Dashboard() {
     return getUserItem('jf365_fecha_meta') || '';
   });
   const [editandoMeta, setEditandoMeta] = useState(false);
+  const [asesorModal, setAsesorModal] = useState<'nutricional' | 'deportivo' | null>(null);
 
   const guardarMeta = () => {
     setUserItem('jf365_peso_meta', pesoMeta.toString());
@@ -428,8 +429,8 @@ export default function Dashboard() {
 
       {/* Contactar asesores */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-        <a href="https://wa.me/5492216806000?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20nutricional" target="_blank" rel="noopener noreferrer"
-          className="block bg-gradient-to-br from-emerald-900/30 to-emerald-800/10 border border-emerald-500/15 rounded-2xl p-4 hover:border-emerald-500/30 transition-all group">
+        <button onClick={() => setAsesorModal('nutricional')}
+          className="block bg-gradient-to-br from-emerald-900/30 to-emerald-800/10 border border-emerald-500/15 rounded-2xl p-4 hover:border-emerald-500/30 transition-all text-left">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-500/15 rounded-xl flex items-center justify-center">
               <MessageCircle className="w-5 h-5 text-emerald-400" />
@@ -439,9 +440,9 @@ export default function Dashboard() {
               <p className="text-white/40 text-xs mt-0.5">Consulta personalizada por WhatsApp</p>
             </div>
           </div>
-        </a>
-        <a href="https://wa.me/5492216035986?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20deportivo" target="_blank" rel="noopener noreferrer"
-          className="block bg-gradient-to-br from-purple-900/30 to-purple-800/10 border border-purple-500/15 rounded-2xl p-4 hover:border-purple-500/30 transition-all group">
+        </button>
+        <button onClick={() => setAsesorModal('deportivo')}
+          className="block bg-gradient-to-br from-purple-900/30 to-purple-800/10 border border-purple-500/15 rounded-2xl p-4 hover:border-purple-500/30 transition-all text-left">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-purple-500/15 rounded-xl flex items-center justify-center">
               <MessageCircle className="w-5 h-5 text-purple-400" />
@@ -451,8 +452,46 @@ export default function Dashboard() {
               <p className="text-white/40 text-xs mt-0.5">Consulta personalizada por WhatsApp</p>
             </div>
           </div>
-        </a>
+        </button>
       </div>
+
+      {/* Modal confirmacion asesor */}
+      {asesorModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => setAsesorModal(null)}>
+          <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-sm p-6 text-center" onClick={e => e.stopPropagation()}>
+            <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl flex items-center justify-center ${asesorModal === 'nutricional' ? 'bg-emerald-500/15' : 'bg-purple-500/15'}`}>
+              <MessageCircle className={`w-7 h-7 ${asesorModal === 'nutricional' ? 'text-emerald-400' : 'text-purple-400'}`} />
+            </div>
+            <h3 className="text-white font-bold text-lg mb-2">
+              Asesor {asesorModal === 'nutricional' ? 'Nutricional' : 'Deportivo'}
+            </h3>
+            <p className="text-white/50 text-sm mb-4">
+              Vas a ser derivado a un profesional por WhatsApp.
+            </p>
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 mb-5">
+              <p className="text-amber-400 text-sm font-semibold">
+                Esta consulta tiene un costo adicional
+              </p>
+              <p className="text-white/40 text-xs mt-1">
+                El profesional te informara sobre tarifas y disponibilidad.
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button onClick={() => setAsesorModal(null)} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">
+                Cancelar
+              </button>
+              <a href={asesorModal === 'nutricional'
+                  ? 'https://wa.me/5492216806000?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20nutricional'
+                  : 'https://wa.me/5492216035986?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20deportivo'}
+                target="_blank" rel="noopener noreferrer"
+                onClick={() => setAsesorModal(null)}
+                className={`flex-1 py-3 rounded-xl text-sm font-black uppercase tracking-wider text-center ${asesorModal === 'nutricional' ? 'bg-emerald-500 text-black' : 'bg-purple-500 text-white'}`}>
+                Contactar
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Perfil metabolico compacto */}
       <div className="bg-dark-800 border border-dark-border rounded-2xl p-4">
