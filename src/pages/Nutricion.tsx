@@ -212,7 +212,7 @@ export default function Nutricion() {
     return {};
   });
   const comidas = planSemanal[diaActivo] || [];
-  const [notaIA, setNotaIA] = useState(() => getUserItem(PLAN_KEY + '_nota') || '');
+  const [notaIAGuardada, setNotaIAGuardada] = useState(() => getUserItem(PLAN_KEY + '_nota') || '');
   const [editandoComida, setEditandoComida] = useState<number | null>(null);
   const [editandoItem, setEditandoItem] = useState<number | null>(null);
   const [generando, setGenerando] = useState(false);
@@ -266,7 +266,7 @@ export default function Nutricion() {
   };
 
   const guardarNota = (n: string) => {
-    setNotaIA(n);
+    setNotaIAGuardada(n);
     setUserItem(PLAN_KEY + '_nota', n);
   };
 
@@ -412,6 +412,37 @@ export default function Nutricion() {
     setUserItem(PLAN_KEY + '_cal_objetivo', val.toString());
   };
 
+  // Nota dinamica que se recalcula segun el dia activo
+  const DIAS_NOMBRE = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
+  const tipoDiaActivo = rutinaSemanal[diaActivo]?.tipo || 'Descanso';
+  const esDescansoHoy = tipoDiaActivo === 'Descanso' || tipoDiaActivo === '';
+  const notaIA = perfil && comidas.length > 0 ? (() => {
+    const pesoU = perfil.peso;
+    const edadU = perfil.edad;
+    const nivelU = perfil.nivelActividad || 'Intermedio';
+    const objetivoU = perfil.objetivo || '';
+
+    let textoObjetivo = 'mantenimiento (comer al nivel de tu gasto)';
+    if (esDeficit) textoObjetivo = `deficit calorico para perder grasa (${Math.abs(ajusteCal)} kcal menos que tu gasto)`;
+    else if (esSuperavit) textoObjetivo = `superavit moderado para ganar musculo (+${ajusteCal} kcal sobre tu gasto)`;
+
+    let textoEntreno = '';
+    if (esDescansoHoy) {
+      textoEntreno = `**${DIAS_NOMBRE[diaActivo]}** es tu dia de descanso. Las calorias estan ajustadas un 10% menos para acompanar la menor actividad.`;
+    } else {
+      textoEntreno = `**${DIAS_NOMBRE[diaActivo]}** entrenas **${tipoDiaActivo}**. Las calorias incluyen energia extra para cubrir tu actividad.`;
+    }
+
+    let textoBalance = '';
+    if (totalCal > 0) {
+      const diff = totalCal - calObjetivo;
+      if (Math.abs(diff) < 50) textoBalance = `Tu plan suma **${totalCal} kcal**, justo en el objetivo.`;
+      else if (diff > 0) textoBalance = `Tu plan suma **${totalCal} kcal**, ${diff} kcal por encima del objetivo (${calObjetivo} kcal). Podes ajustar porciones.`;
+      else textoBalance = `Tu plan suma **${totalCal} kcal**, ${Math.abs(diff)} kcal por debajo del objetivo (${calObjetivo} kcal). Podes agregar un snack o aumentar porciones.`;
+    }
+
+    return `**Tu plan para ${DIAS_NOMBRE[diaActivo]}**\n\nPensado para vos: ${pesoU}kg, ${edadU} anos, nivel ${nivelU}. Tu cuerpo gasta ~${tdee} kcal por dia y este plan apunta a **${calObjetivo} kcal** en ${textoObjetivo}.\n\n${textoEntreno}\n\n${textoBalance}\n\n**Macros del dia:** ${totalProt}g proteina | ${totalCarb}g carbohidratos | ${totalGrasa}g grasas${objetivoU ? `\n\n**Tu objetivo:** ${objetivoU}` : ''}`;
+  })() : notaIAGuardada;
 
   // Sin plan generado
   if (comidas.length === 0) {
