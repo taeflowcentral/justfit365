@@ -792,29 +792,32 @@ export default function Nutricion() {
       {/* Modal agregar alimento */}
       {showAddItem !== null && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => { setShowAddItem(null); setAlimentoBase(null); setCantidadItem(1); }}>
-          <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
+          <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
             <h2 className="text-lg font-black text-white mb-4 flex items-center gap-2"><Plus className="w-5 h-5 text-emerald-400" /> Agregar Alimento</h2>
             <div className="space-y-3">
+              {/* Buscar */}
               <div>
                 <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Buscar alimento</label>
                 <div className="relative">
                   <input type="text" value={nuevoItem.alimento}
                     onChange={e => { setNuevoItem(p => ({ ...p, alimento: e.target.value })); setAlimentoBase(null); setCantidadItem(1); }}
-                    placeholder="Empez\u00e1 a escribir... ej: Pollo, Avena, Banana"
+                    placeholder="Empez\u00e1 a escribir... ej: Pollo, Avena, Bife"
                     className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
                   {nuevoItem.alimento.length >= 2 && !alimentoBase && buscarAlimentos(nuevoItem.alimento).length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-dark-800 border border-dark-border rounded-xl shadow-2xl max-h-60 overflow-y-auto z-10">
-                      {buscarAlimentos(nuevoItem.alimento).map((a, i) => (
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-dark-800 border border-dark-border rounded-xl shadow-2xl max-h-48 overflow-y-auto z-50">
+                      {buscarAlimentos(nuevoItem.alimento, 12).map((a, i) => (
                         <button key={i} type="button"
                           onClick={() => {
                             setAlimentoBase(a);
-                            setCantidadItem(1);
-                            setNuevoItem({
-                              id: 0,
-                              alimento: a.nombre,
-                              porcion: a.unidad ? `1 ${a.unidad}` : a.porcionDefault,
-                              cal: a.cal, prot: a.prot, carb: a.carb, grasa: a.grasa,
-                            });
+                            const porcionMatch = a.porcionDefault.match(/(\d+)\s*g/);
+                            const gramosBase = porcionMatch ? parseInt(porcionMatch[1]) : 0;
+                            if (a.unidad) {
+                              setCantidadItem(1);
+                              setNuevoItem({ id: 0, alimento: a.nombre, porcion: `1 ${a.unidad}`, cal: a.cal, prot: a.prot, carb: a.carb, grasa: a.grasa });
+                            } else {
+                              setCantidadItem(gramosBase || 100);
+                              setNuevoItem({ id: 0, alimento: a.nombre, porcion: a.porcionDefault, cal: a.cal, prot: a.prot, carb: a.carb, grasa: a.grasa });
+                            }
                           }}
                           className="w-full px-3 py-2 text-left hover:bg-emerald-500/10 transition-colors border-b border-dark-border/30 last:border-0">
                           <p className="text-white text-sm">{a.nombre}</p>
@@ -826,62 +829,74 @@ export default function Nutricion() {
                 </div>
               </div>
 
-              {/* Cantidad - solo si tiene unidad contable */}
-              {alimentoBase && (
+              {/* Cantidad por unidad (huevo, banana, etc) */}
+              {alimentoBase && alimentoBase.unidad && (
                 <div>
-                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Cantidad {alimentoBase.unidad ? `(${alimentoBase.unidad}${cantidadItem > 1 ? 's' : ''})` : ''}</label>
+                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Cantidad ({alimentoBase.unidad}{cantidadItem > 1 ? 's' : ''})</label>
                   <div className="flex items-center gap-3">
                     <button type="button" onClick={() => {
                       const n = Math.max(1, cantidadItem - 1);
                       setCantidadItem(n);
-                      setNuevoItem(p => ({
-                        ...p,
-                        porcion: alimentoBase.unidad ? `${n} ${alimentoBase.unidad}${n > 1 ? 's' : ''}` : alimentoBase.porcionDefault,
-                        cal: Math.round(alimentoBase.cal * n),
-                        prot: Math.round(alimentoBase.prot * n * 10) / 10,
-                        carb: Math.round(alimentoBase.carb * n * 10) / 10,
-                        grasa: Math.round(alimentoBase.grasa * n * 10) / 10,
-                      }));
+                      setNuevoItem(p => ({ ...p, porcion: `${n} ${alimentoBase.unidad}${n > 1 ? 's' : ''}`, cal: Math.round(alimentoBase.cal * n), prot: Math.round(alimentoBase.prot * n * 10) / 10, carb: Math.round(alimentoBase.carb * n * 10) / 10, grasa: Math.round(alimentoBase.grasa * n * 10) / 10 }));
                     }} className="w-10 h-10 bg-white/5 hover:bg-white/10 text-white rounded-xl flex items-center justify-center text-xl font-bold border border-dark-border">-</button>
                     <input type="number" min="1" max="20" value={cantidadItem}
                       onChange={e => {
                         const n = Math.max(1, parseInt(e.target.value) || 1);
                         setCantidadItem(n);
-                        setNuevoItem(p => ({
-                          ...p,
-                          porcion: alimentoBase.unidad ? `${n} ${alimentoBase.unidad}${n > 1 ? 's' : ''}` : alimentoBase.porcionDefault,
-                          cal: Math.round(alimentoBase.cal * n),
-                          prot: Math.round(alimentoBase.prot * n * 10) / 10,
-                          carb: Math.round(alimentoBase.carb * n * 10) / 10,
-                          grasa: Math.round(alimentoBase.grasa * n * 10) / 10,
-                        }));
+                        setNuevoItem(p => ({ ...p, porcion: `${n} ${alimentoBase.unidad}${n > 1 ? 's' : ''}`, cal: Math.round(alimentoBase.cal * n), prot: Math.round(alimentoBase.prot * n * 10) / 10, carb: Math.round(alimentoBase.carb * n * 10) / 10, grasa: Math.round(alimentoBase.grasa * n * 10) / 10 }));
                       }}
                       className="w-20 px-3 py-2.5 bg-black/60 border border-electric/30 rounded-xl text-white text-lg text-center font-black focus:outline-none focus:ring-2 focus:ring-electric/30" />
                     <button type="button" onClick={() => {
                       const n = Math.min(20, cantidadItem + 1);
                       setCantidadItem(n);
-                      setNuevoItem(p => ({
-                        ...p,
-                        porcion: alimentoBase.unidad ? `${n} ${alimentoBase.unidad}${n > 1 ? 's' : ''}` : alimentoBase.porcionDefault,
-                        cal: Math.round(alimentoBase.cal * n),
-                        prot: Math.round(alimentoBase.prot * n * 10) / 10,
-                        carb: Math.round(alimentoBase.carb * n * 10) / 10,
-                        grasa: Math.round(alimentoBase.grasa * n * 10) / 10,
-                      }));
+                      setNuevoItem(p => ({ ...p, porcion: `${n} ${alimentoBase.unidad}${n > 1 ? 's' : ''}`, cal: Math.round(alimentoBase.cal * n), prot: Math.round(alimentoBase.prot * n * 10) / 10, carb: Math.round(alimentoBase.carb * n * 10) / 10, grasa: Math.round(alimentoBase.grasa * n * 10) / 10 }));
                     }} className="w-10 h-10 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 rounded-xl flex items-center justify-center text-xl font-bold border border-emerald-500/20">+</button>
-                    <span className="text-white/30 text-xs">{alimentoBase.unidad || alimentoBase.porcionDefault}</span>
+                    <span className="text-white/30 text-xs">{alimentoBase.unidad}{cantidadItem > 1 ? 's' : ''}</span>
                   </div>
                 </div>
               )}
 
+              {/* Gramos para alimentos por peso (carne, arroz, etc) */}
+              {alimentoBase && !alimentoBase.unidad && (() => {
+                const porcionMatch = alimentoBase.porcionDefault.match(/(\d+)\s*g/);
+                const gramosBase = porcionMatch ? parseInt(porcionMatch[1]) : 100;
+                const recalc = (g: number) => {
+                  const factor = g / gramosBase;
+                  setCantidadItem(g);
+                  setNuevoItem(p => ({ ...p, porcion: `${g}g`, cal: Math.round(alimentoBase.cal * factor), prot: Math.round(alimentoBase.prot * factor * 10) / 10, carb: Math.round(alimentoBase.carb * factor * 10) / 10, grasa: Math.round(alimentoBase.grasa * factor * 10) / 10 }));
+                };
+                return (
+                  <div>
+                    <label className="block text-xs text-white/40 uppercase tracking-wider mb-1.5">Gramos (valores se recalculan)</label>
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {[50, 100, 150, 200, 250, 300, 400, 500].map(g => (
+                        <button key={g} type="button" onClick={() => recalc(g)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${cantidadItem === g ? 'bg-electric/20 text-electric border border-electric/30' : 'bg-black/40 text-white/40 border border-dark-border hover:text-white/60'}`}>
+                          {g}g
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <input type="number" min="10" max="2000" step="10" value={cantidadItem}
+                        onChange={e => recalc(parseInt(e.target.value) || gramosBase)}
+                        className="w-24 px-3 py-2.5 bg-black/60 border border-electric/30 rounded-xl text-white text-base text-center font-black focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                      <span className="text-white/40 text-sm">gramos</span>
+                      <span className="text-white/20 text-xs ml-auto">(base: {alimentoBase.porcionDefault})</span>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Porcion manual si no hay alimentoBase */}
               {!alimentoBase && (
                 <div>
                   <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Porci&oacute;n</label>
-                  <input type="text" value={nuevoItem.porcion} onChange={e => setNuevoItem(p => ({ ...p, porcion: e.target.value }))} placeholder="Ej: 2 unidades, 100g"
+                  <input type="text" value={nuevoItem.porcion} onChange={e => setNuevoItem(p => ({ ...p, porcion: e.target.value }))} placeholder="Ej: 200g, 2 unidades"
                     className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
                 </div>
               )}
 
+              {/* Valores nutricionales */}
               <div className="grid grid-cols-4 gap-2">
                 {[
                   { field: 'cal' as const, label: 'Cal', color: 'text-orange-400' },
@@ -896,12 +911,12 @@ export default function Nutricion() {
                   </div>
                 ))}
               </div>
-              {alimentoBase && cantidadItem > 1 && (
+              {alimentoBase && (
                 <p className="text-emerald-400/60 text-[10px] text-center">
-                  {cantidadItem} x {alimentoBase.nombre} = {nuevoItem.cal} cal, {nuevoItem.prot}g P, {nuevoItem.carb}g C, {nuevoItem.grasa}g G
+                  {alimentoBase.nombre} &middot; {nuevoItem.porcion} = {nuevoItem.cal} cal, {nuevoItem.prot}g P, {nuevoItem.carb}g C, {nuevoItem.grasa}g G
                 </p>
               )}
-              {!alimentoBase && <p className="text-white/30 text-[10px] text-center">Los valores se completan autom&aacute;ticamente al elegir un alimento de la lista. Pod&eacute;s ajustarlos manualmente.</p>}
+              {!alimentoBase && <p className="text-white/30 text-[10px] text-center">Los valores se completan al elegir un alimento. Pod&eacute;s ajustarlos manualmente.</p>}
               <div className="flex gap-3 pt-2">
                 <button onClick={() => { setShowAddItem(null); setAlimentoBase(null); setCantidadItem(1); }} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
                 <button onClick={() => { addItem(showAddItem); setAlimentoBase(null); setCantidadItem(1); }} disabled={!nuevoItem.alimento.trim()} className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-400 text-black rounded-xl text-sm font-black uppercase tracking-wider disabled:opacity-30">Agregar</button>
