@@ -14,14 +14,65 @@ export interface AlimentoBase {
 }
 
 const alimentosDB: AlimentoBase[] = [
-  // Carnes
+  // Carne vacuna - cortes
+  { nombre: 'Bife de lomo', porcionDefault: '100g', cal: 180, prot: 27, carb: 0, grasa: 8 },
+  { nombre: 'Bife de chorizo', porcionDefault: '100g', cal: 220, prot: 25, carb: 0, grasa: 13 },
+  { nombre: 'Bife angosto (New York)', porcionDefault: '100g', cal: 200, prot: 26, carb: 0, grasa: 10 },
+  { nombre: 'Bife ancho (Rib eye)', porcionDefault: '100g', cal: 250, prot: 24, carb: 0, grasa: 17 },
+  { nombre: 'Churrasco', porcionDefault: '100g', cal: 190, prot: 26, carb: 0, grasa: 9 },
+  { nombre: 'Entraña', porcionDefault: '100g', cal: 210, prot: 24, carb: 0, grasa: 12 },
+  { nombre: 'Vacio', porcionDefault: '100g', cal: 230, prot: 23, carb: 0, grasa: 15 },
+  { nombre: 'Asado de tira', porcionDefault: '100g', cal: 260, prot: 22, carb: 0, grasa: 19 },
+  { nombre: 'Colita de cuadril', porcionDefault: '100g', cal: 170, prot: 27, carb: 0, grasa: 7 },
+  { nombre: 'Cuadril', porcionDefault: '100g', cal: 175, prot: 27, carb: 0, grasa: 7 },
+  { nombre: 'Nalga', porcionDefault: '100g', cal: 155, prot: 28, carb: 0, grasa: 5 },
+  { nombre: 'Peceto', porcionDefault: '100g', cal: 145, prot: 28, carb: 0, grasa: 4 },
+  { nombre: 'Paleta', porcionDefault: '100g', cal: 185, prot: 25, carb: 0, grasa: 9 },
+  { nombre: 'Roast beef', porcionDefault: '100g', cal: 165, prot: 27, carb: 0, grasa: 6 },
+  { nombre: 'Tapa de asado', porcionDefault: '100g', cal: 240, prot: 23, carb: 0, grasa: 16 },
+  { nombre: 'Matambre vacuno', porcionDefault: '100g', cal: 220, prot: 24, carb: 0, grasa: 14 },
+  { nombre: 'Carne vacuna magra', porcionDefault: '100g', cal: 160, prot: 26, carb: 0, grasa: 6 },
+  { nombre: 'Carne picada magra', porcionDefault: '100g', cal: 175, prot: 22, carb: 0, grasa: 9 },
+  { nombre: 'Carne picada comun', porcionDefault: '100g', cal: 230, prot: 20, carb: 0, grasa: 16 },
+  { nombre: 'Osobuco', porcionDefault: '100g', cal: 190, prot: 24, carb: 0, grasa: 10 },
+  { nombre: 'Mondongo', porcionDefault: '100g', cal: 100, prot: 14, carb: 0, grasa: 4 },
+  { nombre: 'Lengua vacuna', porcionDefault: '100g', cal: 225, prot: 16, carb: 0, grasa: 18 },
+
+  // Achuras y visceras
+  { nombre: 'Higado vacuno', porcionDefault: '100g', cal: 135, prot: 20, carb: 4, grasa: 4 },
+  { nombre: 'Bife de higado', porcionDefault: '100g', cal: 135, prot: 20, carb: 4, grasa: 4 },
+  { nombre: 'Riñon vacuno', porcionDefault: '100g', cal: 100, prot: 17, carb: 0, grasa: 3 },
+  { nombre: 'Chinchulín', porcionDefault: '100g', cal: 180, prot: 16, carb: 0, grasa: 13 },
+  { nombre: 'Molleja', porcionDefault: '100g', cal: 240, prot: 13, carb: 0, grasa: 20 },
+  { nombre: 'Chorizo criollo', porcionDefault: '1 unidad', cal: 300, prot: 15, carb: 1, grasa: 26, unidad: 'unidad' },
+  { nombre: 'Morcilla', porcionDefault: '1 unidad', cal: 280, prot: 11, carb: 3, grasa: 25, unidad: 'unidad' },
+
+  // Carne de cerdo - cortes
+  { nombre: 'Cerdo magro (lomo)', porcionDefault: '100g', cal: 150, prot: 27, carb: 0, grasa: 4 },
+  { nombre: 'Solomillo de cerdo', porcionDefault: '100g', cal: 143, prot: 26, carb: 0, grasa: 4 },
+  { nombre: 'Bondiola de cerdo', porcionDefault: '100g', cal: 200, prot: 22, carb: 0, grasa: 12 },
+  { nombre: 'Costilla de cerdo', porcionDefault: '100g', cal: 280, prot: 20, carb: 0, grasa: 22 },
+  { nombre: 'Matambre de cerdo', porcionDefault: '100g', cal: 210, prot: 23, carb: 0, grasa: 13 },
+  { nombre: 'Carré de cerdo', porcionDefault: '100g', cal: 190, prot: 25, carb: 0, grasa: 10 },
+  { nombre: 'Pechito de cerdo', porcionDefault: '100g', cal: 270, prot: 19, carb: 0, grasa: 21 },
+  { nombre: 'Jamon cocido', porcionDefault: '2 fetas', cal: 60, prot: 10, carb: 1, grasa: 2, unidad: 'feta' },
+  { nombre: 'Jamon crudo', porcionDefault: '2 fetas', cal: 90, prot: 12, carb: 0, grasa: 5, unidad: 'feta' },
+  { nombre: 'Panceta', porcionDefault: '100g', cal: 400, prot: 12, carb: 0, grasa: 40 },
+  { nombre: 'Salchicha parrillera', porcionDefault: '1 unidad', cal: 250, prot: 12, carb: 2, grasa: 22, unidad: 'unidad' },
+
+  // Cordero
+  { nombre: 'Cordero (pierna)', porcionDefault: '100g', cal: 200, prot: 25, carb: 0, grasa: 11 },
+  { nombre: 'Cordero (costillar)', porcionDefault: '100g', cal: 260, prot: 22, carb: 0, grasa: 19 },
+
+  // Pollo y aves
   { nombre: 'Pechuga de pollo', porcionDefault: '100g', cal: 165, prot: 31, carb: 0, grasa: 4 },
   { nombre: 'Pollo entero', porcionDefault: '100g', cal: 200, prot: 25, carb: 0, grasa: 11 },
-  { nombre: 'Carne vacuna magra', porcionDefault: '100g', cal: 160, prot: 26, carb: 0, grasa: 6 },
-  { nombre: 'Bife de lomo', porcionDefault: '100g', cal: 180, prot: 27, carb: 0, grasa: 8 },
-  { nombre: 'Carne picada magra', porcionDefault: '100g', cal: 175, prot: 22, carb: 0, grasa: 9 },
-  { nombre: 'Cerdo magro', porcionDefault: '100g', cal: 150, prot: 27, carb: 0, grasa: 4 },
-  { nombre: 'Bondiola de cerdo', porcionDefault: '100g', cal: 200, prot: 22, carb: 0, grasa: 12 },
+  { nombre: 'Pata muslo de pollo', porcionDefault: '100g', cal: 210, prot: 22, carb: 0, grasa: 13 },
+  { nombre: 'Alita de pollo', porcionDefault: '100g', cal: 230, prot: 19, carb: 0, grasa: 17 },
+  { nombre: 'Pollo sin piel', porcionDefault: '100g', cal: 165, prot: 31, carb: 0, grasa: 4 },
+  { nombre: 'Milanesa de pollo', porcionDefault: '1 unidad', cal: 280, prot: 22, carb: 18, grasa: 14, unidad: 'unidad' },
+  { nombre: 'Milanesa de carne', porcionDefault: '1 unidad', cal: 310, prot: 24, carb: 20, grasa: 16, unidad: 'unidad' },
+  { nombre: 'Hamburguesa casera', porcionDefault: '1 unidad', cal: 250, prot: 20, carb: 2, grasa: 18, unidad: 'unidad' },
   { nombre: 'Pavita', porcionDefault: '100g', cal: 140, prot: 29, carb: 0, grasa: 2 },
   { nombre: 'Conejo', porcionDefault: '100g', cal: 130, prot: 26, carb: 0, grasa: 3 },
 
@@ -35,7 +86,14 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Sardinas', porcionDefault: '100g', cal: 165, prot: 24, carb: 0, grasa: 8 },
   { nombre: 'Caballa', porcionDefault: '100g', cal: 200, prot: 19, carb: 0, grasa: 14 },
   { nombre: 'Surubi', porcionDefault: '100g', cal: 110, prot: 20, carb: 0, grasa: 3 },
+  { nombre: 'Pejerrey', porcionDefault: '100g', cal: 95, prot: 19, carb: 0, grasa: 2 },
+  { nombre: 'Dorado', porcionDefault: '100g', cal: 120, prot: 21, carb: 0, grasa: 4 },
+  { nombre: 'Lenguado', porcionDefault: '100g', cal: 85, prot: 18, carb: 0, grasa: 1 },
   { nombre: 'Langostinos', porcionDefault: '100g', cal: 100, prot: 21, carb: 1, grasa: 1 },
+  { nombre: 'Camarones', porcionDefault: '100g', cal: 85, prot: 20, carb: 0, grasa: 1 },
+  { nombre: 'Mejillones', porcionDefault: '100g', cal: 86, prot: 12, carb: 4, grasa: 2 },
+  { nombre: 'Pulpo', porcionDefault: '100g', cal: 82, prot: 15, carb: 2, grasa: 1 },
+  { nombre: 'Calamar', porcionDefault: '100g', cal: 92, prot: 16, carb: 3, grasa: 1 },
 
   // Huevos y lacteos
   { nombre: 'Huevo entero', porcionDefault: '1 unidad', cal: 70, prot: 6, carb: 1, grasa: 5, unidad: 'unidad' },
