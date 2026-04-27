@@ -453,7 +453,7 @@ export default function Nutricion() {
               let html = `<p class="subtitle">Plan nutricional personalizado &mdash; Objetivo: ${calObjetivo} kcal</p>`;
               comidas.forEach(c => {
                 const cc = c.items.reduce((a, it) => a + (Number(it.cal) || 0), 0);
-                html += `<h2>${c.nombre} (${c.hora} hs) &mdash; ${cc} kcal</h2><table><tr><th>Alimento</th><th>Porci\u00f3n</th><th>Cal</th><th>Prot</th><th>Carb</th><th>Grasa</th></tr>`;
+                html += `<h2>${c.nombre} (${c.hora} hs) &mdash; ${cc} kcal</h2><table><tr><th>Alimento</th><th>Porcion</th><th>Cal</th><th>Prot</th><th>Carb</th><th>Grasa</th></tr>`;
                 c.items.forEach(it => { html += `<tr><td>${it.alimento}</td><td>${it.porcion}</td><td>${it.cal}</td><td>${it.prot}g</td><td>${it.carb}g</td><td>${it.grasa}g</td></tr>`; });
                 html += `</table>`;
               });
@@ -637,7 +637,7 @@ export default function Nutricion() {
                           <div className="grid grid-cols-2 gap-2">
                             <input type="text" value={item.alimento} onChange={e => updateItem(c.id, item.id, 'alimento', e.target.value)} placeholder="Alimento"
                               className="px-2 py-1.5 bg-black/60 border border-dark-border rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
-                            <input type="text" value={item.porcion} onChange={e => updateItem(c.id, item.id, 'porcion', e.target.value)} placeholder="Porci\u00f3n"
+                            <input type="text" value={item.porcion} onChange={e => updateItem(c.id, item.id, 'porcion', e.target.value)} placeholder="Porcion"
                               className="px-2 py-1.5 bg-black/60 border border-dark-border rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
                           </div>
                           {/* Ajuste rapido por gramos */}
@@ -801,7 +801,7 @@ export default function Nutricion() {
                 <div className="relative">
                   <input type="text" value={nuevoItem.alimento}
                     onChange={e => { setNuevoItem(p => ({ ...p, alimento: e.target.value })); setAlimentoBase(null); setCantidadItem(1); }}
-                    placeholder="Empez\u00e1 a escribir... ej: Pollo, Avena, Bife"
+                    placeholder="Ej: Pollo, Bife, Huevo, Avena..."
                     className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
                   {nuevoItem.alimento.length >= 2 && !alimentoBase && buscarAlimentos(nuevoItem.alimento).length > 0 && (
                     <div className="absolute top-full left-0 right-0 mt-1 bg-dark-800 border border-dark-border rounded-xl shadow-2xl max-h-48 overflow-y-auto z-50">
@@ -906,7 +906,7 @@ export default function Nutricion() {
                 ].map(f => (
                   <div key={f.field}>
                     <label className={`block text-[10px] ${f.color} uppercase tracking-wider mb-1`}>{f.label}</label>
-                    <input type="number" min="0" value={nuevoItem[f.field] || ''} onChange={e => { setNuevoItem(p => ({ ...p, [f.field]: parseInt(e.target.value) || 0 })); setAlimentoBase(null); }}
+                    <input type="number" min="0" value={nuevoItem[f.field] || ''} onChange={e => setNuevoItem(p => ({ ...p, [f.field]: parseInt(e.target.value) || 0 }))}
                       className="w-full px-2 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" />
                   </div>
                 ))}
