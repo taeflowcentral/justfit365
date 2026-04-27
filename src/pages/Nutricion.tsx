@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, Zap, Sparkles, RotateCcw, Target, ArrowLeftRight, ShoppingCart, MessageCircle, CheckSquare, Square, X } from 'lucide-react';
 import FoodAlternatives, { findAlternatives } from '../components/FoodAlternatives';
-import { buscarAlimentos, type AlimentoBase } from '../lib/foodDB';
+import { buscarAlimentos, buscarAlimentoExacto, type AlimentoBase } from '../lib/foodDB';
 import { useAuth } from '../context/AuthContext';
 import ShareButtons, { generateNutricionText, shareWhatsApp, printContent } from '../components/ShareButtons';
 import { getUserItem, setUserItem } from '../lib/storage';
@@ -640,6 +640,57 @@ export default function Nutricion() {
                             <input type="text" value={item.porcion} onChange={e => updateItem(c.id, item.id, 'porcion', e.target.value)} placeholder="Porci\u00f3n"
                               className="px-2 py-1.5 bg-black/60 border border-dark-border rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
                           </div>
+                          {/* Ajuste rapido por gramos */}
+                          {(() => {
+                            const base = buscarAlimentoExacto(item.alimento);
+                            if (!base) return null;
+                            // Detectar gramos actuales de la porcion
+                            const gramosMatch = item.porcion.match(/(\d+)\s*g/);
+                            const gramosActuales = gramosMatch ? parseInt(gramosMatch[1]) : 100;
+                            const porcionMatch = base.porcionDefault.match(/(\d+)\s*g/);
+                            const gramosBase = porcionMatch ? parseInt(porcionMatch[1]) : 100;
+                            return (
+                              <div className="bg-electric/5 border border-electric/10 rounded-lg p-2">
+                                <label className="block text-[9px] text-electric uppercase tracking-wider mb-1">Ajustar gramos (recalcula autom&aacute;tico)</label>
+                                <div className="flex items-center gap-2">
+                                  {[50, 100, 150, 200, 250, 300].map(g => (
+                                    <button key={g} type="button" onClick={() => {
+                                      const factor = g / gramosBase;
+                                      const updated = comidas.map(cm => cm.id === c.id ? { ...cm, items: cm.items.map(it => it.id === item.id ? {
+                                        ...it,
+                                        porcion: `${g}g`,
+                                        cal: Math.round(base.cal * factor),
+                                        prot: Math.round(base.prot * factor * 10) / 10,
+                                        carb: Math.round(base.carb * factor * 10) / 10,
+                                        grasa: Math.round(base.grasa * factor * 10) / 10,
+                                      } : it) } : cm);
+                                      guardar(updated);
+                                    }}
+                                      className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${gramosActuales === g ? 'bg-electric/20 text-electric border border-electric/30' : 'bg-black/40 text-white/40 border border-dark-border hover:text-white/60'}`}>
+                                      {g}g
+                                    </button>
+                                  ))}
+                                  <input type="number" min="10" max="1000" step="10" defaultValue={gramosActuales}
+                                    onBlur={e => {
+                                      const g = parseInt(e.target.value) || gramosActuales;
+                                      const factor = g / gramosBase;
+                                      const updated = comidas.map(cm => cm.id === c.id ? { ...cm, items: cm.items.map(it => it.id === item.id ? {
+                                        ...it,
+                                        porcion: `${g}g`,
+                                        cal: Math.round(base.cal * factor),
+                                        prot: Math.round(base.prot * factor * 10) / 10,
+                                        carb: Math.round(base.carb * factor * 10) / 10,
+                                        grasa: Math.round(base.grasa * factor * 10) / 10,
+                                      } : it) } : cm);
+                                      guardar(updated);
+                                    }}
+                                    onKeyDown={e => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
+                                    className="w-16 px-2 py-1 bg-black/60 border border-dark-border rounded-lg text-white text-[11px] text-center focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                                  <span className="text-white/30 text-[10px]">g</span>
+                                </div>
+                              </div>
+                            );
+                          })()}
                           <div className="grid grid-cols-4 gap-2">
                             {[
                               { field: 'cal' as const, label: 'Cal', color: 'text-orange-400' },
