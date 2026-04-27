@@ -586,7 +586,7 @@ export default function Nutricion() {
       </div>
 
       {/* Macros calculados */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      {showMacros && <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
           { label: 'Calor\u00edas', value: totalCal, min: Math.round(calObjetivo * 0.9), max: calObjetivo, color: 'text-orange-400/80', gradient: 'from-orange-500/50 to-red-500/50', icon: Flame, unit: 'kcal' },
           { label: 'Prote\u00edna', value: totalProt, min: Math.round((perfil?.peso || 75) * 1.6), max: Math.round((perfil?.peso || 75) * 2.2), color: 'text-electric/80', gradient: 'from-electric/50 to-neon/50', icon: Droplets, unit: 'g' },
@@ -618,7 +618,7 @@ export default function Nutricion() {
             </div>
           </div>
         ))}
-      </div>
+      </div>}
 
       {/* Comidas */}
       <div className="space-y-4">
