@@ -265,3 +265,33 @@ export function buscarAlimentoExacto(nombre: string): AlimentoBase | null {
   const q = normalizar(nombre);
   return alimentosDB.find(a => normalizar(a.nombre) === q) || null;
 }
+
+export type CategoriaNutricional = 'proteina' | 'carbo' | 'vegetal' | 'grasa' | 'suplemento' | 'otro';
+
+const PALABRAS_PROTEINA = ['pollo', 'pechuga', 'carne', 'bife', 'lomo', 'chorizo', 'churrasco', 'vacuno', 'vacuna', 'cerdo', 'bondiola', 'salmon', 'atun', 'merluza', 'trucha', 'surubi', 'pescado', 'huevo', 'clara', 'whey', 'protein', 'caseina', 'yogur griego', 'cottage', 'tofu', 'tempeh', 'seitan', 'langostino', 'camaron', 'pulpo', 'calamar', 'pavita', 'conejo', 'cordero', 'higado', 'rinon', 'hamburguesa', 'milanesa', 'jamon', 'nalga', 'peceto', 'cuadril', 'paleta', 'osobuco', 'gainer', 'barrita proteica', 'iso clear', 'vegana'];
+const PALABRAS_CARBO = ['arroz', 'avena', 'pan ', 'fideos', 'pasta', 'papa', 'batata', 'quinoa', 'polenta', 'tortilla', 'wrap', 'galleta', 'banana', 'manzana', 'fruta', 'granola', 'cous cous', 'mandioca', 'choclo', 'miel', 'mermelada', 'barrita de cereal', 'dulce'];
+const PALABRAS_VEGETAL = ['brocoli', 'coliflor', 'espinaca', 'lechuga', 'tomate', 'zanahoria', 'pepino', 'zucchini', 'berenjena', 'pimiento', 'cebolla', 'esparrago', 'chaucha', 'repollo', 'remolacha', 'ensalada', 'calabaza', 'arandano', 'frutilla', 'kiwi', 'naranja', 'pera', 'mandarina', 'vegetal', 'verdura'];
+const PALABRAS_SUPLEMENTO = ['creatina', 'omega', 'magnesio', 'vitamina', 'zinc', 'complejo b', 'multivitaminico', 'pre entreno', 'bcaa', 'glutamina', 'carnitina', 'cafeina', 'colageno', 'probiotico', 'ashwagandha', 'melatonina', 'electrolito'];
+
+export function clasificarAlimento(nombre: string): CategoriaNutricional {
+  const n = normalizar(nombre);
+  if (PALABRAS_SUPLEMENTO.some(p => n.includes(p))) return 'suplemento';
+  if (PALABRAS_PROTEINA.some(p => n.includes(p))) return 'proteina';
+  if (PALABRAS_VEGETAL.some(p => n.includes(p))) return 'vegetal';
+  if (PALABRAS_CARBO.some(p => n.includes(p))) return 'carbo';
+  if (n.includes('aceite') || n.includes('manteca') || n.includes('almendra') || n.includes('nuez') || n.includes('mani') || n.includes('palta') || n.includes('semilla')) return 'grasa';
+  return 'otro';
+}
+
+export function analizarComida(items: { alimento: string; prot: number; carb: number }[]): { tieneProteina: boolean; tieneCarbo: boolean; tieneVegetal: boolean } {
+  let tieneProteina = false;
+  let tieneCarbo = false;
+  let tieneVegetal = false;
+  for (const it of items) {
+    const cat = clasificarAlimento(it.alimento);
+    if (cat === 'proteina' || it.prot >= 15) tieneProteina = true;
+    if (cat === 'carbo' || it.carb >= 20) tieneCarbo = true;
+    if (cat === 'vegetal') tieneVegetal = true;
+  }
+  return { tieneProteina, tieneCarbo, tieneVegetal };
+}

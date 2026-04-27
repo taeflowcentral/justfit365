@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, Zap, Sparkles, RotateCcw, Target, ArrowLeftRight, ShoppingCart, MessageCircle, CheckSquare, Square, X } from 'lucide-react';
 import FoodAlternatives, { findAlternatives } from '../components/FoodAlternatives';
-import { buscarAlimentos, buscarAlimentoExacto, type AlimentoBase } from '../lib/foodDB';
+import { buscarAlimentos, buscarAlimentoExacto, analizarComida, type AlimentoBase } from '../lib/foodDB';
 import { useAuth } from '../context/AuthContext';
 import ShareButtons, { generateNutricionText, shareWhatsApp, printContent } from '../components/ShareButtons';
 import { getUserItem, setUserItem } from '../lib/storage';
@@ -625,6 +625,8 @@ export default function Nutricion() {
         {comidas.map(c => {
           const comidaCal = c.items.reduce((a, it) => a + (Number(it.cal) || 0), 0);
           const isEditingComida = editandoComida === c.id;
+          const analisis = c.items.length > 0 ? analizarComida(c.items) : null;
+          const esSnack = c.nombre.toLowerCase().includes('colacion') || c.nombre.toLowerCase().includes('snack') || c.nombre.toLowerCase().includes('nocturna');
 
           return (
             <div key={c.id} className="bg-dark-800 border border-dark-border rounded-2xl overflow-hidden hover:border-white/10 transition-all">
@@ -781,6 +783,34 @@ export default function Nutricion() {
                   );
                 })}
               </div>
+
+              {/* Indicadores nutricionales por comida */}
+              {analisis && !esSnack && (
+                <div className="px-5 py-2.5 border-t border-dark-border/30 bg-black/20">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${analisis.tieneProteina ? 'bg-electric/10 text-electric border border-electric/20' : 'bg-red-500/10 text-red-400 border border-red-500/20 animate-pulse'}`}>
+                      {analisis.tieneProteina ? '\u2713' : '!'} Proteina
+                    </span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${analisis.tieneCarbo ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20 animate-pulse'}`}>
+                      {analisis.tieneCarbo ? '\u2713' : '!'} Carbos
+                    </span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${analisis.tieneVegetal ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20 animate-pulse'}`}>
+                      {analisis.tieneVegetal ? '\u2713' : '!'} Vegetales/Fibra
+                    </span>
+                  </div>
+                  {(!analisis.tieneProteina || !analisis.tieneCarbo || !analisis.tieneVegetal) && (
+                    <p className="text-amber-400/70 text-[10px] mt-1.5 leading-relaxed">
+                      {!analisis.tieneProteina && !analisis.tieneCarbo && !analisis.tieneVegetal
+                        ? 'Esta comida no tiene los 3 pilares. Agrega proteina, un carbohidrato y vegetales para equilibrarla.'
+                        : !analisis.tieneProteina
+                        ? 'No olvides incluir una fuente de proteina (pollo, carne, huevo, yogur griego, whey).'
+                        : !analisis.tieneCarbo
+                        ? 'Falta un carbohidrato de calidad (arroz, avena, batata, pan integral, fruta).'
+                        : 'Agrega vegetales o fibra (ensalada, brocoli, espinaca) para mejorar la digestion y saciedad.'}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           );
         })}
