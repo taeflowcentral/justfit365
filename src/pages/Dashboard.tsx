@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Flame, Droplets, Dumbbell, TrendingUp, Target, Zap, Apple, Timer, ArrowUpRight, Edit3, Save, CheckCircle, AlertTriangle, XCircle, ArrowDown, ArrowUp, Minus } from 'lucide-react';
+import { Flame, Droplets, Dumbbell, TrendingUp, Target, Zap, Apple, Timer, ArrowUpRight, Edit3, Save, CheckCircle, AlertTriangle, XCircle, ArrowDown, ArrowUp, Minus, MessageCircle } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, ReferenceLine } from 'recharts';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -424,6 +424,34 @@ export default function Dashboard() {
           <h3 className="text-white font-bold text-sm">JustFit Coach</h3>
           <p className="text-white/50 text-xs mt-0.5">Preguntale lo que necesites</p>
         </Link>
+      </div>
+
+      {/* Contactar asesores */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <a href="https://wa.me/5492216806000?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20nutricional" target="_blank" rel="noopener noreferrer"
+          className="block bg-gradient-to-br from-emerald-900/30 to-emerald-800/10 border border-emerald-500/15 rounded-2xl p-4 hover:border-emerald-500/30 transition-all group">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-emerald-500/15 rounded-xl flex items-center justify-center">
+              <MessageCircle className="w-5 h-5 text-emerald-400" />
+            </div>
+            <div>
+              <h3 className="text-white font-bold text-sm">Asesor Nutricional</h3>
+              <p className="text-white/40 text-xs mt-0.5">Consulta personalizada por WhatsApp</p>
+            </div>
+          </div>
+        </a>
+        <a href="https://wa.me/5492216035986?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20deportivo" target="_blank" rel="noopener noreferrer"
+          className="block bg-gradient-to-br from-purple-900/30 to-purple-800/10 border border-purple-500/15 rounded-2xl p-4 hover:border-purple-500/30 transition-all group">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-purple-500/15 rounded-xl flex items-center justify-center">
+              <MessageCircle className="w-5 h-5 text-purple-400" />
+            </div>
+            <div>
+              <h3 className="text-white font-bold text-sm">Asesor Deportivo</h3>
+              <p className="text-white/40 text-xs mt-0.5">Consulta personalizada por WhatsApp</p>
+            </div>
+          </div>
+        </a>
       </div>
 
       {/* Perfil metabolico compacto */}
