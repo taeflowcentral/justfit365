@@ -171,15 +171,20 @@ function generarPlanIA(peso: number, altura: number, edad: number, objetivo: str
     },
   ];
 
-  const tipoLabel = tipoEntreno ? ` | **Entreno del d\u00eda:** ${tipoEntreno}` : '';
-  const enfLabel = notasExtra.length > 0 ? `\n\n**Adaptaciones:** ${notasExtra.join(' ')}` : '';
+  const enfLabel = notasExtra.length > 0 ? notasExtra.join(' ') : '';
+
   // Determinar tipo energetico segun el ajuste calorico
   const diferencia = calObjetivo - tdee;
-  let tipoEnergetico = 'Mantenimiento';
-  if (diferencia < -100) tipoEnergetico = `D\u00e9ficit (-${Math.abs(diferencia)} kcal)`;
-  else if (diferencia > 100) tipoEnergetico = `Super\u00e1vit (+${diferencia} kcal)`;
+  let tipoEnergetico = 'mantenimiento (comer al nivel de tu gasto)';
+  if (diferencia < -100) tipoEnergetico = `deficit de ${Math.abs(diferencia)} kcal para perder grasa`;
+  else if (diferencia > 100) tipoEnergetico = `superavit de ${diferencia} kcal para ganar musculo`;
 
-  const nota = `**Plan generado por JustFit Coach** para ${peso}kg, ${edad} a\u00f1os.\n\n**Objetivo:** ${objetivo} (${tipoEnergetico}) | **Nivel:** ${nivel}${tipoLabel}\n**TMB:** ${tmb} kcal | **TDEE:** ${tdee} kcal | **Objetivo cal\u00f3rico:** ${calObjetivo} kcal\n**Macros:** ${protTotal}g P / ${carbTotal}g C / ${grasaTotal}g G\n\n${notaObj}${enfLabel}`;
+  // Texto del entreno del dia
+  const entrenoTexto = !tipoEntreno || tipoEntreno === 'Descanso'
+    ? 'Hoy es dia de descanso, las calorias estan ajustadas un 10% menos.'
+    : `Hoy entrenas ${tipoEntreno}, las calorias incluyen energia extra para cubrir tu actividad.`;
+
+  const nota = `**Tu plan de hoy**\n\nEste plan esta pensado para vos (${peso}kg, ${edad} anos, nivel ${nivel}). Tu cuerpo necesita ~${tdee} kcal por dia y este plan apunta a ${calObjetivo} kcal en ${tipoEnergetico}.\n\n${entrenoTexto}\n\n**Distribucion de macros:** ${protTotal}g de proteina, ${carbTotal}g de carbohidratos y ${grasaTotal}g de grasas.${notaObj ? `\n\n${notaObj}` : ''}${enfLabel ? `\n\n${enfLabel}` : ''}`;
 
   return { comidas, nota };
 }
@@ -752,12 +757,15 @@ export default function Nutricion() {
 
       {/* Nota IA */}
       {notaIA && (
-        <div className="bg-electric/5 border border-electric/20 rounded-2xl p-4 flex items-start gap-3">
-          <Zap className="w-5 h-5 text-electric shrink-0 mt-0.5" />
-          <div className="text-sm text-white/70 whitespace-pre-line leading-relaxed">
+        <div className="bg-electric/5 border border-electric/20 rounded-2xl p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <Zap className="w-5 h-5 text-electric" />
+            <h3 className="text-white font-bold text-sm">JustFit Coach</h3>
+          </div>
+          <div className="text-sm text-white/60 whitespace-pre-line leading-relaxed">
             {notaIA.split(/(\*\*.*?\*\*)/).map((part, i) =>
               part.startsWith('**') && part.endsWith('**')
-                ? <strong key={i} className="text-white font-bold">{part.slice(2, -2)}</strong>
+                ? <strong key={i} className="text-white/90 font-bold">{part.slice(2, -2)}</strong>
                 : <span key={i}>{part}</span>
             )}
           </div>
