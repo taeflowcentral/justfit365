@@ -193,6 +193,7 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Semillas de lino', porcionDefault: '15g', cal: 75, prot: 3, carb: 4, grasa: 6 },
   { nombre: 'Mantequilla de mani', porcionDefault: '15g', cal: 90, prot: 4, carb: 3, grasa: 8 },
   { nombre: 'Mantequilla de almendras', porcionDefault: '15g', cal: 95, prot: 3, carb: 3, grasa: 8 },
+  { nombre: 'Nueces de Brasil', porcionDefault: '1 unidad', cal: 33, prot: 1, carb: 1, grasa: 3, unidad: 'unidad' },
 
   // Aceites y grasas
   { nombre: 'Aceite de oliva', porcionDefault: '10ml', cal: 88, prot: 0, carb: 0, grasa: 10 },
@@ -213,6 +214,39 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Leche de almendras', porcionDefault: '200ml', cal: 30, prot: 1, carb: 1, grasa: 3 },
   { nombre: 'Cafe solo', porcionDefault: '1 taza', cal: 2, prot: 0, carb: 0, grasa: 0, unidad: 'taza' },
   { nombre: 'Te verde', porcionDefault: '1 taza', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'taza' },
+  { nombre: 'Mate', porcionDefault: '1 termo', cal: 5, prot: 0, carb: 1, grasa: 0, unidad: 'termo' },
+  { nombre: 'Leche de coco', porcionDefault: '200ml', cal: 45, prot: 0, carb: 1, grasa: 5 },
+
+  // Suplementos deportivos
+  { nombre: 'Creatina monohidratada', porcionDefault: '1 scoop (5g)', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'scoop' },
+  { nombre: 'Whey protein concentrado', porcionDefault: '1 scoop (30g)', cal: 120, prot: 24, carb: 3, grasa: 1, unidad: 'scoop' },
+  { nombre: 'Whey protein isolado', porcionDefault: '1 scoop (30g)', cal: 110, prot: 27, carb: 1, grasa: 0, unidad: 'scoop' },
+  { nombre: 'Caseina', porcionDefault: '1 scoop (30g)', cal: 120, prot: 24, carb: 4, grasa: 1, unidad: 'scoop' },
+  { nombre: 'Proteina vegana (arveja/arroz)', porcionDefault: '1 scoop (30g)', cal: 110, prot: 22, carb: 4, grasa: 2, unidad: 'scoop' },
+  { nombre: 'Colageno hidrolizado', porcionDefault: '1 scoop (10g)', cal: 36, prot: 9, carb: 0, grasa: 0, unidad: 'scoop' },
+  { nombre: 'Omega 3 (capsula)', porcionDefault: '1 capsula', cal: 10, prot: 0, carb: 0, grasa: 1, unidad: 'capsula' },
+  { nombre: 'Magnesio bisglicinato', porcionDefault: '1 capsula', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'capsula' },
+  { nombre: 'Magnesio citrato', porcionDefault: '1 capsula', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'capsula' },
+  { nombre: 'Vitamina D3 (gota)', porcionDefault: '1 gota', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'gota' },
+  { nombre: 'Vitamina C (500mg)', porcionDefault: '1 comprimido', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'comprimido' },
+  { nombre: 'Zinc picolinato', porcionDefault: '1 capsula', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'capsula' },
+  { nombre: 'Complejo B', porcionDefault: '1 comprimido', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'comprimido' },
+  { nombre: 'Multivitaminico', porcionDefault: '1 comprimido', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'comprimido' },
+  { nombre: 'Pre entreno (cafeina + beta alanina)', porcionDefault: '1 scoop (10g)', cal: 10, prot: 0, carb: 2, grasa: 0, unidad: 'scoop' },
+  { nombre: 'BCAA en polvo', porcionDefault: '1 scoop (10g)', cal: 40, prot: 10, carb: 0, grasa: 0, unidad: 'scoop' },
+  { nombre: 'Glutamina', porcionDefault: '1 scoop (5g)', cal: 20, prot: 5, carb: 0, grasa: 0, unidad: 'scoop' },
+  { nombre: 'L-Carnitina liquida', porcionDefault: '1 dosis (15ml)', cal: 5, prot: 0, carb: 1, grasa: 0, unidad: 'dosis' },
+  { nombre: 'Cafeina anhidra (200mg)', porcionDefault: '1 capsula', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'capsula' },
+  { nombre: 'Barrita proteica', porcionDefault: '1 unidad (60g)', cal: 220, prot: 20, carb: 22, grasa: 8, unidad: 'unidad' },
+  { nombre: 'Barrita proteica low carb', porcionDefault: '1 unidad (50g)', cal: 170, prot: 20, carb: 8, grasa: 7, unidad: 'unidad' },
+  { nombre: 'Barrita de cereal', porcionDefault: '1 unidad (25g)', cal: 100, prot: 2, carb: 18, grasa: 3, unidad: 'unidad' },
+  { nombre: 'Gainer (ganador de peso)', porcionDefault: '1 scoop (80g)', cal: 350, prot: 25, carb: 55, grasa: 4, unidad: 'scoop' },
+  { nombre: 'Electrolitos en polvo', porcionDefault: '1 sobre', cal: 10, prot: 0, carb: 2, grasa: 0, unidad: 'sobre' },
+  { nombre: 'Proteina en agua (iso clear)', porcionDefault: '1 scoop (25g)', cal: 90, prot: 20, carb: 1, grasa: 0, unidad: 'scoop' },
+  { nombre: 'Manteca de mani proteica', porcionDefault: '1 cda (15g)', cal: 60, prot: 6, carb: 3, grasa: 4, unidad: 'cda' },
+  { nombre: 'Probiotico (capsula)', porcionDefault: '1 capsula', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'capsula' },
+  { nombre: 'Ashwagandha', porcionDefault: '1 capsula', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'capsula' },
+  { nombre: 'Melatonina (1mg)', porcionDefault: '1 comprimido', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'comprimido' },
 ];
 
 function normalizar(s: string): string {
