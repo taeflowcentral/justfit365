@@ -209,7 +209,7 @@ export default function Dashboard() {
             <Tooltip contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: '12px', color: '#fff', fontSize: '13px' }} />
             {calMinDiarias > 0 && <ReferenceLine y={calMinDiarias} stroke="#f59e0b" strokeDasharray="4 4" strokeOpacity={0.5} />}
             {calMaxDiarias > 0 && <ReferenceLine y={calMaxDiarias} stroke="#22c55e" strokeDasharray="4 4" strokeOpacity={0.5} />}
-            <Bar dataKey="calorias" fill="#0099ff" radius={[6, 6, 0, 0]} />
+            <Bar dataKey="calorias" fill="#0099ff" fillOpacity={0.45} radius={[6, 6, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
 

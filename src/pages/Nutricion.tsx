@@ -588,10 +588,10 @@ export default function Nutricion() {
       {/* Macros calculados */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: 'Calor\u00edas', value: totalCal, min: Math.round(calObjetivo * 0.9), max: calObjetivo, color: 'text-orange-400', gradient: 'from-orange-500 to-red-500', icon: Flame, unit: 'kcal' },
-          { label: 'Prote\u00edna', value: totalProt, min: Math.round((perfil?.peso || 75) * 1.6), max: Math.round((perfil?.peso || 75) * 2.2), color: 'text-electric', gradient: 'from-electric to-neon', icon: Droplets, unit: 'g' },
-          { label: 'Carbohidratos', value: totalCarb, min: Math.round((calObjetivo * 0.35) / 4), max: Math.round((calObjetivo * 0.55) / 4), color: 'text-amber-400', gradient: 'from-amber-400 to-yellow-400', icon: Wheat, unit: 'g' },
-          { label: 'Grasas', value: totalGrasa, min: Math.round((calObjetivo * 0.20) / 9), max: Math.round((calObjetivo * 0.30) / 9), color: 'text-pink-400', gradient: 'from-pink-500 to-rose-500', icon: Droplet, unit: 'g' },
+          { label: 'Calor\u00edas', value: totalCal, min: Math.round(calObjetivo * 0.9), max: calObjetivo, color: 'text-orange-400/80', gradient: 'from-orange-500/50 to-red-500/50', icon: Flame, unit: 'kcal' },
+          { label: 'Prote\u00edna', value: totalProt, min: Math.round((perfil?.peso || 75) * 1.6), max: Math.round((perfil?.peso || 75) * 2.2), color: 'text-electric/80', gradient: 'from-electric/50 to-neon/50', icon: Droplets, unit: 'g' },
+          { label: 'Carbohidratos', value: totalCarb, min: Math.round((calObjetivo * 0.35) / 4), max: Math.round((calObjetivo * 0.55) / 4), color: 'text-amber-400/80', gradient: 'from-amber-400/50 to-yellow-400/50', icon: Wheat, unit: 'g' },
+          { label: 'Grasas', value: totalGrasa, min: Math.round((calObjetivo * 0.20) / 9), max: Math.round((calObjetivo * 0.30) / 9), color: 'text-pink-400/80', gradient: 'from-pink-500/50 to-rose-500/50', icon: Droplet, unit: 'g' },
         ].map(m => (
           <div key={m.label} className="bg-dark-800 border border-dark-border rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-1">
