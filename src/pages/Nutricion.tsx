@@ -498,7 +498,7 @@ export default function Nutricion() {
             }}
             onWhatsApp={() => shareWhatsApp(generateNutricionText(comidas, calObjetivo))}
           />
-          <button onClick={() => setShowAddComida(true)} className="flex items-center gap-2 px-3 py-2 bg-emerald-500/15 border border-emerald-500/20 text-emerald-400 rounded-xl text-xs font-bold hover:bg-emerald-500/25 transition-colors">
+          <button onClick={() => setShowAddComida(true)} className="flex items-center gap-2 px-3 py-2 bg-cyan-500/15 border border-cyan-500/20 text-cyan-400 rounded-xl text-xs font-bold hover:bg-cyan-500/25 transition-colors">
             <Plus className="w-3 h-3" /> Comida
           </button>
           <button onClick={() => { generarPlan(false); }} disabled={!perfil || generando}
