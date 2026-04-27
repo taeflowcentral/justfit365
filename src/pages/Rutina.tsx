@@ -340,7 +340,7 @@ export default function Rutina() {
                     : 'bg-dark-800 border-dark-border text-white/40 hover:border-white/10 hover:bg-dark-700'
               } cursor-pointer`}>
               <p className="text-xs font-bold uppercase">{d.dia}</p>
-              <p className="text-[9px] mt-0.5 opacity-60 leading-tight">{d.tipo}</p>
+              <p className={`text-[11px] mt-0.5 leading-tight font-semibold ${i === diaActivo ? 'text-purple-300' : d.tipo === 'Descanso' ? 'text-white/30' : 'text-white/60'}`}>{d.tipo}</p>
             </button>
           ))}
         </div>
