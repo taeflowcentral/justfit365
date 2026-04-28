@@ -123,30 +123,47 @@ Si com\u00e9s pescado graso 2-3 veces por semana, quiz\u00e1s no necesit\u00e9s 
 **\u00bfSos vegetariano?** Omega-3 de algas, te da DHA directo \ud83d\udc1f`
   },
   {
-    keywords: ['se\u00f1al metab\u00f3lica', 'metabolica', 'metabolismo'],
-    content: `**Se\u00f1al metab\u00f3lica: c\u00f3mo tu cuerpo regula todo**
+    keywords: ['se\u00f1al metab\u00f3lica', 'metabolica', 'metabolismo', 'senal metabolica', 'hormonas'],
+    content: `**Senal metabolica: la clave que nadie te explica**
 
-Tu cuerpo tiene "se\u00f1ales" hormonales que dicen si est\u00e1 todo bien o hay que activar modo ahorro.
+Tu cuerpo NO es una calculadora de calorias. Es un sistema hormonal. Las "senales metabolicas" son las hormonas que le dicen a tu cuerpo si debe quemar grasa, construir musculo o almacenar todo.
 
-**Las hormonas clave:**
+**Las 5 hormonas que controlan tu cuerpo:**
 
-**Leptina** (saciedad):
-- Cuando hac\u00e9s dieta mucho tiempo, baja \u2192 hambre, cansancio
-- Soluci\u00f3n: un d\u00eda de mantenimiento por semana
+**1. Insulina (la llave maestra)**
+- Cuando comes carbos/azucar, la insulina SUBE y tu cuerpo entra en modo "almacenamiento"
+- Con insulina alta NO PODES quemar grasa (esta bloqueada)
+- El ejercicio de fuerza mejora la sensibilidad a la insulina
+- Comer proteina + fibra ANTES de los carbos reduce el pico de insulina un 40%
+- CLAVE: mantener insulina estable = quemar grasa + tener energia todo el dia
 
-**Cortisol** (estr\u00e9s):
-- Cr\u00f3nicamente alto = perd\u00e9s m\u00fasculo + grasa en la panza
-- Se baja durmiendo bien y no pas\u00e1ndote con el entreno
+**2. Cortisol (la hormona del estres)**
+- Crónicamente alto = pierdes musculo + acumulas grasa abdominal
+- Se dispara con: poco sueno, sobreentrenamiento, estres cronico, ayunos excesivos
+- Se baja con: dormir 7-9hs, magnesio, caminatas, meditacion, no entrenar mas de 60-75 min
 
-**Insulina** (anab\u00f3lica):
-- Mete nutrientes al m\u00fasculo. El ejercicio de fuerza la mantiene bien
-- Lo peor: sedentarismo + ultraprocesados
+**3. Leptina (saciedad)**
+- Cuando haces dieta mucho tiempo, baja y tu cuerpo entra en "modo ahorro"
+- Solucion: 1 dia de mantenimiento por semana (refeed) para resetearla
+- No es "dia trampa" - es comer al nivel de tu TDEE con carbos limpios
 
-**mTOR** (construir m\u00fasculo):
-- Se activa con prote\u00edna y entrenamiento
-- Se apaga con d\u00e9ficit excesivo y demasiado cardio
+**4. Grelina (hambre)**
+- Sube cuando dormis poco o comes muy pocas veces al dia
+- Se controla con: proteina en cada comida, fibra, buena hidratacion, sueno
 
-**Tip para vos ({objetivo}):** no hagas d\u00e9ficits de m\u00e1s de 500 kcal, entren\u00e1 fuerza, dorm\u00ed bien y met\u00e9 prote en cada comida \u2728`
+**5. mTOR (construccion muscular)**
+- Se activa con proteina (leucina) y entrenamiento de fuerza
+- Se apaga con deficit excesivo y demasiado cardio
+- Por eso no sirve hacer 2hs de cardio para "quemar" - pierdes musculo
+
+**Como usar las senales a tu favor ({objetivo}):**
+- Come proteina en cada comida (activa mTOR, controla grelina)
+- Entrena fuerza 3-5x/semana (mejora insulina, activa mTOR)
+- Dormi 7-9 horas (baja cortisol, regula leptina)
+- No hagas deficit de mas de 500 kcal (protege leptina)
+- Evita azucares y harinas (estabiliza insulina)
+
+Tu cuerpo es inteligente. Dale las senales correctas y responde \u2728`
   },
   {
     keywords: ['carbo', 'carbohidrato', 'cuando carbos', 'qu\u00e9 carbos', 'ingerir carbos'],
@@ -1453,6 +1470,335 @@ Si te sent\u00eds cansado a pesar de dormir bien, puede ser deficiencia de vitam
 
 **Si el cansancio persiste** a pesar de buena alimentaci\u00f3n, sue\u00f1o y entrenamiento: ped\u00ed un an\u00e1lisis de sangre completo (hemograma, ferritina, B12, vitamina D, tiroides) \u26a1`
   },
+  {
+    keywords: ['canela bloqueador', 'canela insulina', 'canela glucosa', 'indice glucemico', 'ceilon insulina', 'ig alimentos'],
+    content: `**Canela de Ceilon: el bloqueador natural del indice glucemico**
+
+La canela de Ceilon (Ceylon) no es solo un condimento. Es uno de los reguladores de glucosa mas potentes de la naturaleza.
+
+**Como actua:**
+- **Bloquea parcialmente la alfa-amilasa** (enzima que digiere almidones), ralentizando la absorcion de carbohidratos
+- **Mejora la sensibilidad a la insulina** hasta un 20% segun estudios
+- **Imita la accion de la insulina** ayudando a meter glucosa en las celulas sin tanto pico hormonal
+- **Reduce la velocidad de vaciado gastrico** = los carbos se absorben mas lento
+
+**Resultado practico:** Si comes arroz con canela, el pico de glucosa es 25-30% MENOR que sin canela.
+
+**Como usarla para bajar el IG de tus comidas:**
+1. **En la avena del desayuno:** 1 cdta de canela Ceylon. Convierte un plato de IG medio en IG bajo
+2. **En el cafe/mate:** 1/2 cdta. Estabiliza la glucosa de la manana
+3. **En batidos con fruta:** 1 cdta. Reduce el pico de la fructosa
+4. **En el arroz o la pasta:** espolvorear antes de comer
+5. **En el yogur:** con granola + canela = snack de IG controlado
+
+**IMPORTANTE: Solo canela de CEILON (Ceylon)**
+La canela comun (Cassia, la que venden en el super) tiene cumarina, que en exceso dana el higado. La de Ceilon tiene 250 veces menos cumarina. Busca que diga "Ceylon" o "Ceilon" en el envase.
+
+**Dosis:** 1-6g/dia (1-2 cucharaditas). Mas no es mejor.
+
+**Combo matador:** Canela + vinagre de manzana (1 cda en agua antes de comer) = doble bloqueo de pico glucemico \ud83c\udfaf`
+  },
+  {
+    keywords: ['control insulina', 'resistencia insulina', 'pico insulina', 'glucosa estable', 'azucar sangre'],
+    content: `**Control de insulina: la hormona que decide si quemas o almacenas**
+
+La insulina es la hormona MAS IMPORTANTE para tu composicion corporal. No importa cuantas calorias comas si tu insulina esta descontrolada.
+
+**Cuando la insulina esta ALTA:**
+- Tu cuerpo almacena grasa (no puede quemarla)
+- Retenes liquido
+- Tenes hambre a las 2 horas de comer
+- Energia inestable: picos y bajones
+- A largo plazo: resistencia insulinica, diabetes tipo 2
+
+**Cuando la insulina esta ESTABLE:**
+- Quemas grasa como combustible
+- Energia pareja todo el dia
+- Saciedad prolongada
+- Mejor humor y concentracion
+- Mejor rendimiento deportivo
+
+**7 estrategias para controlar la insulina:**
+
+1. **Orden de los alimentos:** Come en este orden: fibra/vegetales PRIMERO, proteina SEGUNDO, carbohidratos ULTIMO. Reduce el pico glucemico un 40%
+
+2. **Caminar 10 min post-comida:** El musculo "chupa" glucosa sin necesitar tanta insulina
+
+3. **Vinagre de manzana:** 1 cda en agua antes de comer. Ralentiza la digestion de almidones
+
+4. **Canela de Ceilon:** 1 cdta con las comidas. Mejora sensibilidad insulinica
+
+5. **Proteina en cada comida:** Estabiliza glucosa y genera saciedad
+
+6. **Eliminar azucar liquido:** Gaseosas, jugos, bebidas energeticas. Son bombas de insulina
+
+7. **Entrenamiento de fuerza:** El mejor "medicamento" para sensibilidad insulinica. El musculo es el organo mas grande que absorbe glucosa
+
+**Para tu objetivo ({objetivo}):** Controlar la insulina es mas importante que contar calorias. Estabiliza tus hormonas y el cuerpo hace el resto \ud83d\udcaa`
+  },
+  {
+    keywords: ['cortisol', 'estres', 'estres cronico', 'cortisol alto', 'grasa abdominal'],
+    content: `**Cortisol: la hormona que sabotea tus resultados**
+
+El cortisol es la hormona del estres. En dosis agudas es util (te despierta, te da energia para entrenar). Pero CRONICAMENTE ALTO destruye todo.
+
+**Que hace el cortisol alto cronico:**
+- Acumula grasa en el abdomen (grasa visceral, la mas peligrosa)
+- Descompone musculo para usarlo como energia
+- Retiene liquidos (te "hincha")
+- Altera el sueno (no podes dormir aunque estes cansado)
+- Aumenta el hambre por azucar y harinas
+- Debilita el sistema inmune
+- Sube la presion arterial
+
+**Las 5 peores causas de cortisol alto:**
+1. **Dormir menos de 6 horas** - La #1 causa. Una noche mala sube cortisol 37%
+2. **Sobreentrenamiento** - Entrenar mas de 75 min o entrenar intenso 7 dias sin descanso
+3. **Deficit calorico extremo** - Menos de 1200 kcal/dia pone al cuerpo en modo supervivencia
+4. **Estres emocional cronico** - Trabajo, relaciones, preocupaciones constantes
+5. **Exceso de cafeina** - Mas de 400mg/dia (3-4 cafes) mantiene cortisol elevado
+
+**Como bajarlo:**
+- Dormir 7-9 horas (no negociable)
+- Magnesio bisglicinato antes de dormir (400mg)
+- Caminatas de 20-30 min en la naturaleza
+- No entrenar mas de 60-75 min por sesion
+- Respiracion 4-7-8: inspira 4 seg, retene 7, exhala 8
+- Ashwagandha (suplemento adaptogeno con evidencia solida)
+- Descansar 1-2 dias por semana del entrenamiento
+
+El cortisol es la razon por la que muchos entrenan duro, comen "bien" y no ven resultados. No es falta de esfuerzo, es exceso de estres \u26a1`
+  },
+  {
+    keywords: ['desinflamacion', 'inflamacion', 'inflamacion cronica', 'antiinflamatorio', 'desinflamar', 'hinchado', 'retencion'],
+    content: `**Desinflamacion: el secreto para transformar tu cuerpo**
+
+La inflamacion cronica de baja intensidad es INVISIBLE pero esta detras del 80% de los problemas: no bajar de peso, fatiga, dolor articular, mala recuperacion, envejecimiento acelerado.
+
+**Senales de inflamacion cronica:**
+- Hinchazon abdominal constante
+- Retencion de liquidos (anillos apretados, tobillo hinchado)
+- Fatiga aunque duermas
+- Dolor articular sin lesion
+- Piel opaca, acne en adultos
+- Recuperacion lenta post-entreno
+- Grasa abdominal que no se va
+
+**Los 5 inflamadores principales (ELIMINAR):**
+1. **Azucar refinado y harinas blancas** - Disparan citoquinas inflamatorias
+2. **Aceites de semillas** (girasol, soja, maiz) - Exceso de Omega-6 pro-inflamatorio
+3. **Alcohol** - Inflama intestino, higado y todo el sistema
+4. **Ultraprocesados** - Conservantes, colorantes, emulsionantes destruyen la microbiota
+5. **Estres cronico + mal sueno** - Cortisol alto = inflamacion sistemica
+
+**Los 5 desinflamadores mas potentes (INCLUIR):**
+1. **Omega-3** (salmon, sardinas, suplemento EPA/DHA) - Antiinflamatorio directo
+2. **Curcuma + pimienta negra** - Curcumina es comparable a ibuprofeno
+3. **Jengibre fresco** - Reduce marcadores inflamatorios un 25%
+4. **Vegetales de hoja verde** - Espinaca, kale, rucula. Ricos en antioxidantes
+5. **Ayuno nocturno de 12hs** - Darle descanso al sistema digestivo
+
+**Plan desinflamacion 7 dias:**
+- Eliminar azucar, harinas, alcohol
+- 2-3 porciones de Omega-3 por dia (salmon + suplemento)
+- Te de curcuma + jengibre + pimienta en ayunas
+- Vegetales en cada comida
+- Dormir 8 horas
+- Resultado: en 7 dias notas la diferencia en hinchazon y energia
+
+La desinflamacion es el primer paso antes de cualquier objetivo de composicion corporal \ud83d\udd25`
+  },
+  {
+    keywords: ['dormir', 'sueno calidad', 'importancia dormir', 'insomnio entrenamiento', 'descanso nocturno', 'horas sueno'],
+    content: `**Dormir: el suplemento gratis mas poderoso que existe**
+
+Si dormis mal, todo lo demas falla. No importa cuanto entrenes ni que tan bien comas. Sin sueno de calidad, tus resultados se reducen a la mitad.
+
+**Que pasa cuando dormis MENOS de 7 horas:**
+- Cortisol sube 37% (acumulas grasa abdominal)
+- Testosterona baja 10-15% (menos musculo, menos energia)
+- Grelina sube (mas hambre, especialmente de azucar)
+- Leptina baja (menos saciedad)
+- Sensibilidad a la insulina cae 30% (almacenas mas grasa)
+- Recuperacion muscular se reduce drasticamente
+- Riesgo de lesion aumenta 70%
+
+**Cuanto dormir segun tu actividad:**
+- Sedentario: 7-8 horas
+- Entrenamiento moderado: 7.5-8.5 horas
+- Entrenamiento intenso: 8-9 horas
+- Atleta de alto rendimiento: 9-10 horas
+
+**10 tips para dormir mejor:**
+1. **Misma hora todos los dias** (incluso fines de semana)
+2. **Habitacion fria** (18-20 grados ideal)
+3. **Oscuridad total** (cortinas blackout o antifaz)
+4. **Sin pantallas 1 hora antes** (la luz azul bloquea melatonina)
+5. **Magnesio bisglicinato** 400mg 30 min antes de dormir
+6. **No cafeina despues de las 14hs** (vida media: 5-6 horas)
+7. **Cenar liviano** y minimo 2 horas antes de acostarte
+8. **Te de tilo, valeriana o pasiflora** antes de dormir
+9. **Melatonina** 0.5-1mg si cuesta conciliar (no mas)
+10. **Rutina de "cierre":** ducha tibia + lectura + respiracion
+
+**El sueno es cuando:**
+- Se libera hormona de crecimiento (repara musculo)
+- Se consolida la memoria muscular del entrenamiento
+- Se regulan todas las hormonas metabolicas
+- Se desintoxica el cerebro (sistema glinfatico)
+
+Dormir bien no es un lujo, es la base de todo lo demas \ud83c\udf19`
+  },
+  {
+    keywords: ['deshidratacion', 'deshidrata', 'que deshidrata', 'bebidas deshidratan', 'alimentos deshidratan', 'hidratacion importancia'],
+    content: `**Hidratacion avanzada: que te hidrata y que te deshidrata**
+
+El agua es el nutriente mas importante. Con solo 2% de deshidratacion, tu rendimiento cae un 20% y tu concentracion un 30%.
+
+**Para tus {peso}kg necesitas:** {aguaMin}-{aguaMax} litros por dia (mas si entrenas)
+
+**BEBIDAS QUE DESHIDRATAN (evitar o compensar):**
+- **Alcohol** - Diuretico potente. 1 cerveza = necesitas 1.5 vasos extra de agua
+- **Cafe en exceso** (mas de 3 tazas) - Efecto diuretico. Hasta 2 tazas esta bien
+- **Gaseosas** (incluso las diet) - El sodio y edulcorantes alteran hidratacion celular
+- **Bebidas energeticas** - Cafeina + azucar = doble deshidratacion
+- **Jugos industriales** - Azucar concentrada, poca agua util
+- **Te negro en exceso** - Taninos son diureticos suaves
+
+**ALIMENTOS QUE DESHIDRATAN:**
+- Fiambres y embutidos (altisimos en sodio)
+- Snacks salados (papas fritas, palitos)
+- Comida rapida (sodio + grasas trans)
+- Azucar refinada (requiere agua para metabolizarse)
+- Harinas refinadas (misma razon que el azucar)
+
+**ALIMENTOS QUE HIDRATAN (incluir):**
+- Pepino (96% agua), sandia (92%), tomate (94%)
+- Apio, lechuga, pimiento
+- Frutas: frutillas, naranja, melon, uvas
+- Sopas y caldos caseros
+- Agua de coco (electrolitos naturales)
+
+**Senales de deshidratacion:**
+- Orina oscura (debe ser amarillo claro o transparente)
+- Dolor de cabeza
+- Fatiga sin razon
+- Calambres
+- Boca seca
+- Mal rendimiento en el gym
+
+**Protocolo de hidratacion diario:**
+- Al despertar: 500ml de agua (tu cuerpo paso 8hs sin agua)
+- Antes de entrenar: 500ml 30 min antes
+- Durante entreno: 200ml cada 15-20 min
+- Post-entreno: 500-750ml con electrolitos
+- Resto del dia: distribuir hasta completar {aguaMin}-{aguaMax}L
+
+La regla simple: si tenes sed, ya estas deshidratado. Toma antes de tener sed \ud83d\udca7`
+  },
+  {
+    keywords: ['jengibre curcuma', 'como tomar curcuma', 'curcuma jengibre tuberculo', 'golden milk', 'cuando tomar jengibre', 'tuberculo antiinflamatorio'],
+    content: `**Jengibre y Curcuma: los tuberculos antiinflamatorios mas poderosos**
+
+IMPORTANTE: Siempre usar el TUBERCULO FRESCO o en polvo de calidad. Los suplementos funcionan pero el tuberculo tiene compuestos sinergicos que la capsula no tiene.
+
+**CURCUMA (Curcuma longa)**
+
+**Beneficios comprobados:**
+- Antiinflamatorio comparable a ibuprofeno (sin efectos secundarios)
+- Antioxidante 5-8 veces mas potente que la vitamina E
+- Protege articulaciones (reduce dolor en artritis un 40%)
+- Mejora recuperacion post-entreno
+- Hepatoprotector (protege el higado)
+- Anticancerigeno (estudios en curso muy prometedores)
+
+**CLAVE: absorcion con pimienta negra**
+La curcumina sola se absorbe solo un 3%. Con piperina (pimienta negra) la absorcion sube un 2000%. SIEMPRE combinar.
+
+**Como tomarla:**
+- **Golden Milk (la mejor forma):** Leche vegetal caliente + 1 cdta curcuma + pizca de pimienta negra + 1/2 cdta canela + miel. Tomar a la NOCHE, 1hs antes de dormir
+- **En las comidas:** Agregar al arroz, pollo, huevos, sopas. Siempre con pimienta
+- **Shot matutino:** Agua tibia + 1/2 cdta curcuma + pimienta + limon
+- **Rallada fresca:** Sobre ensaladas, en jugos verdes
+
+**JENGIBRE (Zingiber officinale)**
+
+**Beneficios comprobados:**
+- Reduce dolor muscular post-entreno (DOMS) un 25%
+- Antiinflamatorio y analgesico natural
+- Acelera metabolismo un 5% (termogenico)
+- Mejora digestion y absorcion de nutrientes
+- Antiemitico (nauseas, mareos)
+- Mejora circulacion sanguinea
+
+**Como tomarlo:**
+- **Te de jengibre:** Rodajas de raiz fresca en agua caliente 10 min. Ideal en AYUNAS por la manana
+- **Rallado fresco:** En woks, ensaladas, jugos, batidos
+- **Shot anti-inflamatorio:** Jengibre + limon + curcuma + pimienta. En ayunas
+- **Post-entreno:** Te de jengibre para acelerar recuperacion
+
+**CUANDO TOMAR CADA UNO:**
+- **Manana (ayunas):** Jengibre + limon (activa digestion, termogenico)
+- **Con las comidas:** Curcuma + pimienta (mejora absorcion de nutrientes)
+- **Post-entreno:** Jengibre (reduce inflamacion y DOMS)
+- **Noche:** Golden milk con curcuma (antiinflamatorio + relajante)
+
+**Combo diario recomendado:**
+1. Manana: shot de jengibre + limon
+2. Almuerzo: curcuma en la comida + pimienta
+3. Noche: golden milk antes de dormir
+
+Son baratos, naturales y tienen mas evidencia que la mayoria de los suplementos \ud83c\udf3f`
+  },
+  {
+    keywords: ['dejar alcohol', 'alcohol objetivo', 'alcohol musculo', 'cerveza entreno', 'alcohol grasa', 'despedirse alcohol'],
+    content: `**Alcohol: por que es INCOMPATIBLE con tus objetivos**
+
+No es que "un vasito no hace nada". El alcohol afecta CADA sistema que necesitas para lograr resultados.
+
+**Lo que hace el alcohol en tu cuerpo:**
+
+**1. Destruye la sintesis proteica muscular**
+- 1 noche de alcohol reduce la sintesis proteica un 37%
+- Eso significa: el musculo que entrenaste HOY no se repara si tomas esta noche
+- El efecto dura 24-48 horas
+
+**2. Desploma la testosterona**
+- Baja testosterona y sube estrogenos (si, en hombres tambien)
+- Menos musculo, mas grasa, menos energia
+- Efecto medible con solo 2-3 copas
+
+**3. Descontrola la insulina y el cortisol**
+- El alcohol es metabolizado como PRIORIDAD por el higado
+- Mientras metaboliza alcohol, NO quema grasa
+- Sube cortisol (acumula grasa abdominal)
+- Altera la glucosa por 24-48 horas
+
+**4. Destruye la calidad del sueno**
+- "Me duermo rapido con alcohol" = FALSO sueno reparador
+- Elimina la fase REM (donde se repara el musculo)
+- Te despertars deshidratado y sin haber recuperado
+
+**5. Calorias vacias + hambre**
+- 1 cerveza = 150 kcal. 1 copa vino = 120 kcal. 1 fernet = 200 kcal
+- El alcohol AUMENTA el hambre (altera grelina)
+- Despues de tomar comes pizza, empanadas, snacks = 2000+ kcal extra
+
+**6. Deshidratacion e inflamacion**
+- Diuretico potente. Perdees electrolitos
+- Inflama TODO el sistema digestivo
+- La "hinchazon" post-salida dura 3-5 dias
+
+**La verdad dura:** Si queres resultados reales, el alcohol tiene que irse. No es "moderacion" - cada copa retrasa tu progreso.
+
+**Reemplazos sociales:**
+- Agua con gas + limon + hielo (parece un trago)
+- Kombucha
+- Cerveza sin alcohol (0.0%)
+- Agua tonica sin azucar + limon
+
+Tu cuerpo te lo va a agradecer en 2 semanas. La diferencia es dramatica \ud83d\udcaa`
+  },
 ];
 
 function personalizeContent(content: string, perfil: { peso: number; altura: number; edad: number; objetivo: string; nivelActividad: string } | undefined): string {
@@ -1653,7 +1999,7 @@ export default function BioCoach() {
       </div>
 
       <div className="flex flex-wrap gap-1.5 mt-3 mb-3">
-        {['Creatina', 'Prote\u00edna', 'Col\u00e1geno', 'Omega3 tipos', 'Magnesio tipos', 'Harinas y az\u00facar', 'Alimentaci\u00f3n seg\u00fan objetivo', 'Tendencias 2025', 'Canela y especias', 'Electrolitos', 'Salud intestinal', 'Minerales', 'Antioxidantes', 'Complejo B', 'Whey', 'Bajar grasa', 'Ganar m\u00fasculo', 'D\u00e9ficit/Super\u00e1vit', 'Macros', 'Sue\u00f1o', 'Cafe\u00edna', 'Sarcopenia', 'Menopausia', 'Hipotiroidismo', 'Principiante', 'Suplementos', 'Gl\u00fateos', 'Abs'].map(s => (
+        {['Senal metabolica', 'Control insulina', 'Cortisol', 'Canela bloqueador IG', 'Desinflamacion', 'Dormir', 'Que deshidrata', 'Jengibre y curcuma', 'Dejar alcohol', 'Creatina', 'Proteina', 'Colageno', 'Omega3 tipos', 'Magnesio tipos', 'Harinas y azucar', 'Alimentacion segun objetivo', 'Tendencias 2025', 'Electrolitos', 'Salud intestinal', 'Minerales', 'Complejo B', 'Whey', 'Bajar grasa', 'Ganar musculo', 'Macros', 'Sueno', 'Cafeina', 'Principiante', 'Suplementos'].map(s => (
           <button key={s} onClick={() => setInput(s)}
             className="px-2.5 py-1 bg-white/[0.03] border border-dark-border hover:border-electric/30 rounded-lg text-[11px] text-white/40 hover:text-electric transition-all">
             {s}
