@@ -651,16 +651,22 @@ export default function Dashboard() {
         </h3>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
           {[
-            { label: 'Peso', value: `${peso} kg` },
-            { label: 'Altura', value: `${altura} cm` },
-            { label: 'Edad', value: `${edad} a\u00f1os` },
-            { label: 'Nivel', value: nivel },
-            { label: 'TMB', value: `${tmb.toLocaleString('es-AR')}` },
-            { label: 'TDEE', value: `${tdee.toLocaleString('es-AR')}` },
+            { label: 'Peso', value: `${peso} kg`, tip: '' },
+            { label: 'Altura', value: `${altura} cm`, tip: '' },
+            { label: 'Edad', value: `${edad} a\u00f1os`, tip: '' },
+            { label: 'Nivel', value: nivel, tip: '' },
+            { label: 'TMB', value: `${tmb.toLocaleString('es-AR')}`, tip: 'Tasa Metabolica Basal: calorias que tu cuerpo quema en reposo total para mantener funciones vitales (respirar, circulacion, temperatura).' },
+            { label: 'TDEE', value: `${tdee.toLocaleString('es-AR')}`, tip: 'Gasto Energetico Total Diario: calorias que quemas por dia incluyendo tu actividad fisica. Si comes menos, bajas de peso. Si comes mas, subis.' },
           ].map(item => (
-            <div key={item.label} className="bg-black/40 border border-dark-border rounded-xl p-2.5 text-center">
+            <div key={item.label} className="bg-black/40 border border-dark-border rounded-xl p-2.5 text-center relative group">
               <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">{item.label}</p>
               <p className="text-white font-bold text-sm mt-0.5">{item.value}</p>
+              {item.tip && (
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-dark-800 border border-electric/20 rounded-xl p-3 shadow-2xl opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity z-20">
+                  <p className="text-electric text-[10px] font-bold mb-1">{item.label}</p>
+                  <p className="text-white/60 text-[10px] leading-relaxed">{item.tip}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
