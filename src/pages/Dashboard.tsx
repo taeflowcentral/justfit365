@@ -134,21 +134,31 @@ export default function Dashboard() {
   const calMaxDiarias = quiereBajar ? Math.max(1400, tdee - 300) : (quiereSubir ? tdee + 500 : tdee);
 
   // Indice de correccion: comparar calorias reales vs necesarias
-  const calPromedioDiario = calSemana > 0 ? Math.round(calSemana / 7) : 0;
+  const diasConDatos = weekData.filter(d => d.calorias > 0).length;
+  const calPromedioDiario = diasConDatos > 0 ? Math.round(calSemana / diasConDatos) : 0;
   const calNecesarias = quiereBajar ? (tdee - deficitDiario) : (quiereSubir ? (tdee + superavitDiario) : tdee);
 
-  // Estado del progreso
-  type EstadoProgreso = 'excelente' | 'bien' | 'corregir' | 'sin_datos';
+  // Estado del progreso con mensajes claros
+  type EstadoProgreso = 'excelente' | 'bien' | 'corregir_alto' | 'corregir_bajo' | 'sin_datos';
   const estadoProgreso: EstadoProgreso = calPromedioDiario === 0 ? 'sin_datos'
     : (calPromedioDiario >= calMinDiarias && calPromedioDiario <= calMaxDiarias) ? 'excelente'
     : (Math.abs(calPromedioDiario - calNecesarias) < 300) ? 'bien'
-    : 'corregir';
+    : calPromedioDiario > calMaxDiarias ? 'corregir_alto'
+    : 'corregir_bajo';
 
+  const diffCal = calPromedioDiario - calNecesarias;
   const estadoConfig = {
-    excelente: { icon: CheckCircle, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', label: 'Excelente ritmo', desc: 'Vas por buen camino para alcanzar tu objetivo.' },
-    bien: { icon: Target, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20', label: 'Casi en rango', desc: 'Ajust\u00e1 un poco tus calor\u00edas para mejorar el ritmo.' },
-    corregir: { icon: AlertTriangle, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20', label: 'Necesita ajuste', desc: quiereBajar ? 'Est\u00e1s consumiendo m\u00e1s calor\u00edas de las recomendadas.' : 'Est\u00e1s consumiendo menos calor\u00edas de las necesarias.' },
-    sin_datos: { icon: XCircle, color: 'text-white/30', bg: 'bg-white/5', border: 'border-dark-border', label: 'Sin datos', desc: 'Gener\u00e1 un plan nutricional para ver tu progreso.' },
+    excelente: { icon: CheckCircle, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', label: 'Vas muy bien', desc: 'Tu alimentacion esta alineada con tu objetivo. Segui asi.' },
+    bien: { icon: Target, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20', label: 'Cerca del objetivo', desc: `Estas a solo ${Math.abs(diffCal)} kcal de tu rango ideal. Un pequeno ajuste en las porciones te pone en camino.` },
+    corregir_alto: { icon: AlertTriangle, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20', label: 'Consumo elevado',
+      desc: quiereBajar
+        ? `Estas consumiendo ${diffCal} kcal de mas por dia. Para perder peso, intenta reducir porciones de carbohidratos o eliminar un snack.`
+        : `Estas ${diffCal} kcal por encima del objetivo. Esto puede generar acumulacion de grasa no deseada. Revisa las porciones.` },
+    corregir_bajo: { icon: AlertTriangle, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20', label: 'Consumo bajo',
+      desc: quiereSubir
+        ? `Estas consumiendo ${Math.abs(diffCal)} kcal menos de lo necesario. Para ganar musculo necesitas comer mas. Agrega un snack proteico o aumenta porciones.`
+        : `Estas ${Math.abs(diffCal)} kcal por debajo. Comer muy poco puede frenar tu metabolismo. Asegurate de incluir proteina y carbos en cada comida.` },
+    sin_datos: { icon: XCircle, color: 'text-white/30', bg: 'bg-white/5', border: 'border-dark-border', label: 'Sin datos de la semana', desc: 'Genera un plan nutricional en la seccion Nutricion para ver tu progreso aqui.' },
   };
   const est = estadoConfig[estadoProgreso];
 
@@ -200,36 +210,49 @@ export default function Dashboard() {
 
       {/* Calorias Semanales + Rango objetivo */}
       <div className="bg-dark-800 border border-dark-border rounded-2xl p-4">
-        <h3 className="text-white font-bold text-sm mb-3 flex items-center gap-2">
-          <Flame className="w-4 h-4 text-orange-400" /> Calor&iacute;as Semanales
-        </h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-white font-bold text-sm flex items-center gap-2">
+            <Flame className="w-4 h-4 text-orange-400" /> Calorias Semanales
+          </h3>
+          {diasConDatos > 0 && (
+            <span className="text-white/30 text-[10px]">{diasConDatos} de 7 dias con plan</span>
+          )}
+        </div>
         <ResponsiveContainer width="100%" height={200}>
           <BarChart data={weekData}>
             <XAxis dataKey="dia" stroke="#555" fontSize={12} tick={{ fill: '#999' }} />
             <YAxis stroke="#555" fontSize={11} tick={{ fill: '#888' }} />
-            <Tooltip contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: '12px', color: '#fff', fontSize: '13px' }} />
-            {calMinDiarias > 0 && <ReferenceLine y={calMinDiarias} stroke="#f59e0b" strokeDasharray="4 4" strokeOpacity={0.5} />}
-            {calMaxDiarias > 0 && <ReferenceLine y={calMaxDiarias} stroke="#22c55e" strokeDasharray="4 4" strokeOpacity={0.5} />}
-            <Bar dataKey="calorias" fill="#0099ff" fillOpacity={0.45} radius={[6, 6, 0, 0]} />
+            <Tooltip contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: '12px', color: '#fff', fontSize: '13px' }}
+              formatter={(value) => [`${value} kcal`, 'Calorias']} />
+            {calMinDiarias > 0 && <ReferenceLine y={calMinDiarias} stroke="#f59e0b" strokeDasharray="4 4" strokeOpacity={0.4} label={{ value: 'Min', fill: '#f59e0b', fontSize: 9, position: 'left' }} />}
+            {calMaxDiarias > 0 && <ReferenceLine y={calMaxDiarias} stroke="#22c55e" strokeDasharray="4 4" strokeOpacity={0.4} label={{ value: 'Max', fill: '#22c55e', fontSize: 9, position: 'left' }} />}
+            <Bar dataKey="calorias" radius={[6, 6, 0, 0]}
+              fill="#0099ff" fillOpacity={0.4}
+            />
           </BarChart>
         </ResponsiveContainer>
 
         {/* Rango calorico */}
-        <div className="grid grid-cols-3 gap-2 mt-3">
+        <div className="grid grid-cols-4 gap-2 mt-3">
+          <div className="bg-black/40 rounded-xl p-2.5 text-center border border-white/5">
+            <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">Promedio</p>
+            <p className={`font-black text-lg leading-tight ${calPromedioDiario > 0 ? 'text-white' : 'text-white/20'}`}>{calPromedioDiario || '-'}</p>
+            <p className="text-white/30 text-[10px]">kcal/dia</p>
+          </div>
           <div className="bg-black/40 rounded-xl p-2.5 text-center border border-amber-500/10">
-            <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">M&iacute;nimo</p>
+            <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">Minimo</p>
             <p className="text-amber-400 font-black text-lg leading-tight">{calMinDiarias}</p>
-            <p className="text-white/30 text-[10px]">kcal/d&iacute;a</p>
+            <p className="text-white/30 text-[10px]">kcal/dia</p>
           </div>
           <div className="bg-black/40 rounded-xl p-2.5 text-center border border-electric/10">
-            <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">Necesario</p>
+            <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">Ideal</p>
             <p className="text-electric font-black text-lg leading-tight">{calNecesarias}</p>
-            <p className="text-white/30 text-[10px]">kcal/d&iacute;a</p>
+            <p className="text-white/30 text-[10px]">kcal/dia</p>
           </div>
           <div className="bg-black/40 rounded-xl p-2.5 text-center border border-emerald-500/10">
-            <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">M&aacute;ximo</p>
+            <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">Maximo</p>
             <p className="text-emerald-400 font-black text-lg leading-tight">{calMaxDiarias}</p>
-            <p className="text-white/30 text-[10px]">kcal/d&iacute;a</p>
+            <p className="text-white/30 text-[10px]">kcal/dia</p>
           </div>
         </div>
 
@@ -238,13 +261,13 @@ export default function Dashboard() {
           <est.icon className={`w-5 h-5 ${est.color} shrink-0 mt-0.5`} />
           <div>
             <p className={`font-bold text-sm ${est.color}`}>{est.label}</p>
-            <p className="text-white/50 text-xs mt-0.5">{est.desc}</p>
+            <p className="text-white/50 text-xs mt-0.5 leading-relaxed">{est.desc}</p>
             {calPromedioDiario > 0 && (
-              <p className="text-white/40 text-[11px] mt-1">
-                Promedio actual: <strong className="text-white/70">{calPromedioDiario} kcal/d&iacute;a</strong>
-                {calPromedioDiario !== calNecesarias && (
-                  <span className={calPromedioDiario > calNecesarias ? 'text-red-400' : 'text-amber-400'}>
-                    {' '}({calPromedioDiario > calNecesarias ? '+' : ''}{calPromedioDiario - calNecesarias} kcal)
+              <p className="text-white/40 text-[11px] mt-1.5">
+                Tu promedio: <strong className="text-white/70">{calPromedioDiario} kcal/dia</strong> (basado en {diasConDatos} dia{diasConDatos > 1 ? 's' : ''} con plan)
+                {diffCal !== 0 && (
+                  <span className={diffCal > 0 ? 'text-red-400' : 'text-amber-400'}>
+                    {' '}&mdash; {diffCal > 0 ? `${diffCal} kcal de mas` : `${Math.abs(diffCal)} kcal de menos`}
                   </span>
                 )}
               </p>
