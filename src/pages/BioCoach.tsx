@@ -714,35 +714,295 @@ Pod\u00e9s ganar m\u00fasculo y tener un f\u00edsico incre\u00edble siendo veget
 Se puede al 100%. Solo necesita un poco m\u00e1s de planificaci\u00f3n \ud83c\udf31`
   },
   {
-    keywords: ['intermitente', 'ayuno', 'fasting', 'no desayunar'],
-    content: `**Ayuno intermitente: \u00bfsirve o es humo?**
+    keywords: ['intermitente', 'ayuno', 'fasting', 'no desayunar', 'ventana alimentaria', '16 8', '18 6', 'ayuno prolongado'],
+    content: `**Ayuno Intermitente: guia completa con ciencia real**
 
-El ayuno intermitente (AI) no es m\u00e1gico, pero puede ser una herramienta \u00fatil si te funciona bien el esquema.
+El ayuno intermitente (AI) NO es una dieta. Es un PATRON de alimentacion que alterna ventanas de comida con ventanas de ayuno. La evidencia es solida si se hace bien.
 
-**\u00bfQu\u00e9 es?**
-- Comer todas tus calor\u00edas en una ventana de tiempo (generalmente 8 horas) y ayunar las otras 16
-- Ejemplo: com\u00e9s entre las 12 y las 20hs, ayun\u00e1s de 20 a 12
+**TIPOS DE AYUNO INTERMITENTE:**
 
-**\u00bfFunciona para bajar de peso?**
-- S\u00f3lo si genera d\u00e9ficit cal\u00f3rico. No es magia, es que al comer en menos horas, muchos comen menos total
-- Si en 8 horas met\u00e9s las mismas calor\u00edas, no vas a bajar nada
+**12:12 (Principiantes)**
+- 12 horas comiendo, 12 ayunando
+- Ejemplo: cenas a las 20hs, desayunas a las 8hs
+- El mas facil. Casi cualquiera puede hacerlo
+- Beneficio: activa limpieza celular basica
 
-**\u00bfAfecta el m\u00fasculo?**
-- Si lleg\u00e1s a tu prote\u00edna diaria ({protReq}g) en la ventana de comida, no vas a perder m\u00fasculo
-- Pero puede ser dif\u00edcil meter {protReq}g en solo 2-3 comidas
-- Si tu objetivo es hipertrofia, 4-5 comidas distribuidas es mejor
+**16:8 (El mas popular)**
+- 16 horas ayuno, 8 horas comiendo
+- Ejemplo: comes entre 12 y 20hs. Salteas el desayuno
+- Optimo para perdida de grasa + mantener musculo
+- Ideal para: personas con sobrepeso, resistencia insulinica
 
-**\u00bfPara qui\u00e9n funciona bien?**
-- Gente que no tiene hambre a la ma\u00f1ana
-- Personas que prefieren comidas grandes y pocas
-- Gente con agendas apretadas
+**18:6 (Intermedio)**
+- 18 horas ayuno, 6 horas comiendo
+- Ejemplo: comes entre 13 y 19hs
+- Mayor autofagia y quema de grasa
+- Requiere experiencia previa con 16:8
 
-**\u00bfPara qui\u00e9n NO funciona?**
-- Si te da ansiedad o atracones por la noche
-- Si entren\u00e1s a la ma\u00f1ana temprano (necesit\u00e1s combustible)
-- Si ten\u00e9s historial de trastornos alimentarios
+**20:4 (Avanzado - "Warrior Diet")**
+- 20 horas ayuno, 4 horas comiendo
+- Una comida principal grande + un snack
+- NO recomendado para principiantes ni deportistas de fuerza
 
-No es obligatorio ni superior. Es una herramienta m\u00e1s \u23f0`
+**OMAD (One Meal A Day)**
+- 23 horas ayuno, 1 comida
+- Muy dificil llegar a los macros necesarios
+- Riesgo de perder musculo. Solo para casos especificos
+
+**5:2 (Ayuno semanal)**
+- 5 dias comes normal, 2 dias comes solo 500-600 kcal
+- Los dias de ayuno no deben ser consecutivos
+
+**QUE PASA EN TU CUERPO DURANTE EL AYUNO:**
+
+**0-4 horas:** Digestion de la ultima comida. Insulina elevada
+**4-8 horas:** Insulina baja. Empieza a usar glucogeno (reservas de azucar)
+**8-12 horas:** Glucogeno se agota. Empieza la QUEMA DE GRASA (lipólisis)
+**12-16 horas:** Quema de grasa acelerada. Hormona de crecimiento SUBE hasta 5 veces
+**16-24 horas:** AUTOFAGIA se activa fuerte. El cuerpo "recicla" celulas danadas
+**24-48 horas:** Autofagia maxima. Regeneracion celular profunda. Solo bajo supervision medica
+
+**HORMONA DE CRECIMIENTO (GH):**
+- Durante el ayuno de 16+ horas, la GH sube hasta un 500%
+- La GH es la hormona de la "juventud": quema grasa, protege musculo, regenera tejidos
+- Combinar ayuno + entrenamiento en ayunas = pico maximo de GH
+- CUIDADO: romper el ayuno con azucar ANULA el efecto de la GH
+
+**COMO ROMPER EL AYUNO CORRECTAMENTE:**
+1. Empezar con agua + limon o caldo de huesos (prepara el estomago)
+2. A los 15 min: proteina + grasas saludables (huevos, palta)
+3. Evitar carbos simples al romper (nada de pan, jugos, galletitas)
+4. El orden importa: proteina primero, vegetales, carbos al final
+
+**DURANTE EL AYUNO PODES TOMAR:**
+- Agua (la base)
+- Cafe negro sin azucar (acelera la quema de grasa)
+- Te verde o te de hierbas
+- Agua con sal (electrolitos)
+- NO: leche, edulcorantes, jugos, caldos con grasa
+
+**Para tu objetivo ({objetivo}) con {peso}kg:**
+- Necesitas {protReq}g de proteina diaria
+- En una ventana de 8 horas = 3 comidas de ~{Math.round(parseInt('{protReq}') / 3 || 40)}g de proteina cada una
+- Entrenar idealmente al final del ayuno o dentro de la ventana de comida
+
+**BENEFICIOS COMPROBADOS del AI:**
+- Mejora sensibilidad a la insulina (clave para perder grasa)
+- Reduce inflamacion cronica
+- Activa autofagia (limpieza celular)
+- Aumenta hormona de crecimiento
+- Mejora perfil lipidico (colesterol, trigliceridos)
+- Mejora claridad mental y concentracion
+- Puede mejorar longevidad (estudios en curso)
+
+Preguntame sobre autofagia o hormona de crecimiento para mas detalle \u23f0`
+  },
+  {
+    keywords: ['autofagia', 'limpieza celular', 'reciclaje celular', 'celulas danadas', 'regeneracion', 'detox real'],
+    content: `**Autofagia: el verdadero "detox" que tu cuerpo ya sabe hacer**
+
+Olvidate de jugos detox y te "desintoxicantes". Tu cuerpo tiene un mecanismo REAL de limpieza celular: la AUTOFAGIA (descubierta por Yoshinori Ohsumi, Premio Nobel 2016).
+
+**Que es la autofagia?**
+"Auto" = uno mismo. "Fagia" = comer. Literalmente: la celula SE COME a si misma. Pero solo las partes danadas, viejas o disfuncionales. Es un sistema de RECICLAJE CELULAR.
+
+**Que hace exactamente:**
+- Elimina proteinas danadas y mal plegadas (basura celular)
+- Destruye mitocondrias disfuncionales y genera nuevas
+- Elimina patogenos intracelulares (bacterias, virus)
+- Recicla componentes celulares para generar energia
+- Protege contra enfermedades neurodegenerativas (Alzheimer, Parkinson)
+- Efecto anticancerigeno: elimina celulas precancerigenas
+
+**COMO ACTIVAR LA AUTOFAGIA:**
+
+**1. Ayuno (el activador mas potente)**
+- La autofagia comienza a las 12-14 horas de ayuno
+- Se intensifica fuertemente a las 16-24 horas
+- Pico maximo: 24-48 horas (solo bajo supervision medica)
+- Por eso el ayuno 16:8 es el minimo para activarla
+
+**2. Ejercicio**
+- El ejercicio intenso activa autofagia en el musculo
+- Especialmente entrenamiento de fuerza + cardio Zone 2
+- Entrenar en ayunas = doble activacion (ayuno + ejercicio)
+
+**3. Restriccion de proteinas (ciclica)**
+- 1 dia por semana con proteina baja (<50g) activa autofagia
+- NO hacerlo todos los dias (necesitas proteina para el musculo)
+
+**4. Cafe y te verde**
+- Los polifenoles del cafe y EGCG del te verde activan autofagia
+- Cafe negro sin azucar durante el ayuno: perfecto
+
+**5. Curcuma y resveratrol**
+- Ambos activan vias de autofagia (AMPK, SIRT1)
+
+**QUE APAGA LA AUTOFAGIA (evitar durante el ayuno):**
+- Cualquier alimento con calorias (incluso un poco de leche en el cafe)
+- Azucar o edulcorantes (disparan insulina)
+- Aminoacidos/proteina (activan mTOR que FRENA la autofagia)
+- Nota: la autofagia y mTOR son OPUESTOS. Uno limpia, el otro construye. Necesitas AMBOS en momentos diferentes
+
+**CICLO OPTIMO SEMANAL:**
+- 5-6 dias: comer bien, proteina alta, activar mTOR (construir musculo)
+- 1-2 dias: ayuno 16-20hs (activar autofagia, limpiar celulas)
+- Es el equilibrio entre CONSTRUIR y LIMPIAR
+
+**Beneficios observados:**
+- Piel mas luminosa y joven
+- Mejor funcion cognitiva
+- Menos inflamacion
+- Mejor recuperacion deportiva
+- Sistema inmune mas fuerte
+- Potencial anti-envejecimiento
+
+La autofagia es gratuita, esta en tu cuerpo y se activa con solo no comer por 16 horas. El mejor "suplemento" que existe \ud83e\uddec`
+  },
+  {
+    keywords: ['hormona crecimiento', 'gh', 'hgh', 'growth hormone', 'rejuvenecer', 'anti envejecimiento', 'anti age'],
+    content: `**Hormona de Crecimiento (GH): la hormona de la juventud**
+
+La GH no es solo para crecer de estatura. En adultos es fundamental para: quemar grasa, construir musculo, regenerar tejidos y mantenerte joven.
+
+**Que hace la GH en adultos:**
+- Quema grasa (especialmente abdominal) como combustible
+- Protege y construye masa muscular
+- Regenera piel, tendones, huesos
+- Mejora calidad del sueno profundo
+- Fortalece sistema inmune
+- Mejora densidad osea
+- Efecto "anti-aging" medible
+
+**A partir de los 30 anos, la GH baja un 14% por decada.** A los 60 tenes solo un 20% de la GH que tenias a los 20. PERO podes ESTIMULARLA naturalmente.
+
+**LAS 7 FORMAS DE AUMENTAR TU GH NATURALMENTE:**
+
+**1. Ayuno intermitente (la mas potente)**
+- 16hs de ayuno = GH sube hasta 500%
+- Es el estimulador natural mas potente que existe
+- La insulina BAJA la GH. Sin comer = insulina baja = GH alta
+
+**2. Sueno profundo**
+- El 75% de la GH se libera durante el sueno profundo (fase 3-4)
+- Pico maximo: entre las 23hs y las 2am
+- Si dormis mal, tu GH se desploma
+- Magnesio + cuarto oscuro + sin pantallas = mas sueno profundo
+
+**3. Entrenamiento de fuerza intenso**
+- Series pesadas con descansos cortos (60-90 seg) = pico de GH
+- Los ejercicios multiarticulares (sentadilla, peso muerto) son los que mas la estimulan
+- Sesiones de 45-60 min son optimas. Mas de 75 min = cortisol sube y anula la GH
+
+**4. Entrenamiento en ayunas**
+- Combinar ayuno + entrenamiento = DOBLE estimulo de GH
+- Entrenar al final del ayuno (ej: ayunas 16hs, entrenas a las 15hs, comes a las 16hs)
+
+**5. Reducir azucar e insulina**
+- Cada pico de insulina SUPRIME la GH
+- Mantener glucosa estable = GH alta durante mas tiempo
+- La canela de Ceilon ayuda a estabilizar glucosa
+
+**6. Sauna / duchas frias**
+- El estres termico (calor o frio) estimula GH
+- Sauna: 20 min a 80-100 grados puede duplicar GH
+- Ducha fria: 2-3 min al final de la ducha
+
+**7. Suplementos que apoyan la GH:**
+- GABA (antes de dormir, 3-5g)
+- Arginina + Ornitina (antes de dormir, en ayunas)
+- Melatonina (0.5-1mg, mejora sueno profundo = mas GH)
+- Glutamina (5g post-entreno)
+- Zinc (cofactor para la produccion de GH)
+
+**QUE DESTRUYE LA GH:**
+- Comer antes de dormir (la insulina de la cena bloquea el pico nocturno)
+- Alcohol (elimina fase de sueno profundo)
+- Azucar refinada constante
+- Grasa abdominal (a mas grasa visceral, menos GH)
+- Estres cronico (cortisol suprime GH)
+
+**Plan practico para maximizar GH:**
+- Cenar 3 horas antes de dormir (dejar insulina baja para el pico nocturno)
+- Dormir 8 horas en oscuridad total
+- Ayuno 16:8 al menos 3 veces por semana
+- Entrenar fuerza pesado con descansos cortos
+- Minimizar azucar y harinas
+
+No necesitas inyectarte nada. Tu cuerpo produce GH, solo tenes que darle las condiciones correctas \ud83d\ude80`
+  },
+  {
+    keywords: ['ayuno riesgo', 'ayuno peligro', 'quien no ayunar', 'contraindicacion ayuno', 'ayuno edad', 'ayuno mujer'],
+    content: `**Ayuno Intermitente: riesgos, edades y contraindicaciones**
+
+El ayuno NO es para todos. Antes de empezar, conoce los riesgos y las contraindicaciones absolutas.
+
+**CONTRAINDICACIONES ABSOLUTAS (NO hacer ayuno):**
+- Embarazadas y en periodo de lactancia
+- Menores de 18 anos (estan en crecimiento, necesitan nutrientes constantes)
+- Personas con diabetes tipo 1 (riesgo de hipoglucemia severa)
+- Trastornos alimentarios actuales o pasados (anorexia, bulimia, binge eating)
+- Bajo peso o desnutricion (IMC menor a 18.5)
+- Medicacion que requiere ingesta con alimentos
+
+**PRECAUCION ESPECIAL (consultar medico primero):**
+- Diabetes tipo 2 con medicacion (puede causar hipoglucemia)
+- Hipotension arterial
+- Enfermedades renales o hepaticas
+- Personas mayores de 70 anos (mayor riesgo de sarcopenia)
+- Mujeres con amenorrea o trastornos hormonales
+- Personas con calculos biliares
+
+**MUJERES Y AYUNO - PRECAUCION ESPECIAL:**
+Las mujeres son mas sensibles a las senales de "restriccion". El ayuno excesivo puede:
+- Alterar el ciclo menstrual (amenorrea)
+- Aumentar cortisol desproporcionadamente
+- Afectar la tiroides
+- Recomendacion: empezar con 12:12 o 14:10, no directamente 16:8
+- Evitar ayunar en la fase lutea (2 semanas antes del periodo)
+- Si el periodo se altera, DEJAR el ayuno inmediatamente
+
+**SEGUN LA EDAD:**
+
+**18-30 anos:**
+- Pueden hacer 16:8 sin problemas si estan sanos
+- Ideal para perder grasa manteniendo musculo
+- Si buscan hipertrofia, mejor 4-5 comidas distribuidas (no ayuno)
+
+**30-50 anos:**
+- Franja ideal para el ayuno intermitente
+- Beneficios metabolicos maximos
+- 16:8 es el protocolo recomendado
+- 1-2 ayunos de 24hs/mes para autofagia (opcional)
+
+**50-65 anos:**
+- Empezar con 12:12 o 14:10
+- La proteina es CRITICA - asegurar {protReq}g minimo
+- Entrenar fuerza para prevenir sarcopenia
+- Consultar medico antes de ayunos de mas de 16 horas
+
+**65+ anos:**
+- NO recomendado el ayuno prolongado sin supervision medica
+- El riesgo de perder musculo supera los beneficios
+- Mejor estrategia: comer bien, mucha proteina, entrenar fuerza
+- Si se hace, maximo 12:12
+
+**SENALES DE ALARMA durante el ayuno (parar inmediatamente):**
+- Mareos fuertes o vision borrosa
+- Temblores
+- Confusion mental
+- Palpitaciones
+- Nauseas intensas
+- Debilidad extrema
+- Dolor de cabeza severo que no pasa con agua
+
+**COMO EMPEZAR DE FORMA SEGURA:**
+1. Semana 1-2: Ayuno 12:12 (solo no comer entre cena y desayuno)
+2. Semana 3-4: Ayuno 14:10 (retrasar desayuno 2 horas)
+3. Semana 5+: Ayuno 16:8 (si te sentis bien)
+4. Nunca saltar directamente a 20:4 o OMAD
+
+El ayuno es una herramienta poderosa, pero como todo lo poderoso, mal usado puede ser peligroso. Escucha a tu cuerpo \u26a0\ufe0f`
   },
   {
     keywords: ['rodilla', 'espalda', 'hombro', 'articulaci\u00f3n', 'articular', 'col\u00e1geno'],
@@ -1999,7 +2259,7 @@ export default function BioCoach() {
       </div>
 
       <div className="flex flex-wrap gap-1.5 mt-3 mb-3">
-        {['Senal metabolica', 'Control insulina', 'Cortisol', 'Canela bloqueador IG', 'Desinflamacion', 'Dormir', 'Que deshidrata', 'Jengibre y curcuma', 'Dejar alcohol', 'Creatina', 'Proteina', 'Colageno', 'Omega3 tipos', 'Magnesio tipos', 'Harinas y azucar', 'Alimentacion segun objetivo', 'Tendencias 2025', 'Electrolitos', 'Salud intestinal', 'Minerales', 'Complejo B', 'Whey', 'Bajar grasa', 'Ganar musculo', 'Macros', 'Sueno', 'Cafeina', 'Principiante', 'Suplementos'].map(s => (
+        {['Ayuno intermitente', 'Autofagia', 'Hormona crecimiento', 'Ayuno riesgo', 'Senal metabolica', 'Control insulina', 'Cortisol', 'Canela bloqueador IG', 'Desinflamacion', 'Dormir', 'Que deshidrata', 'Jengibre y curcuma', 'Dejar alcohol', 'Creatina', 'Proteina', 'Colageno', 'Omega3 tipos', 'Magnesio tipos', 'Harinas y azucar', 'Tendencias 2025', 'Electrolitos', 'Salud intestinal', 'Bajar grasa', 'Ganar musculo', 'Principiante', 'Suplementos'].map(s => (
           <button key={s} onClick={() => setInput(s)}
             className="px-2.5 py-1 bg-white/[0.03] border border-dark-border hover:border-electric/30 rounded-lg text-[11px] text-white/40 hover:text-electric transition-all">
             {s}
