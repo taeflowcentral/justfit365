@@ -7,6 +7,11 @@ import { supabase } from './lib/supabase'
 // Ping a Supabase para evitar que el proyecto se pause por inactividad
 supabase.from('usuarios').select('id', { count: 'exact', head: true }).then(() => {});
 
+// Registrar Service Worker para PWA (instalar en pantalla de inicio)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

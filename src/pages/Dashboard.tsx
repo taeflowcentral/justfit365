@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Flame, Droplets, Dumbbell, TrendingUp, Target, Zap, Apple, Timer, ArrowUpRight, Edit3, Save, CheckCircle, AlertTriangle, XCircle, ArrowDown, ArrowUp, Minus, MessageCircle } from 'lucide-react';
+import { Flame, Droplets, Dumbbell, TrendingUp, Target, Zap, Apple, Timer, ArrowUpRight, Edit3, Save, CheckCircle, AlertTriangle, XCircle, ArrowDown, ArrowUp, Minus, MessageCircle, Download } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, ReferenceLine } from 'recharts';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -87,6 +87,19 @@ export default function Dashboard() {
   });
   const [editandoMeta, setEditandoMeta] = useState(false);
   const [asesorModal, setAsesorModal] = useState<'nutricional' | 'deportivo' | null>(null);
+
+  // PWA Install prompt
+  const [installPrompt, setInstallPrompt] = useState<Event | null>(null);
+  const [showInstallBanner, setShowInstallBanner] = useState(false);
+  useEffect(() => {
+    const handler = (e: Event) => { e.preventDefault(); setInstallPrompt(e); setShowInstallBanner(true); };
+    window.addEventListener('beforeinstallprompt', handler);
+    // En iOS no hay beforeinstallprompt, mostrar banner manual
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    if (isIOS && !isStandalone) setShowInstallBanner(true);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
 
   const guardarMeta = () => {
     setUserItem('jf365_peso_meta', pesoMeta.toString());
@@ -183,6 +196,42 @@ export default function Dashboard() {
         </h1>
         <p className="text-white/50 text-sm mt-1">Tu resumen de rendimiento</p>
       </div>
+
+      {/* Banner instalar app */}
+      {showInstallBanner && (
+        <div className="bg-gradient-to-r from-electric/10 to-neon/10 border border-electric/20 rounded-2xl p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-electric/15 rounded-xl flex items-center justify-center">
+              <Download className="w-5 h-5 text-electric" />
+            </div>
+            <div>
+              <h3 className="text-white font-bold text-sm">Instalar JustFit365</h3>
+              <p className="text-white/40 text-xs mt-0.5">
+                {/iPad|iPhone|iPod/.test(navigator.userAgent)
+                  ? 'Toca el icono compartir y luego "Agregar a inicio"'
+                  : 'Agrega el icono a tu pantalla de inicio'}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {installPrompt ? (
+              <button onClick={async () => {
+                const prompt = installPrompt as unknown as { prompt: () => void; userChoice: Promise<{ outcome: string }> };
+                prompt.prompt();
+                const result = await prompt.userChoice;
+                if (result.outcome === 'accepted') setShowInstallBanner(false);
+                setInstallPrompt(null);
+              }} className="px-4 py-2 bg-electric text-black rounded-xl text-xs font-black uppercase tracking-wider hover:bg-electric/80 transition-all">
+                Instalar
+              </button>
+            ) : (
+              <button onClick={() => setShowInstallBanner(false)} className="px-3 py-2 bg-white/5 text-white/40 rounded-xl text-xs font-medium border border-dark-border">
+                Cerrar
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Frase del dia */}
       <FraseDelDia />
