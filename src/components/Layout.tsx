@@ -41,7 +41,7 @@ export default function Layout() {
             </div>
             <h2 className="text-white font-black text-xl mb-2">Cuenta Deshabilitada</h2>
             <p className="text-white/60 text-sm mb-6">Tu cuenta fue deshabilitada por el administrador. Para reactivarla, contactate con soporte.</p>
-            <a href="mailto:carloscuevaslaplata@gmail.com?subject=JustFit365%20-%20Cuenta%20Deshabilitada"
+            <a href="mailto:justfit365.com@gmail.com?subject=JustFit365%20-%20Cuenta%20Deshabilitada"
               className="block w-full py-3 bg-electric/15 text-electric rounded-xl text-sm font-bold border border-electric/30 hover:bg-electric/25 transition-colors mb-2">
               Contactar Soporte
             </a>

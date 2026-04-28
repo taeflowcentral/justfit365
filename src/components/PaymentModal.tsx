@@ -66,7 +66,7 @@ export default function PaymentModal() {
 
   const alias = 'ventanasdepapel';
   const titular = 'Carlos Federico Cuevas';
-  const emailDestino = 'carloscuevaslaplata@gmail.com';
+  const emailDestino = 'justfit365.com@gmail.com';
 
   const vencimiento = new Date();
   if (esGimnasio) {

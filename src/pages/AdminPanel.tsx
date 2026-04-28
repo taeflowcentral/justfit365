@@ -93,7 +93,7 @@ export default function AdminPanel() {
       // Construir el mensaje
       const asunto = encodeURIComponent('JustFit365 - Actualizaci\u00f3n de Suscripci\u00f3n');
       const cuerpo = encodeURIComponent(
-        `Hola,\n\nTe informamos que el precio de la suscripci\u00f3n de JustFit365 ha sido actualizado a $${(parseFloat(precio) || precioActual).toLocaleString('es-AR')}.\n\nEste cambio aplica a partir de tu pr\u00f3xima renovaci\u00f3n. Tu suscripci\u00f3n actual contin\u00faa vigente hasta su fecha de vencimiento.\n\nDatos de pago:\nAlias: ventanasdepapel\nTitular: Carlos Federico Cuevas\nComprobante a: carloscuevaslaplata@gmail.com\n\nSaludos,\nEquipo JustFit365`
+        `Hola,\n\nTe informamos que el precio de la suscripci\u00f3n de JustFit365 ha sido actualizado a $${(parseFloat(precio) || precioActual).toLocaleString('es-AR')}.\n\nEste cambio aplica a partir de tu pr\u00f3xima renovaci\u00f3n. Tu suscripci\u00f3n actual contin\u00faa vigente hasta su fecha de vencimiento.\n\nDatos de pago:\nAlias: ventanasdepapel\nTitular: Carlos Federico Cuevas\nComprobante a: justfit365.com@gmail.com\n\nSaludos,\nEquipo JustFit365`
       );
 
       // Guardar registro de la notificacion en Supabase
@@ -232,7 +232,7 @@ export default function AdminPanel() {
               <p>Datos de pago:<br />
                 Alias: <strong className="text-electric">ventanasdepapel</strong><br />
                 Titular: Carlos Federico Cuevas<br />
-                Comprobante a: carloscuevaslaplata@gmail.com
+                Comprobante a: justfit365.com@gmail.com
               </p>
               <p className="text-white/30">Saludos,<br />Equipo JustFit365</p>
             </div>
@@ -456,7 +456,7 @@ export default function AdminPanel() {
           </div>
           <div className="p-3 bg-dark-700 rounded-xl">
             <p className="text-white/30 text-[10px] uppercase tracking-wider">Email de notificaciones</p>
-            <p className="text-white font-medium text-sm">carloscuevaslaplata@gmail.com</p>
+            <p className="text-white font-medium text-sm">justfit365.com@gmail.com</p>
           </div>
           <div className="p-3 bg-dark-700 rounded-xl">
             <p className="text-white/30 text-[10px] uppercase tracking-wider">Recordatorio autom&aacute;tico</p>

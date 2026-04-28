@@ -167,7 +167,7 @@ export default function Suscripcion() {
               </div>
               <div className="p-3 bg-dark-700 rounded-xl">
                 <p className="text-white/30 text-[10px] uppercase tracking-wider">Comprobante a</p>
-                <p className="text-electric font-medium text-sm">carloscuevaslaplata@gmail.com</p>
+                <p className="text-electric font-medium text-sm">justfit365.com@gmail.com</p>
               </div>
             </div>
           </div>
