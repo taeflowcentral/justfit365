@@ -167,7 +167,7 @@ export default function Progreso() {
           )}
           {conPeso.length > 0 && (
             <div className="bg-dark-800 border border-dark-border rounded-xl p-3">
-              <p className="text-white/30 text-[10px] uppercase tracking-wider flex items-center gap-1"><Scale className="w-3 h-3" />\u00daltimo peso</p>
+              <p className="text-white/30 text-[10px] uppercase tracking-wider flex items-center gap-1"><Scale className="w-3 h-3" />Ultimo peso</p>
               <p className="text-white text-xl font-black">{conPeso[0].peso} kg</p>
               {conPeso.length >= 2 && (
                 <p className={`text-[10px] ${conPeso[0].peso! < conPeso[1].peso! ? 'text-emerald-400' : conPeso[0].peso! > conPeso[1].peso! ? 'text-amber-400' : 'text-white/30'}`}>
@@ -204,11 +204,11 @@ export default function Progreso() {
       {/* Comparativa lado a lado */}
       {showComparativa && media.filter(m => m.tipo === 'foto').length >= 2 && (
         <div className="bg-dark-800 border border-dark-border rounded-2xl p-4">
-          <h3 className="text-white font-bold text-sm mb-3 flex items-center gap-2"><TrendingUp className="w-4 h-4 text-electric" /> Comparativa: Primera vs \u00daltima</h3>
+          <h3 className="text-white font-bold text-sm mb-3 flex items-center gap-2"><TrendingUp className="w-4 h-4 text-electric" /> Comparativa: Primera vs Ultima</h3>
           <div className="grid grid-cols-2 gap-3">
             {[media.filter(m => m.tipo === 'foto').slice(-1)[0], media.filter(m => m.tipo === 'foto')[0]].map((m, i) => m && (
               <div key={m.id} className="space-y-2">
-                <p className="text-white/40 text-xs text-center">{i === 0 ? 'Primer registro' : '\u00daltimo registro'}</p>
+                <p className="text-white/40 text-xs text-center">{i === 0 ? 'Primer registro' : 'Ultimo registro'}</p>
                 <img src={m.url} alt="" className="w-full aspect-[3/4] object-cover rounded-xl" />
                 <div className="text-center text-[10px] text-white/30">
                   {m.fecha} {m.peso && `\u2022 ${m.peso}kg`} {m.grasaCorporal && `\u2022 ${m.grasaCorporal}%`}
@@ -244,8 +244,8 @@ export default function Progreso() {
       {media.length === 0 && (
         <div className="bg-dark-800 border border-dark-border rounded-2xl p-12 text-center">
           <Camera className="w-16 h-16 text-white/5 mx-auto mb-4" />
-          <h3 className="text-white/40 font-bold mb-2">Sin registros a\u00fan</h3>
-          <p className="text-white/20 text-sm mb-4">Sub\u00ed fotos con tus medidas para hacer seguimiento de progreso.</p>
+          <h3 className="text-white/40 font-bold mb-2">Sin registros aun</h3>
+          <p className="text-white/20 text-sm mb-4">Subi fotos con tus medidas para hacer seguimiento de progreso.</p>
           <button onClick={() => setShowUpload(true)} className="px-6 py-3 bg-pink-600/20 text-pink-400 border border-pink-500/30 rounded-xl text-sm font-bold">Subir primera foto</button>
         </div>
       )}
@@ -279,7 +279,7 @@ export default function Progreso() {
                 <div className="flex items-center gap-1.5 mt-2">
                   {m.analisisIA ? (
                     <button onClick={() => setExpandido(expandido === m.id ? null : m.id)} className="flex items-center gap-1 px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400 text-[10px] font-bold">
-                      <Sparkles className="w-3 h-3" /> An\u00e1lisis <ChevronDown className={`w-2.5 h-2.5 transition-transform ${expandido === m.id ? 'rotate-180' : ''}`} />
+                      <Sparkles className="w-3 h-3" /> Analisis <ChevronDown className={`w-2.5 h-2.5 transition-transform ${expandido === m.id ? 'rotate-180' : ''}`} />
                     </button>
                   ) : m.analizando ? (
                     <span className="flex items-center gap-1 px-2 py-1 bg-electric/10 rounded-lg text-electric text-[10px]"><Sparkles className="w-3 h-3 animate-spin" /> Analizando...</span>
@@ -335,7 +335,7 @@ export default function Progreso() {
                 </div>
               </div>
 
-              <p className="text-white/15 text-[10px] text-center">Datos corporales opcionales. La fecha se registra autom\u00e1ticamente.</p>
+              <p className="text-white/15 text-[10px] text-center">Datos corporales opcionales. La fecha se registra automaticamente.</p>
 
               <div className="grid grid-cols-2 gap-3">
                 <label className="flex flex-col items-center gap-2 p-4 bg-pink-500/5 border-2 border-dashed border-pink-500/20 rounded-2xl cursor-pointer hover:border-pink-500/40 transition-all">
