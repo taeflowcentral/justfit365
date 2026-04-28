@@ -1,5 +1,6 @@
 import { Users, CreditCard, TrendingUp, UserPlus, Activity, Crown } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { useAuth } from '../context/AuthContext';
 
 const membresiaData = [
   { mes: 'Ene', activos: 32, nuevos: 5 },
@@ -17,11 +18,14 @@ const miembros = [
 ];
 
 export default function GymDashboard() {
+  const { user } = useAuth();
+  const gymName = user?.gimnasioNombre || 'Mi Gimnasio';
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-black text-white tracking-tight">
-          Panel <span className="text-electric">Iron Gym</span>
+          Panel <span className="text-lime">{gymName}</span>
         </h1>
         <p className="text-white/40 text-sm mt-1">Administraci&oacute;n de suscripciones grupales</p>
       </div>
