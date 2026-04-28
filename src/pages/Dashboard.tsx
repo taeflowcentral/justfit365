@@ -402,23 +402,134 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Progreso de peso - chart */}
-      {pesoHistory.length >= 2 && (
-        <div className="bg-dark-800 border border-dark-border rounded-2xl p-4">
-          <h3 className="text-white font-bold text-sm mb-3 flex items-center gap-2">
+      {/* Progreso de peso */}
+      <div className="bg-dark-800 border border-dark-border rounded-2xl p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-white font-bold text-sm flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-electric" /> Progreso de Peso
           </h3>
-          <ResponsiveContainer width="100%" height={160}>
-            <AreaChart data={pesoHistory}>
-              <XAxis dataKey="sem" stroke="#555" fontSize={11} tick={{ fill: '#888' }} />
-              <YAxis stroke="#555" fontSize={11} tick={{ fill: '#888' }} domain={['dataMin - 1', 'dataMax + 1']} />
-              <Tooltip contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: '12px', color: '#fff', fontSize: '13px' }} />
-              {pesoMeta > 0 && <ReferenceLine y={pesoMeta} stroke="#00e5ff" strokeDasharray="4 4" strokeOpacity={0.5} label={{ value: 'Meta', fill: '#00e5ff', fontSize: 10 }} />}
-              <Area type="monotone" dataKey="peso" stroke="#0099ff" fill="#0099ff" fillOpacity={0.1} strokeWidth={2} />
-            </AreaChart>
-          </ResponsiveContainer>
+          <div className="flex items-center gap-2">
+            <input type="number" step="0.1" min="30" max="300" placeholder="Peso hoy"
+              id="peso-registro-dashboard"
+              className="w-24 px-2 py-1.5 bg-black/60 border border-dark-border rounded-lg text-white text-xs text-center focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/20" />
+            <button onClick={() => {
+              const input = document.getElementById('peso-registro-dashboard') as HTMLInputElement;
+              const val = parseFloat(input?.value);
+              if (!val || val < 30) return;
+              const hoy = new Date();
+              const label = `${hoy.getDate()}/${hoy.getMonth() + 1}`;
+              const last = pesoHistory[pesoHistory.length - 1];
+              let updated;
+              if (last && last.sem === label) {
+                updated = pesoHistory.map((p, i) => i === pesoHistory.length - 1 ? { ...p, peso: val } : p);
+              } else {
+                updated = [...pesoHistory, { sem: label, peso: val }].slice(-16);
+              }
+              setPesoHistory(updated);
+              savePesoHistory(updated);
+              if (input) input.value = '';
+            }} className="px-3 py-1.5 bg-electric/15 border border-electric/20 text-electric rounded-lg text-xs font-bold hover:bg-electric/25 transition-all">
+              Registrar
+            </button>
+          </div>
         </div>
-      )}
+
+        {pesoHistory.length === 0 ? (
+          <div className="text-center py-8">
+            <TrendingUp className="w-10 h-10 text-white/10 mx-auto mb-2" />
+            <p className="text-white/40 text-sm">Registra tu peso para ver la evolucion.</p>
+            <p className="text-white/25 text-xs mt-1">Pesate siempre a la misma hora para datos mas precisos.</p>
+          </div>
+        ) : (() => {
+          // Generar curva proyectada (ideal) si hay meta
+          const chartData = pesoHistory.map(p => ({ ...p, proyectado: undefined as number | undefined }));
+          if (pesoMeta > 0 && pesoHistory.length >= 1 && fechaMeta) {
+            const pesoInicio = pesoHistory[0].peso;
+            const totalEntries = pesoHistory.length;
+            const diasTotales = Math.max(1, Math.round((new Date(fechaMeta).getTime() - Date.now()) / 86400000));
+            // Calcular cuantos puntos proyectar despues del ultimo registro
+            const puntosExtra = Math.min(8, Math.max(2, Math.round(diasTotales / 14)));
+            const totalPuntos = totalEntries + puntosExtra;
+            // Rellenar proyectado en los datos existentes
+            chartData.forEach((p, i) => {
+              p.proyectado = Math.round((pesoInicio + (pesoMeta - pesoInicio) * (i / (totalPuntos - 1))) * 10) / 10;
+            });
+            // Agregar puntos futuros
+            const hoy = new Date();
+            for (let j = 1; j <= puntosExtra; j++) {
+              const futuro = new Date(hoy.getTime() + j * 14 * 86400000);
+              const label = `${futuro.getDate()}/${futuro.getMonth() + 1}`;
+              const progreso = (totalEntries + j - 1) / (totalPuntos - 1);
+              chartData.push({
+                sem: label,
+                peso: undefined as unknown as number,
+                proyectado: Math.round((pesoInicio + (pesoMeta - pesoInicio) * progreso) * 10) / 10,
+              });
+            }
+          }
+
+          const pesoActual = pesoHistory[pesoHistory.length - 1]?.peso || peso;
+          const primerPeso = pesoHistory[0]?.peso || peso;
+          const cambioTotal = Math.round((pesoActual - primerPeso) * 10) / 10;
+
+          return (
+            <>
+              <ResponsiveContainer width="100%" height={180}>
+                <AreaChart data={chartData}>
+                  <XAxis dataKey="sem" stroke="#555" fontSize={10} tick={{ fill: '#888' }} />
+                  <YAxis stroke="#555" fontSize={10} tick={{ fill: '#888' }} domain={['dataMin - 2', 'dataMax + 2']} />
+                  <Tooltip contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: '12px', color: '#fff', fontSize: '12px' }} />
+                  {pesoMeta > 0 && <ReferenceLine y={pesoMeta} stroke="#00e5ff" strokeDasharray="3 3" strokeOpacity={0.3} />}
+                  {/* Curva proyectada (ideal) */}
+                  {pesoMeta > 0 && (
+                    <Area type="monotone" dataKey="proyectado" stroke="#00e5ff" strokeDasharray="6 3" fill="#00e5ff" fillOpacity={0.05} strokeWidth={1.5} strokeOpacity={0.6} name="Proyectado" dot={false} />
+                  )}
+                  {/* Curva real */}
+                  <Area type="monotone" dataKey="peso" stroke="#0099ff" fill="#0099ff" fillOpacity={0.1} strokeWidth={2.5} name="Real" connectNulls={false} />
+                </AreaChart>
+              </ResponsiveContainer>
+
+              {/* Leyenda y resumen */}
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex items-center gap-4 text-[10px]">
+                  <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#0099ff] rounded inline-block" /> Real</span>
+                  {pesoMeta > 0 && <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#00e5ff] rounded inline-block opacity-60" style={{ borderTop: '1px dashed #00e5ff' }} /> Proyectado</span>}
+                </div>
+                <div className="text-[10px] text-white/40">
+                  {pesoHistory.length} registros
+                  {cambioTotal !== 0 && (
+                    <span className={cambioTotal < 0 ? ' text-emerald-400' : ' text-red-400'}>
+                      {' '}&middot; {cambioTotal > 0 ? '+' : ''}{cambioTotal} kg
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Estado vs proyeccion */}
+              {pesoMeta > 0 && pesoHistory.length >= 2 && (() => {
+                const proyectadoAhora = chartData.find((_, i) => i === pesoHistory.length - 1)?.proyectado;
+                if (!proyectadoAhora) return null;
+                const diffProy = Math.round((pesoActual - proyectadoAhora) * 10) / 10;
+                const enCamino = Math.abs(diffProy) <= 1;
+                return (
+                  <div className={`mt-2 rounded-lg p-2.5 flex items-center gap-2 text-xs ${
+                    enCamino ? 'bg-emerald-500/10 border border-emerald-500/15 text-emerald-400'
+                    : 'bg-amber-500/10 border border-amber-500/15 text-amber-400'
+                  }`}>
+                    {enCamino ? <CheckCircle className="w-3.5 h-3.5 shrink-0" /> : <AlertTriangle className="w-3.5 h-3.5 shrink-0" />}
+                    {enCamino
+                      ? `Tu peso real (${pesoActual}kg) esta en linea con lo proyectado (${proyectadoAhora}kg). Segui asi.`
+                      : diffProy > 0
+                        ? `Tu peso real (${pesoActual}kg) esta ${diffProy}kg por encima de lo proyectado (${proyectadoAhora}kg). Revisa tu plan nutricional.`
+                        : `Tu peso real (${pesoActual}kg) esta ${Math.abs(diffProy)}kg por debajo de lo proyectado (${proyectadoAhora}kg). ${quiereSubir ? 'Necesitas comer mas para alcanzar tu meta.' : 'Vas mas rapido de lo esperado.'}`
+                    }
+                  </div>
+                );
+              })()}
+            </>
+          );
+        })()}
+      </div>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
