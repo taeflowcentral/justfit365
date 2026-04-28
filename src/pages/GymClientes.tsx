@@ -1,9 +1,80 @@
 import { useState } from 'react';
-import { Users, Plus, Search, Dumbbell, Utensils, Trash2, User, Phone, Target, Activity, MessageCircle, Printer, Mail, History, Save, Clock, TrendingUp, ArrowDown, ArrowUp, Minus, CheckCircle, AlertTriangle, Weight, Ruler, Calendar } from 'lucide-react';
+import { Users, Plus, Search, Dumbbell, Utensils, Trash2, User, Phone, Target, Activity, MessageCircle, Printer, Mail, History, Save, Clock, TrendingUp, ArrowDown, ArrowUp, Minus, CheckCircle, AlertTriangle, Weight, Ruler, Calendar, Zap } from 'lucide-react';
 import { getUserItem, setUserItem } from '../lib/storage';
 import { useAuth } from '../context/AuthContext';
-import { buscarAlimentos } from '../lib/foodDB';
+import { buscarAlimentos, analizarComida } from '../lib/foodDB';
 import { printContent } from '../components/ShareButtons';
+
+// Plantillas de ejercicios por objetivo
+const plantillasRutina: Record<string, ClienteRutina[]> = {
+  'Hipertrofia': [
+    { id: 0, nombre: 'Press Banca con Barra', series: 4, reps: '8-10', descanso: '90', peso: '', musculo: 'Pecho', notas: '' },
+    { id: 0, nombre: 'Sentadilla con Barra', series: 4, reps: '8-10', descanso: '90', peso: '', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Remo con Barra', series: 4, reps: '8-10', descanso: '75', peso: '', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Press Militar', series: 3, reps: '10-12', descanso: '75', peso: '', musculo: 'Hombros', notas: '' },
+    { id: 0, nombre: 'Curl con Barra', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Biceps', notas: '' },
+    { id: 0, nombre: 'Triceps en Polea', series: 3, reps: '12-15', descanso: '60', peso: '', musculo: 'Triceps', notas: '' },
+    { id: 0, nombre: 'Peso Muerto Rumano', series: 3, reps: '10-12', descanso: '75', peso: '', musculo: 'Isquiotibiales', notas: '' },
+  ],
+  'Tonificacion': [
+    { id: 0, nombre: 'Sentadilla Goblet', series: 3, reps: '15', descanso: '45', peso: '', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Hip Thrust', series: 4, reps: '12-15', descanso: '60', peso: '', musculo: 'Gluteos', notas: '' },
+    { id: 0, nombre: 'Estocadas Caminando', series: 3, reps: '12 c/lado', descanso: '45', peso: '', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Remo con Mancuerna', series: 3, reps: '12-15', descanso: '45', peso: '', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Press con Mancuernas', series: 3, reps: '12-15', descanso: '45', peso: '', musculo: 'Pecho', notas: '' },
+    { id: 0, nombre: 'Plancha', series: 3, reps: '45 seg', descanso: '30', peso: 'Corporal', musculo: 'Core', notas: '' },
+    { id: 0, nombre: 'Elevaciones Laterales', series: 3, reps: '15', descanso: '30', peso: '', musculo: 'Hombros', notas: '' },
+  ],
+  'Perdida de grasa': [
+    { id: 0, nombre: 'Burpees', series: 4, reps: '10', descanso: '30', peso: 'Corporal', musculo: 'Full Body', notas: 'Alta intensidad' },
+    { id: 0, nombre: 'Sentadilla con Salto', series: 3, reps: '15', descanso: '30', peso: 'Corporal', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Mountain Climbers', series: 3, reps: '30 seg', descanso: '20', peso: 'Corporal', musculo: 'Core', notas: '' },
+    { id: 0, nombre: 'Kettlebell Swing', series: 4, reps: '15', descanso: '30', peso: '', musculo: 'Gluteos', notas: '' },
+    { id: 0, nombre: 'Remo con Barra', series: 3, reps: '12', descanso: '45', peso: '', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Press Banca', series: 3, reps: '12', descanso: '45', peso: '', musculo: 'Pecho', notas: '' },
+    { id: 0, nombre: 'Plancha Lateral', series: 3, reps: '30 seg c/lado', descanso: '20', peso: 'Corporal', musculo: 'Core', notas: '' },
+  ],
+  'Fuerza': [
+    { id: 0, nombre: 'Sentadilla con Barra', series: 5, reps: '5', descanso: '180', peso: '', musculo: 'Cuadriceps', notas: 'Peso pesado' },
+    { id: 0, nombre: 'Press Banca', series: 5, reps: '5', descanso: '180', peso: '', musculo: 'Pecho', notas: 'Peso pesado' },
+    { id: 0, nombre: 'Peso Muerto', series: 5, reps: '5', descanso: '180', peso: '', musculo: 'Espalda baja', notas: 'Peso pesado' },
+    { id: 0, nombre: 'Press Militar', series: 4, reps: '6', descanso: '120', peso: '', musculo: 'Hombros', notas: '' },
+    { id: 0, nombre: 'Dominadas', series: 4, reps: '6-8', descanso: '120', peso: 'Corporal', musculo: 'Espalda', notas: '' },
+  ],
+};
+
+// Generar plan nutricional automatico
+function generarNutricionCliente(peso: number, objetivo: string): ClienteComida[] {
+  const esDeficit = objetivo.toLowerCase().includes('grasa') || objetivo.toLowerCase().includes('perdida');
+  const esMasa = objetivo.toLowerCase().includes('hipertrofia') || objetivo.toLowerCase().includes('fuerza');
+  const protPorComida = Math.round((peso * (esDeficit ? 2.2 : esMasa ? 2.0 : 1.6)) / 5);
+
+  return [
+    { id: Date.now(), nombre: 'Desayuno', hora: '07:30', items: [
+      { id: Date.now()+1, alimento: 'Avena con leche', porcion: '80g + 200ml', cal: esDeficit ? 250 : 320, prot: 14, carb: esDeficit ? 35 : 52, grasa: 6 },
+      { id: Date.now()+2, alimento: 'Huevos revueltos', porcion: '2 unidades', cal: 140, prot: 12, carb: 2, grasa: 10 },
+      { id: Date.now()+3, alimento: 'Banana', porcion: '1 unidad', cal: 105, prot: 1, carb: 27, grasa: 0 },
+    ]},
+    { id: Date.now()+10, nombre: 'Media Manana', hora: '10:30', items: [
+      { id: Date.now()+11, alimento: 'Yogur griego', porcion: '1 pote (200g)', cal: 130, prot: 20, carb: 6, grasa: 3 },
+      { id: Date.now()+12, alimento: 'Nueces', porcion: '15g', cal: 100, prot: 2, carb: 2, grasa: 10 },
+    ]},
+    { id: Date.now()+20, nombre: 'Almuerzo', hora: '13:00', items: [
+      { id: Date.now()+21, alimento: 'Pechuga de pollo', porcion: `${protPorComida * 4}g`, cal: Math.round(protPorComida * 5.5), prot: protPorComida, carb: 0, grasa: Math.round(protPorComida * 0.13) },
+      { id: Date.now()+22, alimento: esMasa ? 'Arroz integral' : 'Ensalada mixta', porcion: esMasa ? '150g' : '200g', cal: esMasa ? 170 : 30, prot: esMasa ? 4 : 2, carb: esMasa ? 36 : 6, grasa: esMasa ? 1 : 0 },
+      { id: Date.now()+23, alimento: 'Brocoli al vapor', porcion: '150g', cal: 50, prot: 4, carb: 8, grasa: 0 },
+    ]},
+    { id: Date.now()+30, nombre: 'Merienda', hora: '16:30', items: [
+      { id: Date.now()+31, alimento: 'Whey protein', porcion: '1 scoop (30g)', cal: 120, prot: 24, carb: 3, grasa: 1 },
+      { id: Date.now()+32, alimento: esMasa ? 'Banana' : 'Arandanos', porcion: esMasa ? '1 unidad' : '100g', cal: esMasa ? 105 : 57, prot: 1, carb: esMasa ? 27 : 14, grasa: 0 },
+    ]},
+    { id: Date.now()+40, nombre: 'Cena', hora: '20:30', items: [
+      { id: Date.now()+41, alimento: esDeficit ? 'Merluza al horno' : 'Salmon al horno', porcion: '200g', cal: esDeficit ? 180 : 390, prot: esDeficit ? 36 : 44, carb: 0, grasa: esDeficit ? 4 : 24 },
+      { id: Date.now()+42, alimento: 'Batata asada', porcion: '200g', cal: 180, prot: 2, carb: 42, grasa: 0 },
+      { id: Date.now()+43, alimento: 'Ensalada de rucula y parmesano', porcion: '1 plato', cal: 160, prot: 10, carb: 4, grasa: 12 },
+    ]},
+  ];
+}
 
 interface ClienteRutina {
   id: number;
@@ -479,6 +550,14 @@ export default function GymClientes() {
               <button onClick={() => enviarEmail('rutina')} className="flex items-center gap-1.5 px-3 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl text-xs font-medium hover:bg-blue-500/20 transition-all">
                 <Mail className="w-3.5 h-3.5" /> Email
               </button>
+              <button onClick={() => {
+                const obj = cliente!.objetivo?.split(',')[0]?.trim() || 'Hipertrofia';
+                const plantilla = plantillasRutina[obj] || plantillasRutina['Hipertrofia'];
+                const ejs = plantilla.map(e => ({ ...e, id: Date.now() + Math.random() * 10000 }));
+                updateCliente(cliente!.id, { rutina: ejs });
+              }} className="flex items-center gap-1.5 px-3 py-2 bg-purple-500/15 border border-purple-500/20 text-purple-400 rounded-xl text-xs font-bold hover:bg-purple-500/25 transition-all">
+                <Zap className="w-3.5 h-3.5" /> Generar Rutina
+              </button>
               <button onClick={() => setShowAddEj(true)} className="flex items-center gap-1.5 px-3 py-2 bg-electric/15 border border-electric/20 text-electric rounded-xl text-xs font-bold hover:bg-electric/25 transition-all">
                 <Plus className="w-3.5 h-3.5" /> Ejercicio
               </button>
@@ -528,6 +607,12 @@ export default function GymClientes() {
               <button onClick={() => enviarEmail('nutricion')} className="flex items-center gap-1.5 px-3 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl text-xs font-medium hover:bg-blue-500/20 transition-all">
                 <Mail className="w-3.5 h-3.5" /> Email
               </button>
+              <button onClick={() => {
+                const plan = generarNutricionCliente(cliente!.peso, cliente!.objetivo || 'Hipertrofia');
+                updateCliente(cliente!.id, { nutricion: plan });
+              }} className="flex items-center gap-1.5 px-3 py-2 bg-purple-500/15 border border-purple-500/20 text-purple-400 rounded-xl text-xs font-bold hover:bg-purple-500/25 transition-all">
+                <Zap className="w-3.5 h-3.5" /> Generar Plan
+              </button>
               <button onClick={() => setShowAddComida(true)} className="flex items-center gap-1.5 px-3 py-2 bg-emerald-500/15 border border-emerald-500/20 text-emerald-400 rounded-xl text-xs font-bold hover:bg-emerald-500/25 transition-all">
                 <Plus className="w-3.5 h-3.5" /> Comida
               </button>
@@ -566,6 +651,25 @@ export default function GymClientes() {
                       ))}
                     </div>
                   )}
+                  {/* Indicadores nutricionales */}
+                  {c.items.length > 0 && (() => {
+                    const analisis = analizarComida(c.items);
+                    const esSnack = c.nombre.toLowerCase().includes('merienda') || c.nombre.toLowerCase().includes('media');
+                    if (esSnack) return null;
+                    return (
+                      <div className="px-4 py-2 border-t border-dark-border/30 bg-black/20 flex flex-wrap gap-1.5">
+                        <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold ${analisis.tieneProteina ? 'bg-electric/10 text-electric border border-electric/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
+                          {analisis.tieneProteina ? '\u2713' : '!'} Prot
+                        </span>
+                        <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold ${analisis.tieneCarbo ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
+                          {analisis.tieneCarbo ? '\u2713' : '!'} Carbo
+                        </span>
+                        <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold ${analisis.tieneVegetal ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'}`}>
+                          {analisis.tieneVegetal ? '\u2713' : '!'} Vegetal
+                        </span>
+                      </div>
+                    );
+                  })()}
                 </div>
               ))}
               {/* Totales */}
