@@ -441,25 +441,34 @@ export default function Dashboard() {
             <p className="text-white/25 text-xs mt-1">Pesate siempre a la misma hora para datos mas precisos.</p>
           </div>
         ) : (() => {
-          // Generar curva proyectada (ideal) si hay meta
+          // Generar curva proyectada basada en fechas reales
           const chartData = pesoHistory.map(p => ({ ...p, proyectado: undefined as number | undefined }));
           if (pesoMeta > 0 && pesoHistory.length >= 1 && fechaMeta) {
             const pesoInicio = pesoHistory[0].peso;
-            const totalEntries = pesoHistory.length;
-            const diasTotales = Math.max(1, Math.round((new Date(fechaMeta).getTime() - Date.now()) / 86400000));
-            // Calcular cuantos puntos proyectar despues del ultimo registro
-            const puntosExtra = Math.min(8, Math.max(2, Math.round(diasTotales / 14)));
-            const totalPuntos = totalEntries + puntosExtra;
-            // Rellenar proyectado en los datos existentes
-            chartData.forEach((p, i) => {
-              p.proyectado = Math.round((pesoInicio + (pesoMeta - pesoInicio) * (i / (totalPuntos - 1))) * 10) / 10;
-            });
-            // Agregar puntos futuros
+            const fechaMetaDate = new Date(fechaMeta);
             const hoy = new Date();
+
+            // Fecha aproximada del primer registro (estimamos hacia atras)
+            const diasDesdeInicio = Math.max(1, (pesoHistory.length - 1) * 7); // ~1 registro por semana
+            const fechaInicio = new Date(hoy.getTime() - diasDesdeInicio * 86400000);
+            const diasTotalesProyecto = Math.max(1, Math.round((fechaMetaDate.getTime() - fechaInicio.getTime()) / 86400000));
+
+            // Calcular proyectado para cada registro existente
+            chartData.forEach((p, i) => {
+              const diasTranscurridos = Math.round(i * (diasDesdeInicio / Math.max(1, pesoHistory.length - 1)));
+              const progreso = Math.min(1, diasTranscurridos / diasTotalesProyecto);
+              p.proyectado = Math.round((pesoInicio + (pesoMeta - pesoInicio) * progreso) * 10) / 10;
+            });
+
+            // Agregar puntos futuros hasta la fecha meta (cada 2 semanas)
+            const diasHastaFin = Math.max(0, Math.round((fechaMetaDate.getTime() - hoy.getTime()) / 86400000));
+            const puntosExtra = Math.min(10, Math.max(2, Math.round(diasHastaFin / 14)));
             for (let j = 1; j <= puntosExtra; j++) {
-              const futuro = new Date(hoy.getTime() + j * 14 * 86400000);
+              const diasFuturo = Math.round(j * (diasHastaFin / puntosExtra));
+              const futuro = new Date(hoy.getTime() + diasFuturo * 86400000);
               const label = `${futuro.getDate()}/${futuro.getMonth() + 1}`;
-              const progreso = (totalEntries + j - 1) / (totalPuntos - 1);
+              const diasDesdeInicioFuturo = diasDesdeInicio + diasFuturo;
+              const progreso = Math.min(1, diasDesdeInicioFuturo / diasTotalesProyecto);
               chartData.push({
                 sem: label,
                 peso: undefined as unknown as number,
@@ -491,19 +500,27 @@ export default function Dashboard() {
 
               {/* Leyenda y resumen */}
               <div className="flex items-center justify-between mt-2">
-                <div className="flex items-center gap-4 text-[10px]">
-                  <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#0099ff] rounded inline-block" /> Real</span>
-                  {pesoMeta > 0 && <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#00e5ff] rounded inline-block opacity-60" style={{ borderTop: '1px dashed #00e5ff' }} /> Proyectado</span>}
+                <div className="flex items-center gap-4 text-[10px] text-white/50">
+                  <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#0099ff] rounded inline-block" /> Tu peso real</span>
+                  {pesoMeta > 0 && <span className="flex items-center gap-1"><span className="w-3 h-0.5 bg-[#00e5ff] rounded inline-block opacity-60" style={{ borderTop: '1px dashed #00e5ff' }} /> Camino ideal</span>}
                 </div>
                 <div className="text-[10px] text-white/40">
                   {pesoHistory.length} registros
                   {cambioTotal !== 0 && (
-                    <span className={cambioTotal < 0 ? ' text-emerald-400' : ' text-red-400'}>
+                    <span className={cambioTotal < 0 ? ' text-emerald-400' : (quiereSubir && cambioTotal > 0) ? ' text-emerald-400' : ' text-red-400'}>
                       {' '}&middot; {cambioTotal > 0 ? '+' : ''}{cambioTotal} kg
                     </span>
                   )}
                 </div>
               </div>
+
+              {/* Resumen del objetivo */}
+              {pesoMeta > 0 && fechaMeta && (
+                <div className="mt-2 bg-electric/5 border border-electric/10 rounded-lg p-2.5 text-[11px] text-white/50">
+                  <strong className="text-white/70">Objetivo:</strong> {quiereBajar ? 'Bajar' : quiereSubir ? 'Subir' : 'Mantener'} de <strong className="text-white/80">{pesoActual}kg</strong> a <strong className="text-electric">{pesoMeta}kg</strong> para <strong className="text-white/80">{new Date(fechaMeta).toLocaleDateString('es-AR', { month: 'long', year: 'numeric' })}</strong>
+                  {kgRestantes > 0 && <span> &mdash; faltan <strong className="text-white/80">{kgRestantes.toFixed(1)}kg</strong> en {semanasRestantes} semanas</span>}
+                </div>
+              )}
 
               {/* Estado vs proyeccion */}
               {pesoMeta > 0 && pesoHistory.length >= 2 && (() => {
