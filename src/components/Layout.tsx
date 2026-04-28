@@ -72,7 +72,7 @@ export default function Layout() {
             <button onClick={() => setMobileMenuOpen(true)} className="md:hidden p-2 text-white/40 hover:text-white rounded-xl transition-colors">
               <Menu className="w-5 h-5" />
             </button>
-            <span className="md:hidden text-white font-black text-sm tracking-tighter">Just<span className="text-electric">Fit</span>365</span>
+            <span className="md:hidden text-white font-black text-sm tracking-tighter">JustFit<span className="text-lime">365</span></span>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
             <button className="relative p-2 text-white/30 hover:text-white hover:bg-white/5 rounded-xl transition-colors">

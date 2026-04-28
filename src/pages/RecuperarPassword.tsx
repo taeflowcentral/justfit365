@@ -83,10 +83,10 @@ export default function RecuperarPassword() {
       <div className="relative w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-electric to-neon rounded-2xl shadow-2xl shadow-electric/20 mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-lime rounded-2xl shadow-2xl shadow-lime/20 mb-4">
             <Zap className="w-8 h-8 text-black" strokeWidth={2.5} />
           </div>
-          <h1 className="text-3xl font-black text-white tracking-tighter">Just<span className="text-electric">Fit</span><span className="text-white">365</span></h1>
+          <h1 className="text-3xl font-black text-white tracking-tighter">JustFit<span className="text-lime">365</span></h1>
         </div>
 
         <div className="bg-dark-800/80 backdrop-blur-2xl border border-dark-border rounded-3xl shadow-2xl p-6">

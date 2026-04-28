@@ -96,7 +96,7 @@ export default function GymConfig() {
               <div className="bg-black/40 border border-dark-border rounded-xl p-3">
                 <p className="text-white/30 text-[10px] uppercase tracking-wider mb-2">Vista previa del header</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-gradient-to-br from-electric to-neon rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-lime rounded-lg flex items-center justify-center">
                     <span className="text-black font-black text-xs">JF</span>
                   </div>
                   <span className="text-white/20 text-lg">+</span>

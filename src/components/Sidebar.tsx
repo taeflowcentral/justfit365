@@ -57,12 +57,12 @@ export default function Sidebar({ onNavigate }: { onNavigate: () => void }) {
     <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-dark-900 border-r border-dark-border flex flex-col transition-all duration-300 min-h-screen`}>
       {/* Logo */}
       <div className="p-4 border-b border-dark-border flex items-center gap-3">
-        <div className="w-10 h-10 bg-gradient-to-br from-electric to-neon rounded-xl flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 bg-lime rounded-xl flex items-center justify-center shrink-0">
           <Zap className="w-5 h-5 text-black" strokeWidth={2.5} />
         </div>
         {!collapsed && (
           <div>
-            <h1 className="text-white font-black text-lg leading-tight tracking-tighter">Just<span className="text-electric">Fit</span><span className="text-white">365</span></h1>
+            <h1 className="text-white font-black text-lg leading-tight tracking-tighter">JustFit<span className="text-lime">365</span></h1>
             <p className="text-white/20 text-[10px] uppercase tracking-[0.2em]">v1.0</p>
           </div>
         )}
