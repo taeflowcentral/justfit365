@@ -676,19 +676,25 @@ export default function Dashboard() {
                 El profesional te informara sobre tarifas y disponibilidad.
               </p>
             </div>
-            <div className="flex gap-3">
-              <button onClick={() => setAsesorModal(null)} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">
-                Cancelar
-              </button>
-              <a href={asesorModal === 'nutricional'
-                  ? 'https://wa.me/5492216806000?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20nutricional'
-                  : 'https://wa.me/5492216035986?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20deportivo'}
-                target="_blank" rel="noopener noreferrer"
-                onClick={() => setAsesorModal(null)}
-                className={`flex-1 py-3 rounded-xl text-sm font-black uppercase tracking-wider text-center ${asesorModal === 'nutricional' ? 'bg-emerald-500 text-black' : 'bg-purple-500 text-white'}`}>
-                Contactar
-              </a>
-            </div>
+            {asesorModal === 'nutricional' ? (
+              <div className="flex gap-3">
+                <button onClick={() => setAsesorModal(null)} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
+                <a href="https://wa.me/5492216806000?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20nutricional" target="_blank" rel="noopener noreferrer" onClick={() => setAsesorModal(null)}
+                  className="flex-1 py-3 bg-emerald-500 text-black rounded-xl text-sm font-black uppercase tracking-wider text-center">Contactar</a>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <a href="https://wa.me/5492216035986?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20deportivo" target="_blank" rel="noopener noreferrer" onClick={() => setAsesorModal(null)}
+                  className="w-full py-3 bg-purple-500 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+                  <MessageCircle className="w-4 h-4" /> Asesor 1 &mdash; +54 221 603-5986
+                </a>
+                <a href="https://wa.me/5492344414701?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20deportivo" target="_blank" rel="noopener noreferrer" onClick={() => setAsesorModal(null)}
+                  className="w-full py-3 bg-purple-600 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+                  <MessageCircle className="w-4 h-4" /> Asesor 2 &mdash; +54 2344 414701
+                </a>
+                <button onClick={() => setAsesorModal(null)} className="w-full py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
+              </div>
+            )}
           </div>
         </div>
       )}
