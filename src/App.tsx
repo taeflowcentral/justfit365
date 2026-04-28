@@ -16,6 +16,7 @@ import AdminPanel from './pages/AdminPanel';
 import GymClientes from './pages/GymClientes';
 import Registro from './pages/Registro';
 import RecuperarPassword from './pages/RecuperarPassword';
+import WorkoutTimer from './pages/WorkoutTimer';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -42,6 +43,7 @@ function AppRoutes() {
         <Route path="miembros" element={<GymDashboard />} />
         <Route path="clientes" element={<GymClientes />} />
         <Route path="config-gym" element={<GymConfig />} />
+        <Route path="timer" element={<WorkoutTimer />} />
         <Route path="admin" element={<AdminPanel />} />
       </Route>
     </Routes>

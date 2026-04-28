@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   Zap, LayoutDashboard, Utensils, Dumbbell, MessageSquare,
   Settings, LogOut, Building2, Users, CreditCard, ChevronLeft, ChevronRight, UserCog,
-  Camera, Stethoscope, ShieldCheck, LifeBuoy
+  Camera, Stethoscope, ShieldCheck, LifeBuoy, Timer
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -11,11 +11,12 @@ const userLinks = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/nutricion', icon: Utensils, label: 'Mi Nutrici\u00f3n' },
   { to: '/rutina', icon: Dumbbell, label: 'Mi Rutina' },
+  { to: '/timer', icon: Timer, label: 'Timer' },
   { to: '/bio-coach', icon: MessageSquare, label: 'JustFit Coach' },
   { to: '/progreso', icon: Camera, label: 'Mi Progreso' },
-  { to: '/analisis', icon: Stethoscope, label: 'An\u00e1lisis M\u00e9dicos' },
+  { to: '/analisis', icon: Stethoscope, label: 'Analisis Medicos' },
   { to: '/perfil', icon: UserCog, label: 'Mi Perfil' },
-  { to: '/suscripcion', icon: CreditCard, label: 'Suscripci\u00f3n' },
+  { to: '/suscripcion', icon: CreditCard, label: 'Suscripcion' },
 ];
 
 const gymLinks = [
@@ -23,12 +24,13 @@ const gymLinks = [
   { to: '/clientes', icon: Users, label: 'Mis Clientes' },
   { to: '/nutricion', icon: Utensils, label: 'Nutrici\u00f3n' },
   { to: '/rutina', icon: Dumbbell, label: 'Rutinas' },
+  { to: '/timer', icon: Timer, label: 'Timer' },
   { to: '/bio-coach', icon: MessageSquare, label: 'JustFit Coach' },
   { to: '/progreso', icon: Camera, label: 'Progreso' },
-  { to: '/analisis', icon: Stethoscope, label: 'An\u00e1lisis M\u00e9dicos' },
-  { to: '/config-gym', icon: Settings, label: 'Configuraci\u00f3n' },
+  { to: '/analisis', icon: Stethoscope, label: 'Analisis Medicos' },
+  { to: '/config-gym', icon: Settings, label: 'Configuracion' },
   { to: '/perfil', icon: UserCog, label: 'Mi Perfil' },
-  { to: '/suscripcion', icon: CreditCard, label: 'Suscripci\u00f3n' },
+  { to: '/suscripcion', icon: CreditCard, label: 'Suscripcion' },
 ];
 
 const adminLinks = [
@@ -36,9 +38,10 @@ const adminLinks = [
   { to: '/admin', icon: ShieldCheck, label: 'Admin Panel' },
   { to: '/nutricion', icon: Utensils, label: 'Nutrici\u00f3n' },
   { to: '/rutina', icon: Dumbbell, label: 'Rutinas' },
+  { to: '/timer', icon: Timer, label: 'Timer' },
   { to: '/bio-coach', icon: MessageSquare, label: 'JustFit Coach' },
   { to: '/progreso', icon: Camera, label: 'Progreso' },
-  { to: '/analisis', icon: Stethoscope, label: 'An\u00e1lisis M\u00e9dicos' },
+  { to: '/analisis', icon: Stethoscope, label: 'Analisis Medicos' },
   { to: '/clientes', icon: Users, label: 'Clientes Gym' },
   { to: '/config-gym', icon: Settings, label: 'Config Gym' },
   { to: '/perfil', icon: UserCog, label: 'Mi Perfil' },
