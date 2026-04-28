@@ -1005,6 +1005,108 @@ Las mujeres son mas sensibles a las senales de "restriccion". El ayuno excesivo 
 El ayuno es una herramienta poderosa, pero como todo lo poderoso, mal usado puede ser peligroso. Escucha a tu cuerpo \u26a0\ufe0f`
   },
   {
+    keywords: ['ayuno prolongado', 'ayuno 24', 'ayuno 36', 'ayuno 48', 'ayuno 72', 'ayuno largo', 'ayuno 40 horas', 'ayuno 3 dias', 'ayuno 5 dias', 'ayuno extremo', 'ayuno limite'],
+    content: `**Ayunos prolongados (24 a 120 horas): guia completa**
+
+Los ayunos de mas de 24 horas activan mecanismos profundos de regeneracion. Pero tienen riesgos reales y REQUIEREN supervision medica a partir de las 48 horas.
+
+**HORA POR HORA: que pasa en tu cuerpo**
+
+**12-24 horas:**
+- Glucogeno hepatico se agota completamente
+- Quema de grasa (lipolisis) como fuente principal de energia
+- Hormona de crecimiento sube 300-500%
+- Autofagia comienza a activarse
+- Insulina en minimos historicos
+- Claridad mental por produccion de cetonas
+
+**24-36 horas:**
+- Autofagia se intensifica significativamente
+- El cuerpo entra en cetosis (usa grasa como combustible principal)
+- Cetonas cruzan la barrera hematoencefalica = claridad mental notable
+- BDNF (factor neurotrofico) sube: regeneracion neuronal
+- Inflamacion sistemica cae drasticamente
+- Hormona de crecimiento en pico maximo
+
+**36-48 horas:**
+- Autofagia en nivel maximo
+- Celulas madre comienzan a activarse
+- Sistema inmune empieza un proceso de "reseteo"
+- El cuerpo se vuelve muy eficiente metabolizando grasa
+- Posible sensacion de euforia por cetonas elevadas
+- El hambre PARADOJICAMENTE disminuye (las cetonas suprimen grelina)
+
+**48-72 horas:**
+- Regeneracion del sistema inmune (las celulas inmunes viejas son destruidas y reemplazadas)
+- Valter Longo (USC) demostro que 72hs de ayuno "reinicia" el sistema inmune
+- Celulas madre hematopoyeticas se activan
+- Maxima regeneracion celular
+- Resistencia a la insulina puede revertirse significativamente
+
+**72-120 horas (3-5 dias):**
+- El cuerpo funciona casi exclusivamente con cetonas y acidos grasos
+- Autofagia profunda: se reciclan proteinas mal plegadas asociadas a enfermedades neurodegenerativas
+- Posible regeneracion parcial de celulas beta del pancreas (estudios en ratones, investigacion en humanos en curso)
+- Perdida de peso: ~300-500g de grasa real por dia (el resto es agua y glucogeno)
+- LIMITE MAXIMO recomendado para personas sin supervision medica continua
+
+**MAS DE 5 DIAS (120+ horas):**
+- SOLO bajo supervision medica estricta en clinica especializada
+- Existe riesgo real de: arritmia cardiaca, desbalance electrolitico severo, sindrome de realimentacion
+- Historicamente se han hecho ayunos de 7, 14, 21 y hasta 40 dias (bajo supervision)
+- El caso extremo documentado: Angus Barbieri ayuno 382 dias en 1965-66 (bajo control medico permanente, NO replicable)
+
+**PROTOCOLO SEGURO PARA AYUNOS DE 24-72 HORAS:**
+
+**Preparacion (1-2 dias antes):**
+- Reducir carbohidratos gradualmente
+- Ultima comida rica en grasas saludables + proteina + vegetales
+- Hidratar bien los dias previos
+
+**Durante el ayuno - OBLIGATORIO:**
+- Agua: 2-3 litros por dia minimo
+- Sal: 1/2 cdta de sal marina en agua, 2-3 veces por dia (CRITICO para evitar mareos)
+- Magnesio: 400mg/dia (previene calambres y arritmia)
+- Potasio: agua de coco o suplemento (si pasa de 48hs)
+- Cafe negro o te verde: permitidos, ayudan a suprimir hambre
+- Caldo de huesos: 1 taza si te sentis muy debil (rompe parcialmente el ayuno pero mantiene la cetosis)
+
+**ROMPER EL AYUNO - MAS IMPORTANTE QUE EL AYUNO MISMO:**
+
+Ayuno de 24hs: Romper con comida normal (proteina + vegetales)
+
+Ayuno de 36-48hs:
+1. Caldo de huesos tibio (prepara el estomago)
+2. Esperar 30 min
+3. Comida pequena: 2 huevos + palta o yogur griego
+4. Esperar 2 horas
+5. Comida normal moderada
+
+Ayuno de 72+ horas - SINDROME DE REALIMENTACION (peligro real):
+1. Dia 1 post-ayuno: solo caldos, yogur, huevos blandos, porciones MINIMAS
+2. Dia 2: agregar proteinas magras y vegetales cocidos, porciones moderadas
+3. Dia 3: comida normal pero controlada
+4. NUNCA comer un plato grande de carbohidratos inmediatamente despues de 72+ horas de ayuno. El cambio brusco de electrolitos puede causar arritmia cardiaca
+
+**FRECUENCIA RECOMENDADA:**
+- Ayuno 24hs: 1-2 veces por mes (seguro para la mayoria)
+- Ayuno 36hs: 1 vez por mes
+- Ayuno 48hs: cada 2-3 meses, con experiencia previa
+- Ayuno 72hs: 2-4 veces por ano maximo, con supervision
+- Ayuno 5+ dias: 1-2 veces por ano maximo, SOLO con medico
+
+**QUIEN NO DEBE HACER AYUNOS PROLONGADOS:**
+- Menores de 25 anos
+- Mujeres embarazadas o lactando
+- Personas con IMC menor a 20
+- Diabeticos tipo 1
+- Personas con trastornos alimentarios
+- Personas con insuficiencia cardiaca o renal
+- Sin experiencia previa en ayuno 16:8
+
+**La ciencia es clara:** Los ayunos de 24-72 horas tienen beneficios reales y medibles. Pero mas alla de 72 horas los riesgos aumentan exponencialmente. El punto dulce para la mayoria de las personas es: ayuno 16:8 regular + un ayuno de 24-36hs mensual + un ayuno de 48-72hs trimestral \u26a0\ufe0f`
+  },
+  {
     keywords: ['rodilla', 'espalda', 'hombro', 'articulaci\u00f3n', 'articular', 'col\u00e1geno'],
     content: `**Salud articular: cuid\u00e1 tus articulaciones**
 
@@ -2259,7 +2361,7 @@ export default function BioCoach() {
       </div>
 
       <div className="flex flex-wrap gap-1.5 mt-3 mb-3">
-        {['Ayuno intermitente', 'Autofagia', 'Hormona crecimiento', 'Ayuno riesgo', 'Senal metabolica', 'Control insulina', 'Cortisol', 'Canela bloqueador IG', 'Desinflamacion', 'Dormir', 'Que deshidrata', 'Jengibre y curcuma', 'Dejar alcohol', 'Creatina', 'Proteina', 'Colageno', 'Omega3 tipos', 'Magnesio tipos', 'Harinas y azucar', 'Tendencias 2025', 'Electrolitos', 'Salud intestinal', 'Bajar grasa', 'Ganar musculo', 'Principiante', 'Suplementos'].map(s => (
+        {['Ayuno intermitente', 'Ayuno prolongado', 'Autofagia', 'Hormona crecimiento', 'Ayuno riesgo', 'Senal metabolica', 'Control insulina', 'Cortisol', 'Canela bloqueador IG', 'Desinflamacion', 'Dormir', 'Que deshidrata', 'Jengibre y curcuma', 'Dejar alcohol', 'Creatina', 'Proteina', 'Colageno', 'Omega3 tipos', 'Magnesio tipos', 'Harinas y azucar', 'Tendencias 2025', 'Electrolitos', 'Salud intestinal', 'Bajar grasa', 'Ganar musculo', 'Principiante', 'Suplementos'].map(s => (
           <button key={s} onClick={() => setInput(s)}
             className="px-2.5 py-1 bg-white/[0.03] border border-dark-border hover:border-electric/30 rounded-lg text-[11px] text-white/40 hover:text-electric transition-all">
             {s}
