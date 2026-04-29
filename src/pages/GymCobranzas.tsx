@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { DollarSign, Users, Search, Check, Clock, AlertTriangle, MessageCircle, Printer, ChevronDown, Plus, Trash2, Edit3, Save, Mail, Send } from 'lucide-react';
 import { getUserItem, setUserItem } from '../lib/storage';
 import { useAuth } from '../context/AuthContext';
-import { getPrecioMensualGym } from '../components/PaymentModal';
+// Cuota del gym a sus clientes es independiente de la suscripcion a JustFit365
 import { printContent } from '../components/ShareButtons';
 
 interface Pago {
@@ -30,7 +30,12 @@ const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', '
 export default function GymCobranzas() {
   const { user } = useAuth();
   const gymName = user?.gimnasioNombre || 'Mi Gimnasio';
-  const precioBase = getPrecioMensualGym();
+  // Cuota que el gym cobra a SUS clientes (separada de la suscripcion a JustFit365)
+  const CUOTA_KEY = 'bc_gym_cuota_clientes';
+  const precioBase = (() => {
+    const saved = getUserItem(CUOTA_KEY);
+    return saved ? parseFloat(saved) : 15000;
+  })();
 
   const [pagos, setPagos] = useState<Pago[]>(() => {
     try { const s = getUserItem(PAGOS_KEY); return s ? JSON.parse(s) : []; } catch { return []; }
@@ -68,8 +73,7 @@ export default function GymCobranzas() {
   const guardarCuota = () => {
     const val = parseFloat(nuevaCuota);
     if (!val || val < 0) return;
-    localStorage.setItem('bc_precio_mensual_gym', val.toString());
-    window.dispatchEvent(new Event('precios-actualizados'));
+    setUserItem(CUOTA_KEY, val.toString());
     setEditandoCuota(false);
   };
 

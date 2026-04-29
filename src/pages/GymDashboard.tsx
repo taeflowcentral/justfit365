@@ -3,7 +3,7 @@ import { Users, CreditCard, UserPlus, Activity, ChevronDown, Dumbbell, Utensils,
 import { useAuth } from '../context/AuthContext';
 import { getUserItem } from '../lib/storage';
 import { Link } from 'react-router-dom';
-import { getPrecioMensualGym } from '../components/PaymentModal';
+// Cuota que el gym cobra a sus clientes (independiente de suscripcion JustFit365)
 
 interface Cliente {
   id: number;
@@ -36,7 +36,10 @@ export default function GymDashboard() {
   const totalClientes = clientes.length;
   const conRutina = clientes.filter(c => c.rutina && c.rutina.length > 0);
   const conNutricion = clientes.filter(c => c.nutricion && c.nutricion.length > 0);
-  const precioGym = getPrecioMensualGym();
+  const precioGym = (() => {
+    const saved = getUserItem('bc_gym_cuota_clientes');
+    return saved ? parseFloat(saved) : 15000;
+  })();
   const facturacionEstimada = totalClientes * precioGym;
 
   // Clientes "nuevos" (ultimos del array, simulando los mas recientes)
