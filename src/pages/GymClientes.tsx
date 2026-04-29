@@ -638,20 +638,20 @@ export default function GymClientes() {
           {/* Selector de disciplina */}
           {showDisciplinas && (
             <div className="bg-dark-800 border border-purple-500/20 rounded-2xl p-4">
-              <p className="text-white font-bold text-sm mb-3">Elegir disciplina para generar rutina:</p>
+              <p className="text-white font-bold text-sm mb-3">Elegir disciplina:</p>
               <div className="flex flex-wrap gap-2">
                 {DISCIPLINAS.map(d => (
                   <button key={d} onClick={() => {
                     const plantilla = plantillasRutina[d] || [];
                     const ejs = plantilla.map(e => ({ ...e, id: Date.now() + Math.random() * 10000 }));
-                    updateCliente(cliente!.id, { rutina: [...cliente!.rutina, ...ejs] });
+                    updateCliente(cliente!.id, { rutina: ejs });
                     setShowDisciplinas(false);
                   }} className="px-3 py-2 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-xl text-xs font-bold hover:bg-purple-500/25 transition-all">
                     {d}
                   </button>
                 ))}
               </div>
-              <p className="text-white/30 text-[10px] mt-2">Los ejercicios se agregan a la rutina actual. Podes combinar disciplinas.</p>
+              <p className="text-white/30 text-[10px] mt-2">Reemplaza la rutina actual con los ejercicios de la disciplina elegida. Podes editar o agregar ejercicios despues.</p>
             </div>
           )}
 
