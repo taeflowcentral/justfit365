@@ -1,4 +1,4 @@
-import { CreditCard, CheckCircle, Calendar, Shield, Clock, Copy, Mail, DollarSign, Zap, AlertTriangle, RotateCcw } from 'lucide-react';
+import { CreditCard, CheckCircle, Calendar, Shield, Clock, Copy, Mail, DollarSign, Zap, AlertTriangle, RotateCcw, MessageCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useState, useEffect } from 'react';
 import { getPrecioAnual, getPrecioMensualGym } from '../components/PaymentModal';
@@ -166,8 +166,20 @@ export default function Suscripcion() {
                 </button>
               </div>
               <div className="p-3 bg-dark-700 rounded-xl">
-                <p className="text-white/30 text-[10px] uppercase tracking-wider">Comprobante a</p>
-                <p className="text-electric font-medium text-sm">justfit365.com@gmail.com</p>
+                <p className="text-white/30 text-[10px] uppercase tracking-wider mb-2">Comprobante a</p>
+                <p className="text-electric font-medium text-sm mb-3">justfit365.com@gmail.com</p>
+                <div className="flex gap-2">
+                  <a href={`mailto:justfit365.com@gmail.com?subject=${encodeURIComponent(`Comprobante de pago - ${user?.nombre || ''} - ${user?.dni || ''}`)}&body=${encodeURIComponent(`Hola,\n\nAdjunto comprobante de pago de suscripcion.\n\nNombre: ${user?.nombre || ''}\nDNI: ${user?.dni || ''}\nPlan: ${planNombre}\nMonto: $${precio.toLocaleString('es-AR')}\n\nSaludos`)}`}
+                    target="_blank" rel="noopener noreferrer"
+                    className="flex-1 py-2.5 bg-electric/10 border border-electric/20 text-electric rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-electric/20 transition-all">
+                    <Mail className="w-3.5 h-3.5" /> Enviar por Email
+                  </a>
+                  <a href={`https://wa.me/5492216806000?text=${encodeURIComponent(`Hola, te envio el comprobante de pago de mi suscripcion a JustFit365.\n\nNombre: ${user?.nombre || ''}\nDNI: ${user?.dni || ''}\nPlan: ${planNombre}\nMonto: $${precio.toLocaleString('es-AR')}`)}`}
+                    target="_blank" rel="noopener noreferrer"
+                    className="flex-1 py-2.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-emerald-500/20 transition-all">
+                    <MessageCircle className="w-3.5 h-3.5" /> Enviar por WhatsApp
+                  </a>
+                </div>
               </div>
             </div>
           </div>
