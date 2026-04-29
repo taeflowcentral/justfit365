@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Settings, DollarSign, Users, Mail, Send, CheckCircle, AlertTriangle, Shield, Bell, KeyRound, Trash2, FileText, Eye, Power, PowerOff } from 'lucide-react';
 import { getPrecioAnual, setPrecioAnual, getPrecioMensualGym, setPrecioMensualGym } from '../components/PaymentModal';
+import { getPlanesGym as loadPlanesGym, setPlanesGym as savePlanesGym } from '../pages/Suscripcion';
 import { getAllUsers, type User } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { getPagos } from '../lib/pagos';
@@ -58,8 +59,9 @@ export default function AdminPanel() {
   const [sending, setSending] = useState(false);
   const [showConfirmPrecio, setShowConfirmPrecio] = useState(false);
 
-  const [precioGym, setPrecioGymState] = useState(getPrecioMensualGym().toString());
+  void getPrecioMensualGym; void setPrecioMensualGym;
   const [precioGymSaved, setPrecioGymSaved] = useState(false);
+  const [planesGym, setPlanesGymState] = useState(loadPlanesGym);
 
   const handleSavePrecio = () => {
     const nuevoPrecio = parseFloat(precio);
@@ -70,13 +72,7 @@ export default function AdminPanel() {
     setTimeout(() => setPrecioSaved(false), 3000);
   };
 
-  const handleSavePrecioGym = () => {
-    const val = parseFloat(precioGym);
-    if (isNaN(val) || val <= 0) return;
-    setPrecioMensualGym(val);
-    setPrecioGymSaved(true);
-    setTimeout(() => setPrecioGymSaved(false), 3000);
-  };
+  // Planes gym se guardan con savePlanesGym
 
   const enviarNotificacion = async () => {
     setSending(true);
@@ -183,29 +179,50 @@ export default function AdminPanel() {
         )}
       </div>
 
-      {/* Precio mensual gimnasios */}
+      {/* Planes de gimnasios */}
       <div className="bg-dark-800 border border-dark-border rounded-2xl p-6">
         <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-          <DollarSign className="w-5 h-5 text-purple-400" /> Precio Mensual Gimnasios
+          <DollarSign className="w-5 h-5 text-purple-400" /> Planes Gimnasios (Marca Blanca)
         </h3>
-        <p className="text-white/30 text-xs mb-4">Los gimnasios pagan mensualmente. Se inactivan al 2do mes impago y se reactivan al actualizar el pago.</p>
-        <div className="flex items-end gap-4">
-          <div className="flex-1 max-w-xs">
-            <label className="block text-xs text-white/40 uppercase tracking-wider mb-2">Precio mensual ARS ($)</label>
-            <div className="relative">
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 font-bold">$</span>
-              <input type="number" min="1" step="0.01" value={precioGym} onChange={e => setPrecioGymState(e.target.value)}
-                className="w-full pl-16 pr-4 py-3.5 bg-black/60 border border-dark-border rounded-xl text-white text-lg font-bold focus:outline-none focus:ring-2 focus:ring-electric/30" />
+        <p className="text-white/30 text-xs mb-4">Configura los precios de cada plan. Los gimnasios ven estos planes al momento de pagar su suscripcion.</p>
+
+        <div className="space-y-3 mb-4">
+          {planesGym.map((plan, idx) => (
+            <div key={plan.id} className="flex items-center gap-3 bg-black/30 border border-dark-border rounded-xl p-3">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-white font-bold text-sm">{plan.nombre}</span>
+                  <span className="text-white/30 text-xs">({plan.clientes} clientes)</span>
+                  {plan.popular && <span className="text-[9px] px-1.5 py-0.5 bg-electric/15 text-electric rounded-full font-bold">Popular</span>}
+                </div>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-white/30 text-sm">$</span>
+                <input type="number" min="0" step="1000" value={plan.precio}
+                  onChange={e => {
+                    const updated = [...planesGym];
+                    updated[idx] = { ...plan, precio: parseInt(e.target.value) || 0 };
+                    setPlanesGymState(updated);
+                  }}
+                  className="w-24 px-2 py-1.5 bg-black/60 border border-dark-border rounded-lg text-white text-sm font-bold text-center focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                <span className="text-white/20 text-xs">/mes</span>
+              </div>
             </div>
-            <p className="text-white/20 text-xs mt-1">Actual: ${getPrecioMensualGym().toLocaleString('es-AR')}/mes</p>
-          </div>
-          <button onClick={handleSavePrecioGym}
-            className={`px-6 py-3.5 rounded-xl text-sm font-black uppercase tracking-wider transition-all ${
+          ))}
+        </div>
+
+        <div className="flex gap-3">
+          <button onClick={() => {
+            savePlanesGym(planesGym);
+            setPrecioGymSaved(true);
+            setTimeout(() => setPrecioGymSaved(false), 3000);
+          }}
+            className={`px-6 py-3 rounded-xl text-sm font-black uppercase tracking-wider transition-all ${
               precioGymSaved
                 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                 : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/20 hover:scale-[1.02]'
             }`}>
-            {precioGymSaved ? <><CheckCircle className="w-4 h-4 inline mr-1" /> Guardado</> : 'Actualizar'}
+            {precioGymSaved ? <><CheckCircle className="w-4 h-4 inline mr-1" /> Guardado</> : 'Guardar Planes'}
           </button>
         </div>
       </div>

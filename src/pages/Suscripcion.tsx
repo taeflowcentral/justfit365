@@ -1,7 +1,28 @@
-import { CreditCard, CheckCircle, Calendar, Shield, Clock, Copy, Mail, DollarSign, Zap, AlertTriangle, RotateCcw, MessageCircle } from 'lucide-react';
+import { CreditCard, CheckCircle, Calendar, Shield, Clock, Copy, Mail, DollarSign, Zap, AlertTriangle, RotateCcw, MessageCircle, Users, Crown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useState, useEffect } from 'react';
 import { getPrecioAnual, getPrecioMensualGym } from '../components/PaymentModal';
+import { getUserItem } from '../lib/storage';
+
+interface PlanGym { id: string; nombre: string; clientes: number; precio: number; popular?: boolean }
+
+export function getPlanesGym(): PlanGym[] {
+  try {
+    const saved = localStorage.getItem('jf365_planes_gym');
+    if (saved) return JSON.parse(saved);
+  } catch { /* ignore */ }
+  return [
+    { id: 'gym100', nombre: 'Starter', clientes: 100, precio: 19000 },
+    { id: 'gym300', nombre: 'Profesional', clientes: 300, precio: 35000, popular: true },
+    { id: 'gym500', nombre: 'Premium', clientes: 500, precio: 55000 },
+    { id: 'gym1000', nombre: 'Elite', clientes: 1000, precio: 85000 },
+  ];
+}
+
+export function setPlanesGym(planes: PlanGym[]) {
+  localStorage.setItem('jf365_planes_gym', JSON.stringify(planes));
+  window.dispatchEvent(new Event('precios-actualizados'));
+}
 
 export default function Suscripcion() {
   const { user } = useAuth();
@@ -144,15 +165,42 @@ export default function Suscripcion() {
             </div>
           </div>
 
-          {/* Renovacion con Mercado Pago */}
+          {/* Renovacion - Planes para gimnasios */}
           <div className="bg-dark-800 border border-dark-border rounded-2xl p-6">
-            <h3 className="text-white font-bold mb-3">Renovar suscripci&oacute;n {esGimnasio ? 'mensual' : 'anual'}</h3>
-            <p className="text-white/40 text-sm mb-4">Pag&aacute; directamente con Mercado Pago (tarjeta, transferencia o efectivo).</p>
+            <h3 className="text-white font-bold mb-3">Renovar suscripcion {esGimnasio ? 'mensual' : 'anual'}</h3>
+
+            {esGimnasio ? (
+              <>
+                <p className="text-white/40 text-sm mb-4">Elegi el plan que mejor se adapte a tu gimnasio.</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                  {getPlanesGym().map(plan => {
+                    const planSeleccionado = getUserItem('jf365_gym_plan') || 'gym100';
+                    const esActual = planSeleccionado === plan.id;
+                    return (
+                      <div key={plan.id} className={`rounded-2xl p-4 border-2 transition-all relative ${
+                        esActual ? 'border-lime/40 bg-lime/5' : plan.popular ? 'border-electric/20 bg-electric/5' : 'border-dark-border bg-dark-700'
+                      }`}>
+                        {plan.popular && !esActual && <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-electric text-black text-[9px] font-black uppercase tracking-wider rounded-full">Popular</div>}
+                        {esActual && <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-lime text-black text-[9px] font-black uppercase tracking-wider rounded-full">Tu plan</div>}
+                        <div className="flex items-center gap-2 mb-2">
+                          <Crown className={`w-4 h-4 ${esActual ? 'text-lime' : 'text-white/30'}`} />
+                          <h4 className="text-white font-bold text-sm">{plan.nombre}</h4>
+                        </div>
+                        <p className="text-2xl font-black text-white mb-1">${plan.precio.toLocaleString('es-AR')}<span className="text-white/30 text-xs font-normal">/mes</span></p>
+                        <p className="text-white/40 text-xs flex items-center gap-1"><Users className="w-3 h-3" /> Hasta {plan.clientes} clientes</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              <p className="text-white/40 text-sm mb-4">Paga directamente con Mercado Pago (tarjeta, transferencia o efectivo).</p>
+            )}
 
             <a href="https://link.mercadopago.com.ar/ventanasdepapel" target="_blank" rel="noopener noreferrer"
               className="w-full py-4 bg-[#00b1ea] hover:bg-[#009dd4] text-white font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-[#00b1ea]/20 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] mb-4">
               <svg viewBox="0 0 24 24" className="w-6 h-6" fill="currentColor"><rect width="24" height="24" rx="4" fill="white" fillOpacity="0.2"/><text x="12" y="17" textAnchor="middle" fontSize="12" fontWeight="bold" fill="white">MP</text></svg>
-              Renovar con Mercado Pago (AR$ {precio.toLocaleString('es-AR')})
+              Pagar con Mercado Pago
             </a>
 
             <div className="space-y-2">
