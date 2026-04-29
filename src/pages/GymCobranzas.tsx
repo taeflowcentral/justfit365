@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DollarSign, Users, Search, Check, Clock, AlertTriangle, MessageCircle, Printer, ChevronDown, Plus, Trash2 } from 'lucide-react';
+import { DollarSign, Users, Search, Check, Clock, AlertTriangle, MessageCircle, Printer, ChevronDown, Plus, Trash2, Edit3, Save, Mail, Send } from 'lucide-react';
 import { getUserItem, setUserItem } from '../lib/storage';
 import { useAuth } from '../context/AuthContext';
 import { getPrecioMensualGym } from '../components/PaymentModal';
@@ -61,6 +61,54 @@ export default function GymCobranzas() {
   const [showDetalle, setShowDetalle] = useState<number | null>(null);
   const [filtroEstado, setFiltroEstado] = useState<'todos' | 'pagado' | 'pendiente'>('todos');
   const [nuevoPago, setNuevoPago] = useState({ clienteId: 0, monto: precioBase.toString(), metodo: 'Efectivo', comprobante: '', nota: '' });
+  const [editandoCuota, setEditandoCuota] = useState(false);
+  const [nuevaCuota, setNuevaCuota] = useState(precioBase.toString());
+  const [showAvisoCuota, setShowAvisoCuota] = useState(false);
+
+  const guardarCuota = () => {
+    const val = parseFloat(nuevaCuota);
+    if (!val || val < 0) return;
+    localStorage.setItem('bc_precio_mensual_gym', val.toString());
+    window.dispatchEvent(new Event('precios-actualizados'));
+    setEditandoCuota(false);
+  };
+
+  const enviarAvisoCuotaWhatsApp = () => {
+    const val = parseFloat(nuevaCuota) || precioBase;
+    clientes.forEach(c => {
+      const tel = c.telefono.replace(/\D/g, '');
+      if (!tel) return;
+      let text = `Hola ${c.nombre.split(' ')[0]}, te informamos que la cuota de *${gymName}* se actualizo a *$${val.toLocaleString('es-AR')}* por mes.`;
+      if (aliasGym || cvuGym) {
+        text += `\n\n*Datos para transferencia:*`;
+        if (aliasGym) text += `\nAlias: ${aliasGym}`;
+        if (cvuGym) text += `\nCVU: ${cvuGym}`;
+        if (titularGym) text += `\nTitular: ${titularGym}`;
+        if (bancoGym) text += `\n${bancoGym}`;
+      }
+      text += `\n\nEl cambio aplica a partir del proximo periodo. Saludos!`;
+      window.open(`https://wa.me/${tel}?text=${encodeURIComponent(text)}`, '_blank');
+    });
+    setShowAvisoCuota(false);
+  };
+
+  const enviarAvisoCuotaEmail = () => {
+    const val = parseFloat(nuevaCuota) || precioBase;
+    const emails = clientes.filter(c => c.email).map(c => c.email).join(',');
+    if (!emails) { alert('Ningun cliente tiene email cargado'); return; }
+    const subject = `${gymName} - Actualizacion de cuota`;
+    let body = `Hola,\n\nLes informamos que la cuota de ${gymName} se actualizo a $${val.toLocaleString('es-AR')} por mes.\n`;
+    if (aliasGym || cvuGym) {
+      body += `\nDatos para transferencia:\n`;
+      if (aliasGym) body += `Alias: ${aliasGym}\n`;
+      if (cvuGym) body += `CVU: ${cvuGym}\n`;
+      if (titularGym) body += `Titular: ${titularGym}\n`;
+      if (bancoGym) body += `${bancoGym}\n`;
+    }
+    body += `\nEl cambio aplica a partir del proximo periodo.\n\nSaludos,\n${gymName}`;
+    window.open(`mailto:${emails}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+    setShowAvisoCuota(false);
+  };
 
   // Pagos del mes activo
   const pagosMes = pagos.filter(p => p.mes === mesActivo);
@@ -212,6 +260,63 @@ export default function GymCobranzas() {
           <div className="h-full bg-gradient-to-r from-emerald-500 to-lime rounded-full transition-all" style={{ width: `${clientes.length > 0 ? (clientesPagados / clientes.length) * 100 : 0}%` }} />
         </div>
       </div>
+
+      {/* Cuota */}
+      <div className="bg-dark-800 border border-dark-border rounded-2xl p-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <DollarSign className="w-5 h-5 text-lime" />
+          <div>
+            <p className="text-white/50 text-[10px] uppercase tracking-wider">Valor de la cuota</p>
+            {editandoCuota ? (
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-white/50 text-lg">$</span>
+                <input type="number" min="0" step="100" value={nuevaCuota} onChange={e => setNuevaCuota(e.target.value)}
+                  className="w-28 px-3 py-1.5 bg-black/60 border border-electric/30 rounded-lg text-white text-lg font-black focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                <button onClick={guardarCuota} className="p-1.5 text-emerald-400 hover:text-emerald-300"><Save className="w-4 h-4" /></button>
+              </div>
+            ) : (
+              <p className="text-white font-black text-xl">${precioBase.toLocaleString('es-AR')}<span className="text-white/30 text-sm font-normal"> /mes</span></p>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          {!editandoCuota ? (
+            <>
+              <button onClick={() => { setNuevaCuota(precioBase.toString()); setEditandoCuota(true); }} className="p-2 text-white/20 hover:text-electric transition-colors rounded-xl hover:bg-white/5">
+                <Edit3 className="w-4 h-4" />
+              </button>
+              <button onClick={() => setShowAvisoCuota(true)} className="flex items-center gap-1.5 px-3 py-2 bg-lime/15 border border-lime/20 text-lime rounded-xl text-xs font-bold hover:bg-lime/25 transition-all">
+                <Send className="w-3.5 h-3.5" /> Avisar cambio
+              </button>
+            </>
+          ) : (
+            <button onClick={() => setEditandoCuota(false)} className="px-3 py-1.5 text-white/40 text-xs">Cancelar</button>
+          )}
+        </div>
+      </div>
+
+      {/* Modal aviso cambio de cuota */}
+      {showAvisoCuota && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => setShowAvisoCuota(false)}>
+          <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-sm p-6 text-center" onClick={e => e.stopPropagation()}>
+            <div className="w-14 h-14 mx-auto mb-4 bg-lime/15 rounded-2xl flex items-center justify-center">
+              <Send className="w-7 h-7 text-lime" />
+            </div>
+            <h3 className="text-white font-bold text-lg mb-2">Avisar cambio de cuota</h3>
+            <p className="text-white/50 text-sm mb-2">Cuota actual: <strong className="text-white">${precioBase.toLocaleString('es-AR')}/mes</strong></p>
+            <p className="text-white/40 text-xs mb-5">Se enviara el aviso a {clientes.length} cliente{clientes.length !== 1 ? 's' : ''} con los datos de pago incluidos.</p>
+            <div className="space-y-2">
+              <button onClick={enviarAvisoCuotaWhatsApp} className="w-full py-3 bg-emerald-500 text-black rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+                <MessageCircle className="w-4 h-4" /> Enviar por WhatsApp
+              </button>
+              <button onClick={enviarAvisoCuotaEmail} className="w-full py-3 bg-blue-500 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+                <Mail className="w-4 h-4" /> Enviar por Email
+              </button>
+              <button onClick={() => setShowAvisoCuota(false)} className="w-full py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Acciones */}
       <div className="flex gap-2 flex-wrap">
