@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
 const features = [
-  { icon: Utensils, title: 'Plan Nutricional IA', desc: 'Planes personalizados segun tu peso, objetivo y condiciones. Base de 300+ alimentos argentinos.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+  { icon: Utensils, title: 'Plan Nutricional', desc: 'Planes personalizados segun tu peso, objetivo y condiciones. Base de 300+ alimentos argentinos. Avalado por profesionales UNLP y UCA.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
   { icon: Dumbbell, title: 'Rutinas Inteligentes', desc: 'Ejercicios adaptados a tu nivel. Push, Pull, Piernas, HIIT, Yoga y mas. Se ajustan automaticamente.', color: 'text-purple-400', bg: 'bg-purple-500/10' },
   { icon: MessageSquare, title: 'JustFit Coach', desc: 'Tu coach virtual 24/7. Consulta sobre suplementos, ayuno, nutricion, lesiones y mas.', color: 'text-electric', bg: 'bg-electric/10' },
   { icon: TrendingUp, title: 'Progreso Real', desc: 'Seguimiento de peso, medidas y fotos. Graficos de evolucion con metas y proyecciones.', color: 'text-amber-400', bg: 'bg-amber-500/10' },
@@ -21,7 +21,7 @@ const screenshots = [
   { title: 'Dashboard', desc: 'Tu resumen diario con calorias, entreno, hidratacion y progreso de peso.' },
   { title: 'Nutricion', desc: 'Plan completo con desayuno, almuerzo, merienda y cena. Macros automaticos.' },
   { title: 'Rutinas', desc: 'Ejercicios por dia con series, reps, peso y descanso. Editable al 100%.' },
-  { title: 'Coach IA', desc: '40+ temas: ayuno, insulina, colageno, curcuma, sueno, hidratacion y mas.' },
+  { title: 'JustFit Coach', desc: '40+ temas: ayuno, insulina, colageno, curcuma, sueno, hidratacion y mas.' },
   { title: 'Timer', desc: '5 modos: Cronometro, Cuenta regresiva, Tabata, EMOM, For Time.' },
   { title: 'Gimnasios', desc: 'Clientes, rutinas, nutricion, cobranzas y marca blanca para tu gym.' },
 ];
@@ -51,9 +51,12 @@ export default function Landing() {
             Tu cuerpo necesita un plan. Nosotros te damos <strong className="text-white">la ciencia, la tecnologia y el acompanamiento</strong> para lograrlo.
           </p>
 
-          <p className="text-white/30 text-sm mb-10 max-w-lg mx-auto">
+          <p className="text-white/30 text-sm mb-4 max-w-lg mx-auto">
             Planes nutricionales personalizados, rutinas inteligentes, coach virtual 24/7,
             seguimiento de progreso y mucho mas. Todo en una sola app.
+          </p>
+          <p className="text-white/20 text-xs mb-10 max-w-md mx-auto">
+            Contenido avalado por profesionales en Nutricion y Ciencias del Deporte de la <strong className="text-white/40">UNLP</strong> y <strong className="text-white/40">UCA</strong>
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">

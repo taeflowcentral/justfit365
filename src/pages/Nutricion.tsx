@@ -457,7 +457,7 @@ export default function Nutricion() {
           <Zap className="w-16 h-16 text-electric/20 mx-auto mb-4" />
           <h3 className="text-white font-bold text-lg mb-2">Sin plan nutricional</h3>
           <p className="text-white/40 text-sm mb-2 max-w-md mx-auto">
-            La IA va a generar un plan personalizado basado en tu perfil metab&oacute;lico
+            JustFit365 va a generar un plan personalizado basado en tu perfil metab&oacute;lico
             {perfil ? ` (${perfil.peso}kg, ${perfil.altura}cm, ${perfil.edad} a\u00f1os, objetivo: ${perfil.objetivo}).` : '. Configur\u00e1 tu perfil primero.'}
           </p>
           {perfil && (
