@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Users, Plus, Search, Dumbbell, Utensils, Trash2, User, Phone, Target, Activity, MessageCircle, Printer, Mail, History, Save, Clock, TrendingUp, ArrowDown, ArrowUp, Minus, CheckCircle, AlertTriangle, Weight, Ruler, Calendar, Zap } from 'lucide-react';
+import { Users, Plus, Search, Dumbbell, Utensils, Trash2, User, Phone, Target, Activity, MessageCircle, Printer, Mail, History, Save, Clock, TrendingUp, ArrowDown, ArrowUp, Minus, CheckCircle, AlertTriangle, Weight, Ruler, Calendar, Zap, Camera } from 'lucide-react';
 import { getUserItem, setUserItem } from '../lib/storage';
 import { useAuth } from '../context/AuthContext';
 import { buscarAlimentos, analizarComida } from '../lib/foodDB';
@@ -125,6 +125,7 @@ interface Cliente {
   enfermedades: string[];
   declaraBuenaSalud: boolean;
   esMayorDeEdad: boolean;
+  foto: string;
   rutina: ClienteRutina[];
   nutricion: ClienteComida[];
   notas: string;
@@ -139,7 +140,7 @@ export default function GymClientes() {
     const saved = getUserItem(CLIENTES_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      return parsed.map((c: Cliente) => ({ ...c, email: c.email || '', dni: c.dni || '', direccion: c.direccion || '', contactoEmergencia: c.contactoEmergencia || '', telefonoEmergencia: c.telefonoEmergencia || '', enfermedades: c.enfermedades || [], declaraBuenaSalud: c.declaraBuenaSalud ?? false, esMayorDeEdad: c.esMayorDeEdad ?? true, historial: c.historial || [], pesoMeta: c.pesoMeta || 0, fechaMeta: c.fechaMeta || '', pesoHistorial: c.pesoHistorial || [], nivelActividad: c.nivelActividad || 'Intermedio' }));
+      return parsed.map((c: Cliente) => ({ ...c, email: c.email || '', dni: c.dni || '', direccion: c.direccion || '', contactoEmergencia: c.contactoEmergencia || '', telefonoEmergencia: c.telefonoEmergencia || '', enfermedades: c.enfermedades || [], declaraBuenaSalud: c.declaraBuenaSalud ?? false, esMayorDeEdad: c.esMayorDeEdad ?? true, foto: c.foto || '', historial: c.historial || [], pesoMeta: c.pesoMeta || 0, fechaMeta: c.fechaMeta || '', pesoHistorial: c.pesoHistorial || [], nivelActividad: c.nivelActividad || 'Intermedio' }));
     }
     return [];
   });
@@ -173,7 +174,7 @@ export default function GymClientes() {
       objetivo: nuevoCliente.objetivo.join(', '), nivel: nuevoCliente.nivel,
       peso: parseFloat(nuevoCliente.peso) || 70, altura: parseInt(nuevoCliente.altura) || 170, edad: parseInt(nuevoCliente.edad) || 25,
       pesoMeta: parseFloat(nuevoCliente.pesoMeta) || 0, fechaMeta: '', pesoHistorial: [], nivelActividad: nuevoCliente.nivel,
-      enfermedades: nuevoCliente.enfermedades, declaraBuenaSalud: nuevoCliente.declaraBuenaSalud, esMayorDeEdad: nuevoCliente.esMayorDeEdad,
+      enfermedades: nuevoCliente.enfermedades, declaraBuenaSalud: nuevoCliente.declaraBuenaSalud, esMayorDeEdad: nuevoCliente.esMayorDeEdad, foto: '',
       notas: '', rutina: [], nutricion: [], historial: [],
     };
     guardar([...clientes, nuevo]);
@@ -351,8 +352,8 @@ export default function GymClientes() {
             <div key={c.id} className="bg-dark-800 border border-dark-border rounded-2xl p-5 hover:border-electric/20 transition-all cursor-pointer" onClick={() => { setClienteActivo(c.id); setTab('rutina'); }}>
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 bg-gradient-to-br from-electric to-neon rounded-full flex items-center justify-center text-black text-sm font-black">
-                    {c.nombre.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  <div className="w-11 h-11 rounded-full flex items-center justify-center overflow-hidden shrink-0">
+                    {c.foto ? <img src={c.foto} alt={c.nombre} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gradient-to-br from-electric to-neon flex items-center justify-center text-black text-sm font-black">{c.nombre.split(' ').map(n => n[0]).join('').slice(0, 2)}</div>}
                   </div>
                   <div>
                     <p className="text-white font-bold">{c.nombre}</p>
@@ -504,8 +505,8 @@ export default function GymClientes() {
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
           </button>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-electric to-neon rounded-full flex items-center justify-center text-black font-black">
-              {cliente!.nombre.split(' ').map(n => n[0]).join('').slice(0, 2)}
+            <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden shrink-0">
+              {cliente!.foto ? <img src={cliente!.foto} alt={cliente!.nombre} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gradient-to-br from-electric to-neon flex items-center justify-center text-black font-black">{cliente!.nombre.split(' ').map(n => n[0]).join('').slice(0, 2)}</div>}
             </div>
             <div>
               <h1 className="text-xl font-black text-white">{cliente!.nombre}</h1>
@@ -702,6 +703,55 @@ export default function GymClientes() {
 
         return (
         <div className="space-y-4">
+          {/* Foto de perfil */}
+          <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
+            <h3 className="text-white font-bold mb-4 flex items-center gap-2"><Camera className="w-4 h-4 text-electric" /> Foto de Perfil</h3>
+            <div className="flex items-center gap-5">
+              <div className="relative group">
+                <div className="w-24 h-24 rounded-2xl overflow-hidden bg-dark-700 border-2 border-dark-border flex items-center justify-center">
+                  {c.foto ? (
+                    <img src={c.foto} alt={c.nombre} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="text-center">
+                      <User className="w-8 h-8 text-white/10 mx-auto" />
+                      <span className="text-white/15 text-[9px] block mt-1">Sin foto</span>
+                    </div>
+                  )}
+                </div>
+                <label className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 rounded-2xl cursor-pointer transition-opacity">
+                  <Camera className="w-5 h-5 text-white" />
+                  <input type="file" accept="image/*" className="hidden" onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    if (file.size > 2 * 1024 * 1024) { alert('La imagen no debe superar los 2MB'); return; }
+                    const reader = new FileReader();
+                    reader.onloadend = () => updateCliente(c.id, { foto: reader.result as string });
+                    reader.readAsDataURL(file);
+                  }} />
+                </label>
+              </div>
+              <div className="space-y-2">
+                <label className="flex items-center gap-2 px-4 py-2 bg-electric/10 border border-electric/20 rounded-xl text-electric text-xs font-medium cursor-pointer hover:bg-electric/20 transition-colors">
+                  <Camera className="w-3.5 h-3.5" /> Subir foto
+                  <input type="file" accept="image/*" className="hidden" onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    if (file.size > 2 * 1024 * 1024) { alert('La imagen no debe superar los 2MB'); return; }
+                    const reader = new FileReader();
+                    reader.onloadend = () => updateCliente(c.id, { foto: reader.result as string });
+                    reader.readAsDataURL(file);
+                  }} />
+                </label>
+                {c.foto && (
+                  <button onClick={() => updateCliente(c.id, { foto: '' })} className="flex items-center gap-2 px-4 py-2 bg-danger/10 border border-danger/20 rounded-xl text-danger text-xs font-medium hover:bg-danger/20 transition-colors">
+                    <Trash2 className="w-3.5 h-3.5" /> Eliminar
+                  </button>
+                )}
+                <p className="text-white/20 text-[10px]">JPG, PNG. Max 2MB.</p>
+              </div>
+            </div>
+          </div>
+
           {/* Datos editables */}
           <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
             <h3 className="text-white font-bold mb-4 flex items-center gap-2"><User className="w-4 h-4 text-electric" /> Datos del cliente</h3>
