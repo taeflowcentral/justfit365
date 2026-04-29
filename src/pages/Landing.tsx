@@ -183,8 +183,8 @@ export default function Landing() {
             <div className="bg-dark-800 border border-dark-border rounded-2xl p-6 relative">
               <h3 className="text-white font-bold text-lg mb-1">Plan Individual</h3>
               <p className="text-white/40 text-xs mb-4">Acceso completo a todos los m\u00f3dulos</p>
-              <p className="text-4xl font-black text-white mb-1">$57.000</p>
-              <p className="text-white/30 text-xs mb-6">Valor por 1 a\u00f1o &mdash; menos de $5.000/mes</p>
+              <p className="text-4xl font-black text-white mb-1">$57.000 <span className="text-lime text-lg font-bold">/ Valor por 1 a\u00f1o</span></p>
+              <p className="text-white/30 text-xs mb-6">Menos de $5.000 por mes</p>
               <ul className="space-y-2 mb-6">
                 {['Plan nutricional personalizado', 'Rutinas inteligentes', 'JustFit Coach 24/7', 'Progreso y mediciones', 'Workout Timer', 'An\u00e1lisis m\u00e9dicos'].map(f => (
                   <li key={f} className="flex items-center gap-2 text-white/60 text-sm"><CheckCircle className="w-4 h-4 text-lime shrink-0" />{f}</li>
