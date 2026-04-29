@@ -4,27 +4,27 @@ import { useState } from 'react';
 import LanguageSelector from '../components/LanguageSelector';
 
 const features = [
-  { icon: Utensils, title: 'Plan Nutricional', desc: 'Planes personalizados seg\u00fan tu peso, objetivo y condiciones. Base de 300+ alimentos argentinos. Avalado por profesionales UNLP y UCA.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-  { icon: Dumbbell, title: 'Rutinas Inteligentes', desc: 'Ejercicios adaptados a tu nivel. Push, Pull, Piernas, HIIT, Yoga y m\u00e1s. Se ajustan autom\u00e1ticamente.', color: 'text-purple-400', bg: 'bg-purple-500/10' },
-  { icon: MessageSquare, title: 'JustFit Coach', desc: 'Tu coach virtual 24/7. Consult\u00e1 sobre suplementos, ayuno, nutrici\u00f3n, lesiones y m\u00e1s.', color: 'text-electric', bg: 'bg-electric/10' },
-  { icon: TrendingUp, title: 'Progreso Real', desc: 'Seguimiento de peso, medidas y fotos. Gr\u00e1ficos de evoluci\u00f3n con metas y proyecciones.', color: 'text-amber-400', bg: 'bg-amber-500/10' },
-  { icon: Timer, title: 'Workout Timer', desc: 'Cron\u00f3metro, Tabata, EMOM, For Time. Sonidos autom\u00e1ticos para entrenar sin mirar el celular.', color: 'text-red-400', bg: 'bg-red-500/10' },
-  { icon: Users, title: 'Panel Gimnasios', desc: 'Gesti\u00f3n de clientes, rutinas, nutrici\u00f3n, cobranzas y marca blanca. Todo en un solo lugar.', color: 'text-lime', bg: 'bg-lime/10' },
+  { icon: Utensils, title: 'Plan Nutricional', desc: 'Planes personalizados segun tu peso, objetivo y condiciones. Base de 300+ alimentos argentinos. Avalado por profesionales UNLP y UCA.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+  { icon: Dumbbell, title: 'Rutinas Inteligentes', desc: 'Ejercicios adaptados a tu nivel. Push, Pull, Piernas, HIIT, Yoga y mas. Se ajustan automaticamente.', color: 'text-purple-400', bg: 'bg-purple-500/10' },
+  { icon: MessageSquare, title: 'JustFit Coach', desc: 'Tu coach virtual 24/7. Consulta sobre suplementos, ayuno, nutricion, lesiones y mas.', color: 'text-electric', bg: 'bg-electric/10' },
+  { icon: TrendingUp, title: 'Progreso Real', desc: 'Seguimiento de peso, medidas y fotos. Graficos de evolucion con metas y proyecciones.', color: 'text-amber-400', bg: 'bg-amber-500/10' },
+  { icon: Timer, title: 'Workout Timer', desc: 'Cronometro, Tabata, EMOM, For Time. Sonidos automaticos para entrenar sin mirar el celular.', color: 'text-red-400', bg: 'bg-red-500/10' },
+  { icon: Users, title: 'Panel Gimnasios', desc: 'Gestion de clientes, rutinas, nutricion, cobranzas y marca blanca. Todo en un solo lugar.', color: 'text-lime', bg: 'bg-lime/10' },
 ];
 
 const testimonios = [
-  { nombre: 'Laura M.', texto: 'En 3 meses baj\u00e9 8kg siguiendo los planes. El coach me ayud\u00f3 a entender los ayunos.', estrellas: 5 },
-  { nombre: 'Mart\u00edn R.', texto: 'Como entrenador uso el panel de gimnasio para todos mis clientes. Ahorro horas de trabajo.', estrellas: 5 },
-  { nombre: 'Sof\u00eda L.', texto: 'La base de alimentos es incre\u00edble. Puedo armar mis comidas y ver los macros al instante.', estrellas: 5 },
+  { nombre: 'Laura M.', texto: 'En 3 meses baje 8kg siguiendo los planes. El coach me ayudo a entender los ayunos.', estrellas: 5 },
+  { nombre: 'Martin R.', texto: 'Como entrenador uso el panel de gimnasio para todos mis clientes. Ahorro horas de trabajo.', estrellas: 5 },
+  { nombre: 'Sofia L.', texto: 'La base de alimentos es increible. Puedo armar mis comidas y ver los macros al instante.', estrellas: 5 },
 ];
 
 const screenshots = [
-  { title: 'Dashboard', desc: 'Tu resumen diario con calor\u00edas, entreno, hidrataci\u00f3n y progreso de peso.' },
-  { title: 'Nutrici\u00f3n', desc: 'Plan completo con desayuno, almuerzo, merienda y cena. Macros autom\u00e1ticos.' },
-  { title: 'Rutinas', desc: 'Ejercicios por d\u00eda con series, reps, peso y descanso. Editable al 100%.' },
-  { title: 'JustFit Coach', desc: '40+ temas: ayuno, insulina, col\u00e1geno, c\u00farcuma, sue\u00f1o, hidrataci\u00f3n y m\u00e1s.' },
-  { title: 'Timer', desc: '5 modos: Cron\u00f3metro, Cuenta regresiva, Tabata, EMOM, For Time.' },
-  { title: 'Gimnasios', desc: 'Clientes, rutinas, nutrici\u00f3n, cobranzas y marca blanca para tu gym.' },
+  { title: 'Dashboard', desc: 'Tu resumen diario con calorias, entreno, hidratacion y progreso de peso.' },
+  { title: 'Nutricion', desc: 'Plan completo con desayuno, almuerzo, merienda y cena. Macros automaticos.' },
+  { title: 'Rutinas', desc: 'Ejercicios por dia con series, reps, peso y descanso. Editable al 100%.' },
+  { title: 'JustFit Coach', desc: '40+ temas: ayuno, insulina, colageno, curcuma, sueno, hidratacion y mas.' },
+  { title: 'Timer', desc: '5 modos: Cronometro, Cuenta regresiva, Tabata, EMOM, For Time.' },
+  { title: 'Gimnasios', desc: 'Clientes, rutinas, nutricion, cobranzas y marca blanca para tu gym.' },
 ];
 
 export default function Landing() {
@@ -48,7 +48,7 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* HERO - ATENCI\u00d3N */}
+      {/* HERO */}
       <section className="relative min-h-screen flex items-center justify-center px-4">
         <div className="absolute inset-0">
           <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-lime/8 rounded-full blur-[150px]" />
@@ -57,7 +57,7 @@ export default function Landing() {
 
         <div className="relative text-center max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime/10 border border-lime/20 rounded-full text-lime text-xs font-bold uppercase tracking-wider mb-8">
-            <Zap className="w-3.5 h-3.5" /> Fitness & Nutrici\u00f3n Inteligente
+            <Zap className="w-3.5 h-3.5" /> Fitness &amp; Nutricion Inteligente
           </div>
 
           <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-none mb-6">
@@ -65,15 +65,14 @@ export default function Landing() {
           </h1>
 
           <p className="text-xl sm:text-2xl text-white/50 max-w-2xl mx-auto mb-4 leading-relaxed">
-            Tu cuerpo necesita un plan. Nosotros te damos <strong className="text-white">la ciencia, la tecnolog\u00eda y el acompa\u00f1amiento</strong> para lograrlo.
+            Tu cuerpo necesita un plan. Nosotros te damos <strong className="text-white">la ciencia, la tecnologia y el acompa&ntilde;amiento</strong> para lograrlo.
           </p>
 
           <p className="text-white/30 text-sm mb-4 max-w-lg mx-auto">
-            Planes nutricionales personalizados, rutinas inteligentes, coach virtual 24/7,
-            seguimiento de progreso y mucho m\u00e1s. Todo en una sola app.
+            Planes nutricionales personalizados, rutinas inteligentes, coach virtual 24/7, seguimiento de progreso y mucho m&aacute;s. Todo en una sola app.
           </p>
           <p className="text-white/20 text-xs mb-10 max-w-md mx-auto">
-            Contenido avalado por profesionales en Nutrici\u00f3n y Ciencias del Deporte de la <strong className="text-white/40">UNLP</strong> y <strong className="text-white/40">UCA</strong>
+            Contenido avalado por profesionales en Nutricion y Ciencias del Deporte de la <strong className="text-white/40">UNLP</strong> y <strong className="text-white/40">UCA</strong>
           </p>
 
           {/* Stats */}
@@ -90,13 +89,13 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* FEATURES - INTER\u00c9S */}
+      {/* FEATURES */}
       <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-lime text-xs font-bold uppercase tracking-widest mb-3">Todo lo que necesit\u00e1s</p>
+            <p className="text-lime text-xs font-bold uppercase tracking-widest mb-3">Todo lo que necesitas</p>
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight">Una app, infinitas posibilidades</h2>
-            <p className="text-white/40 mt-4 max-w-lg mx-auto">Dise\u00f1ada para personas que quieren resultados reales. Sin humo, con ciencia.</p>
+            <p className="text-white/40 mt-4 max-w-lg mx-auto">Dise&ntilde;ada para personas que quieren resultados reales. Sin humo, con ciencia.</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -113,12 +112,12 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* SCREENSHOTS / DEMO - DESEO */}
+      {/* SCREENSHOTS */}
       <section className="py-20 px-4 bg-dark-900">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-lime text-xs font-bold uppercase tracking-widest mb-3">As\u00ed se ve por dentro</p>
-            <h2 className="text-3xl sm:text-5xl font-black tracking-tight">Conoc\u00e9 cada m\u00f3dulo</h2>
+            <p className="text-lime text-xs font-bold uppercase tracking-widest mb-3">Asi se ve por dentro</p>
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight">Conoce cada modulo</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -175,18 +174,18 @@ export default function Landing() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-lime text-xs font-bold uppercase tracking-widest mb-3">Planes accesibles</p>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Eleg\u00ed el plan que se adapte a vos</h2>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Elegi el plan que se adapte a vos</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
             {/* Individual */}
             <div className="bg-dark-800 border border-dark-border rounded-2xl p-6 relative">
               <h3 className="text-white font-bold text-lg mb-1">Plan Individual</h3>
-              <p className="text-white/40 text-xs mb-4">Acceso completo a todos los m\u00f3dulos</p>
+              <p className="text-white/40 text-xs mb-4">Acceso completo a todos los modulos</p>
               <p className="text-3xl sm:text-4xl font-black text-white mb-1">$57.000 <span className="text-lime text-base sm:text-lg font-bold">/ 1 A&ntilde;o</span></p>
               <p className="text-white/30 text-xs mb-6">Menos de $5.000 por mes</p>
               <ul className="space-y-2 mb-6">
-                {['Plan nutricional personalizado', 'Rutinas inteligentes', 'JustFit Coach 24/7', 'Progreso y mediciones', 'Workout Timer', 'An\u00e1lisis m\u00e9dicos'].map(f => (
+                {['Plan nutricional personalizado', 'Rutinas inteligentes', 'JustFit Coach 24/7', 'Progreso y mediciones', 'Workout Timer', 'Analisis medicos'].map(f => (
                   <li key={f} className="flex items-center gap-2 text-white/60 text-sm"><CheckCircle className="w-4 h-4 text-lime shrink-0" />{f}</li>
                 ))}
               </ul>
@@ -199,11 +198,11 @@ export default function Landing() {
             <div className="bg-dark-800 border-2 border-lime/30 rounded-2xl p-6 relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-lime text-black text-[10px] font-black uppercase tracking-wider rounded-full">Popular</div>
               <h3 className="text-white font-bold text-lg mb-1">Plan Gimnasio</h3>
-              <p className="text-white/40 text-xs mb-4">Marca blanca + gesti\u00f3n de clientes</p>
+              <p className="text-white/40 text-xs mb-4">Marca blanca + gestion de clientes</p>
               <p className="text-4xl font-black text-lime mb-1">$19.000<span className="text-white/30 text-sm font-normal">/mes</span></p>
               <p className="text-white/30 text-xs mb-6">Clientes ilimitados</p>
               <ul className="space-y-2 mb-6">
-                {['Todo lo del Plan Individual', 'Panel de gesti\u00f3n de clientes', 'Rutinas y nutrici\u00f3n por cliente', 'Sistema de cobranzas', 'Marca blanca (tu logo)', 'WhatsApp y Email integrado'].map(f => (
+                {['Todo lo del Plan Individual', 'Panel de gestion de clientes', 'Rutinas y nutricion por cliente', 'Sistema de cobranzas', 'Marca blanca (tu logo)', 'WhatsApp y Email integrado'].map(f => (
                   <li key={f} className="flex items-center gap-2 text-white/60 text-sm"><CheckCircle className="w-4 h-4 text-lime shrink-0" />{f}</li>
                 ))}
               </ul>
@@ -231,12 +230,12 @@ export default function Landing() {
 
           <div className="space-y-2">
             {[
-              { q: '\u00bfNecesito experiencia para usar la app?', a: 'No. JustFit365 est\u00e1 dise\u00f1ada tanto para principiantes como para avanzados. El sistema se adapta a tu nivel y objetivo.' },
-              { q: '\u00bfPuedo usarla en el celular?', a: 'S\u00ed. Es una app web que funciona en cualquier dispositivo: celular, tablet o PC. Pod\u00e9s instalarla como app desde el navegador.' },
-              { q: '\u00bfC\u00f3mo funciona el Coach virtual?', a: 'Es un asistente inteligente con m\u00e1s de 40 temas de nutrici\u00f3n, suplementaci\u00f3n, entrenamiento y salud. Le pregunt\u00e1s y te responde con informaci\u00f3n personalizada seg\u00fan tu perfil.' },
-              { q: '\u00bfSirve para gimnasios?', a: 'S\u00ed. El Plan Gimnasio incluye gesti\u00f3n de clientes, rutinas y nutrici\u00f3n personalizadas, sistema de cobranzas y marca blanca con tu logo.' },
-              { q: '\u00bfPuedo cancelar en cualquier momento?', a: 'S\u00ed. No hay permanencia m\u00ednima. Tu suscripci\u00f3n se mantiene activa hasta el vencimiento del per\u00edodo pagado.' },
-              { q: '\u00bfQu\u00e9 m\u00e9todos de pago aceptan?', a: 'Mercado Pago (tarjeta, transferencia, efectivo en puntos de pago) y transferencia bancaria directa.' },
+              { q: 'Necesito experiencia para usar la app?', a: 'No. JustFit365 esta dise&ntilde;ada tanto para principiantes como para avanzados. El sistema se adapta a tu nivel y objetivo.' },
+              { q: 'Puedo usarla en el celular?', a: 'Si. Es una app web que funciona en cualquier dispositivo: celular, tablet o PC. Podes instalarla como app desde el navegador.' },
+              { q: 'Como funciona el Coach virtual?', a: 'Es un asistente inteligente con mas de 40 temas de nutricion, suplementacion, entrenamiento y salud. Le preguntas y te responde con informacion personalizada segun tu perfil.' },
+              { q: 'Sirve para gimnasios?', a: 'Si. El Plan Gimnasio incluye gestion de clientes, rutinas y nutricion personalizadas, sistema de cobranzas y marca blanca con tu logo.' },
+              { q: 'Puedo cancelar en cualquier momento?', a: 'Si. No hay permanencia minima. Tu suscripcion se mantiene activa hasta el vencimiento del periodo pagado.' },
+              { q: 'Que metodos de pago aceptan?', a: 'Mercado Pago (tarjeta, transferencia, efectivo en puntos de pago) y transferencia bancaria directa.' },
             ].map((faq, i) => (
               <button key={i} onClick={() => setFaqOpen(faqOpen === i ? null : i)} className="w-full text-left bg-dark-800 border border-dark-border rounded-xl p-4 hover:border-white/10 transition-all">
                 <div className="flex items-center justify-between">
@@ -250,7 +249,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* CTA FINAL - ACCI\u00d3N */}
+      {/* CTA FINAL */}
       <section className="py-20 px-4 bg-dark-900 relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-lime/5 rounded-full blur-[120px]" />
@@ -261,13 +260,13 @@ export default function Landing() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-lime rounded-2xl mb-6">
             <Zap className="w-8 h-8 text-black" strokeWidth={2.5} />
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight mb-4">Empez\u00e1 hoy.<br />Tu cuerpo te lo va a agradecer.</h2>
-          <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">No importa si reci\u00e9n arranc\u00e1s o si entren\u00e1s hace a\u00f1os. JustFit365 se adapta a vos.</p>
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight mb-4">Empeza hoy.<br />Tu cuerpo te lo va a agradecer.</h2>
+          <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">No importa si recien arrancas o si entrenas hace a&ntilde;os. JustFit365 se adapta a vos.</p>
           <Link to="/registro"
             className="inline-flex items-center gap-2 px-10 py-5 bg-lime text-black font-black text-sm uppercase tracking-widest rounded-xl hover:bg-lime/80 transition-all shadow-lg shadow-lime/20 hover:scale-[1.02]">
             <Zap className="w-5 h-5" /> Crear Cuenta
           </Link>
-          <p className="text-white/20 text-xs mt-4">Sin tarjeta de cr\u00e9dito. Empez\u00e1 a explorar ahora.</p>
+          <p className="text-white/20 text-xs mt-4">Sin tarjeta de credito. Empeza a explorar ahora.</p>
         </div>
       </section>
 
@@ -281,7 +280,7 @@ export default function Landing() {
             <span className="text-white font-black tracking-tighter">JustFit<span className="text-lime">365</span></span>
           </div>
           <div className="flex items-center gap-6 text-white/30 text-xs">
-            <Link to="/login" className="hover:text-white transition-colors">Iniciar sesi\u00f3n</Link>
+            <Link to="/login" className="hover:text-white transition-colors">Iniciar sesion</Link>
             <Link to="/registro" className="hover:text-white transition-colors">Registrarse</Link>
             <a href="mailto:justfit365.com@gmail.com" className="hover:text-white transition-colors">Contacto</a>
           </div>
