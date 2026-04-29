@@ -16,12 +16,13 @@ import AdminPanel from './pages/AdminPanel';
 import GymClientes from './pages/GymClientes';
 import Registro from './pages/Registro';
 import RecuperarPassword from './pages/RecuperarPassword';
+import Landing from './pages/Landing';
 import WorkoutTimer from './pages/WorkoutTimer';
 import GymCobranzas from './pages/GymCobranzas';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+  return isAuthenticated ? <>{children}</> : <Navigate to="/landing" />;
 }
 
 function AppRoutes() {
@@ -29,6 +30,7 @@ function AppRoutes() {
 
   return (
     <Routes>
+      <Route path="/landing" element={isAuthenticated ? <Navigate to="/" replace /> : <Landing />} />
       <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
       <Route path="/registro" element={isAuthenticated ? <Navigate to="/" replace /> : <Registro />} />
       <Route path="/recuperar" element={isAuthenticated ? <Navigate to="/" replace /> : <RecuperarPassword />} />
