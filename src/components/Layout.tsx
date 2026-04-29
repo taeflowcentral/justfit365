@@ -6,6 +6,7 @@ import PaymentModal from './PaymentModal';
 import GymInactiveModal from './GymInactiveModal';
 import { useAuth } from '../context/AuthContext';
 import { Bell, AlertTriangle, Menu } from 'lucide-react';
+import LanguageSelector from './LanguageSelector';
 
 export default function Layout() {
   const { user } = useAuth();
@@ -75,6 +76,7 @@ export default function Layout() {
             <span className="md:hidden text-white font-black text-sm tracking-tighter">JustFit<span className="text-lime">365</span></span>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
+            <LanguageSelector />
             <button className="relative p-2 text-white/30 hover:text-white hover:bg-white/5 rounded-xl transition-colors">
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-electric rounded-full animate-pulse" />

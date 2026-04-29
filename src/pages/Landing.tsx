@@ -1,6 +1,7 @@
 import { Zap, Dumbbell, Utensils, TrendingUp, Timer, MessageSquare, Users, ChevronDown, Star, CheckCircle, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import LanguageSelector from '../components/LanguageSelector';
 
 const features = [
   { icon: Utensils, title: 'Plan Nutricional', desc: 'Planes personalizados segun tu peso, objetivo y condiciones. Base de 300+ alimentos argentinos. Avalado por profesionales UNLP y UCA.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
@@ -31,6 +32,22 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
+        <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 bg-lime rounded-lg flex items-center justify-center">
+              <Zap className="w-4 h-4 text-black" strokeWidth={2.5} />
+            </div>
+            <span className="text-white font-black text-sm tracking-tighter">JustFit<span className="text-lime">365</span></span>
+          </div>
+          <div className="flex items-center gap-3">
+            <LanguageSelector />
+            <Link to="/login" className="px-4 py-1.5 bg-white/5 border border-white/10 text-white/60 text-xs font-bold rounded-lg hover:bg-white/10 transition-all">Ingresar</Link>
+          </div>
+        </div>
+      </nav>
+
       {/* HERO - ATENCION */}
       <section className="relative min-h-screen flex items-center justify-center px-4">
         <div className="absolute inset-0">

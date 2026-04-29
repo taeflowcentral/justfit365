@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Eye, EyeOff, Zap, ShieldCheck, Fingerprint } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import LanguageSelector from '../components/LanguageSelector';
 
 export default function Login() {
   const { login } = useAuth();
@@ -146,7 +147,10 @@ export default function Login() {
           </div>
         </div>
 
-        <p className="text-center text-white/15 text-xs mt-8 tracking-wider">&copy; 2026 JustFit365 &mdash; All rights reserved</p>
+        <div className="flex items-center justify-center gap-3 mt-8">
+          <LanguageSelector />
+          <p className="text-white/15 text-xs tracking-wider">&copy; 2026 JustFit365</p>
+        </div>
       </div>
     </div>
   );
