@@ -6,40 +6,114 @@ import { buscarAlimentos, analizarComida } from '../lib/foodDB';
 import { printContent } from '../components/ShareButtons';
 
 // Plantillas de ejercicios por objetivo
+const DISCIPLINAS = ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body', 'Cardio', 'HIIT', 'Funcional', 'Running', 'Caminata Activa', 'Yoga', 'Spinning', 'Ciclismo'];
+
 const plantillasRutina: Record<string, ClienteRutina[]> = {
-  'Hipertrofia': [
+  'Push': [
     { id: 0, nombre: 'Press Banca con Barra', series: 4, reps: '8-10', descanso: '90', peso: '', musculo: 'Pecho', notas: '' },
+    { id: 0, nombre: 'Press Inclinado Mancuernas', series: 3, reps: '10-12', descanso: '75', peso: '', musculo: 'Pecho superior', notas: '' },
+    { id: 0, nombre: 'Press Militar con Barra', series: 4, reps: '8-10', descanso: '90', peso: '', musculo: 'Hombros', notas: '' },
+    { id: 0, nombre: 'Elevaciones Laterales', series: 4, reps: '12-15', descanso: '60', peso: '', musculo: 'Hombros', notas: '' },
+    { id: 0, nombre: 'Fondos en Paralelas', series: 3, reps: '10-12', descanso: '75', peso: '', musculo: 'Pecho / Triceps', notas: '' },
+    { id: 0, nombre: 'Extension Triceps Polea', series: 3, reps: '12-15', descanso: '60', peso: '', musculo: 'Triceps', notas: '' },
+  ],
+  'Pull': [
+    { id: 0, nombre: 'Dominadas', series: 4, reps: '8-10', descanso: '90', peso: 'Corporal', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Remo con Barra', series: 4, reps: '8-10', descanso: '90', peso: '', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Remo Mancuerna a 1 Brazo', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Pull Down Polea', series: 3, reps: '10-12', descanso: '75', peso: '', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Curl Biceps con Barra', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Biceps', notas: '' },
+    { id: 0, nombre: 'Face Pull', series: 3, reps: '15-20', descanso: '45', peso: '', musculo: 'Hombro posterior', notas: '' },
+  ],
+  'Piernas': [
+    { id: 0, nombre: 'Sentadilla con Barra', series: 4, reps: '6-8', descanso: '120', peso: '', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Prensa de Piernas', series: 4, reps: '10-12', descanso: '90', peso: '', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Peso Muerto Rumano', series: 4, reps: '8-10', descanso: '90', peso: '', musculo: 'Isquiotibiales', notas: '' },
+    { id: 0, nombre: 'Zancadas con Mancuernas', series: 3, reps: '12 c/lado', descanso: '60', peso: '', musculo: 'Gluteos', notas: '' },
+    { id: 0, nombre: 'Extension de Piernas', series: 3, reps: '12-15', descanso: '60', peso: '', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Curl Femoral', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Isquiotibiales', notas: '' },
+    { id: 0, nombre: 'Elevacion de Pantorrillas', series: 4, reps: '15-20', descanso: '45', peso: '', musculo: 'Pantorrillas', notas: '' },
+  ],
+  'Upper': [
+    { id: 0, nombre: 'Press Banca con Barra', series: 4, reps: '6-8', descanso: '90', peso: '', musculo: 'Pecho', notas: '' },
+    { id: 0, nombre: 'Dominadas', series: 4, reps: '8-10', descanso: '90', peso: 'Corporal', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Press Militar', series: 3, reps: '8-10', descanso: '75', peso: '', musculo: 'Hombros', notas: '' },
+    { id: 0, nombre: 'Remo con Barra', series: 3, reps: '10-12', descanso: '75', peso: '', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Curl Biceps', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Biceps', notas: '' },
+    { id: 0, nombre: 'Extension Triceps', series: 3, reps: '12-15', descanso: '60', peso: '', musculo: 'Triceps', notas: '' },
+  ],
+  'Lower': [
     { id: 0, nombre: 'Sentadilla con Barra', series: 4, reps: '8-10', descanso: '90', peso: '', musculo: 'Cuadriceps', notas: '' },
-    { id: 0, nombre: 'Remo con Barra', series: 4, reps: '8-10', descanso: '75', peso: '', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Peso Muerto Rumano', series: 4, reps: '8-10', descanso: '90', peso: '', musculo: 'Isquiotibiales', notas: '' },
+    { id: 0, nombre: 'Hip Thrust', series: 4, reps: '10-12', descanso: '75', peso: '', musculo: 'Gluteos', notas: '' },
+    { id: 0, nombre: 'Sentadilla Bulgara', series: 3, reps: '10 c/lado', descanso: '60', peso: '', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Curl Femoral', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Isquiotibiales', notas: '' },
+    { id: 0, nombre: 'Elevacion de Pantorrillas', series: 4, reps: '15-20', descanso: '45', peso: '', musculo: 'Pantorrillas', notas: '' },
+  ],
+  'Full Body': [
+    { id: 0, nombre: 'Sentadilla con Barra', series: 3, reps: '8-10', descanso: '90', peso: '', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Press Banca', series: 3, reps: '8-10', descanso: '90', peso: '', musculo: 'Pecho', notas: '' },
+    { id: 0, nombre: 'Remo con Barra', series: 3, reps: '10-12', descanso: '75', peso: '', musculo: 'Espalda', notas: '' },
     { id: 0, nombre: 'Press Militar', series: 3, reps: '10-12', descanso: '75', peso: '', musculo: 'Hombros', notas: '' },
-    { id: 0, nombre: 'Curl con Barra', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Biceps', notas: '' },
-    { id: 0, nombre: 'Triceps en Polea', series: 3, reps: '12-15', descanso: '60', peso: '', musculo: 'Triceps', notas: '' },
-    { id: 0, nombre: 'Peso Muerto Rumano', series: 3, reps: '10-12', descanso: '75', peso: '', musculo: 'Isquiotibiales', notas: '' },
-  ],
-  'Tonificacion': [
-    { id: 0, nombre: 'Sentadilla Goblet', series: 3, reps: '15', descanso: '45', peso: '', musculo: 'Cuadriceps', notas: '' },
-    { id: 0, nombre: 'Hip Thrust', series: 4, reps: '12-15', descanso: '60', peso: '', musculo: 'Gluteos', notas: '' },
-    { id: 0, nombre: 'Estocadas Caminando', series: 3, reps: '12 c/lado', descanso: '45', peso: '', musculo: 'Cuadriceps', notas: '' },
-    { id: 0, nombre: 'Remo con Mancuerna', series: 3, reps: '12-15', descanso: '45', peso: '', musculo: 'Espalda', notas: '' },
-    { id: 0, nombre: 'Press con Mancuernas', series: 3, reps: '12-15', descanso: '45', peso: '', musculo: 'Pecho', notas: '' },
+    { id: 0, nombre: 'Peso Muerto Rumano', series: 3, reps: '8-10', descanso: '75', peso: '', musculo: 'Isquiotibiales', notas: '' },
     { id: 0, nombre: 'Plancha', series: 3, reps: '45 seg', descanso: '30', peso: 'Corporal', musculo: 'Core', notas: '' },
-    { id: 0, nombre: 'Elevaciones Laterales', series: 3, reps: '15', descanso: '30', peso: '', musculo: 'Hombros', notas: '' },
   ],
-  'Perdida de grasa': [
-    { id: 0, nombre: 'Burpees', series: 4, reps: '10', descanso: '30', peso: 'Corporal', musculo: 'Full Body', notas: 'Alta intensidad' },
-    { id: 0, nombre: 'Sentadilla con Salto', series: 3, reps: '15', descanso: '30', peso: 'Corporal', musculo: 'Cuadriceps', notas: '' },
-    { id: 0, nombre: 'Mountain Climbers', series: 3, reps: '30 seg', descanso: '20', peso: 'Corporal', musculo: 'Core', notas: '' },
-    { id: 0, nombre: 'Kettlebell Swing', series: 4, reps: '15', descanso: '30', peso: '', musculo: 'Gluteos', notas: '' },
-    { id: 0, nombre: 'Remo con Barra', series: 3, reps: '12', descanso: '45', peso: '', musculo: 'Espalda', notas: '' },
-    { id: 0, nombre: 'Press Banca', series: 3, reps: '12', descanso: '45', peso: '', musculo: 'Pecho', notas: '' },
-    { id: 0, nombre: 'Plancha Lateral', series: 3, reps: '30 seg c/lado', descanso: '20', peso: 'Corporal', musculo: 'Core', notas: '' },
+  'Cardio': [
+    { id: 0, nombre: 'Cinta - Trote', series: 1, reps: '20 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'Ritmo moderado' },
+    { id: 0, nombre: 'Bicicleta Estatica', series: 1, reps: '15 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Eliptico', series: 1, reps: '15 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Remo ergometro', series: 1, reps: '10 min', descanso: '0', peso: '-', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Saltar la soga', series: 5, reps: '2 min', descanso: '30', peso: '-', musculo: 'Pantorrillas', notas: '' },
   ],
-  'Fuerza': [
-    { id: 0, nombre: 'Sentadilla con Barra', series: 5, reps: '5', descanso: '180', peso: '', musculo: 'Cuadriceps', notas: 'Peso pesado' },
-    { id: 0, nombre: 'Press Banca', series: 5, reps: '5', descanso: '180', peso: '', musculo: 'Pecho', notas: 'Peso pesado' },
-    { id: 0, nombre: 'Peso Muerto', series: 5, reps: '5', descanso: '180', peso: '', musculo: 'Espalda baja', notas: 'Peso pesado' },
-    { id: 0, nombre: 'Press Militar', series: 4, reps: '6', descanso: '120', peso: '', musculo: 'Hombros', notas: '' },
-    { id: 0, nombre: 'Dominadas', series: 4, reps: '6-8', descanso: '120', peso: 'Corporal', musculo: 'Espalda', notas: '' },
+  'HIIT': [
+    { id: 0, nombre: 'Burpees', series: 5, reps: '10', descanso: '30', peso: '-', musculo: 'Full Body', notas: 'Maxima intensidad' },
+    { id: 0, nombre: 'Mountain Climbers', series: 5, reps: '20', descanso: '30', peso: '-', musculo: 'Core', notas: '' },
+    { id: 0, nombre: 'Jumping Squats', series: 5, reps: '15', descanso: '30', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Sprint en Cinta', series: 8, reps: '30 seg', descanso: '30', peso: '-', musculo: 'Full Body', notas: '30s sprint / 30s descanso' },
+    { id: 0, nombre: 'Box Jumps', series: 4, reps: '10', descanso: '30', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Plancha con toque de hombro', series: 4, reps: '20', descanso: '30', peso: '-', musculo: 'Core', notas: '' },
+  ],
+  'Funcional': [
+    { id: 0, nombre: 'Kettlebell Swing', series: 4, reps: '15', descanso: '60', peso: '', musculo: 'Gluteos', notas: '' },
+    { id: 0, nombre: 'Turkish Get Up', series: 3, reps: '3 c/lado', descanso: '60', peso: '', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Farmer Walk', series: 3, reps: '40 metros', descanso: '60', peso: '', musculo: 'Core', notas: '' },
+    { id: 0, nombre: 'Battle Ropes', series: 4, reps: '30 seg', descanso: '30', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Clean and Press Kettlebell', series: 4, reps: '8 c/lado', descanso: '60', peso: '', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Goblet Squat', series: 3, reps: '12', descanso: '60', peso: '', musculo: 'Cuadriceps', notas: '' },
+  ],
+  'Running': [
+    { id: 0, nombre: 'Calentamiento caminata', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Trote continuo', series: 1, reps: '25 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'Ritmo constante' },
+    { id: 0, nombre: 'Intervalos de velocidad', series: 6, reps: '1 min rapido / 1 min trote', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Vuelta a la calma', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+  ],
+  'Caminata Activa': [
+    { id: 0, nombre: 'Caminata rapida', series: 1, reps: '30 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'Ritmo 6-7 km/h' },
+    { id: 0, nombre: 'Caminata con inclinacion', series: 4, reps: '5 min subida', descanso: '2 min', peso: '-', musculo: 'Gluteos', notas: '' },
+    { id: 0, nombre: 'Power Walking', series: 1, reps: '15 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Elongacion final', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+  ],
+  'Yoga': [
+    { id: 0, nombre: 'Saludo al sol', series: 5, reps: '1 ciclo', descanso: '15', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Guerrero I y II', series: 3, reps: '30 seg c/lado', descanso: '10', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Plancha a Perro boca abajo', series: 4, reps: '30 seg c/u', descanso: '10', peso: '-', musculo: 'Core', notas: '' },
+    { id: 0, nombre: 'Postura del arbol', series: 2, reps: '30 seg c/lado', descanso: '10', peso: '-', musculo: 'Core', notas: '' },
+    { id: 0, nombre: 'Torsion espinal sentado', series: 2, reps: '30 seg c/lado', descanso: '10', peso: '-', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Savasana', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'Relajacion' },
+  ],
+  'Spinning': [
+    { id: 0, nombre: 'Calentamiento suave', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: 'Resistencia baja' },
+    { id: 0, nombre: 'Subidas de resistencia', series: 5, reps: '3 min alta / 2 min baja', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Sprint en llano', series: 6, reps: '30 seg sprint / 30 seg suave', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Pedaleo sentado sostenido', series: 1, reps: '10 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Vuelta a la calma', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+  ],
+  'Ciclismo': [
+    { id: 0, nombre: 'Rodaje suave', series: 1, reps: '10 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Intervalos de fuerza', series: 5, reps: '3 min fuerte / 2 min suave', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Tempo sostenido', series: 1, reps: '20 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Sprints cortos', series: 4, reps: '20 seg sprint / 40 seg suave', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Vuelta a la calma', series: 1, reps: '10 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
   ],
 };
 
@@ -151,6 +225,7 @@ export default function GymClientes() {
   const [showAddEj, setShowAddEj] = useState(false);
   const [showAddComida, setShowAddComida] = useState(false);
   const [showAddAlimento, setShowAddAlimento] = useState<number | null>(null);
+  const [showDisciplinas, setShowDisciplinas] = useState(false);
   const [nuevoCliente, setNuevoCliente] = useState({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [] as string[], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', enfermedades: [] as string[], declaraBuenaSalud: false, esMayorDeEdad: false });
   const [nuevoEj, setNuevoEj] = useState({ nombre: '', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Pecho', notas: '' });
   const [nuevaComida, setNuevaComida] = useState({ nombre: '', hora: '12:00' });
@@ -551,12 +626,7 @@ export default function GymClientes() {
               <button onClick={() => enviarEmail('rutina')} className="flex items-center gap-1.5 px-3 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl text-xs font-medium hover:bg-blue-500/20 transition-all">
                 <Mail className="w-3.5 h-3.5" /> Email
               </button>
-              <button onClick={() => {
-                const obj = cliente!.objetivo?.split(',')[0]?.trim() || 'Hipertrofia';
-                const plantilla = plantillasRutina[obj] || plantillasRutina['Hipertrofia'];
-                const ejs = plantilla.map(e => ({ ...e, id: Date.now() + Math.random() * 10000 }));
-                updateCliente(cliente!.id, { rutina: ejs });
-              }} className="flex items-center gap-1.5 px-3 py-2 bg-purple-500/15 border border-purple-500/20 text-purple-400 rounded-xl text-xs font-bold hover:bg-purple-500/25 transition-all">
+              <button onClick={() => setShowDisciplinas(!showDisciplinas)} className="flex items-center gap-1.5 px-3 py-2 bg-purple-500/15 border border-purple-500/20 text-purple-400 rounded-xl text-xs font-bold hover:bg-purple-500/25 transition-all">
                 <Zap className="w-3.5 h-3.5" /> Generar Rutina
               </button>
               <button onClick={() => setShowAddEj(true)} className="flex items-center gap-1.5 px-3 py-2 bg-electric/15 border border-electric/20 text-electric rounded-xl text-xs font-bold hover:bg-electric/25 transition-all">
@@ -565,10 +635,30 @@ export default function GymClientes() {
             </div>
           </div>
 
-          {cliente!.rutina.length === 0 ? (
+          {/* Selector de disciplina */}
+          {showDisciplinas && (
+            <div className="bg-dark-800 border border-purple-500/20 rounded-2xl p-4">
+              <p className="text-white font-bold text-sm mb-3">Elegir disciplina para generar rutina:</p>
+              <div className="flex flex-wrap gap-2">
+                {DISCIPLINAS.map(d => (
+                  <button key={d} onClick={() => {
+                    const plantilla = plantillasRutina[d] || [];
+                    const ejs = plantilla.map(e => ({ ...e, id: Date.now() + Math.random() * 10000 }));
+                    updateCliente(cliente!.id, { rutina: [...cliente!.rutina, ...ejs] });
+                    setShowDisciplinas(false);
+                  }} className="px-3 py-2 bg-purple-500/10 border border-purple-500/20 text-purple-400 rounded-xl text-xs font-bold hover:bg-purple-500/25 transition-all">
+                    {d}
+                  </button>
+                ))}
+              </div>
+              <p className="text-white/30 text-[10px] mt-2">Los ejercicios se agregan a la rutina actual. Podes combinar disciplinas.</p>
+            </div>
+          )}
+
+          {cliente!.rutina.length === 0 && !showDisciplinas ? (
             <div className="bg-dark-800 border border-dark-border rounded-2xl p-8 text-center">
               <Dumbbell className="w-12 h-12 text-white/10 mx-auto mb-3" />
-              <p className="text-white/40 text-sm">Sin ejercicios. Agreg&aacute; ejercicios para este cliente.</p>
+              <p className="text-white/40 text-sm">Sin ejercicios. Usa "Generar Rutina" para elegir una disciplina.</p>
             </div>
           ) : (
             <div className="space-y-2">
