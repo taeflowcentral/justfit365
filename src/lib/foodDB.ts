@@ -11,6 +11,7 @@ export interface AlimentoBase {
   // Si tiene factor, los valores son por la porcionDefault
   // Si no, son por 100g y se ajustan
   unidad?: string; // unidad contable (ej: "unidad", "scoop", "rebanada")
+  tags?: string; // tags de busqueda extra
 }
 
 const alimentosDB: AlimentoBase[] = [
@@ -284,38 +285,38 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Ceviche de pescado', porcionDefault: '1 porcion (200g)', cal: 150, prot: 24, carb: 8, grasa: 3, unidad: 'porcion' },
 
   // Snacks y permitidos
-  { nombre: 'Chocolate 70% cacao', porcionDefault: '1 barra (25g)', cal: 140, prot: 2, carb: 12, grasa: 10, unidad: 'barra' },
-  { nombre: 'Chocolate 85% cacao', porcionDefault: '1 barra (25g)', cal: 145, prot: 3, carb: 8, grasa: 12, unidad: 'barra' },
-  { nombre: 'Alfajor tradicional', porcionDefault: '1 unidad', cal: 280, prot: 4, carb: 38, grasa: 13, unidad: 'unidad' },
-  { nombre: 'Alfajor de arroz', porcionDefault: '1 unidad', cal: 110, prot: 1, carb: 18, grasa: 4, unidad: 'unidad' },
-  { nombre: 'Flan casero', porcionDefault: '1 porcion', cal: 200, prot: 6, carb: 28, grasa: 7, unidad: 'porcion' },
-  { nombre: 'Flan con dulce de leche', porcionDefault: '1 porcion', cal: 280, prot: 7, carb: 42, grasa: 9, unidad: 'porcion' },
-  { nombre: 'Brownie', porcionDefault: '1 porcion (60g)', cal: 250, prot: 3, carb: 30, grasa: 14, unidad: 'porcion' },
-  { nombre: 'Brownie proteico', porcionDefault: '1 porcion (60g)', cal: 180, prot: 12, carb: 18, grasa: 8, unidad: 'porcion' },
-  { nombre: 'Pizza (1 porcion)', porcionDefault: '1 porcion', cal: 270, prot: 12, carb: 30, grasa: 12, unidad: 'porcion' },
-  { nombre: 'Pizza integral (1 porcion)', porcionDefault: '1 porcion', cal: 230, prot: 13, carb: 26, grasa: 8, unidad: 'porcion' },
-  { nombre: 'Hamburguesa completa', porcionDefault: '1 unidad', cal: 450, prot: 28, carb: 34, grasa: 22, unidad: 'unidad' },
-  { nombre: 'Hamburguesa sin pan', porcionDefault: '1 unidad', cal: 300, prot: 26, carb: 4, grasa: 20, unidad: 'unidad' },
-  { nombre: 'Hamburguesa con ensalada (sin fritas)', porcionDefault: '1 unidad', cal: 380, prot: 28, carb: 20, grasa: 22, unidad: 'unidad' },
-  { nombre: 'Helado artesanal', porcionDefault: '1 bocha', cal: 130, prot: 2, carb: 16, grasa: 7, unidad: 'bocha' },
-  { nombre: 'Helado proteico', porcionDefault: '1 pote (150g)', cal: 160, prot: 15, carb: 18, grasa: 3, unidad: 'pote' },
-  { nombre: 'Galletitas de avena caseras', porcionDefault: '1 unidad', cal: 80, prot: 2, carb: 12, grasa: 3, unidad: 'unidad' },
-  { nombre: 'Chips de batata al horno', porcionDefault: '1 porcion (100g)', cal: 120, prot: 1, carb: 28, grasa: 1, unidad: 'porcion' },
-  { nombre: 'Palomitas de maiz (sin manteca)', porcionDefault: '1 porcion (30g)', cal: 110, prot: 3, carb: 20, grasa: 2, unidad: 'porcion' },
-  { nombre: 'Mix de frutos secos y chocolate', porcionDefault: '1 punado (30g)', cal: 160, prot: 4, carb: 12, grasa: 11, unidad: 'punado' },
+  { nombre: 'Chocolate 70% cacao', porcionDefault: '1 barra (25g)', cal: 140, prot: 2, carb: 12, grasa: 10, unidad: 'barra', tags: 'snack permitido postre dulce' },
+  { nombre: 'Chocolate 85% cacao', porcionDefault: '1 barra (25g)', cal: 145, prot: 3, carb: 8, grasa: 12, unidad: 'barra', tags: 'snack permitido postre dulce' },
+  { nombre: 'Alfajor tradicional', porcionDefault: '1 unidad', cal: 280, prot: 4, carb: 38, grasa: 13, unidad: 'unidad', tags: 'snack permitido postre dulce' },
+  { nombre: 'Alfajor de arroz', porcionDefault: '1 unidad', cal: 110, prot: 1, carb: 18, grasa: 4, unidad: 'unidad', tags: 'snack permitido postre dulce light' },
+  { nombre: 'Flan casero', porcionDefault: '1 porcion', cal: 200, prot: 6, carb: 28, grasa: 7, unidad: 'porcion', tags: 'snack permitido postre dulce' },
+  { nombre: 'Flan con dulce de leche', porcionDefault: '1 porcion', cal: 280, prot: 7, carb: 42, grasa: 9, unidad: 'porcion', tags: 'snack permitido postre dulce' },
+  { nombre: 'Brownie', porcionDefault: '1 porcion (60g)', cal: 250, prot: 3, carb: 30, grasa: 14, unidad: 'porcion', tags: 'snack permitido postre dulce' },
+  { nombre: 'Brownie proteico', porcionDefault: '1 porcion (60g)', cal: 180, prot: 12, carb: 18, grasa: 8, unidad: 'porcion', tags: 'snack permitido postre dulce proteico' },
+  { nombre: 'Pizza (1 porcion)', porcionDefault: '1 porcion', cal: 270, prot: 12, carb: 30, grasa: 12, unidad: 'porcion', tags: 'snack permitido comida rapida' },
+  { nombre: 'Pizza integral (1 porcion)', porcionDefault: '1 porcion', cal: 230, prot: 13, carb: 26, grasa: 8, unidad: 'porcion', tags: 'snack permitido comida rapida' },
+  { nombre: 'Hamburguesa completa', porcionDefault: '1 unidad', cal: 450, prot: 28, carb: 34, grasa: 22, unidad: 'unidad', tags: 'permitido comida rapida' },
+  { nombre: 'Hamburguesa sin pan', porcionDefault: '1 unidad', cal: 300, prot: 26, carb: 4, grasa: 20, unidad: 'unidad', tags: 'permitido comida rapida low carb' },
+  { nombre: 'Hamburguesa con ensalada (sin fritas)', porcionDefault: '1 unidad', cal: 380, prot: 28, carb: 20, grasa: 22, unidad: 'unidad', tags: 'permitido comida rapida' },
+  { nombre: 'Helado artesanal', porcionDefault: '1 bocha', cal: 130, prot: 2, carb: 16, grasa: 7, unidad: 'bocha', tags: 'snack permitido postre dulce' },
+  { nombre: 'Helado proteico', porcionDefault: '1 pote (150g)', cal: 160, prot: 15, carb: 18, grasa: 3, unidad: 'pote', tags: 'snack permitido postre dulce proteico' },
+  { nombre: 'Galletitas de avena caseras', porcionDefault: '1 unidad', cal: 80, prot: 2, carb: 12, grasa: 3, unidad: 'unidad', tags: 'snack permitido galleta' },
+  { nombre: 'Chips de batata al horno', porcionDefault: '1 porcion (100g)', cal: 120, prot: 1, carb: 28, grasa: 1, unidad: 'porcion', tags: 'snack permitido' },
+  { nombre: 'Palomitas de maiz (sin manteca)', porcionDefault: '1 porcion (30g)', cal: 110, prot: 3, carb: 20, grasa: 2, unidad: 'porcion', tags: 'snack permitido pochoclo' },
+  { nombre: 'Mix de frutos secos y chocolate', porcionDefault: '1 punado (30g)', cal: 160, prot: 4, carb: 12, grasa: 11, unidad: 'punado', tags: 'snack permitido trail mix' },
 
   // Bebidas permitidas
-  { nombre: 'Cerveza (lata 354ml)', porcionDefault: '1 lata', cal: 150, prot: 1, carb: 13, grasa: 0, unidad: 'lata' },
-  { nombre: 'Cerveza light (lata 354ml)', porcionDefault: '1 lata', cal: 100, prot: 1, carb: 6, grasa: 0, unidad: 'lata' },
-  { nombre: 'Vino tinto (copa 150ml)', porcionDefault: '1 copa', cal: 125, prot: 0, carb: 4, grasa: 0, unidad: 'copa' },
-  { nombre: 'Vino blanco (copa 150ml)', porcionDefault: '1 copa', cal: 120, prot: 0, carb: 4, grasa: 0, unidad: 'copa' },
-  { nombre: 'Gaseosa Zero (lata 354ml)', porcionDefault: '1 lata', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'lata' },
-  { nombre: 'Gaseosa comun (lata 354ml)', porcionDefault: '1 lata', cal: 140, prot: 0, carb: 39, grasa: 0, unidad: 'lata' },
-  { nombre: 'Agua saborizada zero', porcionDefault: '1 botella (500ml)', cal: 5, prot: 0, carb: 1, grasa: 0, unidad: 'botella' },
-  { nombre: 'Jugo natural de naranja', porcionDefault: '1 vaso (250ml)', cal: 110, prot: 2, carb: 26, grasa: 0, unidad: 'vaso' },
-  { nombre: 'Limonada casera sin azucar', porcionDefault: '1 vaso (250ml)', cal: 10, prot: 0, carb: 3, grasa: 0, unidad: 'vaso' },
-  { nombre: 'Fernet con gaseosa', porcionDefault: '1 vaso', cal: 200, prot: 0, carb: 20, grasa: 0, unidad: 'vaso' },
-  { nombre: 'Fernet con gaseosa zero', porcionDefault: '1 vaso', cal: 100, prot: 0, carb: 0, grasa: 0, unidad: 'vaso' },
+  { nombre: 'Cerveza (lata 354ml)', porcionDefault: '1 lata', cal: 150, prot: 1, carb: 13, grasa: 0, unidad: 'lata', tags: 'bebida permitido alcohol' },
+  { nombre: 'Cerveza light (lata 354ml)', porcionDefault: '1 lata', cal: 100, prot: 1, carb: 6, grasa: 0, unidad: 'lata', tags: 'bebida permitido alcohol light' },
+  { nombre: 'Vino tinto (copa 150ml)', porcionDefault: '1 copa', cal: 125, prot: 0, carb: 4, grasa: 0, unidad: 'copa', tags: 'bebida permitido alcohol' },
+  { nombre: 'Vino blanco (copa 150ml)', porcionDefault: '1 copa', cal: 120, prot: 0, carb: 4, grasa: 0, unidad: 'copa', tags: 'bebida permitido alcohol' },
+  { nombre: 'Gaseosa Zero (lata 354ml)', porcionDefault: '1 lata', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'lata', tags: 'bebida permitido zero sin azucar' },
+  { nombre: 'Gaseosa comun (lata 354ml)', porcionDefault: '1 lata', cal: 140, prot: 0, carb: 39, grasa: 0, unidad: 'lata', tags: 'bebida' },
+  { nombre: 'Agua saborizada zero', porcionDefault: '1 botella (500ml)', cal: 5, prot: 0, carb: 1, grasa: 0, unidad: 'botella', tags: 'bebida permitido zero sin azucar' },
+  { nombre: 'Jugo natural de naranja', porcionDefault: '1 vaso (250ml)', cal: 110, prot: 2, carb: 26, grasa: 0, unidad: 'vaso', tags: 'bebida jugo natural' },
+  { nombre: 'Limonada casera sin azucar', porcionDefault: '1 vaso (250ml)', cal: 10, prot: 0, carb: 3, grasa: 0, unidad: 'vaso', tags: 'bebida permitido sin azucar' },
+  { nombre: 'Fernet con gaseosa', porcionDefault: '1 vaso', cal: 200, prot: 0, carb: 20, grasa: 0, unidad: 'vaso', tags: 'bebida alcohol' },
+  { nombre: 'Fernet con gaseosa zero', porcionDefault: '1 vaso', cal: 100, prot: 0, carb: 0, grasa: 0, unidad: 'vaso', tags: 'bebida permitido alcohol zero' },
 
   // Suplementos deportivos
   { nombre: 'Creatina monohidratada', porcionDefault: '1 scoop (5g)', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'scoop' },
@@ -337,9 +338,9 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Glutamina', porcionDefault: '1 scoop (5g)', cal: 20, prot: 5, carb: 0, grasa: 0, unidad: 'scoop' },
   { nombre: 'L-Carnitina liquida', porcionDefault: '1 dosis (15ml)', cal: 5, prot: 0, carb: 1, grasa: 0, unidad: 'dosis' },
   { nombre: 'Cafeina anhidra (200mg)', porcionDefault: '1 capsula', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'capsula' },
-  { nombre: 'Barrita proteica', porcionDefault: '1 unidad (60g)', cal: 220, prot: 20, carb: 22, grasa: 8, unidad: 'unidad' },
-  { nombre: 'Barrita proteica low carb', porcionDefault: '1 unidad (50g)', cal: 170, prot: 20, carb: 8, grasa: 7, unidad: 'unidad' },
-  { nombre: 'Barrita de cereal', porcionDefault: '1 unidad (25g)', cal: 100, prot: 2, carb: 18, grasa: 3, unidad: 'unidad' },
+  { nombre: 'Barrita proteica', porcionDefault: '1 unidad (60g)', cal: 220, prot: 20, carb: 22, grasa: 8, unidad: 'unidad', tags: 'snack permitido barra protein bar' },
+  { nombre: 'Barrita proteica low carb', porcionDefault: '1 unidad (50g)', cal: 170, prot: 20, carb: 8, grasa: 7, unidad: 'unidad', tags: 'snack permitido barra protein bar low carb' },
+  { nombre: 'Barrita de cereal', porcionDefault: '1 unidad (25g)', cal: 100, prot: 2, carb: 18, grasa: 3, unidad: 'unidad', tags: 'snack permitido barra cereal' },
   { nombre: 'Gainer (ganador de peso)', porcionDefault: '1 scoop (80g)', cal: 350, prot: 25, carb: 55, grasa: 4, unidad: 'scoop' },
   { nombre: 'Electrolitos en polvo', porcionDefault: '1 sobre', cal: 10, prot: 0, carb: 2, grasa: 0, unidad: 'sobre' },
   { nombre: 'Proteina en agua (iso clear)', porcionDefault: '1 scoop (25g)', cal: 90, prot: 20, carb: 1, grasa: 0, unidad: 'scoop' },
@@ -357,7 +358,7 @@ export function buscarAlimentos(query: string, limite = 8): AlimentoBase[] {
   const q = normalizar(query);
   if (q.length < 2) return [];
   return alimentosDB
-    .filter(a => normalizar(a.nombre).includes(q))
+    .filter(a => normalizar(a.nombre).includes(q) || (a.tags && normalizar(a.tags).includes(q)))
     .slice(0, limite);
 }
 

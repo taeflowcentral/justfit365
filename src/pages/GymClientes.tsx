@@ -1232,9 +1232,9 @@ export default function GymClientes() {
                     onChange={e => setNuevoAlimento(p => ({ ...p, alimento: e.target.value }))}
                     placeholder="Ej: Pollo, Bife, Huevo, Avena..."
                     className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
-                  {nuevoAlimento.alimento.length >= 2 && buscarAlimentos(nuevoAlimento.alimento).length > 0 && (
+                  {nuevoAlimento.alimento.length >= 2 && buscarAlimentos(nuevoAlimento.alimento, 12).length > 0 && (
                     <div className="absolute top-full left-0 right-0 mt-1 bg-dark-800 border border-dark-border rounded-xl shadow-2xl max-h-60 overflow-y-auto z-10">
-                      {buscarAlimentos(nuevoAlimento.alimento).map((a, i) => (
+                      {buscarAlimentos(nuevoAlimento.alimento, 12).map((a, i) => (
                         <button key={i} type="button"
                           onClick={() => setNuevoAlimento({ alimento: a.nombre, porcion: a.porcionDefault, cal: a.cal, prot: a.prot, carb: a.carb, grasa: a.grasa })}
                           className="w-full px-3 py-2 text-left hover:bg-emerald-500/10 transition-colors border-b border-dark-border/30 last:border-0">
