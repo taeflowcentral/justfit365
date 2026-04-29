@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   Zap, LayoutDashboard, Utensils, Dumbbell, MessageSquare,
   Settings, LogOut, Building2, Users, CreditCard, ChevronLeft, ChevronRight, UserCog,
-  Camera, Stethoscope, ShieldCheck, LifeBuoy, Timer
+  Camera, Stethoscope, ShieldCheck, LifeBuoy, Timer, DollarSign
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -22,7 +22,8 @@ const userLinks = [
 const gymLinks = [
   { to: '/', icon: LayoutDashboard, label: 'Panel Gym' },
   { to: '/clientes', icon: Users, label: 'Mis Clientes' },
-  { to: '/nutricion', icon: Utensils, label: 'Nutrici\u00f3n' },
+  { to: '/cobranzas', icon: DollarSign, label: 'Cobranzas' },
+  { to: '/nutricion', icon: Utensils, label: 'Nutricion' },
   { to: '/rutina', icon: Dumbbell, label: 'Rutinas' },
   { to: '/timer', icon: Timer, label: 'Timer' },
   { to: '/bio-coach', icon: MessageSquare, label: 'JustFit Coach' },

@@ -14,6 +14,10 @@ export default function GymConfig() {
   const [emailGym, setEmailGym] = useState(() => getUserItem('jf365_gym_email') || user?.email || '');
   const [accentColor, setAccentColor] = useState(() => getUserItem('jf365_gym_color') || '#0099ff');
   const [dominio, setDominio] = useState(() => getUserItem('jf365_gym_dominio') || '');
+  const [alias, setAlias] = useState(() => getUserItem('jf365_gym_alias') || '');
+  const [cvu, setCvu] = useState(() => getUserItem('jf365_gym_cvu') || '');
+  const [titular, setTitular] = useState(() => getUserItem('jf365_gym_titular') || '');
+  const [banco, setBanco] = useState(() => getUserItem('jf365_gym_banco') || '');
 
   const handleLogo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -42,6 +46,10 @@ export default function GymConfig() {
     setUserItem('jf365_gym_email', emailGym);
     setUserItem('jf365_gym_color', accentColor);
     setUserItem('jf365_gym_dominio', dominio);
+    setUserItem('jf365_gym_alias', alias);
+    setUserItem('jf365_gym_cvu', cvu);
+    setUserItem('jf365_gym_titular', titular);
+    setUserItem('jf365_gym_banco', banco);
 
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
@@ -179,6 +187,39 @@ export default function GymConfig() {
               <Globe className="w-4 h-4 text-white/20" />
               <input type="text" value={dominio} onChange={e => setDominio(e.target.value)} placeholder="migimnasio.justfit365.com" className="bg-transparent text-white text-sm focus:outline-none flex-1 placeholder-white/20" />
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Datos de cobro */}
+      <div className="bg-dark-800 border border-dark-border rounded-2xl p-6">
+        <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+          <CreditCard className="w-4 h-4 text-lime" /> Datos de Cobro
+        </h3>
+        <p className="text-white/30 text-xs mb-4">Estos datos se muestran a los clientes cuando deben pagar y en los recordatorios de WhatsApp.</p>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs text-white/50 uppercase tracking-wider mb-2">Alias</label>
+            <input type="text" value={alias} onChange={e => setAlias(e.target.value)} placeholder="mi.gimnasio.mp"
+              className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
+          </div>
+          <div>
+            <label className="block text-xs text-white/50 uppercase tracking-wider mb-2">CVU / CBU</label>
+            <input type="text" value={cvu} onChange={e => setCvu(e.target.value)} placeholder="0000003100012345678901"
+              className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
+          </div>
+          <div>
+            <label className="block text-xs text-white/50 uppercase tracking-wider mb-2">Titular</label>
+            <input type="text" value={titular} onChange={e => setTitular(e.target.value)} placeholder="Nombre del titular de la cuenta"
+              className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
+          </div>
+          <div>
+            <label className="block text-xs text-white/50 uppercase tracking-wider mb-2">Banco / Billetera</label>
+            <select value={banco} onChange={e => setBanco(e.target.value)}
+              className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
+              <option value="" className="bg-dark-800">Seleccionar...</option>
+              {['Mercado Pago', 'Cuenta DNI', 'Naranja X', 'Uala', 'Brubank', 'Banco Nacion', 'Banco Provincia', 'Banco Galicia', 'Banco Santander', 'BBVA', 'HSBC', 'Macro', 'ICBC', 'Otro'].map(b => <option key={b} value={b} className="bg-dark-800">{b}</option>)}
+            </select>
           </div>
         </div>
       </div>
