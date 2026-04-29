@@ -176,15 +176,15 @@ function generarPlanIA(peso: number, altura: number, edad: number, objetivo: str
   // Determinar tipo energetico segun el ajuste calorico
   const diferencia = calObjetivo - tdee;
   let tipoEnergetico = 'mantenimiento (comer al nivel de tu gasto)';
-  if (diferencia < -100) tipoEnergetico = `deficit de ${Math.abs(diferencia)} kcal para perder grasa`;
-  else if (diferencia > 100) tipoEnergetico = `superavit de ${diferencia} kcal para ganar musculo`;
+  if (diferencia < -100) tipoEnergetico = `déficit de ${Math.abs(diferencia)} kcal para perder grasa`;
+  else if (diferencia > 100) tipoEnergetico = `superávit de ${diferencia} kcal para ganar músculo`;
 
   // Texto del entreno del dia
   const entrenoTexto = !tipoEntreno || tipoEntreno === 'Descanso'
-    ? 'Hoy es dia de descanso, las calorias estan ajustadas un 10% menos.'
-    : `Hoy entrenas ${tipoEntreno}, las calorias incluyen energia extra para cubrir tu actividad.`;
+    ? 'Hoy es día de descanso, las calorías están ajustadas un 10% menos.'
+    : `Hoy entrenás ${tipoEntreno}, las calorías incluyen energía extra para cubrir tu actividad.`;
 
-  const nota = `**Tu plan de hoy**\n\nEste plan esta pensado para vos (${peso}kg, ${edad} anos, nivel ${nivel}). Tu cuerpo necesita ~${tdee} kcal por dia y este plan apunta a ${calObjetivo} kcal en ${tipoEnergetico}.\n\n${entrenoTexto}\n\n**Distribucion de macros:** ${protTotal}g de proteina, ${carbTotal}g de carbohidratos y ${grasaTotal}g de grasas.${notaObj ? `\n\n${notaObj}` : ''}${enfLabel ? `\n\n${enfLabel}` : ''}`;
+  const nota = `**Tu plan de hoy**\n\nEste plan está pensado para vos (${peso}kg, ${edad} años, nivel ${nivel}). Tu cuerpo necesita ~${tdee} kcal por día y este plan apunta a ${calObjetivo} kcal en ${tipoEnergetico}.\n\n${entrenoTexto}\n\n**Distribución de macros:** ${protTotal}g de proteína, ${carbTotal}g de carbohidratos y ${grasaTotal}g de grasas.${notaObj ? `\n\n${notaObj}` : ''}${enfLabel ? `\n\n${enfLabel}` : ''}`;
 
   return { comidas, nota };
 }
@@ -413,7 +413,7 @@ export default function Nutricion() {
   };
 
   // Nota dinamica que se recalcula segun el dia activo
-  const DIAS_NOMBRE = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
+  const DIAS_NOMBRE = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   const tipoDiaActivo = rutinaSemanal[diaActivo]?.tipo || 'Descanso';
   const esDescansoHoy = tipoDiaActivo === 'Descanso' || tipoDiaActivo === '';
   const notaIA = perfil && comidas.length > 0 ? (() => {
@@ -423,25 +423,25 @@ export default function Nutricion() {
     const objetivoU = perfil.objetivo || '';
 
     let textoObjetivo = 'mantenimiento (comer al nivel de tu gasto)';
-    if (esDeficit) textoObjetivo = `deficit calorico para perder grasa (${Math.abs(ajusteCal)} kcal menos que tu gasto)`;
-    else if (esSuperavit) textoObjetivo = `superavit moderado para ganar musculo (+${ajusteCal} kcal sobre tu gasto)`;
+    if (esDeficit) textoObjetivo = `déficit calórico para perder grasa (${Math.abs(ajusteCal)} kcal menos que tu gasto)`;
+    else if (esSuperavit) textoObjetivo = `superávit moderado para ganar músculo (+${ajusteCal} kcal sobre tu gasto)`;
 
     let textoEntreno = '';
     if (esDescansoHoy) {
-      textoEntreno = `**${DIAS_NOMBRE[diaActivo]}** es tu dia de descanso. Las calorias estan ajustadas un 10% menos para acompanar la menor actividad.`;
+      textoEntreno = `**${DIAS_NOMBRE[diaActivo]}** es tu día de descanso. Las calorías están ajustadas un 10% menos para acompañar la menor actividad.`;
     } else {
-      textoEntreno = `**${DIAS_NOMBRE[diaActivo]}** entrenas **${tipoDiaActivo}**. Las calorias incluyen energia extra para cubrir tu actividad.`;
+      textoEntreno = `**${DIAS_NOMBRE[diaActivo]}** entrenás **${tipoDiaActivo}**. Las calorías incluyen energía extra para cubrir tu actividad.`;
     }
 
     let textoBalance = '';
     if (totalCal > 0) {
       const diff = totalCal - calObjetivo;
       if (Math.abs(diff) < 50) textoBalance = `Tu plan suma **${totalCal} kcal**, justo en el objetivo.`;
-      else if (diff > 0) textoBalance = `Tu plan suma **${totalCal} kcal**, ${diff} kcal por encima del objetivo (${calObjetivo} kcal). Podes ajustar porciones.`;
-      else textoBalance = `Tu plan suma **${totalCal} kcal**, ${Math.abs(diff)} kcal por debajo del objetivo (${calObjetivo} kcal). Podes agregar un snack o aumentar porciones.`;
+      else if (diff > 0) textoBalance = `Tu plan suma **${totalCal} kcal**, ${diff} kcal por encima del objetivo (${calObjetivo} kcal). Podés ajustar porciones.`;
+      else textoBalance = `Tu plan suma **${totalCal} kcal**, ${Math.abs(diff)} kcal por debajo del objetivo (${calObjetivo} kcal). Podés agregar un snack o aumentar porciones.`;
     }
 
-    return `**Tu plan para ${DIAS_NOMBRE[diaActivo]}**\n\nPensado para vos: ${pesoU}kg, ${edadU} anos, nivel ${nivelU}. Tu cuerpo gasta ~${tdee} kcal por dia y este plan apunta a **${calObjetivo} kcal** en ${textoObjetivo}.\n\n${textoEntreno}\n\n${textoBalance}\n\n**Macros del dia:** ${totalProt}g proteina | ${totalCarb}g carbohidratos | ${totalGrasa}g grasas${objetivoU ? `\n\n**Tu objetivo:** ${objetivoU}` : ''}`;
+    return `**Tu plan para ${DIAS_NOMBRE[diaActivo]}**\n\nPensado para vos: ${pesoU}kg, ${edadU} años, nivel ${nivelU}. Tu cuerpo gasta ~${tdee} kcal por día y este plan apunta a **${calObjetivo} kcal** en ${textoObjetivo}.\n\n${textoEntreno}\n\n${textoBalance}\n\n**Macros del día:** ${totalProt}g proteína | ${totalCarb}g carbohidratos | ${totalGrasa}g grasas${objetivoU ? `\n\n**Tu objetivo:** ${objetivoU}` : ''}`;
   })() : notaIAGuardada;
 
   // Sin plan generado
@@ -457,7 +457,7 @@ export default function Nutricion() {
           <Zap className="w-16 h-16 text-electric/20 mx-auto mb-4" />
           <h3 className="text-white font-bold text-lg mb-2">Sin plan nutricional</h3>
           <p className="text-white/40 text-sm mb-2 max-w-md mx-auto">
-            JustFit365 va a generar un plan personalizado basado en tu perfil metab&oacute;lico
+            JustFit365 va a generar un plan personalizado basado en tu perfil metab&oacute;lico.
             {perfil ? ` (${perfil.peso}kg, ${perfil.altura}cm, ${perfil.edad} a\u00f1os, objetivo: ${perfil.objetivo}).` : '. Configur\u00e1 tu perfil primero.'}
           </p>
           {perfil && (
@@ -801,12 +801,12 @@ export default function Nutricion() {
                   {(!analisis.tieneProteina || !analisis.tieneCarbo || !analisis.tieneVegetal) && (
                     <p className="text-amber-400/70 text-[10px] mt-1.5 leading-relaxed">
                       {!analisis.tieneProteina && !analisis.tieneCarbo && !analisis.tieneVegetal
-                        ? 'Esta comida no tiene los 3 pilares. Agrega proteina, un carbohidrato y vegetales para equilibrarla.'
+                        ? 'Esta comida no tiene los 3 pilares. Agregá proteína, un carbohidrato y vegetales para equilibrarla.'
                         : !analisis.tieneProteina
-                        ? 'No olvides incluir una fuente de proteina (pollo, carne, huevo, yogur griego, whey).'
+                        ? 'No olvides incluir una fuente de proteína (pollo, carne, huevo, yogur griego, whey).'
                         : !analisis.tieneCarbo
                         ? 'Falta un carbohidrato de calidad (arroz, avena, batata, pan integral, fruta).'
-                        : 'Agrega vegetales o fibra (ensalada, brocoli, espinaca) para mejorar la digestion y saciedad.'}
+                        : 'Agregá vegetales o fibra (ensalada, brócoli, espinaca) para mejorar la digestión y saciedad.'}
                     </p>
                   )}
                 </div>
