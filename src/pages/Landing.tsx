@@ -67,19 +67,8 @@ export default function Landing() {
             <div><p className="text-3xl sm:text-4xl font-black text-lime">24/7</p><p className="text-white/30 text-xs uppercase tracking-wider">Disponible</p></div>
           </div>
 
-          <div className="mb-12 animate-bounce">
+          <div className="mt-8 animate-bounce">
             <ChevronDown className="w-8 h-8 text-lime mx-auto drop-shadow-[0_0_12px_rgba(140,207,46,0.6)]" />
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/registro"
-              className="px-8 py-4 bg-lime text-black font-black text-sm uppercase tracking-widest rounded-xl hover:bg-lime/80 transition-all shadow-lg shadow-lime/20 hover:scale-[1.02] flex items-center justify-center gap-2">
-              <Zap className="w-5 h-5" /> Crear Cuenta
-            </Link>
-            <Link to="/login"
-              className="px-8 py-4 bg-white/5 border border-white/10 text-white/70 font-bold text-sm uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-2">
-              Ya tengo cuenta <ArrowRight className="w-4 h-4" />
-            </Link>
           </div>
         </div>
       </section>
@@ -205,6 +194,13 @@ export default function Landing() {
                 Empezar ahora
               </Link>
             </div>
+          </div>
+
+          <div className="text-center mt-8">
+            <Link to="/login"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 text-white/60 font-bold text-sm uppercase tracking-widest rounded-xl hover:bg-white/10 hover:text-white transition-all">
+              Ya tengo cuenta <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
