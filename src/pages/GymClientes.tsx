@@ -418,7 +418,7 @@ export default function GymClientes() {
                     <input type="number" value={nuevoCliente.pesoMeta} onChange={e => setNuevoCliente(p => ({ ...p, pesoMeta: e.target.value }))} placeholder="70" className="w-full px-3 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
                   <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Nivel</label>
                     <select value={nuevoCliente.nivel} onChange={e => setNuevoCliente(p => ({ ...p, nivel: e.target.value }))} className="w-full px-2 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-xs focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
-                      {['Principiante', 'Intermedio', 'Avanzado'].map(n => <option key={n} value={n} className="bg-dark-800">{n}</option>)}
+                      {['Sedentario', 'Principiante', 'Intermedio', 'Avanzado', 'Elite'].map(n => <option key={n} value={n} className="bg-dark-800">{n}</option>)}
                     </select></div>
                 </div>
 
@@ -448,7 +448,7 @@ export default function GymClientes() {
                 {/* Condiciones preexistentes */}
                 <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1 pt-2">Condiciones Preexistentes</p>
                 <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto">
-                  {['Hipotiroidismo', 'Diabetes', 'Hipertensi\u00f3n', 'Asma', 'Cel\u00edaca', 'Intolerancia lactosa', 'Artritis', 'Osteoporosis', 'Fibromialgia', 'Hernia de disco', 'Escoliosis', 'Tendinitis', 'Cardiopat\u00eda', 'Epilepsia', 'Depresi\u00f3n', 'Ansiedad', 'Apnea del sue\u00f1o', 'Embarazo', 'Sobrepeso/Obesidad'].map(enf => {
+                  {['Hipotiroidismo', 'Hipertiroidismo', 'Hashimoto', 'Diabetes tipo 1', 'Diabetes tipo 2', 'Hipertension arterial', 'Asma', 'EPOC', 'Enfermedad celiaca', 'Intolerancia a la lactosa', 'Alergia al gluten', 'SOP', 'Endometriosis', 'Artritis reumatoide', 'Osteoporosis', 'Osteoartritis', 'Fibromialgia', 'Lupus', 'Crohn', 'Colitis ulcerosa', 'Sindrome intestino irritable', 'Reflujo gastroesofagico', 'Insuficiencia renal', 'Higado graso', 'Anemia ferropenica', 'Arritmia cardiaca', 'Insuficiencia cardiaca', 'Cardiopatia isquemica', 'Epilepsia', 'Esclerosis multiple', 'Parkinson', 'Depresion clinica', 'Ansiedad generalizada', 'Hernia de disco', 'Escoliosis', 'Tendinitis cronica', 'Tunel carpiano', 'Psoriasis', 'Apnea del sueno', 'Hiperlipidemia', 'Gota', 'Embarazo', 'Sobrepeso/Obesidad', 'Addison', 'Cushing'].map(enf => {
                     const activo = nuevoCliente.enfermedades.includes(enf);
                     return (
                       <button key={enf} type="button" onClick={() => {
@@ -786,7 +786,7 @@ export default function GymClientes() {
                 <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1 flex items-center gap-1"><Target className="w-3 h-3" /> Objetivo</label>
                 <select value={c.objetivo} onChange={e => updateCliente(c.id, { objetivo: e.target.value })}
                   className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
-                  {['Hipertrofia', 'Tonificacion', 'Perdida de grasa', 'Fuerza', 'Resistencia', 'Salud general'].map(o => <option key={o} value={o} className="bg-dark-800">{o}</option>)}
+                  {['Hipertrofia', 'Tonificacion', 'Perdida de grasa', 'Fuerza', 'Resistencia', 'Salud general', 'Rendimiento deportivo', 'Rehabilitacion'].map(o => <option key={o} value={o} className="bg-dark-800">{o}</option>)}
                 </select>
               </div>
               <div>
@@ -855,7 +855,7 @@ export default function GymClientes() {
               </div>
             )}
             <div className="flex flex-wrap gap-1 max-h-28 overflow-y-auto">
-              {['Hipotiroidismo', 'Diabetes', 'Hipertensi\u00f3n', 'Asma', 'Cel\u00edaca', 'Intolerancia lactosa', 'Artritis', 'Osteoporosis', 'Fibromialgia', 'Hernia de disco', 'Escoliosis', 'Tendinitis', 'Cardiopat\u00eda', 'Epilepsia', 'Depresi\u00f3n', 'Ansiedad', 'Apnea del sue\u00f1o', 'Embarazo', 'Sobrepeso/Obesidad', 'Renal', 'Lupus', 'Crohn'].filter(e => !(c.enfermedades || []).includes(e)).map(enf => (
+              {['Hipotiroidismo', 'Hipertiroidismo', 'Hashimoto', 'Diabetes tipo 1', 'Diabetes tipo 2', 'Hipertension arterial', 'Asma', 'EPOC', 'Enfermedad celiaca', 'Intolerancia a la lactosa', 'Alergia al gluten', 'SOP', 'Endometriosis', 'Artritis reumatoide', 'Osteoporosis', 'Osteoartritis', 'Fibromialgia', 'Lupus', 'Crohn', 'Colitis ulcerosa', 'Sindrome intestino irritable', 'Reflujo gastroesofagico', 'Insuficiencia renal', 'Higado graso', 'Anemia ferropenica', 'Arritmia cardiaca', 'Insuficiencia cardiaca', 'Cardiopatia isquemica', 'Epilepsia', 'Esclerosis multiple', 'Parkinson', 'Depresion clinica', 'Ansiedad generalizada', 'Hernia de disco', 'Escoliosis', 'Tendinitis cronica', 'Tunel carpiano', 'Psoriasis', 'Apnea del sueno', 'Hiperlipidemia', 'Gota', 'Embarazo', 'Sobrepeso/Obesidad', 'Addison', 'Cushing'].filter(e => !(c.enfermedades || []).includes(e)).map(enf => (
                 <button key={enf} onClick={() => updateCliente(c.id, { enfermedades: [...(c.enfermedades || []), enf] })}
                   className="px-2 py-1 bg-black/30 text-white/30 border border-dark-border rounded-lg text-[10px] hover:text-amber-400 hover:border-amber-500/20 transition-colors">
                   {enf}
