@@ -374,78 +374,154 @@ export default function AdminPanel() {
         </div>
       )}
 
-      {/* Lista de usuarios */}
+      {/* Lista de gimnasios */}
+      {allUsers.filter(u => u.role === 'gimnasio').length > 0 && (
+        <div className="bg-dark-800 border border-lime/15 rounded-2xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-dark-border flex items-center justify-between bg-lime/5">
+            <h3 className="text-white font-bold flex items-center gap-2">
+              <Settings className="w-5 h-5 text-lime" /> Gimnasios (Marca Blanca)
+            </h3>
+            <span className="text-lime/50 text-xs">{allUsers.filter(u => u.role === 'gimnasio').length} gimnasio{allUsers.filter(u => u.role === 'gimnasio').length > 1 ? 's' : ''}</span>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-dark-border">
+                  {['Gimnasio', 'Email', 'DNI', 'Pago', 'Acceso', 'Acciones'].map(h => (
+                    <th key={h} className="text-left px-4 py-3 text-[10px] text-white/30 uppercase tracking-wider">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-dark-border/50">
+                {allUsers.filter(u => u.role === 'gimnasio').map(u => (
+                  <tr key={u.dni} className="hover:bg-lime/[0.02] transition-colors">
+                    <td className="px-4 py-3">
+                      <div>
+                        <p className="text-white font-bold text-sm">{u.gimnasioNombre || u.nombre}</p>
+                        <p className="text-white/30 text-xs">{u.nombre}</p>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-white/50 font-mono text-xs">{u.email || '-'}</td>
+                    <td className="px-4 py-3 text-sm text-white/40 font-mono">{u.dni}</td>
+                    <td className="px-4 py-3">
+                      <button onClick={async () => {
+                        const accion = u.suscripcionPagada ? 'marcar como PENDIENTE' : 'marcar como PAGADO';
+                        if (confirm(`${accion} a ${u.gimnasioNombre || u.nombre}?`)) {
+                          if (await togglePagoUsuario(u.dni, !u.suscripcionPagada)) {
+                            getAllUsers().then(users => setAllUsers(users));
+                          }
+                        }
+                      }} className={`text-xs px-2 py-1 rounded-full font-bold transition-all hover:scale-105 ${u.suscripcionPagada ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                        {u.suscripcionPagada ? '\u2713 Pagado' : '\u2717 Pendiente'}
+                      </button>
+                    </td>
+                    <td className="px-4 py-3">
+                      <button onClick={async () => {
+                        const accion = u.suscripcionActiva ? 'DESHABILITAR' : 'HABILITAR';
+                        if (confirm(`${accion} el acceso de ${u.gimnasioNombre || u.nombre}?`)) {
+                          if (await toggleActivoUsuario(u.dni, !u.suscripcionActiva)) {
+                            getAllUsers().then(users => setAllUsers(users));
+                          }
+                        }
+                      }} className={`text-xs px-2 py-1 rounded-full font-bold transition-all hover:scale-105 flex items-center gap-1 ${u.suscripcionActiva ? 'bg-cyan-500/20 text-cyan-400' : 'bg-white/10 text-white/40'}`}>
+                        {u.suscripcionActiva ? <><Power className="w-3 h-3" /> Activo</> : <><PowerOff className="w-3 h-3" /> Inactivo</>}
+                      </button>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1">
+                        <button onClick={async () => {
+                          const np = prompt(`Nueva contrasena para ${u.nombre} (DNI: ${u.dni}):`);
+                          if (np && np.length >= 6) {
+                            if (await resetPasswordDB(u.dni, np)) { alert(`Contrasena reseteada.`); }
+                          }
+                        }} className="p-1.5 text-white/20 hover:text-amber-400 transition-colors rounded-lg hover:bg-white/5" title="Resetear contrasena">
+                          <KeyRound className="w-4 h-4" />
+                        </button>
+                        <button onClick={async () => {
+                          if (confirm(`Blanquear ${u.gimnasioNombre || u.nombre}? Se elimina la cuenta.`)) {
+                            if (await blanquearUsuario(u.dni)) {
+                              alert('Blanqueado.');
+                              getAllUsers().then(users => setAllUsers(users));
+                            }
+                          }
+                        }} className="p-1.5 text-white/20 hover:text-danger transition-colors rounded-lg hover:bg-white/5" title="Blanquear">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Lista de usuarios individuales */}
       <div className="bg-dark-800 border border-dark-border rounded-2xl overflow-hidden">
         <div className="px-6 py-4 border-b border-dark-border flex items-center justify-between">
           <h3 className="text-white font-bold flex items-center gap-2">
-            <Users className="w-5 h-5 text-purple-400" /> Usuarios Registrados
+            <Users className="w-5 h-5 text-purple-400" /> Usuarios Individuales
           </h3>
-          <span className="text-white/30 text-xs">{allUsers.length} usuarios</span>
+          <span className="text-white/30 text-xs">{allUsers.filter(u => u.role !== 'gimnasio').length} usuarios</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-dark-border">
-                {['Nombre', 'Email', 'DNI', 'Tipo', 'Pago', 'Acceso', 'Acciones'].map(h => (
+                {['Nombre', 'Email', 'DNI', 'Pago', 'Acceso', 'Acciones'].map(h => (
                   <th key={h} className="text-left px-4 py-3 text-[10px] text-white/30 uppercase tracking-wider">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-dark-border/50">
-              {allUsers.map(u => (
+              {allUsers.filter(u => u.role !== 'gimnasio').map(u => (
                 <tr key={u.dni} className="hover:bg-white/[0.02] transition-colors">
                   <td className="px-4 py-3 text-sm text-white font-medium">{u.nombre}</td>
                   <td className="px-4 py-3 text-sm text-white/50 font-mono text-xs">{u.email || '-'}</td>
                   <td className="px-4 py-3 text-sm text-white/40 font-mono">{u.dni}</td>
-                  <td className="px-4 py-3 text-sm text-white/40">{u.role === 'gimnasio' ? 'Gym' : 'Individual'}</td>
                   <td className="px-4 py-3">
                     <button onClick={async () => {
                       const accion = u.suscripcionPagada ? 'marcar como PENDIENTE' : 'marcar como PAGADO';
-                      if (confirm(`\u00bf${accion} a ${u.nombre}?`)) {
+                      if (confirm(`${accion} a ${u.nombre}?`)) {
                         if (await togglePagoUsuario(u.dni, !u.suscripcionPagada)) {
                           getAllUsers().then(users => setAllUsers(users));
                         }
                       }
-                    }} className={`text-xs px-2 py-1 rounded-full font-bold transition-all hover:scale-105 ${u.suscripcionPagada ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30' : 'bg-red-500/20 text-red-400 hover:bg-red-500/30'}`}>
+                    }} className={`text-xs px-2 py-1 rounded-full font-bold transition-all hover:scale-105 ${u.suscripcionPagada ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
                       {u.suscripcionPagada ? '\u2713 Pagado' : '\u2717 Pendiente'}
                     </button>
                   </td>
                   <td className="px-4 py-3">
                     <button onClick={async () => {
                       const accion = u.suscripcionActiva ? 'DESHABILITAR' : 'HABILITAR';
-                      if (confirm(`\u00bf${accion} el acceso de ${u.nombre}?`)) {
+                      if (confirm(`${accion} el acceso de ${u.nombre}?`)) {
                         if (await toggleActivoUsuario(u.dni, !u.suscripcionActiva)) {
                           getAllUsers().then(users => setAllUsers(users));
                         }
                       }
-                    }} className={`text-xs px-2 py-1 rounded-full font-bold transition-all hover:scale-105 flex items-center gap-1 ${u.suscripcionActiva ? 'bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30' : 'bg-white/10 text-white/40 hover:bg-white/20'}`}>
+                    }} className={`text-xs px-2 py-1 rounded-full font-bold transition-all hover:scale-105 flex items-center gap-1 ${u.suscripcionActiva ? 'bg-cyan-500/20 text-cyan-400' : 'bg-white/10 text-white/40'}`}>
                       {u.suscripcionActiva ? <><Power className="w-3 h-3" /> Activo</> : <><PowerOff className="w-3 h-3" /> Inactivo</>}
                     </button>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">
                       <button onClick={async () => {
-                        const np = prompt(`Nueva contrase\u00f1a para ${u.nombre} (DNI: ${u.dni}):`);
+                        const np = prompt(`Nueva contrasena para ${u.nombre} (DNI: ${u.dni}):`);
                         if (np && np.length >= 6) {
-                          if (await resetPasswordDB(u.dni, np)) {
-                            alert(`Contrase\u00f1a de ${u.nombre} reseteada.`);
-                          } else {
-                            alert('Error al resetear.');
-                          }
-                        } else if (np) {
-                          alert('La contrase\u00f1a debe tener al menos 6 caracteres.');
+                          if (await resetPasswordDB(u.dni, np)) { alert(`Contrasena reseteada.`); }
                         }
-                      }} className="p-1.5 text-white/20 hover:text-amber-400 transition-colors rounded-lg hover:bg-white/5" title="Resetear contrase\u00f1a">
+                      }} className="p-1.5 text-white/20 hover:text-amber-400 transition-colors rounded-lg hover:bg-white/5" title="Resetear contrasena">
                         <KeyRound className="w-4 h-4" />
                       </button>
                       <button onClick={async () => {
-                        if (confirm(`\u00bfBlanquear a ${u.nombre} (DNI: ${u.dni})? Se elimina su cuenta y deber\u00e1 registrarse de nuevo.`)) {
+                        if (confirm(`Blanquear a ${u.nombre} (DNI: ${u.dni})? Se elimina la cuenta.`)) {
                           if (await blanquearUsuario(u.dni)) {
-                            alert(`${u.nombre} fue blanqueado.`);
+                            alert('Blanqueado.');
                             getAllUsers().then(users => setAllUsers(users));
                           }
                         }
-                      }} className="p-1.5 text-white/20 hover:text-danger transition-colors rounded-lg hover:bg-white/5" title="Blanquear (eliminar usuario)">
+                      }} className="p-1.5 text-white/20 hover:text-danger transition-colors rounded-lg hover:bg-white/5" title="Blanquear">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
