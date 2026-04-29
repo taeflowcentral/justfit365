@@ -29,7 +29,8 @@ function loadGoogleTranslate() {
 
   // Definir callback
   (window as unknown as Record<string, unknown>).googleTranslateElementInit = () => {
-    const g = (window as unknown as Record<string, { TranslateElement: new (config: Record<string, unknown>, id: string) => void }>).google;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const g = (window as any).google;
     if (g?.translate?.TranslateElement) {
       new g.translate.TranslateElement({
         pageLanguage: 'es',
