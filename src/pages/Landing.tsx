@@ -59,27 +59,27 @@ export default function Landing() {
             Contenido avalado por profesionales en Nutricion y Ciencias del Deporte de la <strong className="text-white/40">UNLP</strong> y <strong className="text-white/40">UCA</strong>
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link to="/registro"
-              className="px-8 py-4 bg-lime text-black font-black text-sm uppercase tracking-widest rounded-xl hover:bg-lime/80 transition-all shadow-lg shadow-lime/20 hover:scale-[1.02] flex items-center justify-center gap-2">
-              <Zap className="w-5 h-5" /> Empezar Gratis
-            </Link>
-            <Link to="/login"
-              className="px-8 py-4 bg-white/5 border border-white/10 text-white/70 font-bold text-sm uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-2">
-              Ya tengo cuenta <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
           {/* Stats */}
-          <div className="flex justify-center gap-8 sm:gap-16 text-center">
+          <div className="flex justify-center gap-8 sm:gap-16 text-center mb-16">
             <div><p className="text-3xl sm:text-4xl font-black text-lime">300+</p><p className="text-white/30 text-xs uppercase tracking-wider">Alimentos</p></div>
             <div><p className="text-3xl sm:text-4xl font-black text-white">40+</p><p className="text-white/30 text-xs uppercase tracking-wider">Temas Coach</p></div>
             <div><p className="text-3xl sm:text-4xl font-black text-white">5</p><p className="text-white/30 text-xs uppercase tracking-wider">Modos Timer</p></div>
             <div><p className="text-3xl sm:text-4xl font-black text-lime">24/7</p><p className="text-white/30 text-xs uppercase tracking-wider">Disponible</p></div>
           </div>
 
-          <div className="mt-16 animate-bounce">
-            <ChevronDown className="w-6 h-6 text-white/20 mx-auto" />
+          <div className="mb-12 animate-bounce">
+            <ChevronDown className="w-8 h-8 text-lime mx-auto drop-shadow-[0_0_12px_rgba(140,207,46,0.6)]" />
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/registro"
+              className="px-8 py-4 bg-lime text-black font-black text-sm uppercase tracking-widest rounded-xl hover:bg-lime/80 transition-all shadow-lg shadow-lime/20 hover:scale-[1.02] flex items-center justify-center gap-2">
+              <Zap className="w-5 h-5" /> Crear Cuenta
+            </Link>
+            <Link to="/login"
+              className="px-8 py-4 bg-white/5 border border-white/10 text-white/70 font-bold text-sm uppercase tracking-widest rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+              Ya tengo cuenta <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
@@ -252,7 +252,7 @@ export default function Landing() {
           <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">No importa si recien arrancas o si entrenas hace anos. JustFit365 se adapta a vos.</p>
           <Link to="/registro"
             className="inline-flex items-center gap-2 px-10 py-5 bg-lime text-black font-black text-sm uppercase tracking-widest rounded-xl hover:bg-lime/80 transition-all shadow-lg shadow-lime/20 hover:scale-[1.02]">
-            <Zap className="w-5 h-5" /> Crear mi cuenta gratis
+            <Zap className="w-5 h-5" /> Crear Cuenta
           </Link>
           <p className="text-white/20 text-xs mt-4">Sin tarjeta de credito. Empeza a explorar ahora.</p>
         </div>
