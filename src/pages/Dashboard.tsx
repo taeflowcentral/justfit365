@@ -67,7 +67,9 @@ export default function Dashboard() {
   const altura = perfil?.altura || 170;
   const edad = perfil?.edad || 30;
   const nivel = perfil?.nivelActividad || 'Intermedio';
-  const tmb = Math.round(10 * peso + 6.25 * altura - 5 * edad + 5);
+  const genero = perfil?.genero || '';
+  const ajusteGenero = genero === 'Mujer' ? -161 : genero === 'Hombre' ? 5 : -78;
+  const tmb = Math.round(10 * peso + 6.25 * altura - 5 * edad + ajusteGenero);
   const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
   const tdee = Math.round(tmb * (factores[nivel] || 1.55));
 

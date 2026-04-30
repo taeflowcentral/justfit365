@@ -200,6 +200,7 @@ interface Cliente {
   declaraBuenaSalud: boolean;
   esMayorDeEdad: boolean;
   foto: string;
+  genero: string;
   rutina: ClienteRutina[];
   nutricion: ClienteComida[];
   notas: string;
@@ -214,7 +215,7 @@ export default function GymClientes() {
     const saved = getUserItem(CLIENTES_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      return parsed.map((c: Cliente) => ({ ...c, email: c.email || '', dni: c.dni || '', direccion: c.direccion || '', contactoEmergencia: c.contactoEmergencia || '', telefonoEmergencia: c.telefonoEmergencia || '', enfermedades: c.enfermedades || [], declaraBuenaSalud: c.declaraBuenaSalud ?? false, esMayorDeEdad: c.esMayorDeEdad ?? true, foto: c.foto || '', historial: c.historial || [], pesoMeta: c.pesoMeta || 0, fechaMeta: c.fechaMeta || '', pesoHistorial: c.pesoHistorial || [], nivelActividad: c.nivelActividad || 'Intermedio' }));
+      return parsed.map((c: Cliente) => ({ ...c, email: c.email || '', dni: c.dni || '', direccion: c.direccion || '', contactoEmergencia: c.contactoEmergencia || '', telefonoEmergencia: c.telefonoEmergencia || '', enfermedades: c.enfermedades || [], declaraBuenaSalud: c.declaraBuenaSalud ?? false, esMayorDeEdad: c.esMayorDeEdad ?? true, foto: c.foto || '', genero: c.genero || '', historial: c.historial || [], pesoMeta: c.pesoMeta || 0, fechaMeta: c.fechaMeta || '', pesoHistorial: c.pesoHistorial || [], nivelActividad: c.nivelActividad || 'Intermedio' }));
     }
     return [];
   });
@@ -226,7 +227,7 @@ export default function GymClientes() {
   const [showAddComida, setShowAddComida] = useState(false);
   const [showAddAlimento, setShowAddAlimento] = useState<number | null>(null);
   const [showDisciplinas, setShowDisciplinas] = useState(false);
-  const [nuevoCliente, setNuevoCliente] = useState({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [] as string[], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', enfermedades: [] as string[], declaraBuenaSalud: false, esMayorDeEdad: false });
+  const [nuevoCliente, setNuevoCliente] = useState({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [] as string[], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', enfermedades: [] as string[], declaraBuenaSalud: false, esMayorDeEdad: false, genero: '' });
   const [nuevoEj, setNuevoEj] = useState({ nombre: '', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Pecho', notas: '' });
   const [nuevaComida, setNuevaComida] = useState({ nombre: '', hora: '12:00' });
   const [nuevoAlimento, setNuevoAlimento] = useState({ alimento: '', porcion: '', cal: 0, prot: 0, carb: 0, grasa: 0 });
@@ -249,11 +250,11 @@ export default function GymClientes() {
       objetivo: nuevoCliente.objetivo.join(', '), nivel: nuevoCliente.nivel,
       peso: parseFloat(nuevoCliente.peso) || 70, altura: parseInt(nuevoCliente.altura) || 170, edad: parseInt(nuevoCliente.edad) || 25,
       pesoMeta: parseFloat(nuevoCliente.pesoMeta) || 0, fechaMeta: '', pesoHistorial: [], nivelActividad: nuevoCliente.nivel,
-      enfermedades: nuevoCliente.enfermedades, declaraBuenaSalud: nuevoCliente.declaraBuenaSalud, esMayorDeEdad: nuevoCliente.esMayorDeEdad, foto: '',
+      enfermedades: nuevoCliente.enfermedades, declaraBuenaSalud: nuevoCliente.declaraBuenaSalud, esMayorDeEdad: nuevoCliente.esMayorDeEdad, foto: '', genero: nuevoCliente.genero,
       notas: '', rutina: [], nutricion: [], historial: [],
     };
     guardar([...clientes, nuevo]);
-    setNuevoCliente({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', enfermedades: [], declaraBuenaSalud: false, esMayorDeEdad: false });
+    setNuevoCliente({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', enfermedades: [], declaraBuenaSalud: false, esMayorDeEdad: false, genero: '' });
     setShowAddCliente(false);
     setClienteActivo(nuevo.id);
   };
@@ -495,6 +496,17 @@ export default function GymClientes() {
                     <select value={nuevoCliente.nivel} onChange={e => setNuevoCliente(p => ({ ...p, nivel: e.target.value }))} className="w-full px-2 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-xs focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
                       {['Sedentario', 'Principiante', 'Intermedio', 'Avanzado', 'Elite'].map(n => <option key={n} value={n} className="bg-dark-800">{n}</option>)}
                     </select></div>
+                </div>
+
+                <div>
+                  <label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Género</label>
+                  <select value={nuevoCliente.genero} onChange={e => setNuevoCliente(p => ({ ...p, genero: e.target.value }))} className="w-full px-3 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
+                    <option value="" className="bg-dark-800">Seleccionar...</option>
+                    <option value="Hombre" className="bg-dark-800">Hombre</option>
+                    <option value="Mujer" className="bg-dark-800">Mujer</option>
+                    <option value="Prefiero no decirlo" className="bg-dark-800">Prefiero no decirlo</option>
+                  </select>
+                  <p className="text-white/30 text-[10px] mt-1">Mejora la precisión del cálculo metabólico (TMB)</p>
                 </div>
 
                 {/* Objetivos multiples */}
@@ -781,7 +793,8 @@ export default function GymClientes() {
       {/* Tab Perfil */}
       {tab === 'perfil' && (() => {
         const c = cliente!;
-        const tmb = Math.round(10 * c.peso + 6.25 * c.altura - 5 * c.edad + 5);
+        const ajusteGenero = c.genero === 'Mujer' ? -161 : c.genero === 'Hombre' ? 5 : -78;
+        const tmb = Math.round(10 * c.peso + 6.25 * c.altura - 5 * c.edad + ajusteGenero);
         const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
         const tdee = Math.round(tmb * (factores[c.nivelActividad || c.nivel] || 1.55));
         const kgRestantes = c.pesoMeta > 0 ? Math.abs(c.peso - c.pesoMeta) : 0;
@@ -886,6 +899,19 @@ export default function GymClientes() {
                   {['Sedentario', 'Principiante', 'Intermedio', 'Avanzado', 'Elite'].map(n => <option key={n} value={n} className="bg-dark-800">{n}</option>)}
                 </select>
               </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mt-3">
+              <div>
+                <label className="block text-[10px] text-white/50 uppercase tracking-wider mb-1">Género</label>
+                <select value={c.genero || ''} onChange={e => updateCliente(c.id, { genero: e.target.value })}
+                  className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
+                  <option value="" className="bg-dark-800">Seleccionar...</option>
+                  <option value="Hombre" className="bg-dark-800">Hombre</option>
+                  <option value="Mujer" className="bg-dark-800">Mujer</option>
+                  <option value="Prefiero no decirlo" className="bg-dark-800">Prefiero no decirlo</option>
+                </select>
+              </div>
+              <div></div>
             </div>
             <div className="grid grid-cols-2 gap-3 mt-3">
               <div>

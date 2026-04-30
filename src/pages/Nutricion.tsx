@@ -25,8 +25,10 @@ interface Comida {
 
 const PLAN_KEY = 'bc_plan_nutricional';
 
-function generarPlanIA(peso: number, altura: number, edad: number, objetivo: string, nivel: string, tipoEntreno?: string, enfermedades?: string[]): { comidas: Comida[]; nota: string } {
-  const tmb = Math.round(10 * peso + 6.25 * altura - 5 * edad + 5);
+function generarPlanIA(peso: number, altura: number, edad: number, objetivo: string, nivel: string, tipoEntreno?: string, enfermedades?: string[], genero?: string): { comidas: Comida[]; nota: string } {
+  // Mifflin-St Jeor: hombres +5, mujeres -161, default (no decir) usar promedio -78
+  const ajusteGenero = genero === 'Mujer' ? -161 : genero === 'Hombre' ? 5 : -78;
+  const tmb = Math.round(10 * peso + 6.25 * altura - 5 * edad + ajusteGenero);
   const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
   const tdee = Math.round(tmb * (factores[nivel] || 1.55));
 
@@ -289,13 +291,13 @@ export default function Nutricion() {
     setGenerando(true);
     setTimeout(() => {
       const tipoHoy = rutinaSemanal[diaActivo]?.tipo || 'Push';
-      const { comidas: plan, nota } = generarPlanIA(perfil.peso, perfil.altura, perfil.edad, perfil.objetivo, perfil.nivelActividad, tipoHoy, enfermedadesUsuario);
+      const { comidas: plan, nota } = generarPlanIA(perfil.peso, perfil.altura, perfil.edad, perfil.objetivo, perfil.nivelActividad, tipoHoy, enfermedadesUsuario, perfil.genero);
       if (todaLaSemana) {
         const semanal: Record<number, Comida[]> = {};
         let notaFinal = '';
         for (let i = 0; i < 7; i++) {
           const tipoDia = rutinaSemanal[i]?.tipo || 'Descanso';
-          const { comidas: planDia, nota: notaDia } = generarPlanIA(perfil.peso, perfil.altura, perfil.edad, perfil.objetivo, perfil.nivelActividad, tipoDia, enfermedadesUsuario);
+          const { comidas: planDia, nota: notaDia } = generarPlanIA(perfil.peso, perfil.altura, perfil.edad, perfil.objetivo, perfil.nivelActividad, tipoDia, enfermedadesUsuario, perfil.genero);
           semanal[i] = planDia;
           if (i === diaActivo) notaFinal = notaDia;
         }
@@ -382,7 +384,8 @@ export default function Nutricion() {
   const totalCarb = comidas.reduce((a, c) => a + c.items.reduce((b, it) => b + (Number(it.carb) || 0), 0), 0);
   const totalGrasa = comidas.reduce((a, c) => a + c.items.reduce((b, it) => b + (Number(it.grasa) || 0), 0), 0);
 
-  const tmb = perfil ? Math.round(10 * perfil.peso + 6.25 * perfil.altura - 5 * perfil.edad + 5) : 0;
+  const ajusteGenero = perfil?.genero === 'Mujer' ? -161 : perfil?.genero === 'Hombre' ? 5 : -78;
+  const tmb = perfil ? Math.round(10 * perfil.peso + 6.25 * perfil.altura - 5 * perfil.edad + ajusteGenero) : 0;
   const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
   const tdee = tmb ? Math.round(tmb * (factores[perfil?.nivelActividad || 'Intermedio'] || 1.55)) : 2500;
 

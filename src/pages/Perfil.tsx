@@ -22,6 +22,7 @@ export default function Perfil() {
     altura: user?.perfil?.altura?.toString() || '',
     objetivo: user?.perfil?.objetivo || 'Hipertrofia',
     nivelActividad: user?.perfil?.nivelActividad || 'Intermedio',
+    genero: user?.perfil?.genero || '',
     pesoMeta: getUserItem('jf365_peso_meta') || '',
     fechaMeta: getUserItem('jf365_fecha_meta') || '',
   });
@@ -108,6 +109,7 @@ export default function Perfil() {
         altura: parseInt(form.altura) || 0,
         objetivo: form.objetivo,
         nivelActividad: form.nivelActividad,
+        genero: form.genero,
       }
     });
     // Guardar meta de peso y fecha
@@ -330,6 +332,20 @@ export default function Perfil() {
               <option value="Avanzado">Avanzado</option>
               <option value="Elite">Elite</option>
             </select>
+          </div>
+          <div>
+            <label className="block text-xs text-white/40 uppercase tracking-wider mb-2">Género</label>
+            <select
+              value={form.genero}
+              onChange={e => handleChange('genero', e.target.value)}
+              className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none"
+            >
+              <option value="">Seleccionar...</option>
+              <option value="Hombre">Hombre</option>
+              <option value="Mujer">Mujer</option>
+              <option value="Prefiero no decirlo">Prefiero no decirlo</option>
+            </select>
+            <p className="text-white/20 text-[10px] mt-1">Mejora la precisión del cálculo metabólico (TMB)</p>
           </div>
           {/* TMB/TDEE calculados */}
           <div className="bg-electric/5 border border-electric/10 rounded-xl p-3 flex flex-col justify-center">

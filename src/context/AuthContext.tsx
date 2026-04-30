@@ -25,6 +25,7 @@ export interface User {
     altura: number;
     objetivo: string;
     nivelActividad: string;
+    genero?: string;
   };
 }
 
@@ -76,6 +77,7 @@ function dbRowToUser(row: Record<string, unknown>): User {
       altura: (row.perfil_altura as number) || 0,
       objetivo: (row.perfil_objetivo as string) || '',
       nivelActividad: (row.perfil_nivel as string) || '',
+      genero: (row.perfil_genero as string) || '',
     } : undefined,
   };
 }
@@ -219,6 +221,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         dbUpdate.perfil_altura = p.altura;
         dbUpdate.perfil_objetivo = p.objetivo;
         dbUpdate.perfil_nivel = p.nivelActividad;
+        if (p.genero !== undefined) dbUpdate.perfil_genero = p.genero;
       }
       if (Object.keys(dbUpdate).length > 0) {
         supabase.from('usuarios').update(dbUpdate).eq('dni', user.dni).then(() => {});
