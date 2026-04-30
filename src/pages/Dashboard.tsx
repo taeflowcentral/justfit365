@@ -257,7 +257,7 @@ export default function Dashboard() {
               <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-3">
                 <p className="text-emerald-400 text-xs font-bold uppercase tracking-wider mb-1">Tu objetivo calórico</p>
                 <p className="text-white text-2xl font-black">{calObjetivo} <span className="text-white/40 text-sm font-normal">kcal/día</span></p>
-                <p className="text-white/50 text-xs">{esDeficit ? 'Déficit para perder grasa' : esSuperavit ? 'Superávit para ganar músculo' : 'Mantenimiento'}</p>
+                <p className="text-white/50 text-xs">{(perfil?.objetivo || '').toLowerCase().includes('grasa') ? 'Déficit para perder grasa' : (perfil?.objetivo || '').toLowerCase().includes('hipertrofia') || (perfil?.objetivo || '').toLowerCase().includes('fuerza') ? 'Superávit para ganar músculo' : 'Mantenimiento'}</p>
               </div>
 
               <div className="bg-purple-500/5 border border-purple-500/15 rounded-xl p-3">
