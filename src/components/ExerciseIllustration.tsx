@@ -228,6 +228,222 @@ const exercises: Record<string, ExerciseData> = {
     musculos: ['Core', 'Hombros', 'Tr\u00edceps'],
     instrucciones: 'Alternar entre plancha alta y baja. Mantener core firme sin balancear.',
   },
+  // Ejercicios corporales (Casa/Hotel/Aire libre)
+  'Flexiones (push ups)': {
+    folder: 'Pushups',
+    musculos: ['Pecho', 'Tr\u00edceps', 'Hombros', 'Core'],
+    instrucciones: 'Manos al ancho de hombros, cuerpo en l\u00ednea recta de cabeza a pies. Bajar el pecho a 5cm del suelo. Empujar hacia arriba sin bloquear codos. Si es dif\u00edcil: rodillas apoyadas. Si es f\u00e1cil: pies elevados en silla.',
+  },
+  'Flexiones': {
+    folder: 'Pushups',
+    musculos: ['Pecho', 'Tr\u00edceps', 'Hombros'],
+    instrucciones: 'Manos al ancho de hombros, cuerpo recto. Bajar pecho a 5cm del suelo. Empujar hacia arriba con control. Core activado todo el movimiento.',
+  },
+  'Flexiones diamante': {
+    folder: 'Close-Grip_Pushup',
+    musculos: ['Tr\u00edceps', 'Pecho interno'],
+    instrucciones: 'Manos juntas formando un diamante (pulgares e \u00edndices se tocan). Bajar el pecho hasta tocar las manos. Codos pegados al cuerpo. \u00c9nfasis en tr\u00edceps.',
+  },
+  'Pike push ups (hombro)': {
+    folder: 'Pushups',
+    musculos: ['Hombros', 'Tr\u00edceps'],
+    instrucciones: 'Cuerpo en V invertida (cadera arriba, manos y pies en el suelo). Bajar la cabeza hacia el suelo flexionando codos. Empujar hacia arriba como un press militar invertido.',
+  },
+  'Fondos en silla': {
+    folder: 'Bench_Dips',
+    musculos: ['Tr\u00edceps', 'Pecho inferior', 'Hombros'],
+    instrucciones: 'Apoyado en el borde de una silla S\u00d3LIDA o banco. Manos al ancho de hombros, dedos hacia adelante. Bajar el cuerpo flexionando codos a 90\u00b0. Empujar hacia arriba sin bloquear.',
+  },
+  'Flexiones inclinadas': {
+    folder: 'Decline_Pushup',
+    musculos: ['Pecho superior', 'Hombros'],
+    instrucciones: 'Manos en una silla, mesa baja o banco. Cuerpo recto. Bajar el pecho hacia el apoyo. Empujar con control. M\u00e1s f\u00e1cil que flexiones normales, ideal para principiantes.',
+  },
+  'Plancha con toque hombro': {
+    folder: 'Plank',
+    musculos: ['Core', 'Hombros', 'Pecho'],
+    instrucciones: 'En posici\u00f3n de plancha alta. Tocar el hombro contrario alternando. Minimizar la rotaci\u00f3n de cadera. Core firme todo el movimiento.',
+  },
+  'Remo con mochila pesada': {
+    folder: 'Bent_Over_Barbell_Row',
+    musculos: ['Espalda', 'B\u00edceps'],
+    instrucciones: 'Carga una mochila con libros o bidones de agua (5-10kg). Inclinarse adelante con espalda recta. Tirar la mochila hacia el ombligo, codos pegados al cuerpo. Apretar om\u00f3platos arriba.',
+  },
+  'Remo con mochila': {
+    folder: 'Bent_Over_Barbell_Row',
+    musculos: ['Espalda', 'B\u00edceps'],
+    instrucciones: 'Mochila con peso (libros, botellas). Inclinado adelante, espalda recta. Tirar al ombligo, apretar la espalda.',
+  },
+  'Remo invertido (mesa robusta)': {
+    folder: 'Inverted_Row',
+    musculos: ['Espalda', 'B\u00edceps'],
+    instrucciones: 'Acostado debajo de una mesa S\u00d3LIDA. Tomar el borde con las manos al ancho de hombros. Tirar el pecho hacia la mesa con cuerpo recto. Bajar con control. Cuanto m\u00e1s horizontal, m\u00e1s dif\u00edcil.',
+  },
+  'Superman': {
+    folder: 'Hyperextensions',
+    musculos: ['Espalda baja', 'Gl\u00fateos'],
+    instrucciones: 'Boca abajo en el piso, brazos extendidos al frente. Levantar simult\u00e1neamente brazos, pecho y piernas como volando. Mantener 2 segundos arriba. Bajar con control.',
+  },
+  'Curl de biceps con bidones': {
+    folder: 'Dumbbell_Bicep_Curl',
+    musculos: ['B\u00edceps'],
+    instrucciones: 'Tomar 2 bidones de agua de 1.5L (3kg cada uno). Brazos al costado, palmas hacia arriba. Flexionar codos llevando bidones a los hombros. Sin balancear el cuerpo.',
+  },
+  'Curl con bidones': {
+    folder: 'Dumbbell_Bicep_Curl',
+    musculos: ['B\u00edceps'],
+    instrucciones: 'Bidones de agua como pesas. Curl tradicional con codos pegados al cuerpo.',
+  },
+  'Pull aparts con toalla': {
+    folder: 'Face_Pull',
+    musculos: ['Hombros posteriores', 'Espalda alta'],
+    instrucciones: 'Toalla o banda el\u00e1stica en las manos. Brazos extendidos al frente. Tirar de los extremos hacia afuera apretando los om\u00f3platos. Mantener tensi\u00f3n 2 seg.',
+  },
+  'Reverse fly con bidones': {
+    folder: 'Bent_Over_Dumbbell_Reverse_Fly',
+    musculos: ['Hombros posteriores'],
+    instrucciones: 'Inclinado adelante con bidones. Brazos colgando. Levantar bidones lateralmente como volando. Apretar om\u00f3platos arriba.',
+  },
+  'Sentadilla con peso corporal': {
+    folder: 'Bodyweight_Squat',
+    musculos: ['Cu\u00e1driceps', 'Gl\u00fateos'],
+    instrucciones: 'Pies al ancho de hombros, punta levemente afuera. Bajar como sent\u00e1ndose en una silla, rodillas alineadas con los pies. Profundidad m\u00e1xima manteniendo espalda recta. Subir empujando con talones.',
+  },
+  'Sentadilla con mochila': {
+    folder: 'Goblet_Squat',
+    musculos: ['Cu\u00e1driceps', 'Gl\u00fateos'],
+    instrucciones: 'Mochila con peso al pecho o en la espalda. Sentadilla profunda con espalda recta. La mochila aumenta la carga.',
+  },
+  'Sentadilla profunda': {
+    folder: 'Bodyweight_Squat',
+    musculos: ['Cu\u00e1driceps', 'Gl\u00fateos'],
+    instrucciones: 'Pies al ancho de hombros. Bajar lo m\u00e1s profundo posible manteniendo espalda recta y talones en el piso. Subir con control.',
+  },
+  'Sentadilla bulgara': {
+    folder: 'Single_Leg_Push-off',
+    musculos: ['Cu\u00e1driceps', 'Gl\u00fateos'],
+    instrucciones: 'Pie trasero apoyado en una silla atr\u00e1s. Pierna delantera firme. Bajar flexionando la rodilla delantera hasta 90\u00b0. Empujar con el tal\u00f3n delantero. Cambiar de pierna.',
+  },
+  'Hip thrust en piso': {
+    folder: 'Glute_Bridge',
+    musculos: ['Gl\u00fateos', 'Isquios'],
+    instrucciones: 'Acostado boca arriba, espalda apoyada en sof\u00e1 o cama. Pies firmes en el suelo. Empujar la cadera hacia arriba apretando gl\u00fateos al m\u00e1ximo. Mantener 2 seg arriba. Bajar con control.',
+  },
+  'Estocadas caminando': {
+    folder: 'Dumbbell_Lunges',
+    musculos: ['Cu\u00e1driceps', 'Gl\u00fateos'],
+    instrucciones: 'Paso largo adelante. Bajar la rodilla trasera hacia el suelo sin tocarlo. Rodilla delantera no pasa la l\u00ednea del dedo gordo. Alternar piernas.',
+  },
+  'Sentadilla con salto': {
+    folder: 'Freehand_Jump_Squat',
+    musculos: ['Cu\u00e1driceps', 'Gl\u00fateos', 'Cardio'],
+    instrucciones: 'Sentadilla normal y al subir, saltar con explosividad. Aterrizar suave en posici\u00f3n de sentadilla. Usar brazos para impulso.',
+  },
+  'Elevaciones de pantorrillas': {
+    folder: 'Standing_Calf_Raises',
+    musculos: ['Pantorrillas'],
+    instrucciones: 'En el borde de un escal\u00f3n con la mitad del pie afuera. Bajar talones por debajo del nivel del escal\u00f3n. Subir lo m\u00e1s alto posible apretando pantorrillas.',
+  },
+  'Pantorrillas en escalon': {
+    folder: 'Standing_Calf_Raises',
+    musculos: ['Pantorrillas'],
+    instrucciones: 'Borde de escal\u00f3n, talones colgando. Subir y bajar con rango completo.',
+  },
+  'Patadas de gluteo': {
+    folder: 'Donkey_Kick',
+    musculos: ['Gl\u00fateos'],
+    instrucciones: 'En 4 patas. Levantar una pierna hacia atr\u00e1s manteniendo rodilla flexionada a 90\u00b0. Apretar gl\u00fateo arriba. Alternar piernas.',
+  },
+  'Curl femoral acostado (toalla)': {
+    folder: 'Lying_Leg_Curls',
+    musculos: ['Isquiotibiales', 'Gl\u00fateos'],
+    instrucciones: 'Acostado boca arriba con talones sobre una toalla en piso liso. Levantar cadera y deslizar talones hacia los gl\u00fateos. Volver con control.',
+  },
+  'Jumping jacks': {
+    folder: 'Jumping_Jacks',
+    musculos: ['Cardio', 'Full Body'],
+    instrucciones: 'De pie, saltar abriendo piernas mientras los brazos suben sobre la cabeza. Volver al centro con un salto. Ritmo constante.',
+  },
+  'High knees': {
+    folder: 'Mountain_Climbers',
+    musculos: ['Cardio', 'Cu\u00e1driceps'],
+    instrucciones: 'Trotar en el lugar levantando las rodillas a la altura de la cadera. Alternar r\u00e1pidamente. Brazos activos.',
+  },
+  'Salto al cajon o silla solida': {
+    folder: 'Front_Box_Jump',
+    musculos: ['Cu\u00e1driceps', 'Gl\u00fateos'],
+    instrucciones: 'Saltar a una superficie estable. Aterrizar suave en flexi\u00f3n. Bajar caminando.',
+  },
+  'Bear crawl': {
+    folder: 'Bear_Crawl_Sled_Drags',
+    musculos: ['Core', 'Hombros', 'Full Body'],
+    instrucciones: 'En 4 patas con rodillas a 5cm del suelo. Caminar mano y pie contrario simult\u00e1neamente. Cadera baja, espalda neutra.',
+  },
+  'Crunch en V': {
+    folder: 'V-Up',
+    musculos: ['Core', 'Abdominales'],
+    instrucciones: 'Acostado boca arriba. Levantar simult\u00e1neamente piernas y torso formando una V. Tocar las manos con las puntas de los pies. Bajar con control.',
+  },
+  'Saltar la soga / soga imaginaria': {
+    folder: 'Rope_Jumping',
+    musculos: ['Pantorrillas', 'Cardio'],
+    instrucciones: 'Con o sin soga. Saltos peque\u00f1os con mu\u00f1ecas relajadas. Mantener ritmo constante. Aterrizar suave en la planta del pie.',
+  },
+  'Sentadilla isometrica': {
+    folder: 'Wall_Sit',
+    musculos: ['Cu\u00e1driceps'],
+    instrucciones: 'Espalda apoyada en una pared, deslizar hacia abajo hasta que las rodillas formen 90\u00b0. Mantener la posici\u00f3n sin moverse. Quema cu\u00e1driceps.',
+  },
+  'Step ups en silla': {
+    folder: 'Step-up_with_Knee_Raise',
+    musculos: ['Cu\u00e1driceps', 'Gl\u00fateos'],
+    instrucciones: 'Silla S\u00d3LIDA o caj\u00f3n estable. Subir un pie, llevar el cuerpo arriba apoyando todo el pie. Bajar con control. Alternar piernas.',
+  },
+  'Plancha lateral': {
+    folder: 'Side_Bridge',
+    musculos: ['Core lateral', 'Oblicuos'],
+    instrucciones: 'De costado, apoyado en antebrazo y pie. Elevar la cadera formando l\u00ednea recta. Mantener tiempo indicado. Cambiar de lado.',
+  },
+  'Plancha': {
+    folder: 'Plank',
+    musculos: ['Core', 'Hombros'],
+    instrucciones: 'Antebrazos apoyados, cuerpo recto de cabeza a talones. Activar core y gl\u00fateos. Sin levantar ni hundir la cadera. Mantener tiempo indicado.',
+  },
+  'Plancha con saltos': {
+    folder: 'Plank',
+    musculos: ['Core', 'Cardio'],
+    instrucciones: 'En plancha alta. Saltar separando y juntando los pies (jumping jacks horizontales). Core estable.',
+  },
+  'Caminata rapida': {
+    folder: 'Jogging_Treadmill',
+    musculos: ['Full Body', 'Cardio'],
+    instrucciones: 'Caminata a ritmo donde pod\u00e9s hablar pero no cantar. Brazos activos. Postura erguida. 6-7 km/h.',
+  },
+  'Trote continuo': {
+    folder: 'Jogging_Treadmill',
+    musculos: ['Full Body', 'Cardio'],
+    instrucciones: 'Trote a ritmo conversacional. Pisada en el medio del pie. Cadencia constante 7-9 km/h.',
+  },
+  'Subida de escaleras': {
+    folder: 'Step-up_with_Knee_Raise',
+    musculos: ['Gl\u00fateos', 'Cu\u00e1driceps'],
+    instrucciones: 'Subir y bajar escaleras a buen ritmo. Pasos completos sin saltar escalones. Excelente cardio.',
+  },
+  'Saludo al sol': {
+    folder: 'Bodyweight_Squat',
+    musculos: ['Full Body', 'Movilidad'],
+    instrucciones: 'Secuencia de yoga: parado, extender brazos arriba, flexi\u00f3n adelante, plancha alta, perro boca abajo, perro boca arriba, plancha, flexi\u00f3n, parado. Fluir con la respiraci\u00f3n.',
+  },
+  'Saltar al cajon o silla solida': {
+    folder: 'Front_Box_Jump',
+    musculos: ['Cu\u00e1driceps', 'Gl\u00fateos'],
+    instrucciones: 'Caja o silla muy s\u00f3lida. Saltar con ambos pies a la vez. Aterrizar en flexi\u00f3n.',
+  },
+  'Sentadilla cossack': {
+    folder: 'Bodyweight_Squat',
+    musculos: ['Cu\u00e1driceps', 'Aductores'],
+    instrucciones: 'Pies bien separados. Bajar a un costado flexionando esa pierna y manteniendo la otra extendida con punta arriba. Alternar lados sin bajar al centro.',
+  },
 };
 
 // Mapeo extendido para ejercicios comunes que el usuario pueda agregar
@@ -383,7 +599,7 @@ export function ExerciseModal({ nombre, onClose }: { nombre: string; onClose: ()
             <div className="bg-[#0a1220] flex items-center justify-center p-4" style={{ minHeight: 280 }}>
               <img
                 src={activeImg === 0 ? images.img0 : images.img1}
-                alt={`${nombre} - ${activeImg === 0 ? 'Posici\u00f3n inicial' : 'Posici\u00f3n final'}`}
+                alt={`${nombre} - ${activeImg === 0 ? 'Posicion inicial' : 'Posicion final'}`}
                 className="max-h-64 object-contain rounded-lg"
                 onError={() => setImgError(true)}
               />
@@ -393,34 +609,40 @@ export function ExerciseModal({ nombre, onClose }: { nombre: string; onClose: ()
               <button
                 onClick={() => setActiveImg(0)}
                 className={`flex-1 py-3 text-sm font-bold text-center transition-all ${activeImg === 0 ? 'bg-electric/10 text-electric border-b-2 border-electric' : 'text-white/30 hover:text-white/50 hover:bg-white/5'}`}>
-                Posici\u00f3n Inicial
+                Posicion Inicial
               </button>
               <button
                 onClick={() => setActiveImg(1)}
                 className={`flex-1 py-3 text-sm font-bold text-center transition-all ${activeImg === 1 ? 'bg-electric/10 text-electric border-b-2 border-electric' : 'text-white/30 hover:text-white/50 hover:bg-white/5'}`}>
-                Posici\u00f3n Final
+                Posicion Final
               </button>
             </div>
           </div>
         ) : (
-          <div className="bg-[#0a1220] flex items-center justify-center p-8" style={{ minHeight: 200 }}>
-            <div className="text-center">
-              <svg className="w-16 h-16 text-white/10 mx-auto mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><circle cx="12" cy="5" r="3"/><path d="M12 8v8M8 12l4 4 4-4M6 20h12"/></svg>
-              <p className="text-white/20 text-sm">Ilustraci\u00f3n no disponible para este ejercicio</p>
-              <p className="text-white/10 text-xs mt-1">Pod\u00e9s agregar una imagen personalizada</p>
+          <div className="bg-gradient-to-br from-electric/5 to-purple-500/5 p-6">
+            <div className="flex items-start gap-3">
+              <div className="w-12 h-12 bg-electric/15 rounded-xl flex items-center justify-center shrink-0">
+                <svg className="w-6 h-6 text-electric" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <div className="flex-1">
+                <p className="text-electric text-xs font-bold uppercase tracking-wider mb-1">Como hacer este ejercicio</p>
+                <p className="text-white/80 text-sm leading-relaxed">{instrucciones}</p>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Instrucciones */}
-        <div className="px-6 py-4 border-t border-dark-border">
-          <p className="text-white/40 text-[10px] uppercase tracking-wider mb-2 font-bold">Ejecuci\u00f3n correcta</p>
-          <p className="text-white/70 text-sm leading-relaxed">{instrucciones}</p>
-        </div>
+        {/* Instrucciones (cuando hay imagen) */}
+        {images && !imgError && (
+          <div className="px-6 py-4 border-t border-dark-border">
+            <p className="text-white/40 text-[10px] uppercase tracking-wider mb-2 font-bold">Ejecucion correcta</p>
+            <p className="text-white/70 text-sm leading-relaxed">{instrucciones}</p>
+          </div>
+        )}
 
         {/* Footer */}
         <div className="px-6 py-3 border-t border-dark-border/50 text-[10px] text-white/15 text-center">
-          Im\u00e1genes: Free Exercise DB (open source)
+          {images && !imgError ? 'Imagenes: Free Exercise DB (open source)' : 'Tip: practica frente a un espejo para corregir la tecnica'}
         </div>
       </div>
     </div>
