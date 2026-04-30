@@ -70,7 +70,7 @@ export default function Suscripcion() {
   const porcentaje = fechaInicio ? Math.max(0, Math.min(100, ((totalDias - diasRestantes) / totalDias) * 100)) : 0;
 
   const copyAlias = () => {
-    navigator.clipboard.writeText('ventanasdepapel');
+    navigator.clipboard.writeText('justfit365');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -207,7 +207,7 @@ export default function Suscripcion() {
               <div className="flex items-center justify-between p-3 bg-dark-700 rounded-xl">
                 <div>
                   <p className="text-white/30 text-[10px] uppercase tracking-wider">Alias alternativo</p>
-                  <p className="text-electric font-mono font-bold">ventanasdepapel</p>
+                  <p className="text-electric font-mono font-bold">justfit365</p>
                 </div>
                 <button onClick={copyAlias} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${copied ? 'bg-emerald-500/20 text-emerald-400' : 'bg-electric/10 text-electric hover:bg-electric/20'}`}>
                   {copied ? <><CheckCircle className="w-3 h-3 inline mr-1" />Copiado</> : <><Copy className="w-3 h-3 inline mr-1" />Copiar</>}

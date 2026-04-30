@@ -64,7 +64,7 @@ export default function PaymentModal() {
   const periodo = esGimnasio ? '/mes' : '/a\u00f1o';
   const planNombre = esGimnasio ? 'Plan Gimnasio Mensual' : 'Plan Anual Completo';
 
-  const alias = 'ventanasdepapel';
+  const alias = 'justfit365';
   const titular = 'Carlos Federico Cuevas';
   const emailDestino = 'justfit365.com@gmail.com';
 

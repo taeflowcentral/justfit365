@@ -11,7 +11,7 @@ export default function GymInactiveModal() {
   const precio = getPrecioMensualGym();
 
   const copyAlias = () => {
-    navigator.clipboard.writeText('ventanasdepapel');
+    navigator.clipboard.writeText('justfit365');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -67,7 +67,7 @@ export default function GymInactiveModal() {
             <div className="flex items-center justify-between p-3 bg-dark-700 rounded-lg">
               <div>
                 <p className="text-white/30 text-[10px] uppercase tracking-wider">Alias Mercado Pago</p>
-                <p className="text-electric font-mono font-bold">ventanasdepapel</p>
+                <p className="text-electric font-mono font-bold">justfit365</p>
               </div>
               <button onClick={copyAlias} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${copied ? 'bg-emerald-500/20 text-emerald-400' : 'bg-electric/10 text-electric hover:bg-electric/20'}`}>
                 {copied ? <><CheckCircle className="w-3 h-3 inline mr-1" />Copiado</> : <><Copy className="w-3 h-3 inline mr-1" />Copiar</>}
