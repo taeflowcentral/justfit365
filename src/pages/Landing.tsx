@@ -22,7 +22,7 @@ const screenshots = [
   { title: 'Dashboard', desc: 'Tu resumen diario con calorías, entreno, hidratación y progreso de peso.' },
   { title: 'Nutrición', desc: 'Plan completo con desayuno, almuerzo, merienda y cena. Macros automáticos.' },
   { title: 'Rutinas', desc: 'Ejercicios por día con series, reps, peso y descanso. Editable al 100%.' },
-  { title: 'JustFit Coach', desc: '40+ temas: ayuno, insulina, colágeno, cúrcuma, sueño, hidratación y más.' },
+  { title: 'JustFit Coach', desc: '55+ temas: ayuno, secado, lesiones, tendones, recomposición, microbiota, sueño, hidratación y más.' },
   { title: 'Timer', desc: '5 modos: Cronómetro, Cuenta regresiva, Tabata, EMOM, For Time.' },
   { title: 'Gimnasios', desc: 'Clientes, rutinas, nutrición, cobranzas y marca blanca para tu gym.' },
 ];
@@ -78,7 +78,7 @@ export default function Landing() {
           {/* Stats */}
           <div className="flex justify-center gap-8 sm:gap-16 text-center mb-16">
             <div><p className="text-3xl sm:text-4xl font-black text-lime">400+</p><p className="text-white/30 text-xs uppercase tracking-wider">Alimentos<br/><span className="text-white/40 text-[10px] normal-case tracking-normal">de 8 países</span></p></div>
-            <div><p className="text-3xl sm:text-4xl font-black text-white">40+</p><p className="text-white/30 text-xs uppercase tracking-wider">Temas Coach</p></div>
+            <div><p className="text-3xl sm:text-4xl font-black text-white">55+</p><p className="text-white/30 text-xs uppercase tracking-wider">Temas Coach</p></div>
             <div><p className="text-3xl sm:text-4xl font-black text-white">5</p><p className="text-white/30 text-xs uppercase tracking-wider">Modos Timer</p></div>
             <div><p className="text-3xl sm:text-4xl font-black text-lime">24/7</p><p className="text-white/30 text-xs uppercase tracking-wider">Disponible</p></div>
           </div>
