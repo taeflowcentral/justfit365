@@ -89,6 +89,9 @@ export default function Dashboard() {
   });
   const [editandoMeta, setEditandoMeta] = useState(false);
   const [asesorModal, setAsesorModal] = useState<'nutricional' | 'deportivo' | null>(null);
+  const [showRoadmap, setShowRoadmap] = useState(() => {
+    return getUserItem('jf365_roadmap_shown') !== '1';
+  });
 
   // PWA Install prompt
   const [installPrompt, setInstallPrompt] = useState<Event | null>(null);
@@ -189,46 +192,144 @@ export default function Dashboard() {
     } catch { return 'Sin rutina'; }
   })();
 
-  // Streak: días consecutivos abriendo la app
-  const streak = (() => {
+  // Streak y total de dias activos
+  const { streak, diasTotales } = (() => {
     const STREAK_KEY = 'jf365_streak';
     const LAST_VISIT = 'jf365_last_visit';
+    const TOTAL_DAYS = 'jf365_total_days';
     const today = new Date().toDateString();
     const last = getUserItem(LAST_VISIT);
     const stored = parseInt(getUserItem(STREAK_KEY) || '0');
-    if (last === today) return stored;
+    let total = parseInt(getUserItem(TOTAL_DAYS) || '0');
+    if (last === today) return { streak: stored, diasTotales: total };
     if (last) {
       const lastDate = new Date(last);
       const diffDays = Math.round((new Date(today).getTime() - lastDate.getTime()) / 86400000);
       const newStreak = diffDays === 1 ? stored + 1 : 1;
+      total = total + 1;
       setUserItem(STREAK_KEY, newStreak.toString());
       setUserItem(LAST_VISIT, today);
-      return newStreak;
+      setUserItem(TOTAL_DAYS, total.toString());
+      return { streak: newStreak, diasTotales: total };
     }
     setUserItem(STREAK_KEY, '1');
     setUserItem(LAST_VISIT, today);
-    return 1;
+    setUserItem(TOTAL_DAYS, '1');
+    return { streak: 1, diasTotales: 1 };
   })();
+
+  // Sistema de niveles basado en dias totales activos
+  const niveles = [
+    { nombre: 'Novato', min: 0, max: 14, color: 'text-white/60', bg: 'bg-white/5', border: 'border-white/10', emoji: '🌱' },
+    { nombre: 'Aprendiz', min: 15, max: 44, color: 'text-electric', bg: 'bg-electric/10', border: 'border-electric/20', emoji: '⚡' },
+    { nombre: 'Atleta', min: 45, max: 89, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20', emoji: '🏆' },
+    { nombre: 'Maestro', min: 90, max: 179, color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/20', emoji: '👑' },
+    { nombre: 'Leyenda', min: 180, max: 9999, color: 'text-lime', bg: 'bg-lime/10', border: 'border-lime/20', emoji: '🔥' },
+  ];
+  const nivelActual = niveles.find(n => diasTotales >= n.min && diasTotales <= n.max) || niveles[0];
+  const nivelIdx = niveles.indexOf(nivelActual);
+  const nivelSiguiente = niveles[nivelIdx + 1];
+  const progresoNivel = nivelSiguiente
+    ? Math.round(((diasTotales - nivelActual.min) / (nivelSiguiente.min - nivelActual.min)) * 100)
+    : 100;
 
   return (
     <div className="space-y-4">
+      {/* Hoja de ruta de bienvenida (primera vez) */}
+      {showRoadmap && perfil && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => { setUserItem('jf365_roadmap_shown', '1'); setShowRoadmap(false); }}>
+          <div className="bg-dark-800 border border-lime/20 rounded-3xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="text-center mb-5">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-lime rounded-2xl mb-3">
+                <Zap className="w-8 h-8 text-black" strokeWidth={2.5} />
+              </div>
+              <h2 className="text-2xl font-black text-white">¡Bienvenido a JustFit365!</h2>
+              <p className="text-white/50 text-sm mt-1">Tu hoja de ruta personalizada</p>
+            </div>
+
+            <div className="space-y-3 mb-5">
+              <div className="bg-electric/5 border border-electric/15 rounded-xl p-3">
+                <p className="text-electric text-xs font-bold uppercase tracking-wider mb-1">Tu perfil</p>
+                <p className="text-white text-sm">{peso}kg · {altura}cm · {edad} años · {nivel}</p>
+                <p className="text-white/50 text-xs mt-0.5">Objetivo: {perfil.objetivo || 'Sin definir'}</p>
+              </div>
+
+              <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-xl p-3">
+                <p className="text-emerald-400 text-xs font-bold uppercase tracking-wider mb-1">Tu objetivo calórico</p>
+                <p className="text-white text-2xl font-black">{calObjetivo} <span className="text-white/40 text-sm font-normal">kcal/día</span></p>
+                <p className="text-white/50 text-xs">{esDeficit ? 'Déficit para perder grasa' : esSuperavit ? 'Superávit para ganar músculo' : 'Mantenimiento'}</p>
+              </div>
+
+              <div className="bg-purple-500/5 border border-purple-500/15 rounded-xl p-3">
+                <p className="text-purple-400 text-xs font-bold uppercase tracking-wider mb-2">Tus próximos pasos</p>
+                <ol className="space-y-1.5">
+                  <li className="flex gap-2 text-white/70 text-xs"><span className="text-purple-400 font-bold">1.</span><span>Generá tu plan nutricional semanal en <strong className="text-white">Nutrición</strong></span></li>
+                  <li className="flex gap-2 text-white/70 text-xs"><span className="text-purple-400 font-bold">2.</span><span>Configurá tu rutina de entrenamiento en <strong className="text-white">Mi Rutina</strong></span></li>
+                  <li className="flex gap-2 text-white/70 text-xs"><span className="text-purple-400 font-bold">3.</span><span>Consultá al <strong className="text-white">JustFit Coach</strong> sobre cualquier duda</span></li>
+                  <li className="flex gap-2 text-white/70 text-xs"><span className="text-purple-400 font-bold">4.</span><span>Registrá tu progreso y mantené tu racha</span></li>
+                </ol>
+              </div>
+
+              <div className="bg-amber-500/5 border border-amber-500/15 rounded-xl p-3">
+                <p className="text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">💡 Tip del día</p>
+                <p className="text-white/70 text-xs leading-relaxed">Volvé todos los días, aunque sea para revisar. Cada día activo suma a tu racha y subís de nivel. El progreso real viene de la consistencia.</p>
+              </div>
+            </div>
+
+            <button onClick={() => { setUserItem('jf365_roadmap_shown', '1'); setShowRoadmap(false); }}
+              className="w-full py-3 bg-lime text-black rounded-xl font-black text-sm uppercase tracking-wider">
+              Empezar mi camino
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header con streak */}
-      <div className="flex items-end justify-between gap-3">
+      <div className="flex items-end justify-between gap-3 flex-wrap">
         <div>
           <h1 className="text-2xl font-black text-white tracking-tight">
             Hola, <span className="text-electric">{user?.nombre?.split(' ')[0]}</span>
           </h1>
           <p className="text-white/50 text-sm mt-1">Tu resumen de rendimiento</p>
         </div>
-        <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${
-          streak >= 7 ? 'bg-amber-500/10 border-amber-500/20' : 'bg-electric/5 border-electric/10'
-        }`}>
-          <span className="text-2xl">{streak >= 30 ? '🔥' : streak >= 7 ? '⚡' : '✨'}</span>
-          <div>
-            <p className={`text-xl font-black leading-none ${streak >= 7 ? 'text-amber-400' : 'text-electric'}`}>{streak}</p>
-            <p className="text-white/40 text-[9px] uppercase tracking-wider">{streak === 1 ? 'día' : 'días'} de racha</p>
+        <div className="flex items-center gap-2">
+          <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${
+            streak >= 7 ? 'bg-amber-500/10 border-amber-500/20' : 'bg-electric/5 border-electric/10'
+          }`}>
+            <span className="text-2xl">{streak >= 30 ? '🔥' : streak >= 7 ? '⚡' : '✨'}</span>
+            <div>
+              <p className={`text-xl font-black leading-none ${streak >= 7 ? 'text-amber-400' : 'text-electric'}`}>{streak}</p>
+              <p className="text-white/40 text-[9px] uppercase tracking-wider">{streak === 1 ? 'día' : 'días'} de racha</p>
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* Nivel del usuario */}
+      <div className={`${nivelActual.bg} border ${nivelActual.border} rounded-2xl p-4`}>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl">{nivelActual.emoji}</span>
+            <div>
+              <p className="text-white/40 text-[10px] uppercase tracking-wider">Tu nivel</p>
+              <p className={`text-lg font-black ${nivelActual.color} leading-tight`}>{nivelActual.nombre}</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-white font-black text-xl leading-none">{diasTotales}</p>
+            <p className="text-white/40 text-[10px] uppercase tracking-wider">días activos</p>
+          </div>
+        </div>
+        {nivelSiguiente && (
+          <>
+            <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
+              <div className={`h-full ${nivelActual.color.replace('text-', 'bg-')} rounded-full transition-all`} style={{ width: `${progresoNivel}%` }} />
+            </div>
+            <p className="text-white/30 text-[10px] mt-1.5 text-center">
+              {nivelSiguiente.min - diasTotales} días para alcanzar <strong className={nivelSiguiente.color}>{nivelSiguiente.emoji} {nivelSiguiente.nombre}</strong>
+            </p>
+          </>
+        )}
       </div>
 
       {/* Banner instalar app */}

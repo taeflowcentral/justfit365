@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   Zap, LayoutDashboard, Utensils, Dumbbell, MessageSquare,
   Settings, LogOut, Building2, Users, CreditCard, ChevronLeft, ChevronRight, UserCog,
-  Camera, Stethoscope, ShieldCheck, LifeBuoy, Timer, DollarSign
+  Camera, Stethoscope, ShieldCheck, LifeBuoy, Timer, DollarSign, Lightbulb
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -122,6 +122,11 @@ export default function Sidebar({ onNavigate }: { onNavigate: () => void }) {
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-cyan-400/70 hover:bg-cyan-500/10 hover:text-cyan-400 transition-all">
           <LifeBuoy className="w-5 h-5 shrink-0" />
           {!collapsed && <span>Soporte T&eacute;cnico</span>}
+        </a>
+        <a href="mailto:justfit365.com@gmail.com?subject=JustFit365%20-%20Sugerencia%20de%20mejora&body=Hola%2C%20me%20gustar%C3%ADa%20sugerir%3A%0A%0A%5BDescrib%C3%AD%20tu%20idea%20o%20mejora%5D%0A%0AMi%20usuario%3A%20"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-lime/70 hover:bg-lime/10 hover:text-lime transition-all">
+          <Lightbulb className="w-5 h-5 shrink-0" />
+          {!collapsed && <span>Sugerir mejora</span>}
         </a>
         <button onClick={logout} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-danger/70 hover:bg-danger/10 transition-all">
           <LogOut className="w-5 h-5 shrink-0" />
