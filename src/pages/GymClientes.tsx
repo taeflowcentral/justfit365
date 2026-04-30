@@ -227,7 +227,7 @@ export default function GymClientes() {
   const [showAddComida, setShowAddComida] = useState(false);
   const [showAddAlimento, setShowAddAlimento] = useState<number | null>(null);
   const [showDisciplinas, setShowDisciplinas] = useState(false);
-  const [nuevoCliente, setNuevoCliente] = useState({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [] as string[], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', enfermedades: [] as string[], declaraBuenaSalud: false, esMayorDeEdad: false, genero: '' });
+  const [nuevoCliente, setNuevoCliente] = useState({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [] as string[], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', fechaMeta: '', enfermedades: [] as string[], declaraBuenaSalud: false, esMayorDeEdad: false, genero: '' });
   const [nuevoEj, setNuevoEj] = useState({ nombre: '', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Pecho', notas: '' });
   const [nuevaComida, setNuevaComida] = useState({ nombre: '', hora: '12:00' });
   const [nuevoAlimento, setNuevoAlimento] = useState({ alimento: '', porcion: '', cal: 0, prot: 0, carb: 0, grasa: 0 });
@@ -249,12 +249,12 @@ export default function GymClientes() {
       contactoEmergencia: nuevoCliente.contactoEmergencia, telefonoEmergencia: nuevoCliente.telefonoEmergencia,
       objetivo: nuevoCliente.objetivo.join(', '), nivel: nuevoCliente.nivel,
       peso: parseFloat(nuevoCliente.peso) || 70, altura: parseInt(nuevoCliente.altura) || 170, edad: parseInt(nuevoCliente.edad) || 25,
-      pesoMeta: parseFloat(nuevoCliente.pesoMeta) || 0, fechaMeta: '', pesoHistorial: [], nivelActividad: nuevoCliente.nivel,
+      pesoMeta: parseFloat(nuevoCliente.pesoMeta) || 0, fechaMeta: nuevoCliente.fechaMeta, pesoHistorial: [], nivelActividad: nuevoCliente.nivel,
       enfermedades: nuevoCliente.enfermedades, declaraBuenaSalud: nuevoCliente.declaraBuenaSalud, esMayorDeEdad: nuevoCliente.esMayorDeEdad, foto: '', genero: nuevoCliente.genero,
       notas: '', rutina: [], nutricion: [], historial: [],
     };
     guardar([...clientes, nuevo]);
-    setNuevoCliente({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', enfermedades: [], declaraBuenaSalud: false, esMayorDeEdad: false, genero: '' });
+    setNuevoCliente({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', fechaMeta: '', enfermedades: [], declaraBuenaSalud: false, esMayorDeEdad: false, genero: '' });
     setShowAddCliente(false);
     setClienteActivo(nuevo.id);
   };
@@ -496,6 +496,26 @@ export default function GymClientes() {
                     <select value={nuevoCliente.nivel} onChange={e => setNuevoCliente(p => ({ ...p, nivel: e.target.value }))} className="w-full px-2 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-xs focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
                       {['Sedentario', 'Principiante', 'Intermedio', 'Avanzado', 'Elite'].map(n => <option key={n} value={n} className="bg-dark-800">{n}</option>)}
                     </select></div>
+                </div>
+
+                <div>
+                  <label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Fecha para alcanzar la meta</label>
+                  <input type="date" value={nuevoCliente.fechaMeta} onChange={e => setNuevoCliente(p => ({ ...p, fechaMeta: e.target.value }))}
+                    className="w-full px-3 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                  {nuevoCliente.peso && nuevoCliente.pesoMeta && nuevoCliente.fechaMeta && (() => {
+                    const pesoNum = parseFloat(nuevoCliente.peso);
+                    const metaNum = parseFloat(nuevoCliente.pesoMeta);
+                    const dias = Math.max(1, Math.round((new Date(nuevoCliente.fechaMeta).getTime() - Date.now()) / 86400000));
+                    const semanas = Math.max(1, Math.round(dias / 7));
+                    const kgDif = Math.abs(pesoNum - metaNum);
+                    const kgSem = kgDif / semanas;
+                    return (
+                      <p className="text-electric/60 text-[10px] mt-1">
+                        {pesoNum > metaNum ? 'Bajar' : 'Subir'} {kgDif.toFixed(1)} kg en {semanas} semanas = {kgSem.toFixed(2)} kg/sem
+                        {kgSem > 1 && <span className="text-red-400"> · Ritmo agresivo</span>}
+                      </p>
+                    );
+                  })()}
                 </div>
 
                 <div>
