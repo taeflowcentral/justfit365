@@ -551,7 +551,7 @@ export default function Nutricion() {
             <Target className="w-5 h-5 text-orange-400" />
           </div>
           <div>
-            <p className="text-white/40 text-xs uppercase tracking-wider">M&aacute;ximo de calor&iacute;as para mantenimiento</p>
+            <p className="text-white/40 text-xs uppercase tracking-wider">Objetivo cal&oacute;rico &mdash; <span className={esDeficit ? 'text-red-400' : esSuperavit ? 'text-emerald-400' : 'text-amber-400'}>{tipoEnergetico}</span></p>
             {editandoCal ? (
               <div className="flex items-center gap-2 mt-1">
                 <input type="number" min="800" max="8000" step="50" value={calObjetivo}
@@ -588,11 +588,24 @@ export default function Nutricion() {
       {/* Macros calculados */}
       {showMacros && <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: 'Calor\u00edas', value: totalCal, min: Math.round(calObjetivo * 0.9), max: calObjetivo, color: 'text-orange-400/80', gradient: 'from-orange-500/50 to-red-500/50', icon: Flame, unit: 'kcal' },
-          { label: 'Prote\u00edna', value: totalProt, min: Math.round((perfil?.peso || 75) * 1.6), max: Math.round((perfil?.peso || 75) * 2.2), color: 'text-electric/80', gradient: 'from-electric/50 to-neon/50', icon: Droplets, unit: 'g' },
+          { label: 'Calorías', value: totalCal, min: Math.round(calObjetivo * 0.9), max: calObjetivo, color: 'text-orange-400/80', gradient: 'from-orange-500/50 to-red-500/50', icon: Flame, unit: 'kcal' },
+          { label: 'Proteína', value: totalProt, min: Math.round((perfil?.peso || 75) * 1.6), max: Math.round((perfil?.peso || 75) * 2.2), color: 'text-electric/80', gradient: 'from-electric/50 to-neon/50', icon: Droplets, unit: 'g' },
           { label: 'Carbohidratos', value: totalCarb, min: Math.round((calObjetivo * 0.35) / 4), max: Math.round((calObjetivo * 0.55) / 4), color: 'text-amber-400/80', gradient: 'from-amber-400/50 to-yellow-400/50', icon: Wheat, unit: 'g' },
           { label: 'Grasas', value: totalGrasa, min: Math.round((calObjetivo * 0.20) / 9), max: Math.round((calObjetivo * 0.30) / 9), color: 'text-pink-400/80', gradient: 'from-pink-500/50 to-rose-500/50', icon: Droplet, unit: 'g' },
-        ].map(m => (
+        ].map(m => {
+          const enRango = m.value >= m.min && m.value <= m.max;
+          const porEncima = m.value > m.max;
+          const colorActual = enRango ? 'text-emerald-400' : porEncima ? 'text-red-400' : 'text-amber-400';
+          // Etiqueta de estado para calorías
+          const esCalorias = m.label === 'Calorías';
+          let etiquetaCal = '';
+          if (esCalorias && m.value > 0) {
+            const diffVsTdee = m.value - tdee;
+            if (diffVsTdee > 100) etiquetaCal = 'Superávit';
+            else if (diffVsTdee < -100) etiquetaCal = 'Déficit';
+            else etiquetaCal = 'Mantenimiento';
+          }
+          return (
           <div key={m.label} className="bg-dark-800 border border-dark-border rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-1">
               <m.icon className={`w-4 h-4 ${m.color}`} />
@@ -610,14 +623,20 @@ export default function Nutricion() {
               </div>
               <div className="text-right">
                 <div className="text-[9px] text-white/30 uppercase tracking-wider leading-none mb-0.5">Actual</div>
-                <div className={`font-black text-base leading-none ${m.value >= m.min && m.value <= m.max ? 'text-emerald-400' : m.value > m.max ? 'text-red-400' : m.color}`}>{m.value}</div>
+                <div className={`font-black text-base leading-none ${colorActual}`}>{m.value}</div>
+                {esCalorias && etiquetaCal && (
+                  <div className={`text-[9px] font-bold uppercase tracking-wider mt-0.5 ${
+                    etiquetaCal === 'Superávit' ? 'text-emerald-400' : etiquetaCal === 'Déficit' ? 'text-red-400' : 'text-amber-400'
+                  }`}>{etiquetaCal}</div>
+                )}
               </div>
             </div>
             <div className="w-full h-2 bg-dark-600 rounded-full overflow-hidden">
               <div className={`h-full rounded-full bg-gradient-to-r ${m.gradient}`} style={{ width: `${Math.min((m.value / m.max) * 100, 100)}%` }} />
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>}
 
       {/* Comidas */}
