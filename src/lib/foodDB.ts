@@ -318,6 +318,79 @@ const alimentosDB: AlimentoBase[] = [
   { nombre: 'Fernet con gaseosa', porcionDefault: '1 vaso', cal: 200, prot: 0, carb: 20, grasa: 0, unidad: 'vaso', tags: 'bebida alcohol' },
   { nombre: 'Fernet con gaseosa zero', porcionDefault: '1 vaso', cal: 100, prot: 0, carb: 0, grasa: 0, unidad: 'vaso', tags: 'bebida permitido alcohol zero' },
 
+  // Comidas internacionales - Estados Unidos
+  { nombre: 'Pancakes americanos', porcionDefault: '3 unidades', cal: 350, prot: 8, carb: 50, grasa: 12, unidad: 'porcion', tags: 'usa estados unidos desayuno' },
+  { nombre: 'Hot dog clasico', porcionDefault: '1 unidad', cal: 290, prot: 11, carb: 20, grasa: 18, unidad: 'unidad', tags: 'usa estados unidos snack' },
+  { nombre: 'Mac and cheese', porcionDefault: '1 plato (250g)', cal: 420, prot: 16, carb: 50, grasa: 18, unidad: 'plato', tags: 'usa estados unidos' },
+  { nombre: 'Buffalo wings', porcionDefault: '6 unidades', cal: 480, prot: 30, carb: 4, grasa: 36, unidad: 'porcion', tags: 'usa estados unidos snack' },
+  { nombre: 'Bagel con queso crema', porcionDefault: '1 unidad', cal: 380, prot: 12, carb: 55, grasa: 12, unidad: 'unidad', tags: 'usa estados unidos desayuno' },
+  { nombre: 'Cheesecake', porcionDefault: '1 porcion', cal: 380, prot: 6, carb: 30, grasa: 27, unidad: 'porcion', tags: 'usa postre dulce snack' },
+  { nombre: 'Donut glaseado', porcionDefault: '1 unidad', cal: 270, prot: 3, carb: 31, grasa: 15, unidad: 'unidad', tags: 'usa snack postre dulce' },
+
+  // Comidas internacionales - Brasil
+  { nombre: 'Acai bowl tradicional', porcionDefault: '1 bowl (300g)', cal: 320, prot: 5, carb: 50, grasa: 12, unidad: 'bowl', tags: 'brasil desayuno' },
+  { nombre: 'Pao de queijo', porcionDefault: '3 unidades', cal: 240, prot: 8, carb: 22, grasa: 14, unidad: 'porcion', tags: 'brasil desayuno snack' },
+  { nombre: 'Feijoada', porcionDefault: '1 plato (300g)', cal: 480, prot: 28, carb: 38, grasa: 22, unidad: 'plato', tags: 'brasil tradicional' },
+  { nombre: 'Brigadeiro', porcionDefault: '1 unidad', cal: 80, prot: 1, carb: 12, grasa: 3, unidad: 'unidad', tags: 'brasil postre dulce snack' },
+  { nombre: 'Moqueca de pescado', porcionDefault: '1 plato (300g)', cal: 380, prot: 32, carb: 8, grasa: 24, unidad: 'plato', tags: 'brasil pescado' },
+  { nombre: 'Coxinha', porcionDefault: '1 unidad', cal: 220, prot: 8, carb: 22, grasa: 11, unidad: 'unidad', tags: 'brasil snack' },
+  { nombre: 'Caipirinha', porcionDefault: '1 vaso', cal: 240, prot: 0, carb: 28, grasa: 0, unidad: 'vaso', tags: 'brasil bebida alcohol' },
+
+  // Comidas internacionales - Alemania
+  { nombre: 'Bratwurst (salchicha alemana)', porcionDefault: '1 unidad', cal: 290, prot: 14, carb: 2, grasa: 25, unidad: 'unidad', tags: 'alemania' },
+  { nombre: 'Pretzel', porcionDefault: '1 unidad (90g)', cal: 280, prot: 8, carb: 56, grasa: 3, unidad: 'unidad', tags: 'alemania snack' },
+  { nombre: 'Sauerkraut (chucrut)', porcionDefault: '100g', cal: 20, prot: 1, carb: 4, grasa: 0, unidad: 'porcion', tags: 'alemania vegetal fermentado probiotico' },
+  { nombre: 'Schnitzel de pollo', porcionDefault: '1 porcion (200g)', cal: 380, prot: 32, carb: 18, grasa: 18, unidad: 'porcion', tags: 'alemania pollo' },
+  { nombre: 'Strudel de manzana', porcionDefault: '1 porcion', cal: 320, prot: 4, carb: 50, grasa: 12, unidad: 'porcion', tags: 'alemania postre dulce' },
+
+  // Comidas internacionales - Corea
+  { nombre: 'Kimchi', porcionDefault: '50g', cal: 15, prot: 1, carb: 3, grasa: 0, unidad: 'porcion', tags: 'corea fermentado vegetal probiotico' },
+  { nombre: 'Bibimbap', porcionDefault: '1 bowl (400g)', cal: 560, prot: 26, carb: 78, grasa: 16, unidad: 'bowl', tags: 'corea' },
+  { nombre: 'Bulgogi (carne marinada)', porcionDefault: '150g', cal: 320, prot: 28, carb: 14, grasa: 16, unidad: 'porcion', tags: 'corea carne' },
+  { nombre: 'Ramen coreano picante', porcionDefault: '1 plato (400g)', cal: 500, prot: 14, carb: 70, grasa: 18, unidad: 'plato', tags: 'corea sopa' },
+  { nombre: 'Mandu (dumplings)', porcionDefault: '5 unidades', cal: 280, prot: 14, carb: 32, grasa: 10, unidad: 'porcion', tags: 'corea' },
+  { nombre: 'Tofu agrio picante', porcionDefault: '1 plato (200g)', cal: 220, prot: 18, carb: 8, grasa: 14, unidad: 'plato', tags: 'corea vegetariano' },
+
+  // Comidas internacionales - Rusia
+  { nombre: 'Borscht (sopa de remolacha)', porcionDefault: '1 plato (300ml)', cal: 180, prot: 8, carb: 22, grasa: 6, unidad: 'plato', tags: 'rusia sopa' },
+  { nombre: 'Pelmeni', porcionDefault: '10 unidades', cal: 380, prot: 16, carb: 48, grasa: 12, unidad: 'porcion', tags: 'rusia' },
+  { nombre: 'Blini con caviar', porcionDefault: '3 unidades', cal: 240, prot: 12, carb: 24, grasa: 10, unidad: 'porcion', tags: 'rusia desayuno' },
+  { nombre: 'Stroganoff', porcionDefault: '1 plato (300g)', cal: 480, prot: 28, carb: 22, grasa: 30, unidad: 'plato', tags: 'rusia carne' },
+  { nombre: 'Solyanka (sopa)', porcionDefault: '1 plato (300ml)', cal: 220, prot: 14, carb: 14, grasa: 12, unidad: 'plato', tags: 'rusia sopa' },
+
+  // Comidas internacionales - Francia
+  { nombre: 'Croissant', porcionDefault: '1 unidad', cal: 260, prot: 5, carb: 26, grasa: 14, unidad: 'unidad', tags: 'francia desayuno snack' },
+  { nombre: 'Baguette con manteca', porcionDefault: '2 rebanadas', cal: 220, prot: 6, carb: 32, grasa: 8, unidad: 'porcion', tags: 'francia desayuno' },
+  { nombre: 'Quiche Lorraine', porcionDefault: '1 porcion', cal: 380, prot: 14, carb: 22, grasa: 26, unidad: 'porcion', tags: 'francia' },
+  { nombre: 'Ratatouille', porcionDefault: '1 plato (250g)', cal: 180, prot: 4, carb: 28, grasa: 6, unidad: 'plato', tags: 'francia vegetal vegetariano' },
+  { nombre: 'Coq au vin', porcionDefault: '1 plato (300g)', cal: 480, prot: 38, carb: 12, grasa: 28, unidad: 'plato', tags: 'francia pollo' },
+  { nombre: 'Crepe dulce', porcionDefault: '1 unidad', cal: 220, prot: 6, carb: 30, grasa: 8, unidad: 'unidad', tags: 'francia postre dulce' },
+  { nombre: 'Macaron', porcionDefault: '1 unidad', cal: 100, prot: 1, carb: 14, grasa: 4, unidad: 'unidad', tags: 'francia postre dulce snack' },
+
+  // Comidas internacionales - Italia
+  { nombre: 'Pasta carbonara', porcionDefault: '1 plato (300g)', cal: 580, prot: 22, carb: 70, grasa: 22, unidad: 'plato', tags: 'italia pasta' },
+  { nombre: 'Pizza margherita', porcionDefault: '1 porcion', cal: 280, prot: 12, carb: 36, grasa: 10, unidad: 'porcion', tags: 'italia pizza' },
+  { nombre: 'Risotto', porcionDefault: '1 plato (250g)', cal: 420, prot: 12, carb: 60, grasa: 14, unidad: 'plato', tags: 'italia' },
+  { nombre: 'Tiramisu', porcionDefault: '1 porcion', cal: 360, prot: 6, carb: 30, grasa: 24, unidad: 'porcion', tags: 'italia postre dulce' },
+  { nombre: 'Bruschetta', porcionDefault: '2 unidades', cal: 180, prot: 6, carb: 24, grasa: 7, unidad: 'porcion', tags: 'italia snack' },
+  { nombre: 'Lasagna', porcionDefault: '1 porcion (250g)', cal: 480, prot: 24, carb: 38, grasa: 25, unidad: 'porcion', tags: 'italia pasta' },
+  { nombre: 'Gnocchi al pesto', porcionDefault: '1 plato (250g)', cal: 480, prot: 12, carb: 65, grasa: 18, unidad: 'plato', tags: 'italia pasta' },
+  { nombre: 'Panna cotta', porcionDefault: '1 porcion', cal: 280, prot: 4, carb: 25, grasa: 18, unidad: 'porcion', tags: 'italia postre dulce' },
+  { nombre: 'Caprese', porcionDefault: '1 plato (200g)', cal: 280, prot: 14, carb: 6, grasa: 22, unidad: 'plato', tags: 'italia ensalada vegetariano' },
+  { nombre: 'Espresso', porcionDefault: '1 taza', cal: 5, prot: 0, carb: 0, grasa: 0, unidad: 'taza', tags: 'italia bebida cafe' },
+
+  // Comidas internacionales - Mexico (cocina latinoamericana popular)
+  { nombre: 'Tacos al pastor', porcionDefault: '3 unidades', cal: 420, prot: 22, carb: 30, grasa: 22, unidad: 'porcion', tags: 'mexico latino' },
+  { nombre: 'Guacamole', porcionDefault: '50g', cal: 80, prot: 1, carb: 5, grasa: 7, unidad: 'porcion', tags: 'mexico vegetal salsa' },
+  { nombre: 'Quesadilla', porcionDefault: '1 unidad', cal: 320, prot: 14, carb: 28, grasa: 18, unidad: 'unidad', tags: 'mexico' },
+  { nombre: 'Burrito de pollo', porcionDefault: '1 unidad', cal: 580, prot: 32, carb: 60, grasa: 22, unidad: 'unidad', tags: 'mexico pollo' },
+
+  // Comidas internacionales - Asiaticas (otras)
+  { nombre: 'Sushi (8 piezas)', porcionDefault: '1 porcion', cal: 320, prot: 16, carb: 56, grasa: 4, unidad: 'porcion', tags: 'japon asia pescado' },
+  { nombre: 'Wok chow mein', porcionDefault: '1 plato (300g)', cal: 380, prot: 14, carb: 50, grasa: 14, unidad: 'plato', tags: 'china asia' },
+  { nombre: 'Pad thai', porcionDefault: '1 plato (300g)', cal: 460, prot: 20, carb: 60, grasa: 16, unidad: 'plato', tags: 'tailandia asia' },
+  { nombre: 'Curry de pollo', porcionDefault: '1 plato (300g)', cal: 420, prot: 28, carb: 24, grasa: 22, unidad: 'plato', tags: 'india asia pollo' },
+
   // Suplementos deportivos
   { nombre: 'Creatina monohidratada', porcionDefault: '1 scoop (5g)', cal: 0, prot: 0, carb: 0, grasa: 0, unidad: 'scoop' },
   { nombre: 'Whey protein concentrado', porcionDefault: '1 scoop (30g)', cal: 120, prot: 24, carb: 3, grasa: 1, unidad: 'scoop' },

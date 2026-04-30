@@ -4,7 +4,7 @@ import { useState } from 'react';
 import LanguageSelector from '../components/LanguageSelector';
 
 const features = [
-  { icon: Utensils, title: 'Plan Nutricional', desc: 'Planes personalizados según tu peso, objetivo y condiciones. Base de 300+ alimentos argentinos. Avalado por profesionales UNLP y UCA.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+  { icon: Utensils, title: 'Plan Nutricional', desc: 'Planes personalizados según tu peso, objetivo y condiciones. Base de 400+ alimentos de 8 países. Avalado por profesionales UNLP y UCA.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
   { icon: Dumbbell, title: 'Rutinas Inteligentes', desc: 'Ejercicios adaptados a tu nivel. Push, Pull, Piernas, HIIT, Yoga y más. Se ajustan automáticamente.', color: 'text-purple-400', bg: 'bg-purple-500/10' },
   { icon: MessageSquare, title: 'JustFit Coach', desc: 'Tu coach virtual 24/7. Consultá sobre suplementos, ayuno, nutrición, lesiones y más.', color: 'text-electric', bg: 'bg-electric/10' },
   { icon: TrendingUp, title: 'Progreso Real', desc: 'Seguimiento de peso, medidas y fotos. Gráficos de evolución con metas y proyecciones.', color: 'text-amber-400', bg: 'bg-amber-500/10' },
@@ -49,7 +49,7 @@ export default function Landing() {
       </nav>
 
       {/* HERO */}
-      <section className="relative min-h-screen flex items-center justify-center px-4">
+      <section className="relative min-h-screen flex items-center justify-center px-4 pt-20">
         <div className="absolute inset-0">
           <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-lime/8 rounded-full blur-[150px]" />
           <div className="absolute bottom-1/4 -right-32 w-[500px] h-[500px] bg-electric/6 rounded-full blur-[150px]" />
@@ -77,7 +77,7 @@ export default function Landing() {
 
           {/* Stats */}
           <div className="flex justify-center gap-8 sm:gap-16 text-center mb-16">
-            <div><p className="text-3xl sm:text-4xl font-black text-lime">300+</p><p className="text-white/30 text-xs uppercase tracking-wider">Alimentos</p></div>
+            <div><p className="text-3xl sm:text-4xl font-black text-lime">400+</p><p className="text-white/30 text-xs uppercase tracking-wider">Alimentos<br/><span className="text-white/40 text-[10px] normal-case tracking-normal">de 8 países</span></p></div>
             <div><p className="text-3xl sm:text-4xl font-black text-white">40+</p><p className="text-white/30 text-xs uppercase tracking-wider">Temas Coach</p></div>
             <div><p className="text-3xl sm:text-4xl font-black text-white">5</p><p className="text-white/30 text-xs uppercase tracking-wider">Modos Timer</p></div>
             <div><p className="text-3xl sm:text-4xl font-black text-lime">24/7</p><p className="text-white/30 text-xs uppercase tracking-wider">Disponible</p></div>
