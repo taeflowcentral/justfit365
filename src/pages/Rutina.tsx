@@ -150,8 +150,117 @@ const plantillas: Record<string, Ejercicio[]> = {
   Descanso: [],
 };
 
-function generarEjerciciosParaDia(tipo: string): Ejercicio[] {
-  const base = plantillas[tipo] || [];
+// Plantillas para entrenar SIN equipo o con equipamiento minimo (Casa, Hotel, Aire libre)
+const plantillasCorporal: Record<string, Omit<Ejercicio, 'id' | 'completado'>[]> = {
+  Push: [
+    { nombre: 'Flexiones (push ups)', series: 4, reps: '12-15', descanso: '60', peso: 'Corporal', musculo: 'Pecho', notas: 'Si es facil: pies elevados en silla.' },
+    { nombre: 'Flexiones diamante', series: 3, reps: '8-12', descanso: '60', peso: 'Corporal', musculo: 'Triceps', notas: 'Manos juntas formando un diamante.' },
+    { nombre: 'Pike push ups (hombro)', series: 3, reps: '8-12', descanso: '60', peso: 'Corporal', musculo: 'Hombros', notas: 'En V invertida, simulan press militar.' },
+    { nombre: 'Fondos en silla', series: 3, reps: '12-15', descanso: '45', peso: 'Corporal', musculo: 'Triceps', notas: 'Apoyado en el borde de una silla solida.' },
+    { nombre: 'Flexiones inclinadas', series: 3, reps: '15-20', descanso: '45', peso: 'Corporal', musculo: 'Pecho superior', notas: 'Manos en silla o mesa baja.' },
+    { nombre: 'Plancha con toque hombro', series: 3, reps: '20', descanso: '30', peso: 'Corporal', musculo: 'Core / Pecho', notas: '' },
+  ],
+  Pull: [
+    { nombre: 'Remo con mochila pesada', series: 4, reps: '12-15', descanso: '60', peso: 'Mochila', musculo: 'Espalda', notas: 'Mochila con libros o botellas. Cargar 5-10 kg.' },
+    { nombre: 'Remo invertido (mesa robusta)', series: 4, reps: '8-12', descanso: '60', peso: 'Corporal', musculo: 'Espalda', notas: 'Debajo de mesa, tirar el cuerpo arriba.' },
+    { nombre: 'Superman', series: 3, reps: '15', descanso: '30', peso: 'Corporal', musculo: 'Espalda baja', notas: 'Boca abajo, levantar brazos y piernas.' },
+    { nombre: 'Curl de biceps con bidones', series: 3, reps: '12-15', descanso: '45', peso: 'Bidones agua', musculo: 'Biceps', notas: '2 bidones de 1.5L = 3kg cada brazo.' },
+    { nombre: 'Pull aparts con toalla', series: 3, reps: '15', descanso: '30', peso: 'Toalla', musculo: 'Espalda alta', notas: 'Tirar de los extremos hacia afuera.' },
+    { nombre: 'Reverse fly con bidones', series: 3, reps: '15', descanso: '30', peso: 'Bidones', musculo: 'Hombro posterior', notas: '' },
+  ],
+  Piernas: [
+    { nombre: 'Sentadilla con peso corporal', series: 4, reps: '20', descanso: '60', peso: 'Corporal', musculo: 'Cuadriceps', notas: 'Bajar lento, profundidad maxima.' },
+    { nombre: 'Sentadilla con mochila', series: 3, reps: '15', descanso: '60', peso: 'Mochila pesada', musculo: 'Cuadriceps', notas: 'Mochila con libros al pecho o espalda.' },
+    { nombre: 'Sentadilla bulgara', series: 3, reps: '12 c/lado', descanso: '60', peso: 'Corporal', musculo: 'Cuadriceps', notas: 'Pie trasero en silla.' },
+    { nombre: 'Hip thrust en piso', series: 4, reps: '15-20', descanso: '60', peso: 'Corporal', musculo: 'Gluteos', notas: 'Espalda apoyada en sofa o cama.' },
+    { nombre: 'Estocadas caminando', series: 3, reps: '12 c/lado', descanso: '45', peso: 'Corporal', musculo: 'Cuadriceps / Gluteos', notas: '' },
+    { nombre: 'Sentadilla con salto', series: 3, reps: '12', descanso: '60', peso: 'Corporal', musculo: 'Cuadriceps / Cardio', notas: 'Explosivo arriba.' },
+    { nombre: 'Elevaciones de pantorrillas', series: 4, reps: '20', descanso: '30', peso: 'Corporal', musculo: 'Pantorrillas', notas: 'En el borde de un escalon.' },
+  ],
+  Upper: [
+    { nombre: 'Flexiones', series: 3, reps: '12-15', descanso: '60', peso: 'Corporal', musculo: 'Pecho', notas: '' },
+    { nombre: 'Remo con mochila', series: 3, reps: '12-15', descanso: '60', peso: 'Mochila', musculo: 'Espalda', notas: '' },
+    { nombre: 'Pike push ups', series: 3, reps: '10-12', descanso: '60', peso: 'Corporal', musculo: 'Hombros', notas: '' },
+    { nombre: 'Fondos en silla', series: 3, reps: '12-15', descanso: '45', peso: 'Corporal', musculo: 'Triceps', notas: '' },
+    { nombre: 'Curl con bidones', series: 3, reps: '12', descanso: '45', peso: 'Bidones', musculo: 'Biceps', notas: '' },
+    { nombre: 'Plancha', series: 3, reps: '60 seg', descanso: '30', peso: 'Corporal', musculo: 'Core', notas: '' },
+  ],
+  Lower: [
+    { nombre: 'Sentadilla profunda', series: 4, reps: '20', descanso: '60', peso: 'Corporal', musculo: 'Cuadriceps', notas: '' },
+    { nombre: 'Hip thrust en piso', series: 4, reps: '20', descanso: '60', peso: 'Corporal', musculo: 'Gluteos', notas: '' },
+    { nombre: 'Sentadilla bulgara', series: 3, reps: '12 c/lado', descanso: '60', peso: 'Corporal', musculo: 'Cuadriceps', notas: '' },
+    { nombre: 'Curl femoral acostado (toalla)', series: 3, reps: '12', descanso: '45', peso: 'Toalla en piso', musculo: 'Isquios', notas: 'Talones en toalla, deslizar.' },
+    { nombre: 'Patadas de gluteo', series: 3, reps: '15 c/lado', descanso: '30', peso: 'Corporal', musculo: 'Gluteos', notas: '' },
+    { nombre: 'Pantorrillas en escalon', series: 4, reps: '20', descanso: '30', peso: 'Corporal', musculo: 'Pantorrillas', notas: '' },
+  ],
+  'Full Body': [
+    { nombre: 'Burpees', series: 3, reps: '10', descanso: '60', peso: 'Corporal', musculo: 'Full Body', notas: 'Maxima intensidad.' },
+    { nombre: 'Sentadilla con salto', series: 3, reps: '15', descanso: '45', peso: 'Corporal', musculo: 'Cuadriceps', notas: '' },
+    { nombre: 'Flexiones', series: 3, reps: '12-15', descanso: '45', peso: 'Corporal', musculo: 'Pecho', notas: '' },
+    { nombre: 'Mountain climbers', series: 3, reps: '30 seg', descanso: '30', peso: 'Corporal', musculo: 'Core / Cardio', notas: '' },
+    { nombre: 'Plancha lateral', series: 3, reps: '30 seg c/lado', descanso: '30', peso: 'Corporal', musculo: 'Core', notas: '' },
+    { nombre: 'Estocadas', series: 3, reps: '12 c/lado', descanso: '45', peso: 'Corporal', musculo: 'Piernas', notas: '' },
+  ],
+  Cardio: [
+    { nombre: 'Saltar la soga / soga imaginaria', series: 5, reps: '2 min', descanso: '30', peso: '-', musculo: 'Cardio', notas: '' },
+    { nombre: 'Jumping jacks', series: 4, reps: '60 seg', descanso: '30', peso: '-', musculo: 'Cardio', notas: '' },
+    { nombre: 'High knees', series: 4, reps: '45 seg', descanso: '30', peso: '-', musculo: 'Cardio', notas: 'Rodillas a la altura de la cadera.' },
+    { nombre: 'Burpees', series: 4, reps: '8', descanso: '45', peso: 'Corporal', musculo: 'Full Body', notas: '' },
+    { nombre: 'Mountain climbers', series: 4, reps: '45 seg', descanso: '30', peso: 'Corporal', musculo: 'Core / Cardio', notas: '' },
+  ],
+  HIIT: [
+    { nombre: 'Burpees', series: 5, reps: '10', descanso: '30', peso: 'Corporal', musculo: 'Full Body', notas: 'Maxima intensidad.' },
+    { nombre: 'Sentadilla con salto', series: 5, reps: '15', descanso: '30', peso: 'Corporal', musculo: 'Cuadriceps', notas: '' },
+    { nombre: 'Mountain climbers', series: 5, reps: '30 seg', descanso: '30', peso: 'Corporal', musculo: 'Core', notas: '' },
+    { nombre: 'Jumping jacks', series: 5, reps: '30 seg', descanso: '20', peso: 'Corporal', musculo: 'Cardio', notas: '' },
+    { nombre: 'Plancha con saltos', series: 4, reps: '30 seg', descanso: '30', peso: 'Corporal', musculo: 'Core', notas: '' },
+    { nombre: 'High knees', series: 4, reps: '30 seg', descanso: '20', peso: 'Corporal', musculo: 'Cardio', notas: '' },
+  ],
+  Funcional: [
+    { nombre: 'Burpees', series: 4, reps: '10', descanso: '60', peso: 'Corporal', musculo: 'Full Body', notas: '' },
+    { nombre: 'Bear crawl', series: 3, reps: '20 metros', descanso: '45', peso: 'Corporal', musculo: 'Full Body', notas: 'Caminar en 4 patas.' },
+    { nombre: 'Plancha dinamica', series: 3, reps: '10 c/lado', descanso: '45', peso: 'Corporal', musculo: 'Core', notas: 'Plancha alta a baja.' },
+    { nombre: 'Salto al cajon o silla solida', series: 4, reps: '10', descanso: '60', peso: 'Corporal', musculo: 'Cuadriceps', notas: '' },
+    { nombre: 'Sentadilla cossack', series: 3, reps: '10 c/lado', descanso: '45', peso: 'Corporal', musculo: 'Piernas', notas: 'Movimiento lateral.' },
+    { nombre: 'Crunch en V', series: 3, reps: '15', descanso: '30', peso: 'Corporal', musculo: 'Core', notas: '' },
+  ],
+  Running: [
+    { nombre: 'Calentamiento caminata', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+    { nombre: 'Trote continuo', series: 1, reps: '25 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'Plaza, parque o calle.' },
+    { nombre: 'Intervalos sprint/trote', series: 6, reps: '1 min sprint / 1 min trote', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+    { nombre: 'Vuelta a la calma', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+  ],
+  'Caminata Activa': [
+    { nombre: 'Caminata rapida', series: 1, reps: '30 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'Ritmo donde podes hablar pero no cantar.' },
+    { nombre: 'Subida de escaleras', series: 4, reps: '5 min', descanso: '2 min', peso: 'Corporal', musculo: 'Gluteos', notas: 'Si hay escaleras disponibles.' },
+    { nombre: 'Power walking con brazos', series: 1, reps: '15 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'Mover brazos activamente.' },
+    { nombre: 'Estiramiento final', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+  ],
+  Yoga: [
+    { nombre: 'Saludo al sol', series: 5, reps: '1 ciclo', descanso: '15', peso: '-', musculo: 'Full Body', notas: '' },
+    { nombre: 'Guerrero I y II', series: 3, reps: '30 seg c/lado', descanso: '10', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { nombre: 'Plancha a Perro boca abajo', series: 4, reps: '30 seg', descanso: '10', peso: '-', musculo: 'Core', notas: '' },
+    { nombre: 'Postura del arbol', series: 2, reps: '30 seg c/lado', descanso: '10', peso: '-', musculo: 'Core', notas: '' },
+    { nombre: 'Torsion espinal', series: 2, reps: '30 seg c/lado', descanso: '10', peso: '-', musculo: 'Espalda', notas: '' },
+    { nombre: 'Savasana', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'Relajacion final.' },
+  ],
+  Spinning: [
+    { nombre: 'Bicicleta sin manos (silla)', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: 'Sustituir con sentadillas isometricas.' },
+    { nombre: 'Sentadilla isometrica', series: 4, reps: '60 seg', descanso: '60', peso: 'Corporal', musculo: 'Cuadriceps', notas: 'Como en spinning de pie.' },
+    { nombre: 'Step ups en silla', series: 4, reps: '20 c/lado', descanso: '45', peso: 'Corporal', musculo: 'Gluteos', notas: '' },
+    { nombre: 'Sentadilla con salto', series: 4, reps: '15', descanso: '45', peso: 'Corporal', musculo: 'Cuadriceps', notas: '' },
+  ],
+  Ciclismo: [
+    { nombre: 'Salida en bicicleta', series: 1, reps: '60 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: 'Si tenes bici. Aire libre o estatica.' },
+    { nombre: 'Sentadillas', series: 4, reps: '20', descanso: '60', peso: 'Corporal', musculo: 'Cuadriceps', notas: 'Si no hay bici.' },
+    { nombre: 'Burpees', series: 4, reps: '10', descanso: '60', peso: 'Corporal', musculo: 'Full Body', notas: '' },
+  ],
+};
+
+function generarEjerciciosParaDia(tipo: string, modo: string = 'Gimnasio'): Ejercicio[] {
+  // Si esta en Casa, Hotel o Aire libre: usar plantillas corporales si existen
+  const usarCorporal = modo === 'Casa' || modo === 'Hotel' || modo === 'Aire libre';
+  const base = (usarCorporal ? plantillasCorporal[tipo] : plantillas[tipo]) || plantillas[tipo] || [];
   return base.map(e => ({ ...e, id: Date.now() + Math.random() * 10000, completado: false }));
 }
 
@@ -190,6 +299,7 @@ export default function Rutina() {
 
   const [expandido, setExpandido] = useState<number | null>(null);
   const [editando, setEditando] = useState<number | null>(null);
+  const [modoEquipo, setModoEquipo] = useState(() => getUserItem('jf365_modo_equipo') || 'Gimnasio');
   const [editSemana, setEditSemana] = useState(false);
   const [editandoDia, setEditandoDia] = useState<number | null>(null);
 
@@ -210,9 +320,10 @@ export default function Rutina() {
     if (tipoFinal === 'Descanso') {
       setEjerciciosPorDia(prev => ({ ...prev, [index]: [] }));
     } else {
+      const modo = getUserItem('jf365_modo_equipo') || 'Gimnasio';
       const ejs: typeof ejerciciosPorDia[0] = [];
       nuevos.forEach(t => {
-        const base = generarEjerciciosParaDia(t);
+        const base = generarEjerciciosParaDia(t, modo);
         base.forEach(e => ejs.push({ ...e, id: e.id + Math.random() }));
       });
       setEjerciciosPorDia(prev => ({ ...prev, [index]: ejs }));
@@ -222,9 +333,10 @@ export default function Rutina() {
   const regenerarEjerciciosDia = () => {
     const tipos = (semana[diaActivo]?.tipo || '').split(' + ').filter(t => t && t !== 'Descanso');
     if (tipos.length === 0) return;
+    const modo = getUserItem('jf365_modo_equipo') || 'Gimnasio';
     const ejs: typeof ejerciciosPorDia[0] = [];
     tipos.forEach(t => {
-      const base = generarEjerciciosParaDia(t);
+      const base = generarEjerciciosParaDia(t, modo);
       base.forEach(e => ejs.push({ ...e, id: e.id + Math.random() }));
     });
     setEjerciciosPorDia(prev => ({ ...prev, [diaActivo]: ejs }));
@@ -309,9 +421,22 @@ export default function Rutina() {
           <div className="mt-3 flex items-center gap-2 flex-wrap">
             <span className="text-white/30 text-xs">Hoy entren&aacute;s en:</span>
             {(['Gimnasio', 'Casa', 'Hotel', 'Aire libre'] as const).map(modo => {
-              const activo = (getUserItem('jf365_modo_equipo') || 'Gimnasio') === modo;
+              const activo = modoEquipo === modo;
               return (
-                <button key={modo} onClick={() => { setUserItem('jf365_modo_equipo', modo); window.location.reload(); }}
+                <button key={modo} onClick={() => {
+                  setModoEquipo(modo);
+                  setUserItem('jf365_modo_equipo', modo);
+                  // Regenerar ejercicios del dia con el nuevo modo
+                  const tipos = (semana[diaActivo]?.tipo || '').split(' + ').filter(t => t && t !== 'Descanso');
+                  if (tipos.length > 0) {
+                    const ejs: Ejercicio[] = [];
+                    tipos.forEach(t => {
+                      const base = generarEjerciciosParaDia(t, modo);
+                      base.forEach(e => ejs.push({ ...e, id: e.id + Math.random() }));
+                    });
+                    setEjerciciosPorDia(prev => ({ ...prev, [diaActivo]: ejs }));
+                  }
+                }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                     activo ? 'bg-electric/15 text-electric border border-electric/30' : 'bg-white/5 text-white/40 border border-dark-border hover:text-white/60'
                   }`}>
@@ -321,14 +446,12 @@ export default function Rutina() {
             })}
           </div>
         )}
-        {(() => {
-          const modo = getUserItem('jf365_modo_equipo') || 'Gimnasio';
-          if (modo === 'Gimnasio' || tipoActivo === 'Descanso') return null;
-          const tip = modo === 'Casa'
-            ? 'Sin equipo: prioriz\u00e1 ejercicios corporales (sentadillas, flexiones, plancha, dominadas en barra). Sustitu\u00ed pesas por mochila con libros o bidones de agua.'
-            : modo === 'Hotel'
-            ? 'En el gimnasio del hotel: us\u00e1 las mancuernas y m\u00e1quinas que tengas. Si no hay equipo, mismas opciones que Casa.'
-            : 'Aire libre: aprovech\u00e1 el peso corporal, sprint, escaleras, banco del parque para fondos y dominadas.';
+        {modoEquipo !== 'Gimnasio' && tipoActivo !== 'Descanso' && (() => {
+          const tip = modoEquipo === 'Casa'
+            ? 'En casa: prioriz\u00e1 peso corporal y mochila con libros/bidones de agua como pesa.'
+            : modoEquipo === 'Hotel'
+            ? 'En hotel: us\u00e1 mancuernas si las hay; si no, peso corporal y elementos del cuarto.'
+            : 'Aire libre: aprovech\u00e1 escaleras, bancos del parque, paredes y peso corporal.';
           return <p className="text-white/30 text-[11px] mt-2 italic">{tip}</p>;
         })()}
         <div className="flex items-center gap-2 mt-3 flex-wrap">
