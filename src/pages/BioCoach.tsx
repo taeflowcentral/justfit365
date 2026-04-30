@@ -2161,6 +2161,904 @@ No es que "un vasito no hace nada". El alcohol afecta CADA sistema que necesitas
 
 Tu cuerpo te lo va a agradecer en 2 semanas. La diferencia es dramatica \ud83d\udcaa`
   },
+  {
+    keywords: ['secado', 'definicion', 'cutting', 'definir musculo', 'fase de definicion', 'corte'],
+    content: `**Secado (Cutting): c\u00f3mo definir sin perder m\u00fasculo**
+
+El "secado" es una fase de p\u00e9rdida de grasa controlada para revelar el m\u00fasculo construido durante una etapa de volumen. Es agresivo y requiere planificaci\u00f3n.
+
+**Cu\u00e1ndo hacerlo:**
+- Despu\u00e9s de 3-6 meses de fase de volumen (super\u00e1vit cal\u00f3rico)
+- Cuando alcanzaste un % de grasa que oculta la definici\u00f3n (>15% hombres, >22% mujeres)
+- Idealmente 8-16 semanas antes de un evento o foto
+
+**Protocolo seguro:**
+1. **D\u00e9ficit moderado:** 400-500 kcal por debajo del TDEE (no m\u00e1s)
+2. **Prote\u00edna alta:** 2.2-2.6 g/kg (preserva masa muscular)
+3. **Carbos c\u00edclicos:** m\u00e1s en d\u00edas de entreno pesado, menos en descanso
+4. **Grasas:** m\u00ednimo 0.8 g/kg (no bajar m\u00e1s, afecta hormonas)
+5. **Entrenamiento:** mantener fuerza, NO hacer m\u00e1s cardio
+6. **Cardio:** Zone 2 (caminar r\u00e1pido, trotar lento) 3-4 veces/sem, 30-40 min
+
+**Velocidad ideal:** 0.5-0.8% del peso corporal por semana
+- 80kg = bajar 400-650g/semana
+- M\u00e1s r\u00e1pido = p\u00e9rdida muscular y rebote
+
+**Suplementaci\u00f3n \u00fatil:**
+- Whey protein (llegar a la prote\u00edna)
+- Creatina (mantener fuerza)
+- Cafe\u00edna (energ\u00eda)
+- Electrolitos (porque com\u00e9s menos sal)
+
+**Errores comunes:**
+- D\u00e9ficit demasiado agresivo (>700 kcal) = p\u00e9rdida de m\u00fasculo
+- Eliminar carbos a 0 = baj\u00f3n de energ\u00eda y rendimiento
+- Hacer 1 hora de cardio diario = cortisol alto + m\u00fasculo perdido
+- No descansar = sobreentrenamiento
+
+**Cuando parar:**
+- Llegaste al % de grasa objetivo
+- Empez\u00e1s a perder fuerza (>10% en ejercicios principales)
+- Hambre extrema, mal humor, insomnio
+- P\u00e9rdida de menstruaci\u00f3n (mujeres)
+
+Despu\u00e9s del secado: subir calor\u00edas GRADUALMENTE (refeed) por 1-2 semanas antes de volver a comer normal \ud83c\udfaf`
+  },
+  {
+    keywords: ['colgajos', 'piel sobrante', 'piel flacida', 'adelgazar sin colgajos', 'firmeza piel', 'elasticidad piel'],
+    content: `**Adelgazar sin colgajos: c\u00f3mo cuidar tu piel**
+
+Los colgajos aparecen cuando la piel pierde elasticidad antes de que se reduzca al ritmo de la p\u00e9rdida de grasa. Se puede prevenir.
+
+**Factores que favorecen colgajos:**
+- P\u00e9rdida de peso muy r\u00e1pida (>1kg/semana)
+- Edad mayor a 40 a\u00f1os (menos col\u00e1geno)
+- P\u00e9rdida de mucho peso (>20-30kg)
+- Mala alimentaci\u00f3n durante la dieta
+- Falta de entrenamiento de fuerza
+- Gen\u00e9tica desfavorable
+
+**C\u00f3mo prevenirlos:**
+
+**1. Velocidad de p\u00e9rdida lenta y sostenida**
+- M\u00e1ximo 0.5-0.7% del peso corporal por semana
+- Deja tiempo a la piel para retraerse
+
+**2. Entrenamiento de fuerza obligatorio**
+- Construir m\u00fasculo "rellena" desde adentro
+- Ejercicios para todo el cuerpo 3-4 veces/sem
+- No solo cardio, esto acelera la flacidez
+
+**3. Hidrataci\u00f3n abundante**
+- 35-40 ml por kg de peso
+- La piel hidratada es m\u00e1s el\u00e1stica
+
+**4. Nutrientes clave para la piel:**
+- **Col\u00e1geno hidrolizado** 10g/d\u00eda con vitamina C
+- **Vitamina C** (kiwi, pimiento, c\u00edtricos): s\u00edntesis de col\u00e1geno
+- **Vitamina E** (almendras, palta, semillas): antioxidante
+- **Zinc** (carnes, semillas calabaza): regeneraci\u00f3n
+- **Omega 3** (salm\u00f3n, sardinas, suplemento): elasticidad
+- **Silicio** (avena, banana, perejil): firmeza
+
+**5. Prote\u00edna alta:** 2.0-2.4 g/kg para preservar y construir m\u00fasculo bajo la piel
+
+**6. Tratamientos externos:**
+- Hidratar piel diariamente (cremas con retinol, p\u00e9ptidos)
+- Cepillado en seco antes de la ducha
+- Duchas fr\u00edas al final (mejora circulaci\u00f3n)
+- Masajes con aceite de rosa mosqueta
+
+**7. Evitar:**
+- Dietas crash (-1000 kcal)
+- Alcohol (deshidrata + envejece)
+- Cigarrillo (destruye col\u00e1geno)
+- Sol excesivo sin protecci\u00f3n
+
+**Si ya ten\u00e9s colgajos:**
+- Si son leves: con tiempo (12-24 meses) y los h\u00e1bitos arriba pueden retraerse
+- Si son severos: la \u00fanica soluci\u00f3n definitiva es cirug\u00eda (abdominoplastia, braquioplastia)
+
+Paciencia: bajar 1kg en 2 semanas con todo este protocolo es mejor que perder 5kg en un mes y quedar con piel colgando \ud83c\udf3f`
+  },
+  {
+    keywords: ['lesiones', 'evitar lesiones', 'prevenir lesiones', 'lesion deportiva', 'cuidados articulares'],
+    content: `**C\u00f3mo evitar lesiones en el entrenamiento**
+
+El 70% de las lesiones de gym son por errores evitables. Ac\u00e1 los principios para entrenar d\u00e9cadas sin lesionarte.
+
+**Las 7 reglas de oro:**
+
+**1. Calentamiento espec\u00edfico (NO solo cardio)**
+- 5 min cardio liviano (subir frecuencia card\u00edaca)
+- Movilidad articular: rotaciones de hombros, caderas, columna
+- Series de aproximaci\u00f3n: 50%, 70%, 85% del peso de trabajo
+
+**2. Progresi\u00f3n lenta**
+- Aumentar peso m\u00e1ximo 2.5-5% por semana
+- Si sub\u00eds m\u00e1s r\u00e1pido, los tendones no se adaptan (ver tema "tendones")
+- Mejor 100kg con t\u00e9cnica perfecta que 120kg lastim\u00e1ndote
+
+**3. T\u00e9cnica antes que peso**
+- Filmate haciendo los ejercicios principales
+- Si no pod\u00e9s hacer el rango completo: el peso es demasiado
+- Pag\u00e1 una sesi\u00f3n con un profesional para corregir
+
+**4. Movilidad y flexibilidad**
+- 10 min de estiramiento al final del entreno
+- Yoga 1 vez/semana
+- Foam roller en zonas tensas (espalda, isquios, gl\u00fateos)
+
+**5. Descanso adecuado**
+- No entrenar el mismo grupo muscular 2 d\u00edas seguidos
+- M\u00ednimo 7 horas de sue\u00f1o
+- 1-2 d\u00edas completos de descanso por semana
+
+**6. Escuch\u00e1 a tu cuerpo**
+- Dolor agudo: PAR\u00c1 inmediato
+- Molestia leve: reducir peso o rango
+- Diferencia entre "trabajar duro" y "lesionarte"
+
+**7. Nutrici\u00f3n e hidrataci\u00f3n**
+- Prote\u00edna alta (recuperaci\u00f3n)
+- Hidrataci\u00f3n constante (lubrica articulaciones)
+- Omega 3 (antiinflamatorio)
+- Col\u00e1geno (tendones)
+
+**Las lesiones m\u00e1s comunes y c\u00f3mo evitarlas:**
+
+**Hombro:**
+- Evitar press detr\u00e1s de nuca
+- Trabajar mucho rotadores externos (Face Pulls)
+- No empujar con cargas pesadas si ten\u00e9s desbalance
+
+**Lumbar:**
+- Sentadillas y peso muerto con t\u00e9cnica perfecta
+- Core fuerte (planchas, deadbugs)
+- No redondear la espalda nunca con peso
+
+**Rodilla:**
+- Rodilla siempre apuntando al pie
+- No pasarte de la l\u00ednea del dedo gordo
+- Trabajar isquios y gl\u00fateos (no solo cu\u00e1driceps)
+
+**Codo:**
+- Evitar repeticiones explosivas con peso m\u00e1ximo
+- No agarrar con los pulgares cuando hay carga alta
+
+**Si te lesionaste:**
+1. Primeras 48hs: hielo, descanso, compresi\u00f3n
+2. Despu\u00e9s: movimiento controlado (NO inmovilizar mucho)
+3. Consulta con kinesi\u00f3logo o m\u00e9dico deportivo
+4. Trabajo correctivo antes de volver a cargar
+
+Mejor "perder" 2 semanas previniendo que 6 meses recuper\u00e1ndote \u26a0\ufe0f`
+  },
+  {
+    keywords: ['tendones', 'tendinitis', 'adaptacion tendones', 'tiempo tendones', 'tejido conectivo'],
+    content: `**Tendones: por qu\u00e9 necesitan m\u00e1s tiempo que los m\u00fasculos**
+
+Esto es lo que NADIE te explica en el gym y la causa #1 de lesiones cuando avanz\u00e1s r\u00e1pido.
+
+**El gran malentendido:**
+El m\u00fasculo se adapta a una nueva carga en 2-4 semanas. Pero los **tendones** y ligamentos tardan **6-12 semanas** en adaptarse a la misma carga.
+
+**Por qu\u00e9 pasa esto:**
+- El m\u00fasculo tiene riego sangu\u00edneo abundante = recuperaci\u00f3n r\u00e1pida
+- Los tendones tienen muy poco riego = recuperaci\u00f3n 5-10 veces m\u00e1s lenta
+- El col\u00e1geno (de los tendones) se renueva muy lento
+
+**Resultado del desajuste:**
+- A las 4 semanas, tu fuerza muscular subi\u00f3 20% pero tus tendones no
+- Sub\u00eds el peso porque "pod\u00e9s"
+- A las 6-8 semanas: TENDINITIS (codo de tenista, golfista, hombro doloroso, rodilla del corredor, fascitis plantar)
+
+**C\u00f3mo entrenar respetando los tendones:**
+
+**1. Progresi\u00f3n m\u00e1s lenta**
+- Aumentar carga m\u00e1ximo 5% cada 2 semanas (no semanal)
+- Hacer una semana de descarga cada 4-5 semanas
+
+**2. Volumen antes que intensidad**
+- M\u00e1s series con peso moderado adapta tendones
+- Menos series con peso m\u00e1ximo "enga\u00f1a" al m\u00fasculo
+
+**3. Exc\u00e9ntricas (lo m\u00e1s importante)**
+- La fase negativa del movimiento estimula los tendones
+- Bajar el peso en 3-4 segundos
+- Excelentes para reforzar tendones d\u00e9biles
+
+**4. Isom\u00e9tricos**
+- Mantener una posici\u00f3n sin moverse
+- 30-45 segundos, 3-5 repeticiones
+- Aumenta tolerancia tendinosa
+- Muy efectivos en rehabilitaci\u00f3n
+
+**5. Suplementaci\u00f3n espec\u00edfica:**
+- **Col\u00e1geno hidrolizado** 15g + Vitamina C 500mg, 30-60 min antes del entreno (mejora s\u00edntesis de col\u00e1geno tendinoso)
+- **Magnesio bisglicinato** (recuperaci\u00f3n)
+- **Omega 3** (antiinflamatorio)
+
+**6. Si sent\u00eds dolor tendinoso:**
+- Reducir peso 30-40%
+- Trabajar el rango sin dolor
+- Exc\u00e9ntricas controladas
+- Si dura m\u00e1s de 2 semanas: kinesi\u00f3logo
+
+**Caso t\u00edpico:**
+Empez\u00e1s press banca con 60kg. A las 6 semanas hac\u00e9s 80kg. A las 10 semanas ten\u00e9s dolor en el codo o hombro. NO es por mala t\u00e9cnica. Son los tendones que no se adaptaron al ritmo del m\u00fasculo.
+
+**Regla de oro:** Si tu progreso es muy r\u00e1pido en peso, est\u00e1 mal. Mejor 1kg/mes consistente que 3kg/mes y lesi\u00f3n \ud83e\uddb4`
+  },
+  {
+    keywords: ['recomposicion corporal', 'recomp', 'ganar musculo perder grasa', 'recomposition'],
+    content: `**Recomposici\u00f3n corporal: ganar m\u00fasculo y perder grasa al mismo tiempo**
+
+Lo que muchos creen imposible, ES posible bajo ciertas condiciones. Se llama "recomposici\u00f3n" o "recomp".
+
+**\u00bfQui\u00e9nes pueden hacer recomp?**
+- **Principiantes** (primer a\u00f1o entrenando) \u2713
+- **Personas con sobrepeso** que reci\u00e9n empiezan \u2713
+- **Personas que volvieron al gym** despu\u00e9s de mucho tiempo \u2713
+- **Avanzados con %grasa alto** (>20% hombres, >28% mujeres) \u2713
+
+**\u00bfQui\u00e9nes NO pueden hacer recomp eficientemente?**
+- Avanzados con %grasa bajo (<12% hombres, <18% mujeres)
+- Personas en buena forma con a\u00f1os de entreno consistente
+
+**Protocolo para recomp:**
+
+**Calor\u00edas:**
+- Mantenimiento exacto (TDEE) o leve d\u00e9ficit (-100 a -200 kcal)
+- NO d\u00e9ficit grande (eso solo baja grasa, no construye m\u00fasculo)
+
+**Prote\u00edna (ESTO es lo cr\u00edtico):**
+- 2.4-2.8 g/kg de peso corporal
+- M\u00e1s alto que en cualquier otro protocolo
+- Distribuida en 5 comidas de 30-40g cada una
+
+**Carbohidratos:**
+- Periodizar: d\u00edas de entreno pesado = m\u00e1s carbos
+- D\u00edas descanso = carbos bajos
+- Total: 3-5 g/kg
+
+**Grasas:**
+- 0.8-1 g/kg
+- Aceite de oliva, palta, frutos secos, salm\u00f3n
+
+**Entrenamiento (LA CLAVE):**
+- Fuerza 4-5 d\u00edas/semana
+- Progresi\u00f3n continua de peso
+- Ejercicios multiarticulares (sentadilla, peso muerto, press, dominadas)
+- Volumen moderado (10-15 series por grupo muscular/semana)
+- Cardio: solo Zone 2, 2-3 veces/sem, 30 min
+
+**Suplementos \u00fatiles:**
+- **Whey protein:** 1-2 scoops/d\u00eda para llegar a la prote\u00edna
+- **Creatina:** 5g/d\u00eda (s\u00ed o s\u00ed)
+- **Vitamina D + Omega 3** (recuperaci\u00f3n)
+
+**Resultados esperados:**
+- 0.5-1kg de grasa perdida al mes
+- 0.3-0.6kg de m\u00fasculo ganado al mes
+- Peso en la balanza puede no cambiar, pero el cuerpo S\u00cd
+- Pesate menos, m\u00eddete m\u00e1s (cintura, brazos, foto comparativa)
+
+**Plazos realistas:**
+- M\u00ednimo 12-16 semanas para ver cambios significativos
+- Necesita PACIENCIA y consistencia extrema
+- No hay d\u00edas "trampa" frecuentes
+
+**Errores que arruinan la recomp:**
+- Prote\u00edna baja (<2 g/kg)
+- D\u00e9ficit cal\u00f3rico excesivo
+- Demasiado cardio
+- Inconsistencia en entrenamiento
+- Mal sue\u00f1o
+
+Si sos principiante o ten\u00e9s grasa que perder, este es EL protocolo \ud83d\udcaa`
+  },
+  {
+    keywords: ['recuperacion muscular', 'sobreentrenamiento', 'fatiga acumulada', 'descanso entre entrenos'],
+    content: `**Recuperaci\u00f3n muscular: el factor m\u00e1s subestimado**
+
+El m\u00fasculo NO crece en el gym. Crece durante la recuperaci\u00f3n. Si recuper\u00e1s mal, todo tu esfuerzo se pierde.
+
+**Las 4 fases de recuperaci\u00f3n:**
+
+**Fase 1 (0-2 horas post-entreno):**
+- Reposici\u00f3n de gluc\u00f3geno
+- Reducci\u00f3n de cortisol
+- Inicio de s\u00edntesis proteica
+- Acci\u00f3n: comida con prote\u00edna + carbos
+
+**Fase 2 (2-24 horas):**
+- Reparaci\u00f3n de microdesgarros
+- Pico de s\u00edntesis proteica
+- Acci\u00f3n: dormir bien, comer suficiente prote\u00edna
+
+**Fase 3 (24-48 horas):**
+- Inflamaci\u00f3n m\u00e1xima (DOMS - dolor muscular)
+- Adaptaci\u00f3n tendinosa
+- Acci\u00f3n: movimiento ligero, hidrataci\u00f3n
+
+**Fase 4 (48-72 horas):**
+- Supercompensaci\u00f3n: est\u00e1s m\u00e1s fuerte que antes
+- Si entren\u00e1s antes: no hubo crecimiento
+- Si esper\u00e1s mucho: efecto se pierde
+
+**Cu\u00e1nto descansar entre entrenamientos del mismo grupo:**
+- Principiantes: 48 horas
+- Intermedios: 48-72 horas
+- Avanzados: 72-96 horas (m\u00e1s est\u00edmulo necesita m\u00e1s recuperaci\u00f3n)
+
+**Se\u00f1ales de mala recuperaci\u00f3n:**
+- Estancamiento de fuerza
+- Insomnio o sue\u00f1o no reparador
+- Frecuencia card\u00edaca en reposo alta (10+ ppm normal)
+- P\u00e9rdida de motivaci\u00f3n
+- P\u00e9rdida de apetito o hambre extrema
+- Lesiones frecuentes
+- Dolor muscular constante (DOMS no se va)
+- Sistema inmune d\u00e9bil (gripes seguidas)
+
+**Estrategias para acelerar la recuperaci\u00f3n:**
+
+**Sue\u00f1o:**
+- 7-9 horas no negociables
+- Habitaci\u00f3n oscura y fr\u00eda (18-20\u00b0C)
+- Sin pantallas 1 hora antes
+
+**Nutrici\u00f3n:**
+- 1.6-2.2 g/kg prote\u00edna
+- Carbos suficientes (no eliminar)
+- 3-4L de agua
+- Prote\u00edna antes de dormir (case\u00edna o yogur griego)
+
+**Recuperaci\u00f3n activa:**
+- Caminar 20-30 min en d\u00edas de descanso
+- Yoga o estiramiento ligero
+- Nataci\u00f3n suave
+
+**T\u00e9cnicas adicionales:**
+- Ducha de contrastes (caliente-fr\u00edo)
+- Sauna (15-20 min, 80-100\u00b0C)
+- Masajes / foam roller
+- Crioterapia (avanzado)
+
+**Suplementos para recuperar:**
+- Magnesio bisglicinato 400mg antes de dormir
+- Glutamina 5g post-entreno
+- ZMA o melatonina (sue\u00f1o profundo)
+- C\u00farcuma + pimienta (antiinflamatorio)
+
+**Semana de descarga (deload):**
+- Cada 4-6 semanas
+- Reducir cargas al 60-70%
+- Mismas series y reps
+- Permite supercompensaci\u00f3n grande
+
+Si entren\u00e1s duro pero recuper\u00e1s mal, est\u00e1s haciendo retroceso, no progreso \ud83c\udf19`
+  },
+  {
+    keywords: ['adultos mayores', '50 a\u00f1os', '60 a\u00f1os', 'fitness mayores', 'tercera edad', 'envejecimiento activo'],
+    content: `**Fitness despu\u00e9s de los 50: la mejor inversi\u00f3n en longevidad**
+
+Despu\u00e9s de los 30, perdemos 1% de masa muscular por a\u00f1o (sarcopenia). A los 60, podemos haber perdido el 30%. Pero esto NO es destino. Es totalmente reversible.
+
+**\u00bfPor qu\u00e9 entrenar despu\u00e9s de los 50 es CR\u00cdTICO?**
+- Reduce mortalidad por todas las causas un 30-40%
+- Previene ca\u00eddas y fracturas (osteoporosis)
+- Mejora funci\u00f3n cognitiva (Alzheimer/demencia)
+- Mantiene independencia hasta los 80+
+- Reduce diabetes tipo 2, hipertensi\u00f3n, depresi\u00f3n
+
+**Los pilares del fitness para mayores:**
+
+**1. Entrenamiento de fuerza (LO M\u00c1S IMPORTANTE)**
+- 2-3 veces por semana
+- Ejercicios funcionales: sentadilla, empuje, tracci\u00f3n, bisagra de cadera
+- Pesas o m\u00e1quinas, NO solo bandas el\u00e1sticas
+- 6-12 reps, 3 series
+- Progresi\u00f3n: aumentar peso 2.5kg cuando complet\u00e1s todas las series
+
+**2. Cardio Zone 2**
+- Caminata r\u00e1pida, bicicleta, nataci\u00f3n
+- 150 minutos por semana m\u00ednimo (OMS)
+- Capacidad de hablar mientras lo hac\u00e9s
+- NO necesario hacer cardio de alta intensidad
+
+**3. Movilidad y equilibrio**
+- Yoga o pilates 1-2 veces/semana
+- Trabajo unilateral (en una pierna)
+- Previene ca\u00eddas (causa #1 de muerte accidental en mayores)
+
+**4. Prote\u00edna alta**
+- 1.6-2.0 g/kg (m\u00e1s que j\u00f3venes, por resistencia anab\u00f3lica)
+- Distribuida: 30-40g en cada comida
+- Whey post-entreno facilita llegar al objetivo
+
+**5. Suplementaci\u00f3n clave:**
+- **Vitamina D3** 2000-4000 UI (mayor\u00eda tiene d\u00e9ficit)
+- **Calcio** 1200mg si no come l\u00e1cteos (osteoporosis)
+- **Omega 3** 2g (cardiovascular + cognitivo)
+- **Creatina** 5g (s\u00ed, tambi\u00e9n para mayores - potencia + memoria)
+- **Magnesio bisglicinato** 400mg (sue\u00f1o + m\u00fasculos)
+- **Vitamina B12** (absorci\u00f3n baja con la edad)
+- **Col\u00e1geno** 10-15g (articulaciones + piel)
+
+**6. Consideraciones m\u00e9dicas:**
+- Chequeo m\u00e9dico antes de empezar
+- Si hay hipertensi\u00f3n: evitar contener respiraci\u00f3n
+- Si hay artrosis: priorizar m\u00e1quinas y cuidar rangos
+- Diabetes: controlar glucosa antes y despu\u00e9s
+
+**Mitos a derribar:**
+- "Estoy muy viejo para empezar" \u2192 FALSO. Estudios muestran ganancia muscular a los 80+
+- "Las pesas son peligrosas" \u2192 M\u00e1s peligroso es NO hacerlas
+- "Necesito caminar mucho y nada m\u00e1s" \u2192 Caminar es bueno, pero NO previene sarcopenia
+- "Mi metabolismo est\u00e1 muerto" \u2192 No, lo que cambi\u00f3 es tu actividad y composici\u00f3n
+
+**Plan de inicio (4 semanas):**
+- Semana 1-2: 2 d\u00edas de fuerza (todo el cuerpo) + caminatas
+- Semana 3-4: agregar 1 d\u00eda m\u00e1s + movilidad
+- A partir del mes 2: rutina completa de 4 d\u00edas
+
+**El factor m\u00e1s importante: empezar HOY.** Cada a\u00f1o que pasa sin entrenar es masa muscular y densidad \u00f3sea que se pierden \ud83d\udcaa`
+  },
+  {
+    keywords: ['crononutricion', 'horarios comida', 'cuando comer', 'ritmo circadiano comida'],
+    content: `**Crononutrici\u00f3n: cu\u00e1ndo comer importa tanto como qu\u00e9 comer**
+
+Tu cuerpo procesa los alimentos diferente seg\u00fan la hora del d\u00eda. Esto se llama crononutrici\u00f3n y es ciencia emergente con evidencia s\u00f3lida.
+
+**Los principios:**
+
+**1. La sensibilidad a la insulina var\u00eda durante el d\u00eda**
+- M\u00e1s alta a la ma\u00f1ana (07-12h)
+- Cae al atardecer (despu\u00e9s de las 19h)
+- M\u00ednima a la noche (despu\u00e9s de las 22h)
+
+**Implicaci\u00f3n:** los carbohidratos por la ma\u00f1ana se absorben mejor que a la noche
+
+**2. El metabolismo NO es constante**
+- Tu cuerpo gasta m\u00e1s calor\u00edas procesando comida temprano
+- Misma comida a las 8h vs 22h: la nocturna se almacena m\u00e1s como grasa
+
+**3. Cortisol natural alto al despertar**
+- Cortisol alto + carbos altos = posible resistencia insul\u00ednica
+- Mejor: prote\u00ednas + grasas al desayuno, carbos a media ma\u00f1ana
+
+**Plan de crononutrici\u00f3n optimizado:**
+
+**Despertar (al menos 30 min despu\u00e9s):**
+- Caf\u00e9 o t\u00e9 (cortisol natural est\u00e1 alto)
+- Hidrataci\u00f3n: 500ml agua
+
+**Desayuno (1-2 horas despu\u00e9s de despertar):**
+- Prote\u00edna alta: huevos, yogur griego, whey
+- Grasas saludables: palta, frutos secos
+- Carbos moderados: avena, fruta
+- Ejemplo: 3 huevos + 1/2 palta + avena + ar\u00e1ndanos
+
+**Almuerzo (12-14h):**
+- La comida M\u00c1S GRANDE del d\u00eda
+- Carbohidratos m\u00e1ximos
+- Prote\u00edna completa
+- Vegetales abundantes
+
+**Snack pre-entreno (16-17h):**
+- Carbo + algo de prote\u00edna
+- Ejemplo: banana + whey
+
+**Cena (3 horas antes de dormir):**
+- Prote\u00edna moderada
+- Vegetales
+- Carbos bajos
+- Grasas saludables
+- Ejemplo: salm\u00f3n + br\u00f3coli + 1/2 batata
+
+**Antes de dormir (opcional):**
+- Case\u00edna, yogur griego, o cottage cheese
+- Magnesio + zinc
+
+**Reglas de oro:**
+
+1. **No comer 3 horas antes de dormir** (mejora calidad del sue\u00f1o y autofagia)
+2. **Carbos seg\u00fan actividad** del d\u00eda y hora siguiente al entreno
+3. **Ventana de comida de 10-12 horas** (ayuno suave nocturno)
+4. **Prote\u00edna bien distribuida** en 4-5 comidas (cada 3-4 horas)
+
+**Para entrenar a la ma\u00f1ana (6-8h):**
+- Pre-entreno (30 min antes): caf\u00e9 + banana o pan tostado
+- Entrenamiento en ayunas funciona, pero no es \u00f3ptimo para hipertrofia
+- Comida s\u00f3lida despu\u00e9s del entreno
+
+**Para entrenar a la noche (18-20h):**
+- Carbos en almuerzo y merienda
+- Comida posterior con prote\u00edna + carbos suaves
+- Cuidado con cenas pesadas que afectan sue\u00f1o
+
+**D\u00edas de descanso:**
+- Menos calor\u00edas totales (-200 kcal)
+- Menos carbos
+- Misma prote\u00edna
+
+Tu cuerpo es un reloj. Sincronizate con \u00e9l y los resultados se aceleran \u23f0`
+  },
+  {
+    keywords: ['microbiota deportistas', 'intestino sano deportista', 'bacterias beneficiosas', 'eje intestino musculo'],
+    content: `**Microbiota del deportista: el segundo cerebro**
+
+Tu intestino tiene 100 billones de bacterias que afectan: absorci\u00f3n de nutrientes, sistema inmune, energ\u00eda, recuperaci\u00f3n, e incluso composici\u00f3n corporal. Cuidarlo es entrenar mejor.
+
+**El eje intestino-m\u00fasculo (descubrimiento reciente):**
+Los deportistas tienen una microbiota DIFERENTE a sedentarios:
+- M\u00e1s diversidad bacteriana
+- M\u00e1s bacterias productoras de butirato (antiinflamatorio)
+- Mejor utilizaci\u00f3n de amino\u00e1cidos
+- Mayor producci\u00f3n natural de creatina
+
+**C\u00f3mo cuidar tu microbiota:**
+
+**1. Fibra DIVERSA (lo m\u00e1s importante):**
+- M\u00ednimo 30g/d\u00eda
+- 30+ tipos de plantas distintas por semana
+- Combina: verduras, frutas, legumbres, granos, frutos secos, semillas
+- Cuanto m\u00e1s variedad = m\u00e1s diversidad bacteriana
+
+**2. Alimentos fermentados (probioticos naturales):**
+- Yogur con cultivos vivos
+- K\u00e9fir (mejor que yogur)
+- Chucrut (sauerkraut)
+- Kimchi
+- Kombucha
+- Miso, tempeh
+- M\u00ednimo 1 porci\u00f3n diaria
+
+**3. Prebioticos (alimento de las bacterias):**
+- Cebolla, ajo, puerro
+- Esp\u00e1rragos, alcaucil
+- Banana verde
+- Avena
+- Manzana
+
+**4. Polifenoles:**
+- T\u00e9 verde, caf\u00e9 (s\u00ed, fermentan en el colon)
+- Cacao 70%+
+- Frutos rojos
+- Aceite de oliva extra virgen
+
+**Lo que destruye tu microbiota:**
+- Antibi\u00f3ticos (necesarios pero brutales)
+- Edulcorantes artificiales (sucralosa, aspartamo)
+- Ultraprocesados
+- Az\u00facar refinado
+- Alcohol en exceso
+- Estr\u00e9s cr\u00f3nico
+- Falta de sue\u00f1o
+
+**Suplementaci\u00f3n \u00fatil:**
+
+**Probi\u00f3ticos:** s\u00f3lo cepas con evidencia para deportistas
+- *Lactobacillus rhamnosus*: inmune
+- *Bifidobacterium longum*: estr\u00e9s
+- *Lactobacillus plantarum*: rendimiento
+
+**Cu\u00e1ndo tomar probi\u00f3ticos:**
+- Despu\u00e9s de antibi\u00f3ticos (obligatorio)
+- Durante viajes o estr\u00e9s alto
+- Si ten\u00e9s problemas digestivos
+
+**Se\u00f1ales de microbiota desbalanceada:**
+- Hinchaz\u00f3n frecuente
+- Constipaci\u00f3n o diarrea alternada
+- Antojos de az\u00facar intensos
+- Energ\u00eda baja constante
+- Sistema inmune d\u00e9bil
+- Acn\u00e9 en adultos
+- Mal humor
+
+**Plan de reset intestinal (4 semanas):**
+
+Semana 1: Eliminar ultraprocesados, edulcorantes, alcohol
+Semana 2: Agregar 1 porci\u00f3n de fermentados/d\u00eda
+Semana 3: Incluir 30+ plantas diferentes en la semana
+Semana 4: Mantener + agregar probiotico de calidad
+
+**Conexi\u00f3n con el rendimiento:**
+- Mejor microbiota = mejor absorci\u00f3n de prote\u00edna
+- M\u00e1s butirato = mejor recuperaci\u00f3n
+- Sistema inmune fuerte = menos enfermedades = m\u00e1s consistencia
+
+Tu intestino es un \u00f3rgano deportivo m\u00e1s. Cu\u00eddalo \ud83e\uddec`
+  },
+  {
+    keywords: ['lesion hombro', 'manguito rotador', 'press hombro doloroso', 'sindrome impingement', 'hombro congelado'],
+    content: `**Hombro doloroso: la lesi\u00f3n m\u00e1s com\u00fan en gym**
+
+El hombro es la articulaci\u00f3n con mayor rango de movimiento del cuerpo, lo que la hace vulnerable. El 50% de quienes entrenan con pesas tienen dolor de hombro alguna vez.
+
+**Causas m\u00e1s comunes:**
+
+**1. S\u00edndrome de impingement (compresi\u00f3n)**
+- El tend\u00f3n del supraespinoso se "pinza" contra el acromi\u00f3n
+- Dolor al levantar el brazo entre 60-120\u00b0
+- Causa: postura adelantada de hombros, debilidad de rotadores externos
+
+**2. Tendinitis del manguito rotador**
+- Inflamaci\u00f3n de los tendones (supraespinoso, infraespinoso, redondo menor, subescapular)
+- Dolor al ladear el brazo o dormir sobre el hombro
+- Causa: sobrecarga, t\u00e9cnica incorrecta
+
+**3. Tendinitis bicipital**
+- Dolor en la parte anterior del hombro
+- Empeora con curl o tracci\u00f3n
+- Causa: ejercicios con codos muy adelante
+
+**4. Hombro congelado (capsulitis adhesiva)**
+- P\u00e9rdida progresiva de movilidad
+- M\u00e1s com\u00fan en mujeres 40-60 a\u00f1os
+- Tarda 1-2 a\u00f1os en resolverse
+
+**C\u00f3mo prevenirlo:**
+
+**Antes de cualquier entrenamiento de torso:**
+- Movilidad de hombros (rotaciones grandes y peque\u00f1as)
+- Activaci\u00f3n de manguito: rotaci\u00f3n externa con banda 2x15
+- Activaci\u00f3n de esc\u00e1pulas: face pulls 2x15
+
+**Durante el entreno:**
+- Codos a 45\u00b0 del cuerpo en press banca (NO 90\u00b0)
+- NO bajar la barra al cuello en press militar
+- Evitar fondos profundos si ten\u00e9s historial de dolor
+- Hacer dominadas con buen rango (cabeza al frente, no detr\u00e1s)
+
+**Trabajo correctivo (clave):**
+- Face pulls: 4x15 todos los d\u00edas que entrenes torso
+- Y, T, W (bandas o mancuernas livianas): 3x12
+- Pull aparts con banda: 3x20
+- Rotaci\u00f3n externa con banda: 3x15 cada lado
+
+**Si ya te duele:**
+
+**Fase aguda (primeros 7-10 d\u00edas):**
+- Reposo activo (no inmovilizar completamente)
+- Hielo 15 min despu\u00e9s de cualquier actividad
+- Antiinflamatorios solo si es muy intenso
+- Movimientos suaves dentro del rango sin dolor
+
+**Recuperaci\u00f3n (2-6 semanas):**
+- Ejercicios de movilidad: Sleeper stretch, cross body
+- Fortalecer manguito rotador con bandas
+- Trabajar esc\u00e1pulas: pegarlas y bajarlas
+- NO empujar con peso a\u00fan
+
+**Vuelta progresiva:**
+- Empezar con 50% del peso anterior
+- Aumentar 10% por semana
+- Si vuelve el dolor: bajar carga
+- Mantener rutina correctiva 3 veces/semana de por vida
+
+**Suplementaci\u00f3n \u00fatil:**
+- Col\u00e1geno hidrolizado 15g + vitamina C (s\u00edntesis tendinosa)
+- Omega 3 alto (3g EPA+DHA)
+- C\u00farcuma con pimienta
+- Magnesio (relaja musculatura)
+
+**Cu\u00e1ndo consultar profesional:**
+- Dolor m\u00e1s de 2 semanas
+- P\u00e9rdida de fuerza notable
+- Dolor nocturno que no te deja dormir
+- "Crujidos" o "clicks" frecuentes
+- P\u00e9rdida de rango de movimiento
+
+Un hombro lesionado mal tratado puede arrastrar problemas durante a\u00f1os. Mejor invertir 2 meses en rehabilitarlo bien que 5 a\u00f1os con dolor cr\u00f3nico \ud83d\udd28`
+  },
+  {
+    keywords: ['ciclismo entrenamiento', 'ciclista', 'cycling training', 'recuperacion ciclismo'],
+    content: `**Ciclismo: nutrici\u00f3n y entrenamiento espec\u00edfico**
+
+El ciclismo demanda mucho del cuerpo de forma diferente al entrenamiento de fuerza. Ac\u00e1 lo espec\u00edfico.
+
+**Tipos de salidas:**
+
+**Zona 2 (recovery / base):**
+- Frecuencia card\u00edaca 60-70% del m\u00e1ximo
+- Pod\u00e9s mantener una conversaci\u00f3n
+- 60-90 minutos
+- Mejora la base aer\u00f3bica
+- 2-3 veces por semana
+
+**Tempo (sweet spot):**
+- 75-85% FC m\u00e1xima
+- Conversaci\u00f3n entrecortada
+- 30-60 minutos
+- Mejora umbral aer\u00f3bico
+- 1-2 veces por semana
+
+**Intervalos (HIIT):**
+- 90-95% FC m\u00e1xima por intervalos
+- 4-5x4 minutos con 3 min recuperaci\u00f3n
+- Mejora VO2m\u00e1x y potencia
+
+**Sprints:**
+- 30 segundos a tope, 4-5 min recuperaci\u00f3n
+- 5-8 series
+- Mejora potencia anaer\u00f3bica
+
+**Nutrici\u00f3n espec\u00edfica para ciclismo:**
+
+**Antes (1-2h antes):**
+- Carbos altos (avena, banana, pan integral)
+- Prote\u00edna moderada
+- Grasas bajas
+- 600ml agua
+
+**Durante (>90 min de salida):**
+- 30-60g carbos por hora (geles, banana, barritas)
+- 500-750ml l\u00edquido por hora
+- Electrolitos si supera 1.5h o calor extremo
+
+**Despu\u00e9s:**
+- Recuperaci\u00f3n 0-60 min: carbos r\u00e1pidos + prote\u00edna (3:1)
+- Comida completa 1-2h despu\u00e9s
+- Hidrataci\u00f3n abundante
+
+**Equipamiento b\u00e1sico:**
+- Puls\u00f3metro o reloj con GPS
+- Bid\u00f3n de agua 750ml o m\u00e1s
+- Geles o barritas para salidas largas
+- Casco SIEMPRE
+
+**Errores comunes:**
+- Solo hacer salidas largas sin variedad
+- No hacer trabajo de fuerza
+- Subestimar la hidrataci\u00f3n
+- Comer poco en salidas >90 min ("bonk")
+- Ignorar el descanso
+
+**Trabajo de fuerza para ciclistas (CR\u00cdTICO):**
+- 2 veces por semana
+- Sentadilla, peso muerto, hip thrust
+- Core fuerte (planchas, deadbugs)
+- Sin esto: r\u00e1pidamente lleg\u00e1s a un techo
+
+**Recuperaci\u00f3n post-salida:**
+- Estiramiento isquios, cu\u00e1driceps, gl\u00fateos, espalda
+- Foam roller
+- Ducha fr\u00eda 5 min al final
+- Sue\u00f1o 8 horas
+
+**Suplementaci\u00f3n \u00fatil:**
+- BCAA en salidas largas (>2h)
+- Cafe\u00edna 30 min antes (200-400mg)
+- Beta-alanina (mejora resistencia anaer\u00f3bica)
+- Bicarbonato de sodio (sprints)
+- Beetroot (mejora rendimiento aer\u00f3bico)
+
+**Plan de la semana (intermedio):**
+- Lunes: descanso o yoga
+- Martes: Z2 60 min
+- Mi\u00e9rcoles: fuerza + intervalos cortos
+- Jueves: Z2 90 min
+- Viernes: descanso
+- S\u00e1bado: salida larga 2-3 horas
+- Domingo: recovery 45 min
+
+El ciclismo es excelente para salud cardiovascular y resistencia, pero NUNCA reemplaza el trabajo de fuerza para tener un cuerpo completo \ud83d\udeb4`
+  },
+  {
+    keywords: ['running tips', 'correr maraton', 'plan running', 'media maraton', 'lesiones runner'],
+    content: `**Running: del 5K al marat\u00f3n sin lesionarte**
+
+Correr es el deporte m\u00e1s democr\u00e1tico y barato, pero tambi\u00e9n el que m\u00e1s lesiones genera mal hecho. Ac\u00e1 lo esencial.
+
+**Tipos de salidas:**
+
+**Trote regenerativo:**
+- Ritmo conversacional (pod\u00e9s hablar)
+- 30-45 minutos
+- Despu\u00e9s de salidas duras
+
+**Tempo (umbral):**
+- 1-min m\u00e1s lento que tu ritmo de 10K
+- 20-40 minutos
+- Mejora la resistencia
+
+**Intervalos:**
+- 4-8 series de 800m a ritmo de 5K
+- Recuperaci\u00f3n trotando 400m
+- Mejora velocidad y VO2
+
+**Long Run (salida larga):**
+- 90-150% del tiempo de carrera objetivo
+- Ritmo lento (poder hablar)
+- Una vez por semana
+- Cr\u00edtico para resistencia
+
+**Plan para llegar a un 10K (8 semanas):**
+- Sem 1-2: 3 d\u00edas, intercalando trote/caminata
+- Sem 3-4: 3 d\u00edas, trote continuo 20-30 min
+- Sem 5-6: 3 d\u00edas, trote 30-45 min + 1 d\u00eda tempo
+- Sem 7-8: 3 d\u00edas + 1 d\u00eda long run progresivo
+
+**Plan media marat\u00f3n (12 semanas):**
+- 4 d\u00edas de carrera por semana
+- 1 long run progresivo (semana pico: 18km)
+- 1 d\u00eda de tempo
+- 1 d\u00eda de intervalos
+- 1-2 d\u00edas de descanso o cross training
+
+**Plan marat\u00f3n (16-20 semanas):**
+- Solo si ya corriste media marat\u00f3n
+- Long run m\u00e1ximo: 32-35km
+- 4-5 d\u00edas de running
+- Trabajo de fuerza obligatorio
+
+**Nutrici\u00f3n para corredores:**
+
+**Diaria:**
+- Carbos: 5-7 g/kg (m\u00e1s en per\u00edodos de mucho km)
+- Prote\u00edna: 1.4-1.8 g/kg
+- Grasas: 1 g/kg
+- Hidrataci\u00f3n: 35-40 ml/kg
+
+**Pre-entrenamiento:**
+- 2-3h antes: comida completa (carbos + prote\u00edna)
+- 30 min antes: banana o gel + agua
+
+**Durante (m\u00e1s de 60 min):**
+- 30-60g carbos por hora (geles)
+- Sales si calor o m\u00e1s de 1.5h
+- 400-800ml l\u00edquido por hora
+
+**Post-running:**
+- Carbos r\u00e1pidos + prote\u00edna
+- Reponer electrolitos
+- Hidrataci\u00f3n abundante
+
+**Lesiones m\u00e1s comunes:**
+
+**Rodilla del corredor (s\u00edndrome femoropatelar):**
+- Dolor en la r\u00f3tula
+- Causa: gl\u00fateos d\u00e9biles, cu\u00e1driceps dominantes
+- Soluci\u00f3n: fortalecer gl\u00fateos, abductores
+
+**Fascitis plantar:**
+- Dolor en el tal\u00f3n al despertar
+- Causa: aumento brusco de km, mal calzado
+- Soluci\u00f3n: estirar pantorrillas, masaje con pelota
+
+**Periostitis tibial:**
+- Dolor en la tibia
+- Causa: aumento brusco, superficies duras
+- Soluci\u00f3n: bajar volumen, hielo, fortalecer
+
+**Tendinitis aquilea:**
+- Dolor en el tend\u00f3n de Aquiles
+- Causa: pantorrillas tensas, salto r\u00e1pido de volumen
+- Soluci\u00f3n: exc\u00e9ntricas, estiramientos
+
+**Reglas de oro para no lesionarte:**
+
+1. **Regla del 10%:** no aumentar volumen m\u00e1s del 10% por semana
+2. **Trabajo de fuerza:** 2 veces/semana m\u00ednimo (sentadillas, hip thrust, core)
+3. **Calzado adecuado:** cambiar cada 600-800km
+4. **Calentamiento:** caminar + movilidad antes de correr
+5. **Descanso:** 1-2 d\u00edas completos de descanso
+6. **Sue\u00f1o:** 7-9 horas
+
+**Suplementaci\u00f3n \u00fatil:**
+- Magnesio (calambres)
+- BCAA en runs largos
+- Beta-alanina (rendimiento)
+- Hierro (especialmente mujeres)
+- Vitamina D + Calcio (huesos)
+- Col\u00e1geno (tendones)
+
+Correr es entrenable a cualquier edad. Empez\u00e1s caminando, en 6 meses corr\u00e9s un 10K. La clave es la paciencia \ud83c\udfc3`
+  },
 ];
 
 function personalizeContent(content: string, perfil: { peso: number; altura: number; edad: number; objetivo: string; nivelActividad: string; genero?: string } | undefined): string {
@@ -2271,6 +3169,7 @@ Pod\u00e9s preguntarme sobre:
 export default function BioCoach() {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [expandedMessages, setExpandedMessages] = useState<Set<number>>(new Set());
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
@@ -2319,7 +3218,13 @@ export default function BioCoach() {
       </div>
 
       <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-        {messages.map(m => (
+        {messages.map(m => {
+          const expanded = expandedMessages.has(m.id);
+          const isLong = m.role === 'assistant' && m.content.length > 200;
+          const displayContent = isLong && !expanded
+            ? m.content.split('\n').slice(0, 3).join('\n').slice(0, 200)
+            : m.content;
+          return (
           <div key={m.id} className={`flex gap-3 ${m.role === 'user' ? 'justify-end' : ''}`}>
             {m.role === 'assistant' && (
               <div className="w-8 h-8 bg-gradient-to-br from-electric to-neon rounded-xl flex items-center justify-center shrink-0 mt-1">
@@ -2332,12 +3237,24 @@ export default function BioCoach() {
                 : 'bg-dark-800 border border-dark-border rounded-2xl rounded-bl-md'
             } px-5 py-4`}>
               <div className="text-sm text-white/80 whitespace-pre-line leading-relaxed">
-                {m.content.split(/(\*\*.*?\*\*)/).map((part, i) =>
+                {displayContent.split(/(\*\*.*?\*\*)/).map((part, i) =>
                   part.startsWith('**') && part.endsWith('**')
                     ? <strong key={i} className="text-white font-bold">{part.slice(2, -2)}</strong>
                     : <span key={i}>{part}</span>
                 )}
+                {isLong && !expanded && <span className="text-white/30">...</span>}
               </div>
+              {isLong && (
+                <button onClick={() => {
+                  setExpandedMessages(prev => {
+                    const next = new Set(prev);
+                    if (expanded) next.delete(m.id); else next.add(m.id);
+                    return next;
+                  });
+                }} className="mt-2 text-electric text-xs font-bold hover:text-electric/80 transition-colors">
+                  {expanded ? 'Leer menos' : 'Leer más...'}
+                </button>
+              )}
               <p className="text-white/10 text-[10px] mt-2">{m.timestamp}</p>
             </div>
             {m.role === 'user' && (
@@ -2346,7 +3263,8 @@ export default function BioCoach() {
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
         {isTyping && (
           <div className="flex gap-3">
             <div className="w-8 h-8 bg-gradient-to-br from-electric to-neon rounded-xl flex items-center justify-center shrink-0">
@@ -2363,7 +3281,7 @@ export default function BioCoach() {
       </div>
 
       <div className="flex flex-wrap gap-1.5 mt-3 mb-3">
-        {['Ayuno intermitente', 'Ayuno prolongado', 'Autofagia', 'Hormona crecimiento', 'Ayuno riesgo', 'Senal metabolica', 'Control insulina', 'Cortisol', 'Canela bloqueador IG', 'Desinflamacion', 'Dormir', 'Que deshidrata', 'Jengibre y curcuma', 'Dejar alcohol', 'Creatina', 'Proteina', 'Colageno', 'Omega3 tipos', 'Magnesio tipos', 'Harinas y azucar', 'Tendencias 2025', 'Electrolitos', 'Salud intestinal', 'Bajar grasa', 'Ganar musculo', 'Principiante', 'Suplementos'].map(s => (
+        {['Secado', 'Adelgazar sin colgajos', 'Evitar lesiones', 'Tendones', 'Recomposicion', 'Recuperacion', 'Adultos mayores', 'Cronutricion', 'Microbiota', 'Hombro doloroso', 'Ciclismo', 'Running', 'Ayuno intermitente', 'Ayuno prolongado', 'Autofagia', 'Hormona crecimiento', 'Senal metabolica', 'Control insulina', 'Cortisol', 'Canela bloqueador IG', 'Desinflamacion', 'Dormir', 'Que deshidrata', 'Jengibre y curcuma', 'Dejar alcohol', 'Creatina', 'Proteina', 'Colageno', 'Omega3 tipos', 'Magnesio tipos', 'Harinas y azucar', 'Tendencias 2025', 'Electrolitos', 'Salud intestinal', 'Bajar grasa', 'Ganar musculo', 'Principiante', 'Suplementos'].map(s => (
           <button key={s} onClick={() => setInput(s)}
             className="px-2.5 py-1 bg-white/[0.03] border border-dark-border hover:border-electric/30 rounded-lg text-[11px] text-white/40 hover:text-electric transition-all">
             {s}
