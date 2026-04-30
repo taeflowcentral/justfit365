@@ -57,7 +57,7 @@ export default function Landing() {
 
         <div className="relative text-center max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-lime/10 border border-lime/20 rounded-full text-lime text-xs font-bold uppercase tracking-wider mb-8">
-            <Zap className="w-3.5 h-3.5" /> Fitness &amp; Nutricion Inteligente
+            <Zap className="w-3.5 h-3.5" /> Fitness &amp; Nutrici&oacute;n Inteligente
           </div>
 
           <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter leading-none mb-6">
@@ -65,14 +65,14 @@ export default function Landing() {
           </h1>
 
           <p className="text-xl sm:text-2xl text-white/50 max-w-2xl mx-auto mb-4 leading-relaxed">
-            Tu cuerpo necesita un plan. Nosotros te damos <strong className="text-white">la ciencia, la tecnologia y el acompa&ntilde;amiento</strong> para lograrlo.
+            Tu cuerpo necesita un plan. Nosotros te damos <strong className="text-white">la ciencia, la tecnolog&iacute;a y el acompa&ntilde;amiento</strong> para lograrlo.
           </p>
 
           <p className="text-white/30 text-sm mb-4 max-w-lg mx-auto">
             Planes nutricionales personalizados, rutinas inteligentes, coach virtual 24/7, seguimiento de progreso y mucho m&aacute;s. Todo en una sola app.
           </p>
           <p className="text-white/20 text-xs mb-10 max-w-md mx-auto">
-            Contenido avalado por profesionales en Nutricion y Ciencias del Deporte de la <strong className="text-white/40">UNLP</strong> y <strong className="text-white/40">UCA</strong>
+            Contenido avalado por profesionales en Nutrici&oacute;n y Ciencias del Deporte de la <strong className="text-white/40">UNLP</strong> y <strong className="text-white/40">UCA</strong>
           </p>
 
           {/* Stats */}
@@ -93,9 +93,10 @@ export default function Landing() {
       <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-lime text-xs font-bold uppercase tracking-widest mb-3">Todo lo que necesitas</p>
+            <p className="text-lime text-xs font-bold uppercase tracking-widest mb-3">Todo lo que necesit&aacute;s</p>
             <h2 className="text-3xl sm:text-5xl font-black tracking-tight">Una app, infinitas posibilidades</h2>
             <p className="text-white/40 mt-4 max-w-lg mx-auto">Dise&ntilde;ada para personas que quieren resultados reales. Sin humo, con ciencia.</p>
+
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -116,8 +117,8 @@ export default function Landing() {
       <section className="py-20 px-4 bg-dark-900">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-lime text-xs font-bold uppercase tracking-widest mb-3">Asi se ve por dentro</p>
-            <h2 className="text-3xl sm:text-5xl font-black tracking-tight">Conoce cada modulo</h2>
+            <p className="text-lime text-xs font-bold uppercase tracking-widest mb-3">As&iacute; se ve por dentro</p>
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tight">Conoc&eacute; cada m&oacute;dulo</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -174,14 +175,14 @@ export default function Landing() {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-lime text-xs font-bold uppercase tracking-widest mb-3">Planes accesibles</p>
-            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Elegi el plan que se adapte a vos</h2>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-tight">Eleg&iacute; el plan que se adapte a vos</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
             {/* Individual */}
             <div className="bg-dark-800 border border-dark-border rounded-2xl p-6 relative">
               <h3 className="text-white font-bold text-lg mb-1">Plan Individual</h3>
-              <p className="text-white/40 text-xs mb-4">Acceso completo a todos los modulos</p>
+              <p className="text-white/40 text-xs mb-4">Acceso completo a todos los m&oacute;dulos</p>
               <p className="text-3xl sm:text-4xl font-black text-white mb-1">$57.000 <span className="text-lime text-base sm:text-lg font-bold">/ 1 A&ntilde;o</span></p>
               <p className="text-white/30 text-xs mb-6">Menos de $5.000 por mes</p>
               <ul className="space-y-2 mb-6">
@@ -198,7 +199,7 @@ export default function Landing() {
             <div className="bg-dark-800 border-2 border-lime/30 rounded-2xl p-6 relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-lime text-black text-[10px] font-black uppercase tracking-wider rounded-full">Popular</div>
               <h3 className="text-white font-bold text-lg mb-1">Plan Gimnasio</h3>
-              <p className="text-white/40 text-xs mb-4">Marca blanca + gestion de clientes</p>
+              <p className="text-white/40 text-xs mb-4">Marca blanca + gesti&oacute;n de clientes</p>
               <p className="text-4xl font-black text-lime mb-1">$19.000<span className="text-white/30 text-sm font-normal">/mes</span></p>
               <p className="text-white/30 text-xs mb-6">Clientes ilimitados</p>
               <ul className="space-y-2 mb-6">
@@ -260,13 +261,13 @@ export default function Landing() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-lime rounded-2xl mb-6">
             <Zap className="w-8 h-8 text-black" strokeWidth={2.5} />
           </div>
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight mb-4">Empeza hoy.<br />Tu cuerpo te lo va a agradecer.</h2>
-          <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">No importa si recien arrancas o si entrenas hace a&ntilde;os. JustFit365 se adapta a vos.</p>
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight mb-4">Empez&aacute; hoy.<br />Tu cuerpo te lo va a agradecer.</h2>
+          <p className="text-white/40 text-sm mb-8 max-w-md mx-auto">No importa si reci&eacute;n arranc&aacute;s o si entren&aacute;s hace a&ntilde;os. JustFit365 se adapta a vos.</p>
           <Link to="/registro"
             className="inline-flex items-center gap-2 px-10 py-5 bg-lime text-black font-black text-sm uppercase tracking-widest rounded-xl hover:bg-lime/80 transition-all shadow-lg shadow-lime/20 hover:scale-[1.02]">
             <Zap className="w-5 h-5" /> Crear Cuenta
           </Link>
-          <p className="text-white/20 text-xs mt-4">Sin tarjeta de credito. Empeza a explorar ahora.</p>
+          <p className="text-white/20 text-xs mt-4">Sin tarjeta de cr&eacute;dito. Empez&aacute; a explorar ahora.</p>
         </div>
       </section>
 
@@ -280,7 +281,7 @@ export default function Landing() {
             <span className="text-white font-black tracking-tighter">JustFit<span className="text-lime">365</span></span>
           </div>
           <div className="flex items-center gap-6 text-white/30 text-xs">
-            <Link to="/login" className="hover:text-white transition-colors">Iniciar sesion</Link>
+            <Link to="/login" className="hover:text-white transition-colors">Iniciar sesi&oacute;n</Link>
             <Link to="/registro" className="hover:text-white transition-colors">Registrarse</Link>
             <a href="mailto:justfit365.com@gmail.com" className="hover:text-white transition-colors">Contacto</a>
           </div>
