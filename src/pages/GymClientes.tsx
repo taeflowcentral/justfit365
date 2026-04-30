@@ -227,7 +227,7 @@ export default function GymClientes() {
   const [showAddComida, setShowAddComida] = useState(false);
   const [showAddAlimento, setShowAddAlimento] = useState<number | null>(null);
   const [showDisciplinas, setShowDisciplinas] = useState(false);
-  const [nuevoCliente, setNuevoCliente] = useState({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [] as string[], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', fechaMeta: '', enfermedades: [] as string[], declaraBuenaSalud: false, esMayorDeEdad: false, genero: '' });
+  const [nuevoCliente, setNuevoCliente] = useState({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [] as string[], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', fechaMeta: '', enfermedades: [] as string[], declaraBuenaSalud: false, esMayorDeEdad: false, genero: '', foto: '' });
   const [nuevoEj, setNuevoEj] = useState({ nombre: '', series: 3, reps: '10-12', descanso: '60', peso: '', musculo: 'Pecho', notas: '' });
   const [nuevaComida, setNuevaComida] = useState({ nombre: '', hora: '12:00' });
   const [nuevoAlimento, setNuevoAlimento] = useState({ alimento: '', porcion: '', cal: 0, prot: 0, carb: 0, grasa: 0 });
@@ -250,11 +250,11 @@ export default function GymClientes() {
       objetivo: nuevoCliente.objetivo.join(', '), nivel: nuevoCliente.nivel,
       peso: parseFloat(nuevoCliente.peso) || 70, altura: parseInt(nuevoCliente.altura) || 170, edad: parseInt(nuevoCliente.edad) || 25,
       pesoMeta: parseFloat(nuevoCliente.pesoMeta) || 0, fechaMeta: nuevoCliente.fechaMeta, pesoHistorial: [], nivelActividad: nuevoCliente.nivel,
-      enfermedades: nuevoCliente.enfermedades, declaraBuenaSalud: nuevoCliente.declaraBuenaSalud, esMayorDeEdad: nuevoCliente.esMayorDeEdad, foto: '', genero: nuevoCliente.genero,
+      enfermedades: nuevoCliente.enfermedades, declaraBuenaSalud: nuevoCliente.declaraBuenaSalud, esMayorDeEdad: nuevoCliente.esMayorDeEdad, foto: nuevoCliente.foto, genero: nuevoCliente.genero,
       notas: '', rutina: [], nutricion: [], historial: [],
     };
     guardar([...clientes, nuevo]);
-    setNuevoCliente({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', fechaMeta: '', enfermedades: [], declaraBuenaSalud: false, esMayorDeEdad: false, genero: '' });
+    setNuevoCliente({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', fechaMeta: '', enfermedades: [], declaraBuenaSalud: false, esMayorDeEdad: false, genero: '', foto: '' });
     setShowAddCliente(false);
     setClienteActivo(nuevo.id);
   };
@@ -455,6 +455,39 @@ export default function GymClientes() {
             <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
               <h2 className="text-lg font-black text-white mb-5 flex items-center gap-2"><Plus className="w-5 h-5 text-electric" /> Nuevo Cliente</h2>
               <div className="space-y-4">
+                {/* Foto de perfil */}
+                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1">Foto de Perfil</p>
+                <div className="flex items-center gap-4">
+                  <div className="relative group">
+                    <div className="w-20 h-20 rounded-2xl overflow-hidden bg-dark-700 border-2 border-dark-border flex items-center justify-center">
+                      {nuevoCliente.foto ? (
+                        <img src={nuevoCliente.foto} alt="Foto cliente" className="w-full h-full object-cover" />
+                      ) : (
+                        <User className="w-8 h-8 text-white/15" />
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <label className="flex items-center gap-2 px-3 py-2 bg-electric/10 border border-electric/20 rounded-xl text-electric text-xs font-medium cursor-pointer hover:bg-electric/20 transition-colors w-fit">
+                      <Camera className="w-3.5 h-3.5" /> {nuevoCliente.foto ? 'Cambiar foto' : 'Subir foto'}
+                      <input type="file" accept="image/*" className="hidden" onChange={e => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        if (file.size > 2 * 1024 * 1024) { alert('La imagen no debe superar los 2MB'); return; }
+                        const reader = new FileReader();
+                        reader.onloadend = () => setNuevoCliente(p => ({ ...p, foto: reader.result as string }));
+                        reader.readAsDataURL(file);
+                      }} />
+                    </label>
+                    {nuevoCliente.foto && (
+                      <button onClick={() => setNuevoCliente(p => ({ ...p, foto: '' }))} className="flex items-center gap-1 px-3 py-1.5 bg-danger/10 border border-danger/20 rounded-lg text-danger text-[10px] font-medium hover:bg-danger/20 transition-colors">
+                        <Trash2 className="w-3 h-3" /> Eliminar
+                      </button>
+                    )}
+                    <p className="text-white/30 text-[10px]">Foto de cara y hombros. JPG o PNG. Máx 2MB.</p>
+                  </div>
+                </div>
+
                 {/* Datos personales */}
                 <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1">Datos Personales</p>
                 <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Nombre completo *</label>
