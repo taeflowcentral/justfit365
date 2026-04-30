@@ -16,14 +16,14 @@ const userLinks = [
   { to: '/progreso', icon: Camera, label: 'Mi Progreso' },
   { to: '/analisis', icon: Stethoscope, label: 'Analisis Medicos' },
   { to: '/perfil', icon: UserCog, label: 'Mi Perfil' },
-  { to: '/suscripcion', icon: CreditCard, label: 'Suscripcion' },
+  { to: '/suscripcion', icon: CreditCard, label: 'Suscripción' },
 ];
 
 const gymLinks = [
   { to: '/', icon: LayoutDashboard, label: 'Panel Gym' },
   { to: '/clientes', icon: Users, label: 'Mis Clientes' },
   { to: '/cobranzas', icon: DollarSign, label: 'Cobranzas' },
-  { to: '/nutricion', icon: Utensils, label: 'Nutricion' },
+  { to: '/nutricion', icon: Utensils, label: 'Nutrición' },
   { to: '/rutina', icon: Dumbbell, label: 'Rutinas' },
   { to: '/timer', icon: Timer, label: 'Timer' },
   { to: '/bio-coach', icon: MessageSquare, label: 'JustFit Coach' },
@@ -31,7 +31,7 @@ const gymLinks = [
   { to: '/analisis', icon: Stethoscope, label: 'Analisis Medicos' },
   { to: '/config-gym', icon: Settings, label: 'Configuracion' },
   { to: '/perfil', icon: UserCog, label: 'Mi Perfil' },
-  { to: '/suscripcion', icon: CreditCard, label: 'Suscripcion' },
+  { to: '/suscripcion', icon: CreditCard, label: 'Suscripción' },
 ];
 
 const adminLinks = [

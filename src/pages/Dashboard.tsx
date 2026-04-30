@@ -161,17 +161,17 @@ export default function Dashboard() {
 
   const diffCal = calPromedioDiario - calNecesarias;
   const estadoConfig = {
-    excelente: { icon: CheckCircle, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', label: 'Vas muy bien', desc: 'Tu alimentacion esta alineada con tu objetivo. Segui asi.' },
-    bien: { icon: Target, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20', label: 'Cerca del objetivo', desc: `Estas a solo ${Math.abs(diffCal)} kcal de tu rango ideal. Un pequeno ajuste en las porciones te pone en camino.` },
+    excelente: { icon: CheckCircle, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20', label: 'Vas muy bien', desc: 'Tu alimentación está alineada con tu objetivo. Seguí así.' },
+    bien: { icon: Target, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20', label: 'Cerca del objetivo', desc: `Estás a solo ${Math.abs(diffCal)} kcal de tu rango ideal. Un pequeño ajuste en las porciones te pone en camino.` },
     corregir_alto: { icon: AlertTriangle, color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/20', label: 'Consumo elevado',
       desc: quiereBajar
-        ? `Estas consumiendo ${diffCal} kcal de mas por dia. Para perder peso, intenta reducir porciones de carbohidratos o eliminar un snack.`
-        : `Estas ${diffCal} kcal por encima del objetivo. Esto puede generar acumulacion de grasa no deseada. Revisa las porciones.` },
+        ? `Estás consumiendo ${diffCal} kcal de más por día. Para perder peso, intentá reducir porciones de carbohidratos o eliminar un snack.`
+        : `Estás ${diffCal} kcal por encima del objetivo. Esto puede generar acumulación de grasa no deseada. Revisá las porciones.` },
     corregir_bajo: { icon: AlertTriangle, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20', label: 'Consumo bajo',
       desc: quiereSubir
-        ? `Estas consumiendo ${Math.abs(diffCal)} kcal menos de lo necesario. Para ganar musculo necesitas comer mas. Agrega un snack proteico o aumenta porciones.`
-        : `Estas ${Math.abs(diffCal)} kcal por debajo. Comer muy poco puede frenar tu metabolismo. Asegurate de incluir proteina y carbos en cada comida.` },
-    sin_datos: { icon: XCircle, color: 'text-white/30', bg: 'bg-white/5', border: 'border-dark-border', label: 'Sin datos de la semana', desc: 'Genera un plan nutricional en la seccion Nutricion para ver tu progreso aqui.' },
+        ? `Estás consumiendo ${Math.abs(diffCal)} kcal menos de lo necesario. Para ganar músculo necesitás comer más. Agregá un snack proteico o aumentá porciones.`
+        : `Estás ${Math.abs(diffCal)} kcal por debajo. Comer muy poco puede frenar tu metabolismo. Asegurate de incluir proteína y carbos en cada comida.` },
+    sin_datos: { icon: XCircle, color: 'text-white/30', bg: 'bg-white/5', border: 'border-dark-border', label: 'Sin datos de la semana', desc: 'Generá un plan nutricional en la sección Nutrición para ver tu progreso acá.' },
   };
   const est = estadoConfig[estadoProgreso];
 
@@ -710,8 +710,8 @@ export default function Dashboard() {
             { label: 'Altura', value: `${altura} cm`, tip: '' },
             { label: 'Edad', value: `${edad} a\u00f1os`, tip: '' },
             { label: 'Nivel', value: nivel, tip: '' },
-            { label: 'TMB', value: `${tmb.toLocaleString('es-AR')}`, tip: 'Tasa Metabolica Basal: calorias que tu cuerpo quema en reposo total para mantener funciones vitales (respirar, circulacion, temperatura).' },
-            { label: 'TDEE', value: `${tdee.toLocaleString('es-AR')}`, tip: 'Gasto Energetico Total Diario: calorias que quemas por dia incluyendo tu actividad fisica. Si comes menos, bajas de peso. Si comes mas, subis.' },
+            { label: 'TMB', value: `${tmb.toLocaleString('es-AR')}`, tip: 'Tasa Metabólica Basal: calorías que tu cuerpo quema en reposo total para mantener funciones vitales (respirar, circulación, temperatura).' },
+            { label: 'TDEE', value: `${tdee.toLocaleString('es-AR')}`, tip: 'Gasto Energético Total Diario: calorías que quemás por día incluyendo tu actividad física. Si comés menos, bajás de peso. Si comés más, subís.' },
           ].map(item => (
             <div key={item.label} className="bg-black/40 border border-dark-border rounded-xl p-2.5 text-center relative group">
               <p className="text-white/50 text-[10px] uppercase tracking-wider font-semibold">{item.label}</p>

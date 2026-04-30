@@ -4,27 +4,27 @@ import { useState } from 'react';
 import LanguageSelector from '../components/LanguageSelector';
 
 const features = [
-  { icon: Utensils, title: 'Plan Nutricional', desc: 'Planes personalizados segun tu peso, objetivo y condiciones. Base de 300+ alimentos argentinos. Avalado por profesionales UNLP y UCA.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-  { icon: Dumbbell, title: 'Rutinas Inteligentes', desc: 'Ejercicios adaptados a tu nivel. Push, Pull, Piernas, HIIT, Yoga y mas. Se ajustan automaticamente.', color: 'text-purple-400', bg: 'bg-purple-500/10' },
-  { icon: MessageSquare, title: 'JustFit Coach', desc: 'Tu coach virtual 24/7. Consulta sobre suplementos, ayuno, nutricion, lesiones y mas.', color: 'text-electric', bg: 'bg-electric/10' },
-  { icon: TrendingUp, title: 'Progreso Real', desc: 'Seguimiento de peso, medidas y fotos. Graficos de evolucion con metas y proyecciones.', color: 'text-amber-400', bg: 'bg-amber-500/10' },
-  { icon: Timer, title: 'Workout Timer', desc: 'Cronometro, Tabata, EMOM, For Time. Sonidos automaticos para entrenar sin mirar el celular.', color: 'text-red-400', bg: 'bg-red-500/10' },
-  { icon: Users, title: 'Panel Gimnasios', desc: 'Gestion de clientes, rutinas, nutricion, cobranzas y marca blanca. Todo en un solo lugar.', color: 'text-lime', bg: 'bg-lime/10' },
+  { icon: Utensils, title: 'Plan Nutricional', desc: 'Planes personalizados según tu peso, objetivo y condiciones. Base de 300+ alimentos argentinos. Avalado por profesionales UNLP y UCA.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+  { icon: Dumbbell, title: 'Rutinas Inteligentes', desc: 'Ejercicios adaptados a tu nivel. Push, Pull, Piernas, HIIT, Yoga y más. Se ajustan automáticamente.', color: 'text-purple-400', bg: 'bg-purple-500/10' },
+  { icon: MessageSquare, title: 'JustFit Coach', desc: 'Tu coach virtual 24/7. Consultá sobre suplementos, ayuno, nutrición, lesiones y más.', color: 'text-electric', bg: 'bg-electric/10' },
+  { icon: TrendingUp, title: 'Progreso Real', desc: 'Seguimiento de peso, medidas y fotos. Gráficos de evolución con metas y proyecciones.', color: 'text-amber-400', bg: 'bg-amber-500/10' },
+  { icon: Timer, title: 'Workout Timer', desc: 'Cronómetro, Tabata, EMOM, For Time. Sonidos automáticos para entrenar sin mirar el celular.', color: 'text-red-400', bg: 'bg-red-500/10' },
+  { icon: Users, title: 'Panel Gimnasios', desc: 'Gestión de clientes, rutinas, nutrición, cobranzas y marca blanca. Todo en un solo lugar.', color: 'text-lime', bg: 'bg-lime/10' },
 ];
 
 const testimonios = [
-  { nombre: 'Laura M.', texto: 'En 3 meses baje 8kg siguiendo los planes. El coach me ayudo a entender los ayunos.', estrellas: 5 },
-  { nombre: 'Martin R.', texto: 'Como entrenador uso el panel de gimnasio para todos mis clientes. Ahorro horas de trabajo.', estrellas: 5 },
-  { nombre: 'Sofia L.', texto: 'La base de alimentos es increible. Puedo armar mis comidas y ver los macros al instante.', estrellas: 5 },
+  { nombre: 'Laura M.', texto: 'En 3 meses bajé 8kg siguiendo los planes. El coach me ayudó a entender los ayunos.', estrellas: 5 },
+  { nombre: 'Martín R.', texto: 'Como entrenador uso el panel de gimnasio para todos mis clientes. Ahorro horas de trabajo.', estrellas: 5 },
+  { nombre: 'Sofía L.', texto: 'La base de alimentos es increíble. Puedo armar mis comidas y ver los macros al instante.', estrellas: 5 },
 ];
 
 const screenshots = [
-  { title: 'Dashboard', desc: 'Tu resumen diario con calorias, entreno, hidratacion y progreso de peso.' },
-  { title: 'Nutricion', desc: 'Plan completo con desayuno, almuerzo, merienda y cena. Macros automaticos.' },
-  { title: 'Rutinas', desc: 'Ejercicios por dia con series, reps, peso y descanso. Editable al 100%.' },
-  { title: 'JustFit Coach', desc: '40+ temas: ayuno, insulina, colageno, curcuma, sueno, hidratacion y mas.' },
-  { title: 'Timer', desc: '5 modos: Cronometro, Cuenta regresiva, Tabata, EMOM, For Time.' },
-  { title: 'Gimnasios', desc: 'Clientes, rutinas, nutricion, cobranzas y marca blanca para tu gym.' },
+  { title: 'Dashboard', desc: 'Tu resumen diario con calorías, entreno, hidratación y progreso de peso.' },
+  { title: 'Nutrición', desc: 'Plan completo con desayuno, almuerzo, merienda y cena. Macros automáticos.' },
+  { title: 'Rutinas', desc: 'Ejercicios por día con series, reps, peso y descanso. Editable al 100%.' },
+  { title: 'JustFit Coach', desc: '40+ temas: ayuno, insulina, colágeno, cúrcuma, sueño, hidratación y más.' },
+  { title: 'Timer', desc: '5 modos: Cronómetro, Cuenta regresiva, Tabata, EMOM, For Time.' },
+  { title: 'Gimnasios', desc: 'Clientes, rutinas, nutrición, cobranzas y marca blanca para tu gym.' },
 ];
 
 export default function Landing() {
@@ -186,7 +186,7 @@ export default function Landing() {
               <p className="text-3xl sm:text-4xl font-black text-white mb-1">$57.000 <span className="text-lime text-base sm:text-lg font-bold">/ 1 A&ntilde;o</span></p>
               <p className="text-white/30 text-xs mb-6">Menos de $5.000 por mes</p>
               <ul className="space-y-2 mb-6">
-                {['Plan nutricional personalizado', 'Rutinas inteligentes', 'JustFit Coach 24/7', 'Progreso y mediciones', 'Workout Timer', 'Analisis medicos'].map(f => (
+                {['Plan nutricional personalizado', 'Rutinas inteligentes', 'JustFit Coach 24/7', 'Progreso y mediciones', 'Workout Timer', 'Análisis médicos'].map(f => (
                   <li key={f} className="flex items-center gap-2 text-white/60 text-sm"><CheckCircle className="w-4 h-4 text-lime shrink-0" />{f}</li>
                 ))}
               </ul>
@@ -203,7 +203,7 @@ export default function Landing() {
               <p className="text-4xl font-black text-lime mb-1">$19.000<span className="text-white/30 text-sm font-normal">/mes</span></p>
               <p className="text-white/30 text-xs mb-6">Clientes ilimitados</p>
               <ul className="space-y-2 mb-6">
-                {['Todo lo del Plan Individual', 'Panel de gestion de clientes', 'Rutinas y nutricion por cliente', 'Sistema de cobranzas', 'Marca blanca (tu logo)', 'WhatsApp y Email integrado'].map(f => (
+                {['Todo lo del Plan Individual', 'Panel de gestión de clientes', 'Rutinas y nutrición por cliente', 'Sistema de cobranzas', 'Marca blanca (tu logo)', 'WhatsApp y Email integrado'].map(f => (
                   <li key={f} className="flex items-center gap-2 text-white/60 text-sm"><CheckCircle className="w-4 h-4 text-lime shrink-0" />{f}</li>
                 ))}
               </ul>
@@ -231,12 +231,12 @@ export default function Landing() {
 
           <div className="space-y-2">
             {[
-              { q: 'Necesito experiencia para usar la app?', a: 'No. JustFit365 esta dise&ntilde;ada tanto para principiantes como para avanzados. El sistema se adapta a tu nivel y objetivo.' },
-              { q: 'Puedo usarla en el celular?', a: 'Si. Es una app web que funciona en cualquier dispositivo: celular, tablet o PC. Podes instalarla como app desde el navegador.' },
-              { q: 'Como funciona el Coach virtual?', a: 'Es un asistente inteligente con mas de 40 temas de nutricion, suplementacion, entrenamiento y salud. Le preguntas y te responde con informacion personalizada segun tu perfil.' },
-              { q: 'Sirve para gimnasios?', a: 'Si. El Plan Gimnasio incluye gestion de clientes, rutinas y nutricion personalizadas, sistema de cobranzas y marca blanca con tu logo.' },
-              { q: 'Puedo cancelar en cualquier momento?', a: 'Si. No hay permanencia minima. Tu suscripcion se mantiene activa hasta el vencimiento del periodo pagado.' },
-              { q: 'Que metodos de pago aceptan?', a: 'Mercado Pago (tarjeta, transferencia, efectivo en puntos de pago) y transferencia bancaria directa.' },
+              { q: '¿Necesito experiencia para usar la app?', a: 'No. JustFit365 está diseñada tanto para principiantes como para avanzados. El sistema se adapta a tu nivel y objetivo.' },
+              { q: '¿Puedo usarla en el celular?', a: 'Sí. Es una app web que funciona en cualquier dispositivo: celular, tablet o PC. Podés instalarla como app desde el navegador.' },
+              { q: '¿Cómo funciona el Coach virtual?', a: 'Es un asistente inteligente con más de 40 temas de nutrición, suplementación, entrenamiento y salud. Le preguntás y te responde con información personalizada según tu perfil.' },
+              { q: '¿Sirve para gimnasios?', a: 'Sí. El Plan Gimnasio incluye gestión de clientes, rutinas y nutrición personalizadas, sistema de cobranzas y marca blanca con tu logo.' },
+              { q: '¿Puedo cancelar en cualquier momento?', a: 'Sí. No hay permanencia mínima. Tu suscripción se mantiene activa hasta el vencimiento del período pagado.' },
+              { q: '¿Qué métodos de pago aceptan?', a: 'Mercado Pago (tarjeta, transferencia, efectivo en puntos de pago) y transferencia bancaria directa.' },
             ].map((faq, i) => (
               <button key={i} onClick={() => setFaqOpen(faqOpen === i ? null : i)} className="w-full text-left bg-dark-800 border border-dark-border rounded-xl p-4 hover:border-white/10 transition-all">
                 <div className="flex items-center justify-between">

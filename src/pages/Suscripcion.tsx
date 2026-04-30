@@ -167,7 +167,7 @@ export default function Suscripcion() {
 
           {/* Renovacion - Planes para gimnasios */}
           <div className="bg-dark-800 border border-dark-border rounded-2xl p-6">
-            <h3 className="text-white font-bold mb-3">Renovar suscripcion {esGimnasio ? 'mensual' : 'anual'}</h3>
+            <h3 className="text-white font-bold mb-3">Renovar suscripción {esGimnasio ? 'mensual' : 'anual'}</h3>
 
             {esGimnasio ? (
               <>
