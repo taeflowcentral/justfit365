@@ -762,74 +762,150 @@ export default function Dashboard() {
         </Link>
       </div>
 
-      {/* Contactar asesores */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-        <button onClick={() => setAsesorModal('nutricional')}
-          className="block bg-gradient-to-br from-emerald-900/30 to-emerald-800/10 border border-emerald-500/15 rounded-2xl p-4 hover:border-emerald-500/30 transition-all text-left">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-500/15 rounded-xl flex items-center justify-center">
-              <MessageCircle className="w-5 h-5 text-emerald-400" />
-            </div>
-            <div>
-              <h3 className="text-white font-bold text-sm">Asesor Nutricional</h3>
-              <p className="text-white/40 text-xs mt-0.5">Consulta personalizada por WhatsApp</p>
-            </div>
+      {/* Asesores - Premium */}
+      <div className="bg-gradient-to-br from-amber-500/5 to-yellow-500/5 border border-amber-500/15 rounded-2xl p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-xl">⭐</span>
+          <div className="flex-1">
+            <p className="text-amber-400 text-xs font-bold uppercase tracking-wider">Asesoría Premium</p>
+            <p className="text-white/50 text-[11px]">¿Necesitás ajustes 100% a medida?</p>
           </div>
-        </button>
-        <button onClick={() => setAsesorModal('deportivo')}
-          className="block bg-gradient-to-br from-purple-900/30 to-purple-800/10 border border-purple-500/15 rounded-2xl p-4 hover:border-purple-500/30 transition-all text-left">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-purple-500/15 rounded-xl flex items-center justify-center">
-              <MessageCircle className="w-5 h-5 text-purple-400" />
+        </div>
+        <p className="text-white/60 text-xs mb-3 leading-relaxed">
+          Hablá <strong className="text-white/80">directamente con nuestros profesionales</strong> de la UNLP y UCA. Resolución en menos de 2hs, ajustes por viaje o lesión, seguimiento por audio.
+        </p>
+        <div className="flex items-center gap-3 mb-3 text-[10px] text-white/40">
+          <span>✓ Más de 500 usuarios atendidos</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <button onClick={() => setAsesorModal('nutricional')}
+            className="block bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 hover:bg-emerald-500/20 transition-all text-left">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                <MessageCircle className="w-4 h-4 text-emerald-400" />
+              </div>
+              <div>
+                <h3 className="text-white font-bold text-xs">Asesor Nutricional</h3>
+                <p className="text-emerald-400/70 text-[10px]">Ver detalle</p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-white font-bold text-sm">Asesor Deportivo</h3>
-              <p className="text-white/40 text-xs mt-0.5">Consulta personalizada por WhatsApp</p>
+          </button>
+          <button onClick={() => setAsesorModal('deportivo')}
+            className="block bg-purple-500/10 border border-purple-500/20 rounded-xl p-3 hover:bg-purple-500/20 transition-all text-left">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                <MessageCircle className="w-4 h-4 text-purple-400" />
+              </div>
+              <div>
+                <h3 className="text-white font-bold text-xs">Asesor Deportivo</h3>
+                <p className="text-purple-400/70 text-[10px]">Ver detalle</p>
+              </div>
             </div>
-          </div>
-        </button>
+          </button>
+        </div>
+        <p className="text-white/30 text-[10px] mt-3 text-center">
+          Antes consultá nuestro <Link to="/bio-coach" className="text-electric hover:underline">JustFit Coach gratuito</Link> con +55 temas
+        </p>
       </div>
 
-      {/* Modal confirmacion asesor */}
+      {/* Modal Ventana de Valor - Asesor */}
       {asesorModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => setAsesorModal(null)}>
-          <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-sm p-6 text-center" onClick={e => e.stopPropagation()}>
-            <div className={`w-14 h-14 mx-auto mb-4 rounded-2xl flex items-center justify-center ${asesorModal === 'nutricional' ? 'bg-emerald-500/15' : 'bg-purple-500/15'}`}>
-              <MessageCircle className={`w-7 h-7 ${asesorModal === 'nutricional' ? 'text-emerald-400' : 'text-purple-400'}`} />
-            </div>
-            <h3 className="text-white font-bold text-lg mb-2">
-              Asesor {asesorModal === 'nutricional' ? 'Nutricional' : 'Deportivo'}
-            </h3>
-            <p className="text-white/50 text-sm mb-4">
-              Vas a ser derivado a un profesional por WhatsApp.
-            </p>
-            <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 mb-5">
-              <p className="text-amber-400 text-sm font-semibold">
-                Esta consulta tiene un costo adicional
-              </p>
-              <p className="text-white/40 text-xs mt-1">
-                El profesional te informara sobre tarifas y disponibilidad.
-              </p>
-            </div>
-            {asesorModal === 'nutricional' ? (
-              <div className="flex gap-3">
-                <button onClick={() => setAsesorModal(null)} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
-                <a href="https://wa.me/5492216806000?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20nutricional" target="_blank" rel="noopener noreferrer" onClick={() => setAsesorModal(null)}
-                  className="flex-1 py-3 bg-emerald-500 text-black rounded-xl text-sm font-black uppercase tracking-wider text-center">Contactar</a>
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => setAsesorModal(null)}>
+          <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            {/* Header con gradient */}
+            <div className={`p-6 text-center border-b border-dark-border ${asesorModal === 'nutricional' ? 'bg-gradient-to-br from-emerald-900/40 to-emerald-800/10' : 'bg-gradient-to-br from-purple-900/40 to-purple-800/10'}`}>
+              <div className={`inline-flex w-14 h-14 mx-auto mb-3 rounded-2xl items-center justify-center ${asesorModal === 'nutricional' ? 'bg-emerald-500/20' : 'bg-purple-500/20'}`}>
+                <MessageCircle className={`w-7 h-7 ${asesorModal === 'nutricional' ? 'text-emerald-400' : 'text-purple-400'}`} />
               </div>
-            ) : (
-              <div className="space-y-2">
-                <a href="https://wa.me/5492216035986?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20deportivo" target="_blank" rel="noopener noreferrer" onClick={() => setAsesorModal(null)}
-                  className="w-full py-3 bg-purple-500 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2">
-                  <MessageCircle className="w-4 h-4" /> Asesor 1 &mdash; +54 221 603-5986
-                </a>
-                <a href="https://wa.me/5492344414701?text=Hola%2C%20quiero%20consultar%20con%20un%20asesor%20deportivo" target="_blank" rel="noopener noreferrer" onClick={() => setAsesorModal(null)}
-                  className="w-full py-3 bg-purple-600 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2">
-                  <MessageCircle className="w-4 h-4" /> Asesor 2 &mdash; +54 2344 414701
-                </a>
-                <button onClick={() => setAsesorModal(null)} className="w-full py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
+              <p className="text-white/40 text-[10px] uppercase tracking-wider mb-1">Tu Asesor Personal</p>
+              <h3 className="text-white font-black text-xl mb-1">
+                Asesoría {asesorModal === 'nutricional' ? 'Nutricional' : 'Deportiva'} Premium
+              </h3>
+              <p className="text-white/50 text-xs">A un clic de distancia</p>
+            </div>
+
+            {/* Contenido */}
+            <div className="p-6 space-y-4">
+              {/* Qué incluye */}
+              <div>
+                <p className="text-white/40 text-[10px] uppercase tracking-wider mb-2">Qué incluye</p>
+                <ul className="space-y-2">
+                  {(asesorModal === 'nutricional' ? [
+                    'Resolución de dudas nutricionales en menos de 2 horas',
+                    'Ajuste de plan por viaje, evento o restricción',
+                    'Recomendaciones de suplementación específica',
+                    'Seguimiento por audio o texto WhatsApp',
+                  ] : [
+                    'Ajuste de rutina por lesión o limitación',
+                    'Corrección de técnica con video',
+                    'Plan específico para evento o competencia',
+                    'Seguimiento por audio o texto WhatsApp',
+                  ]).map(item => (
+                    <li key={item} className="flex items-start gap-2 text-white/70 text-sm">
+                      <CheckCircle className={`w-4 h-4 shrink-0 mt-0.5 ${asesorModal === 'nutricional' ? 'text-emerald-400' : 'text-purple-400'}`} />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            )}
+
+              {/* Profesionales */}
+              <div className="bg-electric/5 border border-electric/15 rounded-xl p-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-base">🎓</span>
+                  <p className="text-electric text-xs font-bold uppercase tracking-wider">Profesionales certificados</p>
+                </div>
+                <p className="text-white/60 text-xs">Avalados por la UNLP y UCA. Más de 500 usuarios atendidos con resultados reales.</p>
+              </div>
+
+              {/* Costo */}
+              <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-base">💎</span>
+                  <p className="text-amber-400 text-xs font-bold uppercase tracking-wider">Servicio Premium</p>
+                </div>
+                <p className="text-white/70 text-xs">Esta consulta tiene un costo adicional. El profesional te informará sobre tarifas y disponibilidad apenas lo contactes por WhatsApp.</p>
+              </div>
+
+              {/* Alternativa gratuita */}
+              <div className="bg-dark-700/50 border border-dark-border rounded-xl p-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <Zap className="w-3.5 h-3.5 text-electric" />
+                  <p className="text-white/70 text-xs font-bold">¿No querés gastar todavía?</p>
+                </div>
+                <p className="text-white/50 text-xs mb-2">Probá primero nuestro <strong className="text-electric">JustFit Coach</strong> con más de 55 temas y respuestas personalizadas según tu perfil. Es gratis y siempre disponible.</p>
+                <Link to="/bio-coach" onClick={() => setAsesorModal(null)} className="inline-flex items-center gap-1 text-electric text-xs font-bold hover:underline">
+                  Ir a JustFit Coach <ArrowUpRight className="w-3 h-3" />
+                </Link>
+              </div>
+
+              {/* Transparencia */}
+              <p className="text-white/30 text-[11px] text-center italic">
+                El contacto se realiza vía WhatsApp para tu comodidad
+              </p>
+
+              {/* Botones */}
+              {asesorModal === 'nutricional' ? (
+                <div className="flex gap-2">
+                  <button onClick={() => setAsesorModal(null)} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
+                  <a href="https://wa.me/5492216806000?text=Hola%2C%20quiero%20activar%20mi%20asesor%C3%ADa%20nutricional%20premium" target="_blank" rel="noopener noreferrer" onClick={() => setAsesorModal(null)}
+                    className="flex-1 py-3 bg-emerald-500 text-black rounded-xl text-sm font-black uppercase tracking-wider text-center hover:bg-emerald-400 transition-colors">Hablar con experto</a>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <p className="text-white/40 text-[10px] uppercase tracking-wider">Elegí tu asesor:</p>
+                  <a href="https://wa.me/5492216035986?text=Hola%2C%20quiero%20activar%20mi%20asesor%C3%ADa%20deportiva%20premium" target="_blank" rel="noopener noreferrer" onClick={() => setAsesorModal(null)}
+                    className="w-full py-3 bg-purple-500 hover:bg-purple-400 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors">
+                    <MessageCircle className="w-4 h-4" /> Asesor 1 — +54 221 603-5986
+                  </a>
+                  <a href="https://wa.me/5492344414701?text=Hola%2C%20quiero%20activar%20mi%20asesor%C3%ADa%20deportiva%20premium" target="_blank" rel="noopener noreferrer" onClick={() => setAsesorModal(null)}
+                    className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors">
+                    <MessageCircle className="w-4 h-4" /> Asesor 2 — +54 2344 414701
+                  </a>
+                  <button onClick={() => setAsesorModal(null)} className="w-full py-2.5 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
