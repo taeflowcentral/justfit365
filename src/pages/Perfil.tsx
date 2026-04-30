@@ -119,8 +119,10 @@ export default function Perfil() {
     setTimeout(() => setSaved(false), 2500);
   };
 
+  // Mifflin-St Jeor: hombre +5, mujer -161, sin especificar -78 (promedio)
+  const ajusteGeneroTmb = form.genero === 'Mujer' ? -161 : form.genero === 'Hombre' ? 5 : -78;
   const tmb = form.peso && form.altura && form.edad
-    ? Math.round(10 * parseFloat(form.peso) + 6.25 * parseInt(form.altura) - 5 * parseInt(form.edad) + 5)
+    ? Math.round(10 * parseFloat(form.peso) + 6.25 * parseInt(form.altura) - 5 * parseInt(form.edad) + ajusteGeneroTmb)
     : 0;
   const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
   const tdee = tmb ? Math.round(tmb * (factores[form.nivelActividad] || 1.55)) : 0;

@@ -2163,10 +2163,12 @@ Tu cuerpo te lo va a agradecer en 2 semanas. La diferencia es dramatica \ud83d\u
   },
 ];
 
-function personalizeContent(content: string, perfil: { peso: number; altura: number; edad: number; objetivo: string; nivelActividad: string } | undefined): string {
+function personalizeContent(content: string, perfil: { peso: number; altura: number; edad: number; objetivo: string; nivelActividad: string; genero?: string } | undefined): string {
   if (!perfil) return content.replace(/\{[^}]+\}/g, '-');
-  const { peso, altura, edad, objetivo, nivelActividad: nivel } = perfil;
-  const tmb = Math.round(10 * peso + 6.25 * altura - 5 * edad + 5);
+  const { peso, altura, edad, objetivo, nivelActividad: nivel, genero } = perfil;
+  // Mifflin-St Jeor: hombre +5, mujer -161, default -78 (promedio)
+  const ajusteGenero = genero === 'Mujer' ? -161 : genero === 'Hombre' ? 5 : -78;
+  const tmb = Math.round(10 * peso + 6.25 * altura - 5 * edad + ajusteGenero);
   const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
   const tdee = Math.round(tmb * (factores[nivel] || 1.55));
   const calObj = objetivo.includes('Hipertrofia') || objetivo.includes('Fuerza') ? tdee + 300 : objetivo.includes('grasa') ? tdee - 400 : tdee;
