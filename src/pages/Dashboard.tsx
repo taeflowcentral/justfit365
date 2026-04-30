@@ -189,14 +189,46 @@ export default function Dashboard() {
     } catch { return 'Sin rutina'; }
   })();
 
+  // Streak: días consecutivos abriendo la app
+  const streak = (() => {
+    const STREAK_KEY = 'jf365_streak';
+    const LAST_VISIT = 'jf365_last_visit';
+    const today = new Date().toDateString();
+    const last = getUserItem(LAST_VISIT);
+    const stored = parseInt(getUserItem(STREAK_KEY) || '0');
+    if (last === today) return stored;
+    if (last) {
+      const lastDate = new Date(last);
+      const diffDays = Math.round((new Date(today).getTime() - lastDate.getTime()) / 86400000);
+      const newStreak = diffDays === 1 ? stored + 1 : 1;
+      setUserItem(STREAK_KEY, newStreak.toString());
+      setUserItem(LAST_VISIT, today);
+      return newStreak;
+    }
+    setUserItem(STREAK_KEY, '1');
+    setUserItem(LAST_VISIT, today);
+    return 1;
+  })();
+
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-black text-white tracking-tight">
-          Hola, <span className="text-electric">{user?.nombre?.split(' ')[0]}</span>
-        </h1>
-        <p className="text-white/50 text-sm mt-1">Tu resumen de rendimiento</p>
+      {/* Header con streak */}
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-black text-white tracking-tight">
+            Hola, <span className="text-electric">{user?.nombre?.split(' ')[0]}</span>
+          </h1>
+          <p className="text-white/50 text-sm mt-1">Tu resumen de rendimiento</p>
+        </div>
+        <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border ${
+          streak >= 7 ? 'bg-amber-500/10 border-amber-500/20' : 'bg-electric/5 border-electric/10'
+        }`}>
+          <span className="text-2xl">{streak >= 30 ? '🔥' : streak >= 7 ? '⚡' : '✨'}</span>
+          <div>
+            <p className={`text-xl font-black leading-none ${streak >= 7 ? 'text-amber-400' : 'text-electric'}`}>{streak}</p>
+            <p className="text-white/40 text-[9px] uppercase tracking-wider">{streak === 1 ? 'día' : 'días'} de racha</p>
+          </div>
+        </div>
       </div>
 
       {/* Banner instalar app */}

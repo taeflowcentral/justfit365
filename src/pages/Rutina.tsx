@@ -14,6 +14,7 @@ interface Ejercicio {
   musculo: string;
   completado: boolean;
   notas: string;
+  rpe?: number; // Rate of Perceived Exertion 1-10
 }
 
 interface DiaEntrenamiento {
@@ -302,6 +303,34 @@ export default function Rutina() {
           {semana[diaActivo]?.dia} &mdash; <span className="text-purple-400 font-bold">{tipoActivo}</span>
           {tipoActivo === 'Descanso' ? ' (D\u00eda de recuperaci\u00f3n)' : ''}
         </p>
+
+        {/* Modo de equipamiento */}
+        {tipoActivo !== 'Descanso' && (
+          <div className="mt-3 flex items-center gap-2 flex-wrap">
+            <span className="text-white/30 text-xs">Hoy entren&aacute;s en:</span>
+            {(['Gimnasio', 'Casa', 'Hotel', 'Aire libre'] as const).map(modo => {
+              const activo = (getUserItem('jf365_modo_equipo') || 'Gimnasio') === modo;
+              return (
+                <button key={modo} onClick={() => { setUserItem('jf365_modo_equipo', modo); window.location.reload(); }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                    activo ? 'bg-electric/15 text-electric border border-electric/30' : 'bg-white/5 text-white/40 border border-dark-border hover:text-white/60'
+                  }`}>
+                  {modo === 'Gimnasio' ? '\ud83c\udfcb\ufe0f' : modo === 'Casa' ? '\ud83c\udfe0' : modo === 'Hotel' ? '\ud83c\udfe8' : '\ud83c\udf33'} {modo}
+                </button>
+              );
+            })}
+          </div>
+        )}
+        {(() => {
+          const modo = getUserItem('jf365_modo_equipo') || 'Gimnasio';
+          if (modo === 'Gimnasio' || tipoActivo === 'Descanso') return null;
+          const tip = modo === 'Casa'
+            ? 'Sin equipo: prioriz\u00e1 ejercicios corporales (sentadillas, flexiones, plancha, dominadas en barra). Sustitu\u00ed pesas por mochila con libros o bidones de agua.'
+            : modo === 'Hotel'
+            ? 'En el gimnasio del hotel: us\u00e1 las mancuernas y m\u00e1quinas que tengas. Si no hay equipo, mismas opciones que Casa.'
+            : 'Aire libre: aprovech\u00e1 el peso corporal, sprint, escaleras, banco del parque para fondos y dominadas.';
+          return <p className="text-white/30 text-[11px] mt-2 italic">{tip}</p>;
+        })()}
         <div className="flex items-center gap-2 mt-3 flex-wrap">
           {tipoActivo !== 'Descanso' && (
             <ShareButtons
@@ -452,6 +481,19 @@ export default function Rutina() {
                           <div><label className="block text-[10px] text-white/30 uppercase tracking-wider mb-1">Descanso (s)</label>
                             <input type="text" value={e.descanso} onChange={ev => updateEjercicio(e.id, 'descanso', ev.target.value)} className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" /></div>
                         </div>
+                        <div>
+                          <label className="block text-[10px] text-white/30 uppercase tracking-wider mb-1">RPE (esfuerzo percibido 1-10)</label>
+                          <div className="flex gap-1">
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
+                              <button key={n} type="button" onClick={() => updateEjercicio(e.id, 'rpe', n)}
+                                className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${e.rpe === n
+                                  ? n <= 4 ? 'bg-emerald-500 text-black' : n <= 7 ? 'bg-amber-500 text-black' : 'bg-red-500 text-white'
+                                  : 'bg-black/40 text-white/30 border border-dark-border hover:text-white/60'
+                                }`}>{n}</button>
+                            ))}
+                          </div>
+                          <p className="text-white/20 text-[10px] mt-1">1-4 fácil &middot; 5-7 moderado &middot; 8-10 muy duro</p>
+                        </div>
                         <div><label className="block text-[10px] text-white/30 uppercase tracking-wider mb-1">Notas</label>
                           <textarea value={e.notas} onChange={ev => updateEjercicio(e.id, 'notas', ev.target.value)} rows={2} placeholder="Ej: Control exc\u00e9ntrico, drop set..."
                             className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 resize-none placeholder-white/15" /></div>
@@ -461,11 +503,12 @@ export default function Rutina() {
                       </div>
                     ) : (
                       <div>
-                        <div className="flex gap-6 mt-3 text-xs">
+                        <div className="flex gap-6 mt-3 text-xs flex-wrap">
                           <div className="flex items-center gap-1 text-white/40"><RotateCcw className="w-3 h-3" /> {e.series} series</div>
                           <div className="flex items-center gap-1 text-white/40"><Dumbbell className="w-3 h-3" /> {e.reps} reps</div>
                           <div className="flex items-center gap-1 text-white/40"><Clock className="w-3 h-3" /> {e.descanso}s descanso</div>
                           <div className="flex items-center gap-1 text-white/40"><Flame className="w-3 h-3" /> {e.peso} kg</div>
+                          {e.rpe && <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${e.rpe <= 4 ? 'bg-emerald-500/15 text-emerald-400' : e.rpe <= 7 ? 'bg-amber-500/15 text-amber-400' : 'bg-red-500/15 text-red-400'}`}>RPE {e.rpe}</div>}
                         </div>
                         {e.notas && <p className="mt-3 text-xs text-electric/60 bg-electric/5 border border-electric/10 rounded-lg px-3 py-2">{e.notas}</p>}
                       </div>

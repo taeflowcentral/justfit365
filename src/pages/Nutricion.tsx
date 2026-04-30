@@ -642,6 +642,42 @@ export default function Nutricion() {
         })}
       </div>}
 
+      {/* Sugerencias inteligentes según macros restantes */}
+      {showMacros && totalCal > 0 && comidas.length > 0 && (() => {
+        const calRest = calObjetivo - totalCal;
+        const protReq = Math.round((perfil?.peso || 75) * 1.8);
+        const protRest = protReq - totalProt;
+        const carbMax = Math.round((calObjetivo * 0.55) / 4);
+        const carbRest = carbMax - totalCarb;
+        const grasaMax = Math.round((calObjetivo * 0.30) / 9);
+        const grasaRest = grasaMax - totalGrasa;
+
+        const sugerencias: string[] = [];
+        if (protRest > 20) sugerencias.push(`Te faltan ${protRest}g de proteína. Sumá: 1 pechuga de pollo (30g), 1 lata de atún (25g), o 1 scoop de whey (24g).`);
+        if (calRest > 300 && carbRest > 30) sugerencias.push(`Te quedan ${calRest} kcal y ${carbRest}g de carbos. Podés agregar 150g de arroz integral o 1 banana grande.`);
+        if (calRest > 200 && grasaRest > 15) sugerencias.push(`Espacio para grasas saludables: 1/2 palta (15g grasa), 30g de almendras (15g grasa) o 1 cda de aceite de oliva.`);
+        if (calRest < -200) sugerencias.push(`Te excediste ${Math.abs(calRest)} kcal. Sacá un snack o reducí porción del próximo plato.`);
+        if (protRest <= 0 && calRest > 100 && calRest < 300) sugerencias.push(`Proteína cubierta. Si tenés hambre, agregá vegetales (brócoli, espinaca, ensalada).`);
+
+        if (sugerencias.length === 0) return null;
+        return (
+          <div className="bg-electric/5 border border-electric/15 rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Zap className="w-4 h-4 text-electric" />
+              <h4 className="text-electric text-xs font-bold uppercase tracking-wider">Sugerencias inteligentes</h4>
+            </div>
+            <ul className="space-y-1.5">
+              {sugerencias.map((s, i) => (
+                <li key={i} className="text-white/60 text-xs leading-relaxed flex gap-2">
+                  <span className="text-electric/60 shrink-0">→</span>
+                  <span>{s}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })()}
+
       {/* Comidas */}
       <div className="space-y-4">
         {comidas.map(c => {
