@@ -122,12 +122,12 @@ export default function LanguageSelector() {
 
       {open && (
         <>
-          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 bg-dark-800 border border-dark-border rounded-xl shadow-2xl z-50 overflow-hidden w-44">
+          <div className="fixed inset-0 z-[60]" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 top-full mt-2 bg-[#0a0a0a] border border-white/15 ring-1 ring-black/50 rounded-xl shadow-2xl shadow-black/80 z-[70] overflow-hidden w-44">
             {idiomas.map(lang => (
               <button key={lang.code} onClick={() => handleSelect(lang.code)}
                 className={`w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm transition-all notranslate ${
-                  current === lang.code ? 'bg-lime/10 text-lime' : 'text-white/60 hover:bg-white/5 hover:text-white'
+                  current === lang.code ? 'bg-lime/10 text-lime' : 'text-white/70 hover:bg-white/5 hover:text-white'
                 }`}>
                 <span className="text-base">{lang.flag}</span>
                 <span className="font-medium">{lang.label}</span>

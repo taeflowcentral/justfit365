@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   Zap, LayoutDashboard, Utensils, Dumbbell, MessageSquare,
@@ -57,7 +57,7 @@ export default function Sidebar({ onNavigate }: { onNavigate: () => void }) {
   return (
     <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-dark-900 border-r border-dark-border flex flex-col transition-all duration-300 min-h-screen`}>
       {/* Logo */}
-      <div className="p-4 border-b border-dark-border flex items-center gap-3">
+      <Link to="/" onClick={onNavigate} className="p-4 border-b border-dark-border flex items-center gap-3 hover:bg-white/[0.02] transition-colors" title="Ir al Dashboard">
         <div className="w-10 h-10 bg-lime rounded-xl flex items-center justify-center shrink-0">
           <Zap className="w-5 h-5 text-black" strokeWidth={2.5} />
         </div>
@@ -67,7 +67,7 @@ export default function Sidebar({ onNavigate }: { onNavigate: () => void }) {
             <p className="text-white/20 text-[10px] uppercase tracking-[0.2em]">v1.0</p>
           </div>
         )}
-      </div>
+      </Link>
 
       {/* Partner logo */}
       {!collapsed && user?.gimnasioNombre && user.role !== 'gimnasio' && (
@@ -103,7 +103,7 @@ export default function Sidebar({ onNavigate }: { onNavigate: () => void }) {
 
       {/* User */}
       <div className="p-3 border-t border-dark-border">
-        <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'} px-3 py-2 mb-2`}>
+        <Link to="/perfil" onClick={onNavigate} className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'} px-3 py-2 mb-2 rounded-xl hover:bg-white/5 transition-colors`} title="Mi Perfil">
           {user?.foto ? (
             <img src={user.foto} alt="" className="w-8 h-8 rounded-full object-cover shrink-0" />
           ) : (
@@ -117,7 +117,7 @@ export default function Sidebar({ onNavigate }: { onNavigate: () => void }) {
               <p className="text-white/30 text-xs capitalize">{user?.role}</p>
             </div>
           )}
-        </div>
+        </Link>
         <a href="mailto:justfit365.com@gmail.com?subject=JustFit365%20-%20Soporte%20T%C3%A9cnico&body=Hola%2C%20necesito%20ayuda%20con%3A%0A%0A"
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-cyan-400/70 hover:bg-cyan-500/10 hover:text-cyan-400 transition-all">
           <LifeBuoy className="w-5 h-5 shrink-0" />

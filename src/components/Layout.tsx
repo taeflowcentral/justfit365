@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import ConsentModal from './ConsentModal';
 import PaymentModal from './PaymentModal';
@@ -67,13 +67,13 @@ export default function Layout() {
 
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar */}
-        <header className="h-14 md:h-16 bg-dark-900/50 backdrop-blur border-b border-dark-border flex items-center justify-between px-3 md:px-6 shrink-0">
+        <header className="h-14 md:h-16 bg-dark-900 border-b border-dark-border flex items-center justify-between px-3 md:px-6 shrink-0 relative z-30">
           <div className="flex items-center gap-2">
             {/* Hamburger mobile */}
             <button onClick={() => setMobileMenuOpen(true)} className="md:hidden p-2 text-white/40 hover:text-white rounded-xl transition-colors">
               <Menu className="w-5 h-5" />
             </button>
-            <span className="md:hidden text-white font-black text-sm tracking-tighter">JustFit<span className="text-lime">365</span></span>
+            <Link to="/" className="md:hidden text-white font-black text-sm tracking-tighter hover:opacity-80 transition-opacity">JustFit<span className="text-lime">365</span></Link>
           </div>
           <div className="flex items-center gap-2 md:gap-4">
             <LanguageSelector />
@@ -81,7 +81,7 @@ export default function Layout() {
               <Bell className="w-5 h-5" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-electric rounded-full animate-pulse" />
             </button>
-            <div className="flex items-center gap-2 px-2 md:px-3 py-1.5 bg-dark-800 rounded-xl border border-dark-border">
+            <Link to="/perfil" className="flex items-center gap-2 px-2 md:px-3 py-1.5 bg-dark-800 rounded-xl border border-dark-border hover:border-electric/30 transition-colors" title="Mi Perfil">
               {user?.foto ? (
                 <img src={user.foto} alt="" className="w-7 h-7 rounded-full object-cover" />
               ) : (
@@ -90,7 +90,7 @@ export default function Layout() {
                 </div>
               )}
               <span className="text-sm text-white/70 font-medium hidden sm:inline">{user?.nombre}</span>
-            </div>
+            </Link>
           </div>
         </header>
 
