@@ -306,24 +306,24 @@ export default function Dashboard() {
       </div>
 
       {/* Nivel del usuario */}
-      <div className={`${nivelActual.bg} border ${nivelActual.border} rounded-2xl p-4`}>
+      <div className="bg-dark-800 border border-dark-border rounded-2xl p-4">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
-            <span className="text-3xl">{nivelActual.emoji}</span>
+            <span className="text-2xl">{nivelActual.emoji}</span>
             <div>
               <p className="text-white/40 text-[10px] uppercase tracking-wider">Tu nivel</p>
-              <p className={`text-lg font-black ${nivelActual.color} leading-tight`}>{nivelActual.nombre}</p>
+              <p className={`text-base font-black ${nivelActual.color} leading-tight`}>{nivelActual.nombre}</p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-white font-black text-xl leading-none">{diasTotales}</p>
+            <p className="text-white font-black text-lg leading-none">{diasTotales}</p>
             <p className="text-white/40 text-[10px] uppercase tracking-wider">días activos</p>
           </div>
         </div>
         {nivelSiguiente && (
           <>
-            <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden">
-              <div className={`h-full ${nivelActual.color.replace('text-', 'bg-')} rounded-full transition-all`} style={{ width: `${progresoNivel}%` }} />
+            <div className="w-full h-1 bg-black/40 rounded-full overflow-hidden">
+              <div className={`h-full ${nivelActual.color.replace('text-', 'bg-')} rounded-full transition-all opacity-70`} style={{ width: `${progresoNivel}%` }} />
             </div>
             <p className="text-white/30 text-[10px] mt-1.5 text-center">
               {nivelSiguiente.min - diasTotales} días para alcanzar <strong className={nivelSiguiente.color}>{nivelSiguiente.emoji} {nivelSiguiente.nombre}</strong>
@@ -334,7 +334,7 @@ export default function Dashboard() {
 
       {/* Banner instalar app */}
       {showInstallBanner && (
-        <div className="bg-gradient-to-r from-electric/10 to-neon/10 border border-electric/20 rounded-2xl p-4 flex items-center justify-between">
+        <div className="bg-dark-800 border border-electric/15 rounded-2xl p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-electric/15 rounded-xl flex items-center justify-center">
               <Download className="w-5 h-5 text-electric" />
@@ -371,20 +371,56 @@ export default function Dashboard() {
       {/* Frase del dia */}
       <FraseDelDia />
 
+      {/* Quick Actions - debajo de la motivacion */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        <Link to="/nutricion" className="block bg-dark-800 border border-dark-border rounded-2xl p-4 hover:border-emerald-500/30 transition-all group">
+          <div className="flex items-center justify-between mb-1.5">
+            <div className="w-8 h-8 bg-emerald-500/10 rounded-lg flex items-center justify-center">
+              <Apple className="w-4 h-4 text-emerald-400" />
+            </div>
+            <ArrowUpRight className="w-3.5 h-3.5 text-white/20 group-hover:text-emerald-400 transition-colors" />
+          </div>
+          <h3 className="text-white font-bold text-sm">Mi Plan Nutricional</h3>
+          <p className="text-white/40 text-xs mt-0.5">{calHoy > 0 ? `${calHoy} kcal / ${calObjetivo} objetivo` : 'Ver plan'}</p>
+        </Link>
+
+        <Link to="/rutina" className="block bg-dark-800 border border-dark-border rounded-2xl p-4 hover:border-purple-500/30 transition-all group">
+          <div className="flex items-center justify-between mb-1.5">
+            <div className="w-8 h-8 bg-purple-500/10 rounded-lg flex items-center justify-center">
+              <Dumbbell className="w-4 h-4 text-purple-400" />
+            </div>
+            <ArrowUpRight className="w-3.5 h-3.5 text-white/20 group-hover:text-purple-400 transition-colors" />
+          </div>
+          <h3 className="text-white font-bold text-sm">Mi Rutina de Hoy</h3>
+          <p className="text-white/40 text-xs mt-0.5">{entrenoHoy}</p>
+        </Link>
+
+        <Link to="/bio-coach" className="block bg-dark-800 border border-dark-border rounded-2xl p-4 hover:border-electric/30 transition-all group">
+          <div className="flex items-center justify-between mb-1.5">
+            <div className="w-8 h-8 bg-electric/10 rounded-lg flex items-center justify-center">
+              <Zap className="w-4 h-4 text-electric" />
+            </div>
+            <ArrowUpRight className="w-3.5 h-3.5 text-white/20 group-hover:text-electric transition-colors" />
+          </div>
+          <h3 className="text-white font-bold text-sm">JustFit Coach</h3>
+          <p className="text-white/40 text-xs mt-0.5">Pregunt&aacute;le lo que necesites</p>
+        </Link>
+      </div>
+
       {/* Stats - compactos */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
         {[
-          { icon: Flame, label: 'Cal hoy', value: calHoy > 0 ? calHoy.toLocaleString('es-AR') : '-', unit: 'kcal', color: 'from-orange-500 to-red-500', glow: 'shadow-orange-500/20' },
-          { icon: Droplets, label: 'Prote\u00edna', value: protHoy > 0 ? protHoy.toString() : '-', unit: 'g', color: 'from-electric to-neon', glow: 'shadow-electric/20' },
-          { icon: Dumbbell, label: 'Entreno', value: entrenoHoy, unit: '', color: 'from-purple-500 to-pink-500', glow: 'shadow-purple-500/20' },
-          { icon: Target, label: 'Objetivo', value: perfil?.objetivo?.split(',')[0] || 'Definir', unit: '', color: 'from-emerald-500 to-green-400', glow: 'shadow-emerald-500/20' },
+          { icon: Flame, label: 'Cal hoy', value: calHoy > 0 ? calHoy.toLocaleString('es-AR') : '-', unit: 'kcal', color: 'text-orange-400', bg: 'bg-orange-500/10' },
+          { icon: Droplets, label: 'Prote\u00edna', value: protHoy > 0 ? protHoy.toString() : '-', unit: 'g', color: 'text-electric', bg: 'bg-electric/10' },
+          { icon: Dumbbell, label: 'Entreno', value: entrenoHoy, unit: '', color: 'text-purple-400', bg: 'bg-purple-500/10' },
+          { icon: Target, label: 'Objetivo', value: perfil?.objetivo?.split(',')[0] || 'Definir', unit: '', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
         ].map(s => (
-          <div key={s.label} className={`bg-dark-800 border border-dark-border rounded-2xl p-3.5 hover:border-white/10 transition-all shadow-lg ${s.glow}`}>
-            <div className={`w-8 h-8 bg-gradient-to-br ${s.color} rounded-lg flex items-center justify-center mb-2`}>
-              <s.icon className="w-4 h-4 text-white" />
+          <div key={s.label} className="bg-dark-800 border border-dark-border rounded-2xl p-3.5 hover:border-white/10 transition-all">
+            <div className={`w-8 h-8 ${s.bg} rounded-lg flex items-center justify-center mb-2`}>
+              <s.icon className={`w-4 h-4 ${s.color}`} />
             </div>
             <p className="text-xl font-black text-white leading-tight truncate">{s.value}<span className="text-white/40 text-xs ml-1 font-normal">{s.unit}</span></p>
-            <p className="text-white/50 text-[11px] mt-0.5 uppercase tracking-wider font-semibold">{s.label}</p>
+            <p className="text-white/40 text-[11px] mt-0.5 uppercase tracking-wider font-semibold">{s.label}</p>
           </div>
         ))}
       </div>
@@ -732,38 +768,8 @@ export default function Dashboard() {
         })()}
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-        <Link to="/nutricion" className="block bg-gradient-to-br from-emerald-900/40 to-emerald-800/20 border border-emerald-500/20 rounded-2xl p-4 hover:border-emerald-500/40 transition-all group">
-          <div className="flex items-center justify-between mb-1.5">
-            <Apple className="w-5 h-5 text-emerald-400" />
-            <ArrowUpRight className="w-3.5 h-3.5 text-emerald-400/50 group-hover:text-emerald-400 transition-colors" />
-          </div>
-          <h3 className="text-white font-bold text-sm">Mi Plan Nutricional</h3>
-          <p className="text-white/50 text-xs mt-0.5">{calHoy > 0 ? `${calHoy} kcal / ${calObjetivo} objetivo` : 'Ver plan'}</p>
-        </Link>
-
-        <Link to="/rutina" className="block bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-500/20 rounded-2xl p-4 hover:border-purple-500/40 transition-all group">
-          <div className="flex items-center justify-between mb-1.5">
-            <Dumbbell className="w-5 h-5 text-purple-400" />
-            <ArrowUpRight className="w-3.5 h-3.5 text-purple-400/50 group-hover:text-purple-400 transition-colors" />
-          </div>
-          <h3 className="text-white font-bold text-sm">Mi Rutina de Hoy</h3>
-          <p className="text-white/50 text-xs mt-0.5">{entrenoHoy}</p>
-        </Link>
-
-        <Link to="/bio-coach" className="block bg-gradient-to-br from-electric/20 to-neon/10 border border-electric/20 rounded-2xl p-4 hover:border-electric/40 transition-all group">
-          <div className="flex items-center justify-between mb-1.5">
-            <Zap className="w-5 h-5 text-electric" />
-            <ArrowUpRight className="w-3.5 h-3.5 text-electric/50 group-hover:text-electric transition-colors" />
-          </div>
-          <h3 className="text-white font-bold text-sm">JustFit Coach</h3>
-          <p className="text-white/50 text-xs mt-0.5">Preguntale lo que necesites</p>
-        </Link>
-      </div>
-
       {/* Asesores - Premium */}
-      <div className="bg-gradient-to-br from-amber-500/5 to-yellow-500/5 border border-amber-500/15 rounded-2xl p-4">
+      <div className="bg-dark-800 border border-amber-500/15 rounded-2xl p-4">
         <div className="flex items-center gap-2 mb-3">
           <span className="text-xl">⭐</span>
           <div className="flex-1">
