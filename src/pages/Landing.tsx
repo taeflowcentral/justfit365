@@ -64,6 +64,20 @@ export default function Landing() {
             JustFit<span className="text-lime">365</span>
           </h1>
 
+          {/* Banner promocion FREE (si esta activa) */}
+          {(() => {
+            const promoUntil = localStorage.getItem('jf365_promo_free_until');
+            const promoActiva = !!(promoUntil && new Date(promoUntil) > new Date());
+            if (!promoActiva) return null;
+            const dias = Math.ceil((new Date(promoUntil!).getTime() - Date.now()) / 86400000);
+            return (
+              <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-gradient-to-r from-emerald-500/20 to-lime/20 border border-emerald-500/40 rounded-full text-sm font-bold text-emerald-400 animate-pulse">
+                <span className="text-lg">🎁</span>
+                <span>PROMO FREE · {dias} día{dias !== 1 ? 's' : ''} para registrarte gratis</span>
+              </div>
+            );
+          })()}
+
           <p className="text-xl sm:text-2xl text-white/50 max-w-2xl mx-auto mb-4 leading-relaxed">
             Tu cuerpo necesita un plan. Nosotros te damos <strong className="text-white">la ciencia, la tecnolog&iacute;a y el acompa&ntilde;amiento</strong> para lograrlo.
           </p>

@@ -69,6 +69,21 @@ export default function Registro() {
 
         {/* Form */}
         <div className="bg-dark-800/80 backdrop-blur-2xl border border-dark-border rounded-3xl shadow-2xl p-6">
+          {/* Banner promocion FREE */}
+          {(() => {
+            const promoUntil = localStorage.getItem('jf365_promo_free_until');
+            const promoActiva = !!(promoUntil && new Date(promoUntil) > new Date());
+            if (!promoActiva) return null;
+            const dias = Math.ceil((new Date(promoUntil!).getTime() - Date.now()) / 86400000);
+            return (
+              <div className="mb-5 bg-gradient-to-r from-emerald-500/15 to-lime/15 border border-emerald-500/30 rounded-2xl p-4 text-center">
+                <span className="text-3xl">🎁</span>
+                <p className="text-emerald-400 font-black text-lg mt-1">¡PROMOCIÓN FREE ACTIVA!</p>
+                <p className="text-white/70 text-xs mt-1">Registrate ahora y accedé GRATIS hasta el {new Date(promoUntil!).toLocaleDateString('es-AR')}</p>
+                <p className="text-white/40 text-[10px] mt-1">Quedan {dias} día{dias !== 1 ? 's' : ''} de promoción</p>
+              </div>
+            );
+          })()}
           <div className="flex items-center gap-2 mb-6">
             <UserPlus className="w-5 h-5 text-electric" />
             <h2 className="text-lg font-bold text-white">Crear Cuenta</h2>

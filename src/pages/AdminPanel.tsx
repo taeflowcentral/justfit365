@@ -538,7 +538,7 @@ export default function AdminPanel() {
         <h3 className="text-white font-bold mb-4 flex items-center gap-2">
           <Shield className="w-5 h-5 text-cyan-400" /> Cuenta de Cobro
         </h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 mb-5">
           <div className="p-3 bg-dark-700 rounded-xl">
             <p className="text-white/30 text-[10px] uppercase tracking-wider">Alias Mercado Pago</p>
             <p className="text-electric font-mono font-bold">justfit365</p>
@@ -556,6 +556,79 @@ export default function AdminPanel() {
             <p className="text-white font-medium text-sm flex items-center gap-1"><Bell className="w-3 h-3 text-warning" /> 10 d&iacute;as antes del vencimiento</p>
           </div>
         </div>
+
+        {/* Barrera de Promocion */}
+        {(() => {
+          const promoUntil = localStorage.getItem('jf365_promo_free_until');
+          const promoActiva = promoUntil && new Date(promoUntil) > new Date();
+          const diasRestantes = promoActiva ? Math.ceil((new Date(promoUntil!).getTime() - Date.now()) / 86400000) : 0;
+          return (
+            <div className={`border rounded-2xl p-4 ${promoActiva ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-dark-700 border-dark-border'}`}>
+              <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{promoActiva ? '🎁' : '🚪'}</span>
+                  <div>
+                    <p className="text-white font-bold text-sm">Barrera de Pago</p>
+                    <p className={`text-xs ${promoActiva ? 'text-emerald-400' : 'text-white/40'}`}>
+                      {promoActiva
+                        ? `Promoción FREE activa · ${diasRestantes} día${diasRestantes !== 1 ? 's' : ''} restantes`
+                        : 'Promoción inactiva · usuarios pagan normalmente'}
+                    </p>
+                  </div>
+                </div>
+                {promoActiva && (
+                  <span className="text-emerald-400 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-emerald-500/15 rounded-full">
+                    Hasta {new Date(promoUntil!).toLocaleDateString('es-AR')}
+                  </span>
+                )}
+              </div>
+              <p className="text-white/50 text-xs mb-3">
+                {promoActiva
+                  ? 'Los nuevos usuarios que se registren en este período podrán usar la app sin pagar la suscripción hasta el vencimiento de la promoción.'
+                  : 'Activá una promoción FREE para que nuevos usuarios accedan sin pagar durante el período que decidas.'}
+              </p>
+              <div className="flex gap-2 flex-wrap">
+                {!promoActiva ? (
+                  <>
+                    <button onClick={() => {
+                      const dias = prompt('¿Cuántos días dura la promoción FREE?\n(7, 15, 30, 60, 90 días)', '30');
+                      if (!dias) return;
+                      const num = parseInt(dias);
+                      if (!num || num < 1 || num > 365) { alert('Ingresá un número entre 1 y 365'); return; }
+                      const until = new Date(Date.now() + num * 86400000);
+                      localStorage.setItem('jf365_promo_free_until', until.toISOString());
+                      alert(`✓ Promoción FREE activada hasta el ${until.toLocaleDateString('es-AR')}\n\nLos usuarios que se registren en este período no necesitan pagar.`);
+                      window.location.reload();
+                    }} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-sm font-black uppercase tracking-wider transition-all">
+                      🟢 Subir barrera (FREE)
+                    </button>
+                  </>
+                ) : (
+                  <button onClick={() => {
+                    if (!confirm('¿Bajar la barrera y terminar la promoción FREE?\n\nLos usuarios actuales mantienen su acceso. Los nuevos volverán a pagar.')) return;
+                    localStorage.removeItem('jf365_promo_free_until');
+                    alert('🚪 Barrera bajada. Promoción terminada. Nuevos usuarios pagan normalmente.');
+                    window.location.reload();
+                  }} className="flex items-center gap-2 px-4 py-2.5 bg-red-500 hover:bg-red-400 text-white rounded-xl text-sm font-black uppercase tracking-wider transition-all">
+                    🔴 Bajar barrera (cobrar)
+                  </button>
+                )}
+                <div className="flex gap-1 ml-auto">
+                  {[7, 15, 30, 60].map(d => (
+                    <button key={d} onClick={() => {
+                      if (promoActiva && !confirm(`Reemplazar promoción actual por una de ${d} días?`)) return;
+                      const until = new Date(Date.now() + d * 86400000);
+                      localStorage.setItem('jf365_promo_free_until', until.toISOString());
+                      window.location.reload();
+                    }} className="px-2.5 py-1 bg-white/5 border border-dark-border text-white/40 hover:text-white hover:border-white/20 rounded-lg text-[10px] font-bold transition-all">
+                      {d}d
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       {/* Modal confirmar precio */}

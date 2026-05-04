@@ -159,6 +159,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: false, error: 'Ya existe un usuario con ese DNI.' };
     }
 
+    // Verificar si hay promocion FREE activa
+    const promoUntil = localStorage.getItem('jf365_promo_free_until');
+    const promoActiva = !!(promoUntil && new Date(promoUntil) > new Date());
+
     const { data, error } = await supabase.from('usuarios').insert({
       dni: regData.dni,
       apellido: regData.apellido,
@@ -168,6 +172,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       role: regData.role,
       gimnasio_id: regData.role === 'gimnasio' ? `gym-${Date.now()}` : null,
       gimnasio_nombre: regData.role === 'gimnasio' ? (regData.gimnasioNombre || regData.nombre) : null,
+      // Si hay promo FREE activa, dar acceso completo hasta el fin de la promo
+      suscripcion_pagada: promoActiva ? true : false,
+      suscripcion_activa: promoActiva ? true : false,
+      fecha_suscripcion: promoActiva ? new Date().toISOString().split('T')[0] : null,
+      fecha_ultimo_pago: promoActiva ? new Date().toISOString().split('T')[0] : null,
     }).select().single();
 
     if (error) {
