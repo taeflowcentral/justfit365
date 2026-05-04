@@ -39,10 +39,27 @@ interface RegisterData {
   gimnasioNombre?: string;
 }
 
+export interface PendingGoogle {
+  email: string;
+  nombre: string;
+  foto?: string;
+}
+
+interface CompleteGoogleData {
+  dni: string;
+  apellido: string;
+  nombre: string;
+  role: 'usuario' | 'gimnasio';
+  gimnasioNombre?: string;
+}
+
 interface AuthContextType {
   user: User | null;
+  pendingGoogle: PendingGoogle | null;
   login: (apellido: string, dni: string, password: string) => Promise<boolean>;
+  loginWithGoogle: () => Promise<void>;
   register: (data: RegisterData) => Promise<{ success: boolean; error?: string }>;
+  completeGoogleRegistration: (data: CompleteGoogleData) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   acceptConsent: () => void;
   updateUser: (data: Partial<User>) => void;
@@ -51,6 +68,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 const CURRENT_USER_KEY = 'jf365_current_user';
+const PENDING_GOOGLE_KEY = 'jf365_pending_google';
 
 function dbRowToUser(row: Record<string, unknown>): User {
   return {
@@ -87,6 +105,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const saved = localStorage.getItem(CURRENT_USER_KEY);
     return saved ? JSON.parse(saved) : null;
   });
+  const [pendingGoogle, setPendingGoogle] = useState<PendingGoogle | null>(() => {
+    const saved = localStorage.getItem(PENDING_GOOGLE_KEY);
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  // Listener de Supabase Auth (Google OAuth)
+  useEffect(() => {
+    const handleSession = async (session: { user: { email?: string; user_metadata?: Record<string, unknown> } } | null) => {
+      if (!session?.user?.email) return;
+      const email = session.user.email;
+      const meta = (session.user.user_metadata || {}) as Record<string, string>;
+      const fullName = meta.full_name || meta.name || email.split('@')[0];
+      const foto = meta.picture || meta.avatar_url;
+
+      // Buscar fila en usuarios por email
+      const { data } = await supabase.from('usuarios').select('*').eq('email', email).maybeSingle();
+      if (data) {
+        const u = dbRowToUser(data);
+        setUser(u);
+        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(u));
+        setPendingGoogle(null);
+        localStorage.removeItem(PENDING_GOOGLE_KEY);
+      } else {
+        // Usuario nuevo de Google - debe completar perfil con DNI + role
+        const pending = { email, nombre: fullName, foto };
+        setPendingGoogle(pending);
+        localStorage.setItem(PENDING_GOOGLE_KEY, JSON.stringify(pending));
+      }
+    };
+
+    // Procesar sesion existente al cargar
+    supabase.auth.getSession().then(({ data }) => handleSession(data.session));
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        handleSession(session);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // Refrescar datos del usuario desde Supabase al iniciar y cada 30 segundos
   useEffect(() => {
@@ -189,9 +248,69 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { success: true };
   };
 
+  const loginWithGoogle = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
+  };
+
+  const completeGoogleRegistration = async (cgData: CompleteGoogleData): Promise<{ success: boolean; error?: string }> => {
+    if (!pendingGoogle) return { success: false, error: 'No hay sesion pendiente.' };
+    if (!/^\d{7,8}$/.test(cgData.dni)) {
+      return { success: false, error: 'El DNI debe tener 7 u 8 dígitos.' };
+    }
+    if (!cgData.apellido.trim() || !cgData.nombre.trim()) {
+      return { success: false, error: 'Nombre y apellido son obligatorios.' };
+    }
+
+    // Verificar si ya existe alguien con ese DNI
+    const { data: existing } = await supabase.from('usuarios').select('dni').eq('dni', cgData.dni).maybeSingle();
+    if (existing) {
+      return { success: false, error: 'Ya existe un usuario con ese DNI.' };
+    }
+
+    // Promo FREE
+    const promoUntil = localStorage.getItem('jf365_promo_free_until');
+    const promoActiva = !!(promoUntil && new Date(promoUntil) > new Date());
+
+    const { data, error } = await supabase.from('usuarios').insert({
+      dni: cgData.dni,
+      apellido: cgData.apellido,
+      nombre: `${cgData.nombre} ${cgData.apellido}`,
+      email: pendingGoogle.email,
+      password_hash: '__google_oauth__',
+      role: cgData.role,
+      foto: pendingGoogle.foto || null,
+      gimnasio_id: cgData.role === 'gimnasio' ? `gym-${Date.now()}` : null,
+      gimnasio_nombre: cgData.role === 'gimnasio' ? (cgData.gimnasioNombre || cgData.nombre) : null,
+      suscripcion_pagada: promoActiva ? true : false,
+      suscripcion_activa: promoActiva ? true : false,
+      fecha_suscripcion: promoActiva ? new Date().toISOString().split('T')[0] : null,
+      fecha_ultimo_pago: promoActiva ? new Date().toISOString().split('T')[0] : null,
+    }).select().single();
+
+    if (error) {
+      return { success: false, error: 'Error al completar registro: ' + error.message };
+    }
+
+    const u = dbRowToUser(data);
+    setUser(u);
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(u));
+    setPendingGoogle(null);
+    localStorage.removeItem(PENDING_GOOGLE_KEY);
+    return { success: true };
+  };
+
   const logout = () => {
     setUser(null);
+    setPendingGoogle(null);
     localStorage.removeItem(CURRENT_USER_KEY);
+    localStorage.removeItem(PENDING_GOOGLE_KEY);
+    // Cerrar sesion de Supabase Auth si la habia (Google OAuth)
+    supabase.auth.signOut().catch(() => {});
   };
 
   const acceptConsent = () => {
@@ -239,7 +358,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, acceptConsent, updateUser, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, pendingGoogle, login, loginWithGoogle, register, completeGoogleRegistration, logout, acceptConsent, updateUser, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

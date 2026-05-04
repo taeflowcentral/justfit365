@@ -19,21 +19,24 @@ import RecuperarPassword from './pages/RecuperarPassword';
 import Landing from './pages/Landing';
 import WorkoutTimer from './pages/WorkoutTimer';
 import GymCobranzas from './pages/GymCobranzas';
+import CompletarPerfil from './pages/CompletarPerfil';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, pendingGoogle } = useAuth();
+  if (pendingGoogle && !isAuthenticated) return <Navigate to="/completar-perfil" replace />;
   return isAuthenticated ? <>{children}</> : <Navigate to="/landing" />;
 }
 
 function AppRoutes() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, pendingGoogle, user } = useAuth();
 
   return (
     <Routes>
-      <Route path="/landing" element={isAuthenticated ? <Navigate to="/" replace /> : <Landing />} />
-      <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
-      <Route path="/registro" element={isAuthenticated ? <Navigate to="/" replace /> : <Registro />} />
+      <Route path="/landing" element={isAuthenticated ? <Navigate to="/" replace /> : pendingGoogle ? <Navigate to="/completar-perfil" replace /> : <Landing />} />
+      <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : pendingGoogle ? <Navigate to="/completar-perfil" replace /> : <Login />} />
+      <Route path="/registro" element={isAuthenticated ? <Navigate to="/" replace /> : pendingGoogle ? <Navigate to="/completar-perfil" replace /> : <Registro />} />
       <Route path="/recuperar" element={isAuthenticated ? <Navigate to="/" replace /> : <RecuperarPassword />} />
+      <Route path="/completar-perfil" element={isAuthenticated ? <Navigate to="/" replace /> : pendingGoogle ? <CompletarPerfil /> : <Navigate to="/login" replace />} />
       <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route index element={user?.role === 'gimnasio' ? <GymDashboard /> : <Dashboard />} />
         <Route path="nutricion" element={<Nutricion />} />
