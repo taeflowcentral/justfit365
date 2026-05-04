@@ -8,6 +8,124 @@ import { printContent } from '../components/ShareButtons';
 // Plantillas de ejercicios por objetivo
 const DISCIPLINAS = ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body', 'Cardio', 'HIIT', 'Funcional', 'Running', 'Caminata Activa', 'Yoga', 'Spinning', 'Ciclismo'];
 
+// Calentamientos especificos de 20 minutos por disciplina
+const calentamientos: Record<string, ClienteRutina[]> = {
+  'Push': [
+    { id: 0, nombre: 'Cardio liviano (cinta o bici)', series: 1, reps: '5 min', descanso: '30', peso: '-', musculo: 'Cardio', notas: 'Subir frecuencia cardiaca al 60-70%' },
+    { id: 0, nombre: 'Rotaciones de hombro grandes', series: 2, reps: '10 c/lado', descanso: '15', peso: '-', musculo: 'Hombros', notas: 'Hacia adelante y atras' },
+    { id: 0, nombre: 'Pull aparts con banda', series: 2, reps: '15', descanso: '20', peso: 'Banda', musculo: 'Hombros posteriores', notas: 'Activar manguito rotador' },
+    { id: 0, nombre: 'Flexiones de calentamiento', series: 2, reps: '10', descanso: '30', peso: 'Corporal', musculo: 'Pecho', notas: '' },
+    { id: 0, nombre: 'Press con barra vacia', series: 2, reps: '12', descanso: '45', peso: 'Barra', musculo: 'Pecho', notas: 'Solo barra para preparar el patron' },
+    { id: 0, nombre: 'Estiramiento dinamico de pecho', series: 1, reps: '60 seg', descanso: '0', peso: '-', musculo: 'Pecho', notas: '' },
+  ],
+  'Pull': [
+    { id: 0, nombre: 'Cardio liviano', series: 1, reps: '5 min', descanso: '30', peso: '-', musculo: 'Cardio', notas: '' },
+    { id: 0, nombre: 'Rotaciones de hombro', series: 2, reps: '10 c/lado', descanso: '15', peso: '-', musculo: 'Hombros', notas: '' },
+    { id: 0, nombre: 'Face pulls con banda', series: 2, reps: '15', descanso: '20', peso: 'Banda', musculo: 'Espalda alta', notas: 'Activacion de espalda' },
+    { id: 0, nombre: 'Dead hang en barra', series: 2, reps: '20 seg', descanso: '30', peso: 'Corporal', musculo: 'Espalda', notas: 'Colgarse pasivamente' },
+    { id: 0, nombre: 'Remos con banda', series: 2, reps: '15', descanso: '30', peso: 'Banda', musculo: 'Espalda', notas: 'Activacion sin carga' },
+    { id: 0, nombre: 'Movilidad torsion espinal', series: 2, reps: '30 seg c/lado', descanso: '0', peso: '-', musculo: 'Espalda', notas: '' },
+  ],
+  'Piernas': [
+    { id: 0, nombre: 'Cardio liviano (bici o eliptico)', series: 1, reps: '5 min', descanso: '30', peso: '-', musculo: 'Cardio', notas: '' },
+    { id: 0, nombre: 'Sentadilla sin peso profunda', series: 2, reps: '15', descanso: '30', peso: 'Corporal', musculo: 'Cuadriceps', notas: 'Bajar lo mas profundo posible' },
+    { id: 0, nombre: 'Estocadas dinamicas', series: 2, reps: '10 c/lado', descanso: '30', peso: 'Corporal', musculo: 'Piernas', notas: '' },
+    { id: 0, nombre: 'Movilidad de cadera (90/90)', series: 2, reps: '8 c/lado', descanso: '15', peso: '-', musculo: 'Cadera', notas: '' },
+    { id: 0, nombre: 'Activacion de gluteos (puente)', series: 2, reps: '15', descanso: '30', peso: 'Corporal', musculo: 'Gluteos', notas: 'Apretar arriba 2 seg' },
+    { id: 0, nombre: 'Sentadilla con barra vacia', series: 2, reps: '10', descanso: '60', peso: 'Barra', musculo: 'Cuadriceps', notas: 'Preparar patron motor' },
+  ],
+  'Upper': [
+    { id: 0, nombre: 'Cardio liviano', series: 1, reps: '5 min', descanso: '30', peso: '-', musculo: 'Cardio', notas: '' },
+    { id: 0, nombre: 'Rotaciones de hombro y codo', series: 2, reps: '10 c/lado', descanso: '15', peso: '-', musculo: 'Hombros', notas: '' },
+    { id: 0, nombre: 'Pull aparts con banda', series: 2, reps: '15', descanso: '20', peso: 'Banda', musculo: 'Espalda alta', notas: '' },
+    { id: 0, nombre: 'Flexiones de calentamiento', series: 2, reps: '8', descanso: '30', peso: 'Corporal', musculo: 'Pecho', notas: '' },
+    { id: 0, nombre: 'Activacion escapular', series: 2, reps: '12', descanso: '20', peso: 'Corporal', musculo: 'Espalda', notas: 'Bajar y juntar omoplatos' },
+    { id: 0, nombre: 'Estiramiento dinamico de tren superior', series: 1, reps: '90 seg', descanso: '0', peso: '-', musculo: 'Tren superior', notas: '' },
+  ],
+  'Lower': [
+    { id: 0, nombre: 'Cardio liviano (bici)', series: 1, reps: '5 min', descanso: '30', peso: '-', musculo: 'Cardio', notas: '' },
+    { id: 0, nombre: 'Sentadilla profunda sin peso', series: 2, reps: '15', descanso: '30', peso: 'Corporal', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Hip thrust corporal', series: 2, reps: '15', descanso: '30', peso: 'Corporal', musculo: 'Gluteos', notas: 'Activacion' },
+    { id: 0, nombre: 'Movilidad de tobillo', series: 2, reps: '10 c/lado', descanso: '15', peso: '-', musculo: 'Tobillo', notas: '' },
+    { id: 0, nombre: 'Estocadas dinamicas', series: 2, reps: '8 c/lado', descanso: '30', peso: 'Corporal', musculo: 'Piernas', notas: '' },
+    { id: 0, nombre: 'Sentadilla con barra vacia', series: 2, reps: '10', descanso: '60', peso: 'Barra', musculo: 'Cuadriceps', notas: '' },
+  ],
+  'Full Body': [
+    { id: 0, nombre: 'Cardio liviano', series: 1, reps: '5 min', descanso: '30', peso: '-', musculo: 'Cardio', notas: '' },
+    { id: 0, nombre: 'Movilidad articular global', series: 1, reps: '3 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'Cuello, hombros, cadera, rodillas, tobillos' },
+    { id: 0, nombre: 'Sentadilla sin peso', series: 2, reps: '15', descanso: '30', peso: 'Corporal', musculo: 'Piernas', notas: '' },
+    { id: 0, nombre: 'Flexiones de calentamiento', series: 2, reps: '8', descanso: '30', peso: 'Corporal', musculo: 'Pecho', notas: '' },
+    { id: 0, nombre: 'Pull aparts con banda', series: 2, reps: '15', descanso: '20', peso: 'Banda', musculo: 'Espalda', notas: '' },
+    { id: 0, nombre: 'Plancha activacion core', series: 2, reps: '30 seg', descanso: '20', peso: 'Corporal', musculo: 'Core', notas: '' },
+  ],
+  'Cardio': [
+    { id: 0, nombre: 'Caminata progresiva', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Cardio', notas: 'Empezar lento, subir ritmo' },
+    { id: 0, nombre: 'Movilidad articular', series: 1, reps: '3 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Trote suave', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Cardio', notas: 'Ritmo conversacional' },
+    { id: 0, nombre: 'Skipping bajo', series: 2, reps: '30 seg', descanso: '15', peso: '-', musculo: 'Cardio', notas: '' },
+    { id: 0, nombre: 'Talones al gluteo', series: 2, reps: '30 seg', descanso: '15', peso: '-', musculo: 'Isquios', notas: '' },
+    { id: 0, nombre: 'Estiramiento de piernas', series: 1, reps: '3 min', descanso: '0', peso: '-', musculo: 'Piernas', notas: '' },
+  ],
+  'HIIT': [
+    { id: 0, nombre: 'Cardio progresivo', series: 1, reps: '5 min', descanso: '30', peso: '-', musculo: 'Cardio', notas: 'Subir intensidad gradualmente' },
+    { id: 0, nombre: 'Movilidad dinamica completa', series: 1, reps: '3 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Jumping jacks suaves', series: 2, reps: '30 seg', descanso: '20', peso: '-', musculo: 'Cardio', notas: '' },
+    { id: 0, nombre: 'Sentadilla sin peso', series: 2, reps: '15', descanso: '20', peso: 'Corporal', musculo: 'Piernas', notas: '' },
+    { id: 0, nombre: 'Mountain climbers lentos', series: 2, reps: '30 seg', descanso: '20', peso: 'Corporal', musculo: 'Core', notas: 'Activacion de core' },
+    { id: 0, nombre: 'Burpees lentos progresivos', series: 1, reps: '5', descanso: '60', peso: 'Corporal', musculo: 'Full Body', notas: 'Para preparar el cuerpo' },
+  ],
+  'Funcional': [
+    { id: 0, nombre: 'Cardio liviano', series: 1, reps: '5 min', descanso: '30', peso: '-', musculo: 'Cardio', notas: '' },
+    { id: 0, nombre: 'Movilidad de cadera y hombros', series: 1, reps: '4 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Bear crawl suave', series: 2, reps: '10 metros', descanso: '30', peso: 'Corporal', musculo: 'Core', notas: '' },
+    { id: 0, nombre: 'Sentadilla goblet liviana', series: 2, reps: '12', descanso: '30', peso: 'Liviano', musculo: 'Piernas', notas: '' },
+    { id: 0, nombre: 'Kettlebell swing tecnico', series: 2, reps: '10', descanso: '45', peso: 'Liviano', musculo: 'Gluteos', notas: 'Practicar tecnica con peso bajo' },
+    { id: 0, nombre: 'Plancha lateral activacion', series: 2, reps: '20 seg c/lado', descanso: '20', peso: 'Corporal', musculo: 'Core', notas: '' },
+  ],
+  'Running': [
+    { id: 0, nombre: 'Caminata rapida', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Cardio', notas: 'Para entrar en calor' },
+    { id: 0, nombre: 'Movilidad de tobillos y caderas', series: 1, reps: '3 min', descanso: '0', peso: '-', musculo: 'Inferior', notas: '' },
+    { id: 0, nombre: 'Skipping bajo', series: 3, reps: '30 seg', descanso: '20', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Talones al gluteo', series: 3, reps: '30 seg', descanso: '20', peso: '-', musculo: 'Isquios', notas: '' },
+    { id: 0, nombre: 'Trote progresivo', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Cardio', notas: 'Aumentar ritmo gradualmente' },
+    { id: 0, nombre: 'Sprints cortos suaves', series: 3, reps: '50 metros', descanso: '60', peso: '-', musculo: 'Cuadriceps', notas: 'Al 70% para activar' },
+  ],
+  'Caminata Activa': [
+    { id: 0, nombre: 'Caminata muy suave', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Cardio', notas: 'Entrar en calor' },
+    { id: 0, nombre: 'Movilidad articular', series: 1, reps: '3 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'Tobillos, rodillas, cadera' },
+    { id: 0, nombre: 'Caminata progresiva', series: 1, reps: '7 min', descanso: '0', peso: '-', musculo: 'Cardio', notas: 'Aumentar ritmo' },
+    { id: 0, nombre: 'Estiramiento dinamico', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Piernas', notas: 'Antes del trabajo principal' },
+  ],
+  'Yoga': [
+    { id: 0, nombre: 'Respiracion profunda (pranayama)', series: 1, reps: '3 min', descanso: '0', peso: '-', musculo: 'Respiracion', notas: 'Inhalar 4 seg, exhalar 6 seg' },
+    { id: 0, nombre: 'Postura de la montana', series: 1, reps: '1 min', descanso: '0', peso: '-', musculo: 'Postura', notas: 'Centrar conciencia' },
+    { id: 0, nombre: 'Saludo al sol (lento)', series: 3, reps: '1 ciclo', descanso: '30', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Gato-vaca', series: 2, reps: '10', descanso: '15', peso: '-', musculo: 'Espalda', notas: 'Movilidad espinal' },
+    { id: 0, nombre: 'Perro boca abajo', series: 2, reps: '30 seg', descanso: '30', peso: '-', musculo: 'Full Body', notas: '' },
+    { id: 0, nombre: 'Lunge dinamico bajo', series: 2, reps: '5 c/lado', descanso: '15', peso: '-', musculo: 'Cadera', notas: '' },
+  ],
+  'Spinning': [
+    { id: 0, nombre: 'Pedaleo muy suave', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: 'Resistencia minima' },
+    { id: 0, nombre: 'Cadencia progresiva', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: 'Aumentar RPM gradualmente' },
+    { id: 0, nombre: 'Resistencia ligera de pie', series: 3, reps: '1 min', descanso: '1 min', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Sprints cortos al 60%', series: 3, reps: '20 seg', descanso: '40', peso: '-', musculo: 'Full Body', notas: 'Para activar' },
+    { id: 0, nombre: 'Estiramiento de piernas en bici', series: 1, reps: '2 min', descanso: '0', peso: '-', musculo: 'Piernas', notas: '' },
+  ],
+  'Ciclismo': [
+    { id: 0, nombre: 'Rodaje muy suave', series: 1, reps: '8 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: 'Zona 1, conversacional' },
+    { id: 0, nombre: 'Cadencia progresiva', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: '' },
+    { id: 0, nombre: 'Sprints cortos suaves', series: 3, reps: '30 seg', descanso: '90', peso: '-', musculo: 'Cuadriceps', notas: 'Al 70% para abrir piernas' },
+    { id: 0, nombre: 'Pedaleo con resistencia ligera', series: 1, reps: '4 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: '' },
+  ],
+};
+
+function generarCalentamientoParaDisciplinas(tipos: string[]): ClienteRutina[] {
+  // Si hay multiple disciplinas, usar Full Body o la primera
+  if (tipos.length === 0) return calentamientos['Full Body'];
+  if (tipos.length === 1) return calentamientos[tipos[0]] || calentamientos['Full Body'];
+  return calentamientos['Full Body'];
+}
+
 const plantillasRutina: Record<string, ClienteRutina[]> = {
   'Push': [
     { id: 0, nombre: 'Press Banca con Barra', series: 4, reps: '8-10', descanso: '90', peso: '', musculo: 'Pecho', notas: '' },
@@ -276,6 +394,18 @@ export default function GymClientes() {
   const deleteEjCliente = (ejId: number) => {
     if (!cliente) return;
     updateCliente(cliente.id, { rutina: cliente.rutina.filter(e => e.id !== ejId) });
+  };
+
+  const moverEjercicio = (ejId: number, direccion: 'arriba' | 'abajo') => {
+    if (!cliente) return;
+    const rutina = [...cliente.rutina];
+    const idx = rutina.findIndex(e => e.id === ejId);
+    if (idx === -1) return;
+    if (direccion === 'arriba' && idx === 0) return;
+    if (direccion === 'abajo' && idx === rutina.length - 1) return;
+    const nuevoIdx = direccion === 'arriba' ? idx - 1 : idx + 1;
+    [rutina[idx], rutina[nuevoIdx]] = [rutina[nuevoIdx], rutina[idx]];
+    updateCliente(cliente.id, { rutina });
   };
 
   // Nutricion
@@ -691,6 +821,21 @@ export default function GymClientes() {
               <button onClick={() => enviarEmail('rutina')} className="flex items-center gap-1.5 px-3 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-xl text-xs font-medium hover:bg-blue-500/20 transition-all">
                 <Mail className="w-3.5 h-3.5" /> Email
               </button>
+              <button onClick={() => {
+                // Detectar disciplinas en la rutina actual y generar calentamiento apropiado
+                const disciplinasUsadas = [...new Set(cliente!.rutina.map(e => {
+                  for (const [disc, ejs] of Object.entries(plantillasRutina)) {
+                    if (ejs.some(p => p.nombre === e.nombre)) return disc;
+                  }
+                  return '';
+                }).filter(Boolean))];
+                const calent = generarCalentamientoParaDisciplinas(disciplinasUsadas);
+                const ejs = calent.map(e => ({ ...e, id: Date.now() + Math.random() * 10000 }));
+                // Agregar al INICIO de la rutina
+                updateCliente(cliente!.id, { rutina: [...ejs, ...cliente!.rutina] });
+              }} className="flex items-center gap-1.5 px-3 py-2 bg-amber-500/15 border border-amber-500/20 text-amber-400 rounded-xl text-xs font-bold hover:bg-amber-500/25 transition-all">
+                🔥 Calentamiento
+              </button>
               <button onClick={() => setShowDisciplinas(!showDisciplinas)} className="flex items-center gap-1.5 px-3 py-2 bg-purple-500/15 border border-purple-500/20 text-purple-400 rounded-xl text-xs font-bold hover:bg-purple-500/25 transition-all">
                 <Zap className="w-3.5 h-3.5" /> Generar Rutina
               </button>
@@ -737,7 +882,17 @@ export default function GymClientes() {
                       {e.notas && <p className="text-electric/50 text-xs mt-0.5">{e.notas}</p>}
                     </div>
                   </div>
-                  <button onClick={() => deleteEjCliente(e.id)} className="p-1.5 text-white/15 hover:text-danger transition-colors"><Trash2 className="w-4 h-4" /></button>
+                  <div className="flex items-center gap-1">
+                    <button onClick={() => moverEjercicio(e.id, 'arriba')} disabled={i === 0}
+                      className="p-1.5 text-white/15 hover:text-electric transition-colors disabled:opacity-20 disabled:cursor-not-allowed" title="Subir">
+                      <ArrowUp className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => moverEjercicio(e.id, 'abajo')} disabled={i === cliente!.rutina.length - 1}
+                      className="p-1.5 text-white/15 hover:text-electric transition-colors disabled:opacity-20 disabled:cursor-not-allowed" title="Bajar">
+                      <ArrowDown className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => deleteEjCliente(e.id)} className="p-1.5 text-white/15 hover:text-danger transition-colors" title="Eliminar"><Trash2 className="w-4 h-4" /></button>
+                  </div>
                 </div>
               ))}
             </div>
