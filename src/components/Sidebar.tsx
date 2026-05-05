@@ -55,7 +55,7 @@ export default function Sidebar({ onNavigate }: { onNavigate: () => void }) {
   const links = user?.role === 'admin' ? adminLinks : user?.role === 'gimnasio' ? gymLinks : userLinks;
 
   return (
-    <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-dark-900 border-r border-dark-border flex flex-col transition-all duration-300 min-h-screen`}>
+    <aside className={`${collapsed ? 'w-20' : 'w-64'} bg-dark-900 border-r border-dark-border flex flex-col transition-all duration-300 h-screen sticky top-0`}>
       {/* Logo */}
       <Link to="/" onClick={onNavigate} className="p-4 border-b border-dark-border flex items-center gap-3 hover:bg-white/[0.02] transition-colors" title="Ir al Dashboard">
         <div className="w-10 h-10 bg-lime rounded-xl flex items-center justify-center shrink-0">
@@ -80,7 +80,7 @@ export default function Sidebar({ onNavigate }: { onNavigate: () => void }) {
       )}
 
       {/* Navigation */}
-      <nav className="flex-1 p-3 space-y-1">
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto min-h-0">
         {links.map(link => (
           <NavLink
             key={link.to + link.label}
