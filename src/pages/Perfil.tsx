@@ -3,11 +3,11 @@ import { useAuth } from '../context/AuthContext';
 import { getUserItem, setUserItem } from '../lib/storage';
 import {
   User as UserIcon, Camera, Save, Trash2, StickyNote, Ruler,
-  Weight, Calendar, Target, Activity, Fingerprint, Mail, Phone, HeartPulse, Plus, X
+  Weight, Calendar, Target, Activity, Fingerprint, Mail, Phone, HeartPulse, Plus, X, LogOut
 } from 'lucide-react';
 
 export default function Perfil() {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
   const [saved, setSaved] = useState(false);
   const [fotoPreview, setFotoPreview] = useState(user?.foto || '');
 
@@ -494,6 +494,17 @@ export default function Perfil() {
       >
         <Save className="w-4 h-4" />
         {saved ? 'Perfil guardado correctamente' : 'Guardar Cambios'}
+      </button>
+
+      {/* Cerrar sesion */}
+      <button
+        onClick={() => {
+          if (confirm('¿Seguro que querés cerrar sesión?')) logout();
+        }}
+        className="w-full py-3.5 mt-2 rounded-2xl bg-danger/10 hover:bg-danger/20 border border-danger/20 text-danger font-bold text-sm flex items-center justify-center gap-2 transition-all"
+      >
+        <LogOut className="w-4 h-4" />
+        Cerrar sesi&oacute;n
       </button>
     </div>
   );
