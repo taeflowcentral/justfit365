@@ -566,13 +566,13 @@ export default function Rutina() {
                     <p className="text-white/30 text-xs mt-0.5">{e.musculo} &middot; {e.series}x{e.reps} &middot; {e.peso}kg</p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    <button onClick={(ev) => { ev.stopPropagation(); setEditando(editando === e.id ? null : e.id); setExpandido(e.id); }} className="p-1.5 text-white/20 hover:text-electric transition-colors rounded-lg hover:bg-white/5">
-                      {editando === e.id ? <X className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
+                    <button onClick={(ev) => { ev.stopPropagation(); setEditando(editando === e.id ? null : e.id); setExpandido(e.id); }} className="p-2 text-white/55 hover:text-electric transition-colors rounded-lg hover:bg-white/5" title={editando === e.id ? 'Cerrar' : 'Editar ejercicio'}>
+                      {editando === e.id ? <X className="w-5 h-5" /> : <Edit3 className="w-5 h-5" />}
                     </button>
-                    <button onClick={(ev) => { ev.stopPropagation(); deleteEjercicio(e.id); }} className="p-1.5 text-white/20 hover:text-danger transition-colors rounded-lg hover:bg-white/5">
-                      <Trash2 className="w-4 h-4" />
+                    <button onClick={(ev) => { ev.stopPropagation(); deleteEjercicio(e.id); }} className="p-2 text-white/55 hover:text-danger transition-colors rounded-lg hover:bg-white/5" title="Eliminar">
+                      <Trash2 className="w-5 h-5" />
                     </button>
-                    <ChevronDown className={`w-4 h-4 text-white/20 transition-transform ${expandido === e.id ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-5 h-5 text-white/45 transition-transform ${expandido === e.id ? 'rotate-180' : ''}`} />
                   </div>
                 </div>
 
@@ -582,12 +582,12 @@ export default function Rutina() {
                       <div className="space-y-4 mt-4">
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="block text-[10px] text-white/30 uppercase tracking-wider mb-1">Nombre</label>
+                            <label className="block text-xs text-white/55 uppercase tracking-wider mb-1.5 font-semibold">Nombre</label>
                             <input type="text" value={e.nombre} onChange={ev => updateEjercicio(e.id, 'nombre', ev.target.value)}
                               className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30" />
                           </div>
                           <div>
-                            <label className="block text-[10px] text-white/30 uppercase tracking-wider mb-1">M&uacute;sculo</label>
+                            <label className="block text-xs text-white/55 uppercase tracking-wider mb-1.5 font-semibold">M&uacute;sculo</label>
                             <select value={e.musculo} onChange={ev => updateEjercicio(e.id, 'musculo', ev.target.value)}
                               className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 appearance-none">
                               {gruposMusculares.map(g => <option key={g} value={g} className="bg-dark-800">{g}</option>)}
@@ -595,45 +595,45 @@ export default function Rutina() {
                           </div>
                         </div>
                         <div className="grid grid-cols-4 gap-3">
-                          <div><label className="block text-[10px] text-white/30 uppercase tracking-wider mb-1">Series</label>
+                          <div><label className="block text-xs text-white/55 uppercase tracking-wider mb-1.5 font-semibold">Series</label>
                             <input type="number" min="1" max="20" value={e.series} onChange={ev => updateEjercicio(e.id, 'series', parseInt(ev.target.value) || 1)} className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" /></div>
-                          <div><label className="block text-[10px] text-white/30 uppercase tracking-wider mb-1">Reps</label>
+                          <div><label className="block text-xs text-white/55 uppercase tracking-wider mb-1.5 font-semibold">Reps</label>
                             <input type="text" value={e.reps} onChange={ev => updateEjercicio(e.id, 'reps', ev.target.value)} className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" /></div>
-                          <div><label className="block text-[10px] text-white/30 uppercase tracking-wider mb-1">Peso (kg)</label>
+                          <div><label className="block text-xs text-white/55 uppercase tracking-wider mb-1.5 font-semibold">Peso (kg)</label>
                             <input type="text" value={e.peso} onChange={ev => updateEjercicio(e.id, 'peso', ev.target.value)} className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" /></div>
-                          <div><label className="block text-[10px] text-white/30 uppercase tracking-wider mb-1">Descanso (s)</label>
+                          <div><label className="block text-xs text-white/55 uppercase tracking-wider mb-1.5 font-semibold">Descanso (s)</label>
                             <input type="text" value={e.descanso} onChange={ev => updateEjercicio(e.id, 'descanso', ev.target.value)} className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" /></div>
                         </div>
                         <div>
-                          <label className="block text-[10px] text-white/30 uppercase tracking-wider mb-1">RPE (esfuerzo percibido 1-10)</label>
+                          <label className="block text-xs text-white/55 uppercase tracking-wider mb-1.5 font-semibold">RPE (esfuerzo percibido 1-10)</label>
                           <div className="flex gap-1">
                             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
                               <button key={n} type="button" onClick={() => updateEjercicio(e.id, 'rpe', n)}
-                                className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${e.rpe === n
+                                className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${e.rpe === n
                                   ? n <= 4 ? 'bg-emerald-500 text-black' : n <= 7 ? 'bg-amber-500 text-black' : 'bg-red-500 text-white'
-                                  : 'bg-black/40 text-white/30 border border-dark-border hover:text-white/60'
+                                  : 'bg-black/40 text-white/55 border border-dark-border hover:text-white/85'
                                 }`}>{n}</button>
                             ))}
                           </div>
-                          <p className="text-white/20 text-[10px] mt-1">1-4 fácil &middot; 5-7 moderado &middot; 8-10 muy duro</p>
+                          <p className="text-white/45 text-xs mt-1.5">1-4 fácil &middot; 5-7 moderado &middot; 8-10 muy duro</p>
                         </div>
-                        <div><label className="block text-[10px] text-white/30 uppercase tracking-wider mb-1">Notas</label>
+                        <div><label className="block text-xs text-white/55 uppercase tracking-wider mb-1.5 font-semibold">Notas</label>
                           <textarea value={e.notas} onChange={ev => updateEjercicio(e.id, 'notas', ev.target.value)} rows={2} placeholder="Ej: Control exc\u00e9ntrico, drop set..."
                             className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 resize-none placeholder-white/15" /></div>
-                        <button onClick={() => setEditando(null)} className="flex items-center gap-2 px-4 py-2 bg-emerald-500/15 text-emerald-400 rounded-xl text-xs font-bold hover:bg-emerald-500/25 transition-colors">
-                          <Save className="w-3 h-3" /> Listo
+                        <button onClick={() => setEditando(null)} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500/15 text-emerald-400 rounded-xl text-sm font-bold hover:bg-emerald-500/25 transition-colors">
+                          <Save className="w-4 h-4" /> Listo
                         </button>
                       </div>
                     ) : (
                       <div>
-                        <div className="flex gap-6 mt-3 text-xs flex-wrap">
-                          <div className="flex items-center gap-1 text-white/40"><RotateCcw className="w-3 h-3" /> {e.series} series</div>
-                          <div className="flex items-center gap-1 text-white/40"><Dumbbell className="w-3 h-3" /> {e.reps} reps</div>
-                          <div className="flex items-center gap-1 text-white/40"><Clock className="w-3 h-3" /> {e.descanso}s descanso</div>
-                          <div className="flex items-center gap-1 text-white/40"><Flame className="w-3 h-3" /> {e.peso} kg</div>
-                          {e.rpe && <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${e.rpe <= 4 ? 'bg-emerald-500/15 text-emerald-400' : e.rpe <= 7 ? 'bg-amber-500/15 text-amber-400' : 'bg-red-500/15 text-red-400'}`}>RPE {e.rpe}</div>}
+                        <div className="flex gap-5 mt-3 text-sm flex-wrap">
+                          <div className="flex items-center gap-1.5 text-white/65"><RotateCcw className="w-4 h-4" /> {e.series} series</div>
+                          <div className="flex items-center gap-1.5 text-white/65"><Dumbbell className="w-4 h-4" /> {e.reps} reps</div>
+                          <div className="flex items-center gap-1.5 text-white/65"><Clock className="w-4 h-4" /> {e.descanso}s descanso</div>
+                          <div className="flex items-center gap-1.5 text-white/65"><Flame className="w-4 h-4" /> {e.peso} kg</div>
+                          {e.rpe && <div className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold ${e.rpe <= 4 ? 'bg-emerald-500/15 text-emerald-400' : e.rpe <= 7 ? 'bg-amber-500/15 text-amber-400' : 'bg-red-500/15 text-red-400'}`}>RPE {e.rpe}</div>}
                         </div>
-                        {e.notas && <p className="mt-3 text-xs text-electric/60 bg-electric/5 border border-electric/10 rounded-lg px-3 py-2">{e.notas}</p>}
+                        {e.notas && <p className="mt-3 text-sm text-electric/80 bg-electric/5 border border-electric/10 rounded-lg px-3 py-2.5">{e.notas}</p>}
                       </div>
                     )}
                   </div>

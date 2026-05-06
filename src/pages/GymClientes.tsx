@@ -566,13 +566,13 @@ export default function GymClientes() {
                     <p className="text-white/40 text-xs">{c.objetivo?.split(',')[0] || '-'} &middot; {c.nivel}{c.dni ? ` \u00b7 DNI ${c.dni}` : ''}</p>
                   </div>
                 </div>
-                <button onClick={(ev) => { ev.stopPropagation(); deleteCliente(c.id); }} className="p-1.5 text-white/15 hover:text-danger transition-colors rounded-lg hover:bg-white/5">
+                <button onClick={(ev) => { ev.stopPropagation(); deleteCliente(c.id); }} className="p-2 text-white/55 hover:text-danger transition-colors rounded-lg hover:bg-white/5" title="Eliminar cliente">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
               <div className="flex items-center gap-4 text-xs text-white/40">
-                <span className="flex items-center gap-1"><Dumbbell className="w-3 h-3" /> {c.rutina.length} ej.</span>
-                <span className="flex items-center gap-1"><Utensils className="w-3 h-3" /> {c.nutricion.length} comidas</span>
+                <span className="flex items-center gap-1.5"><Dumbbell className="w-4 h-4" /> {c.rutina.length} ej.</span>
+                <span className="flex items-center gap-1.5"><Utensils className="w-4 h-4" /> {c.nutricion.length} comidas</span>
                 <span>{c.peso}kg &middot; {c.altura}cm &middot; {c.edad}a</span>
               </div>
             </div>
@@ -586,7 +586,7 @@ export default function GymClientes() {
               <h2 className="text-lg font-black text-white mb-5 flex items-center gap-2"><Plus className="w-5 h-5 text-electric" /> Nuevo Cliente</h2>
               <div className="space-y-4">
                 {/* Foto de perfil */}
-                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1">Foto de Perfil</p>
+                <p className="text-white/65 text-xs uppercase tracking-widest font-bold border-b border-dark-border pb-1.5">Foto de Perfil</p>
                 <div className="flex items-center gap-4">
                   <div className="relative group">
                     <div className="w-20 h-20 rounded-2xl overflow-hidden bg-dark-700 border-2 border-dark-border flex items-center justify-center">
@@ -619,7 +619,7 @@ export default function GymClientes() {
                 </div>
 
                 {/* Datos personales */}
-                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1">Datos Personales</p>
+                <p className="text-white/65 text-xs uppercase tracking-widest font-bold border-b border-dark-border pb-1.5">Datos Personales</p>
                 <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Nombre completo *</label>
                   <input type="text" value={nuevoCliente.nombre} onChange={e => setNuevoCliente(p => ({ ...p, nombre: e.target.value }))} placeholder="Nombre y Apellido" className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
                 <div className="grid grid-cols-2 gap-3">
@@ -638,7 +638,7 @@ export default function GymClientes() {
                 </div>
 
                 {/* Contacto de emergencia */}
-                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1 pt-2">Contacto de Emergencia</p>
+                <p className="text-white/65 text-xs uppercase tracking-widest font-bold border-b border-dark-border pb-1.5 pt-2">Contacto de Emergencia</p>
                 <div className="grid grid-cols-2 gap-3">
                   <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Nombre</label>
                     <input type="text" value={nuevoCliente.contactoEmergencia} onChange={e => setNuevoCliente(p => ({ ...p, contactoEmergencia: e.target.value }))} placeholder="Familiar o amigo" className="w-full px-4 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
@@ -647,7 +647,7 @@ export default function GymClientes() {
                 </div>
 
                 {/* Datos fisicos */}
-                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1 pt-2">Datos F&iacute;sicos y Objetivos</p>
+                <p className="text-white/65 text-xs uppercase tracking-widest font-bold border-b border-dark-border pb-1.5 pt-2">Datos F&iacute;sicos y Objetivos</p>
                 <div className="grid grid-cols-4 gap-3">
                   <div><label className="block text-xs text-white/50 uppercase tracking-wider mb-1">Peso (kg)</label>
                     <input type="number" value={nuevoCliente.peso} onChange={e => setNuevoCliente(p => ({ ...p, peso: e.target.value }))} placeholder="75" className="w-full px-3 py-3 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30 placeholder-white/15" /></div>
@@ -716,7 +716,7 @@ export default function GymClientes() {
                 </div>
 
                 {/* Condiciones preexistentes */}
-                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1 pt-2">Condiciones Preexistentes</p>
+                <p className="text-white/65 text-xs uppercase tracking-widest font-bold border-b border-dark-border pb-1.5 pt-2">Condiciones Preexistentes</p>
                 <div className="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto">
                   {['Hipotiroidismo', 'Hipertiroidismo', 'Hashimoto', 'Diabetes tipo 1', 'Diabetes tipo 2', 'Hipertension arterial', 'Asma', 'EPOC', 'Enfermedad celiaca', 'Intolerancia a la lactosa', 'Alergia al gluten', 'SOP', 'Endometriosis', 'Artritis reumatoide', 'Osteoporosis', 'Osteoartritis', 'Fibromialgia', 'Lupus', 'Crohn', 'Colitis ulcerosa', 'Sindrome intestino irritable', 'Reflujo gastroesofagico', 'Insuficiencia renal', 'Higado graso', 'Anemia ferropenica', 'Arritmia cardiaca', 'Insuficiencia cardiaca', 'Cardiopatia isquemica', 'Epilepsia', 'Esclerosis multiple', 'Parkinson', 'Depresion clinica', 'Ansiedad generalizada', 'Hernia de disco', 'Escoliosis', 'Tendinitis cronica', 'Tunel carpiano', 'Psoriasis', 'Apnea del sueno', 'Hiperlipidemia', 'Gota', 'Angioedema', 'Angioedema hereditario', 'Embarazo', 'Sobrepeso/Obesidad', 'Addison', 'Cushing', 'Dermatitis atopica'].map(enf => {
                     const activo = nuevoCliente.enfermedades.includes(enf);
@@ -737,7 +737,7 @@ export default function GymClientes() {
                 </div>
 
                 {/* Declaraciones */}
-                <p className="text-white/30 text-[10px] uppercase tracking-widest font-bold border-b border-dark-border pb-1 pt-2">Declaraciones</p>
+                <p className="text-white/65 text-xs uppercase tracking-widest font-bold border-b border-dark-border pb-1.5 pt-2">Declaraciones</p>
                 <label className="flex items-start gap-3 cursor-pointer group">
                   <input type="checkbox" checked={nuevoCliente.esMayorDeEdad} onChange={e => setNuevoCliente(p => ({ ...p, esMayorDeEdad: e.target.checked }))}
                     className="mt-0.5 w-4 h-4 rounded border-dark-border bg-black/60 text-electric focus:ring-electric/30" />
@@ -878,20 +878,20 @@ export default function GymClientes() {
                     <span className="w-7 h-7 bg-purple-500/15 text-purple-400 rounded-lg flex items-center justify-center text-xs font-bold">{i + 1}</span>
                     <div>
                       <p className="text-white font-bold text-sm">{e.nombre}</p>
-                      <p className="text-white/40 text-xs">{e.musculo} &middot; {e.series}x{e.reps} &middot; {e.peso}kg &middot; {e.descanso}s</p>
-                      {e.notas && <p className="text-electric/50 text-xs mt-0.5">{e.notas}</p>}
+                      <p className="text-white/55 text-sm">{e.musculo} &middot; {e.series}x{e.reps} &middot; {e.peso}kg &middot; {e.descanso}s</p>
+                      {e.notas && <p className="text-electric/75 text-xs mt-0.5">{e.notas}</p>}
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
                     <button onClick={() => moverEjercicio(e.id, 'arriba')} disabled={i === 0}
-                      className="p-1.5 text-white/15 hover:text-electric transition-colors disabled:opacity-20 disabled:cursor-not-allowed" title="Subir">
-                      <ArrowUp className="w-4 h-4" />
+                      className="p-2 text-white/55 hover:text-electric transition-colors rounded-lg hover:bg-white/5 disabled:opacity-20 disabled:cursor-not-allowed" title="Subir">
+                      <ArrowUp className="w-5 h-5" />
                     </button>
                     <button onClick={() => moverEjercicio(e.id, 'abajo')} disabled={i === cliente!.rutina.length - 1}
-                      className="p-1.5 text-white/15 hover:text-electric transition-colors disabled:opacity-20 disabled:cursor-not-allowed" title="Bajar">
-                      <ArrowDown className="w-4 h-4" />
+                      className="p-2 text-white/55 hover:text-electric transition-colors rounded-lg hover:bg-white/5 disabled:opacity-20 disabled:cursor-not-allowed" title="Bajar">
+                      <ArrowDown className="w-5 h-5" />
                     </button>
-                    <button onClick={() => deleteEjCliente(e.id)} className="p-1.5 text-white/15 hover:text-danger transition-colors" title="Eliminar"><Trash2 className="w-4 h-4" /></button>
+                    <button onClick={() => deleteEjCliente(e.id)} className="p-2 text-white/55 hover:text-danger transition-colors rounded-lg hover:bg-white/5" title="Eliminar"><Trash2 className="w-5 h-5" /></button>
                   </div>
                 </div>
               ))}
