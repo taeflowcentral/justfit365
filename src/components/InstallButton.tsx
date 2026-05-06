@@ -101,9 +101,20 @@ export default function InstallButton({ variant = 'sidebar', collapsed = false }
 }
 
 function InstallHelpModal({ onClose }: { onClose: () => void }) {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isAndroid = /Android/.test(navigator.userAgent);
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+  const isAndroid = /Android/.test(ua);
   const isMobile = isIOS || isAndroid;
+  // En iOS, solo Safari permite Agregar a inicio. Chrome iOS = "CriOS", Firefox iOS = "FxiOS"
+  const isIOSChrome = isIOS && /CriOS/.test(ua);
+  const isIOSFirefox = isIOS && /FxiOS/.test(ua);
+  const isIOSOtherBrowser = isIOS && (isIOSChrome || isIOSFirefox);
+
+  const copiarURL = () => {
+    navigator.clipboard.writeText(window.location.origin).then(() => {
+      alert('URL copiada. Ahora abrila en Safari.');
+    });
+  };
 
   return (
     <div className="fixed inset-0 bg-black/85 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={onClose}>
@@ -118,56 +129,110 @@ function InstallHelpModal({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <div className="p-5 space-y-4 text-sm text-white/70">
-          <p>Tené el icono de JustFit365 directo en tu pantalla de inicio o escritorio. Sin abrir el navegador.</p>
-
-          {isIOS && (
-            <div className="bg-electric/5 border border-electric/15 rounded-2xl p-4 space-y-3">
+        <div className="p-5 space-y-4 text-sm text-white/75">
+          {isIOSOtherBrowser && (
+            <div className="bg-amber-500/10 border-2 border-amber-500/40 rounded-2xl p-4 space-y-3">
               <div className="flex items-center gap-2">
-                <Smartphone className="w-5 h-5 text-electric" />
-                <h4 className="text-white font-bold">iPhone / iPad (Safari)</h4>
+                <Smartphone className="w-5 h-5 text-amber-400" />
+                <h4 className="text-white font-black text-base">Estás en {isIOSChrome ? 'Chrome' : 'Firefox'}</h4>
               </div>
-              <ol className="space-y-2.5 list-decimal list-inside">
-                <li>Tocá el botón <Share className="w-4 h-4 inline mx-1 text-electric" /> <strong className="text-white">Compartir</strong> abajo en Safari.</li>
-                <li>Bajá hasta <strong className="text-white">"Agregar a inicio"</strong> (con el ícono <Plus className="w-3.5 h-3.5 inline" />).</li>
-                <li>Confirmá con <strong className="text-white">Agregar</strong> arriba a la derecha.</li>
-              </ol>
-              <p className="text-white/45 text-xs">⚠️ En iOS solo funciona desde Safari, no desde Chrome o Firefox.</p>
+              <p className="text-white text-sm">
+                En iPhone, el "Agregar a inicio" solo funciona desde <strong className="text-amber-400">Safari</strong>. Apple bloquea esta función en otros navegadores.
+              </p>
+              <div className="bg-black/40 rounded-xl p-3 space-y-2">
+                <p className="text-white/80 text-sm font-bold">¿Qué hago ahora?</p>
+                <ol className="space-y-1.5 list-decimal list-inside text-sm">
+                  <li>Copiá esta URL → tocá el botón abajo</li>
+                  <li>Abrí <strong className="text-amber-400">Safari</strong> en tu iPhone</li>
+                  <li>Pegá la URL en la barra de direcciones</li>
+                  <li>Volvé a tocar "Bajar la app"</li>
+                </ol>
+              </div>
+              <button onClick={copiarURL}
+                className="w-full py-3 bg-amber-500 text-black rounded-xl text-sm font-black uppercase tracking-wider hover:bg-amber-400">
+                Copiar URL para Safari
+              </button>
+            </div>
+          )}
+
+          {isIOS && !isIOSOtherBrowser && (
+            <div className="bg-electric/5 border-2 border-electric/30 rounded-2xl p-4 space-y-4">
+              <div className="flex items-center gap-2">
+                <Smartphone className="w-6 h-6 text-electric" />
+                <h4 className="text-white font-black text-base">Cómo instalar en iPhone</h4>
+              </div>
+
+              <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3">
+                <p className="text-amber-400 text-xs font-bold mb-1">⚠️ ¿Por qué no hay botón automático?</p>
+                <p className="text-white/70 text-xs leading-relaxed">
+                  Apple no deja que las webs instalen apps con un botón en iPhone. Solo se puede hacer manualmente desde el menú de Safari. Es así para todas las webs (Twitter/X, Instagram, etc.), no es algo que podamos cambiar.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 bg-electric text-black rounded-full flex items-center justify-center font-black text-base shrink-0">1</div>
+                  <div className="flex-1 pt-1">
+                    <p className="text-white text-sm font-bold mb-1">Tocá el botón <span className="inline-flex items-center justify-center w-7 h-7 bg-electric/20 border border-electric/40 rounded-md mx-1 align-middle"><Share className="w-4 h-4 text-electric" /></span> Compartir</p>
+                    <p className="text-white/60 text-xs">Está <strong className="text-white">en la barra de abajo de Safari</strong> (centro). Si no ves la barra, deslizá un poquito para abajo en la página.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 bg-electric text-black rounded-full flex items-center justify-center font-black text-base shrink-0">2</div>
+                  <div className="flex-1 pt-1">
+                    <p className="text-white text-sm font-bold mb-1">Deslizá y buscá <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-electric/15 border border-electric/30 rounded-md mx-1 align-middle text-electric text-xs font-bold"><Plus className="w-3 h-3" />Agregar a inicio</span></p>
+                    <p className="text-white/60 text-xs">Está en la lista de opciones, hacia abajo. Tocalo.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 bg-electric text-black rounded-full flex items-center justify-center font-black text-base shrink-0">3</div>
+                  <div className="flex-1 pt-1">
+                    <p className="text-white text-sm font-bold mb-1">Tocá <span className="inline-flex items-center px-2 py-0.5 bg-electric text-black rounded-md mx-1 align-middle text-xs font-black">Agregar</span> arriba a la derecha</p>
+                    <p className="text-white/60 text-xs">El icono de JustFit365 aparece en tu pantalla de inicio como cualquier otra app.</p>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-white/45 text-xs text-center italic pt-1">
+                Tip: tenés que estar en <strong className="text-white/70">Safari</strong> (no Chrome ni Firefox) y la página tiene que estar <strong className="text-white/70">cargada</strong>.
+              </p>
             </div>
           )}
 
           {isAndroid && (
-            <div className="bg-emerald-500/5 border border-emerald-500/15 rounded-2xl p-4 space-y-3">
+            <div className="bg-emerald-500/5 border-2 border-emerald-500/30 rounded-2xl p-4 space-y-3">
               <div className="flex items-center gap-2">
-                <Smartphone className="w-5 h-5 text-emerald-400" />
-                <h4 className="text-white font-bold">Android (Chrome)</h4>
+                <Smartphone className="w-6 h-6 text-emerald-400" />
+                <h4 className="text-white font-black text-base">Android (Chrome)</h4>
               </div>
               <ol className="space-y-2.5 list-decimal list-inside">
                 <li>Tocá el menú <strong className="text-white">⋮</strong> arriba a la derecha en Chrome.</li>
                 <li>Elegí <strong className="text-white">"Instalar aplicación"</strong> o <strong className="text-white">"Agregar a pantalla principal"</strong>.</li>
                 <li>Confirmá con <strong className="text-white">Instalar</strong>.</li>
               </ol>
-              <p className="text-white/45 text-xs">Si tocás "Instalar app" desde el menú de JustFit365 te debería aparecer el aviso directo.</p>
+              <p className="text-white/45 text-xs">Si tocás "Bajar la app" desde el menú de JustFit365 te aparece el aviso directo de Chrome.</p>
             </div>
           )}
 
           {!isMobile && (
-            <div className="bg-violet-500/5 border border-violet-500/15 rounded-2xl p-4 space-y-3">
+            <div className="bg-violet-500/5 border-2 border-violet-500/30 rounded-2xl p-4 space-y-3">
               <div className="flex items-center gap-2">
-                <Monitor className="w-5 h-5 text-violet-300" />
-                <h4 className="text-white font-bold">Computadora (Chrome / Edge)</h4>
+                <Monitor className="w-6 h-6 text-violet-300" />
+                <h4 className="text-white font-black text-base">Computadora (Chrome / Edge)</h4>
               </div>
               <ol className="space-y-2.5 list-decimal list-inside">
                 <li>En la barra de direcciones, buscá el ícono <Download className="w-4 h-4 inline mx-1 text-violet-300" /> <strong className="text-white">Instalar</strong> al final de la URL.</li>
-                <li>Si no aparece, abrí el menú <strong className="text-white">⋮</strong> arriba a la derecha y elegí <strong className="text-white">"Instalar JustFit365"</strong>.</li>
-                <li>Confirmá con <strong className="text-white">Instalar</strong>. Vas a tener un acceso directo en tu escritorio o menú de aplicaciones.</li>
+                <li>Si no aparece, abrí el menú <strong className="text-white">⋮</strong> y elegí <strong className="text-white">"Instalar JustFit365"</strong>.</li>
+                <li>Confirmá con <strong className="text-white">Instalar</strong>. Tenés acceso directo en escritorio o menú de apps.</li>
               </ol>
               <p className="text-white/45 text-xs">En Firefox no se puede instalar como app. Usá Chrome, Edge o Brave.</p>
             </div>
           )}
 
           <p className="text-white/50 text-xs text-center pt-2">
-            Una vez instalada, JustFit365 se abre como cualquier otra app, incluso sin conexión podés ver tus datos guardados.
+            Una vez instalada, JustFit365 se abre como cualquier app nativa.
           </p>
         </div>
       </div>
