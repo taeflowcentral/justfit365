@@ -90,17 +90,17 @@ export default function Dashboard() {
   })();
 
   // Helper para delta vs objetivo (▼ falta, ▲ se paso, ✓ en meta)
-  const calcDelta = (actual: number, meta: number) => {
+  const calcDelta = (actual: number, meta: number, tolerancia: number) => {
     if (actual === 0 || meta === 0) return null;
     const diff = actual - meta;
-    const tolerancia = Math.max(50, meta * 0.05);
     if (Math.abs(diff) <= tolerancia) return { simbolo: '✓', valor: 'En tu meta', color: 'text-emerald-400' };
     return diff < 0
       ? { simbolo: '▼', valor: Math.abs(diff).toString(), color: 'text-amber-400' }
       : { simbolo: '▲', valor: diff.toString(), color: 'text-red-400' };
   };
-  const calDelta = calcDelta(calHoy, calObjetivo);
-  const protDelta = calcDelta(protHoy, protObjetivo);
+  // Tolerancias diarias razonables: 100 kcal (~1 fruta), 10g prot (~1 huevo)
+  const calDelta = calcDelta(calHoy, calObjetivo, 100);
+  const protDelta = calcDelta(protHoy, protObjetivo, 10);
 
   // Meta de peso y fecha
   const [pesoMeta, setPesoMeta] = useState(() => {
