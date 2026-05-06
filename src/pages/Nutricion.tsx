@@ -738,14 +738,14 @@ export default function Nutricion() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-orange-400 font-bold text-sm">{comidaCal} kcal</span>
-                  <button onClick={() => setEditandoComida(isEditingComida ? null : c.id)} className="p-1.5 text-white/20 hover:text-electric transition-colors rounded-lg hover:bg-white/5">
-                    {isEditingComida ? <Save className="w-4 h-4" /> : <Edit3 className="w-4 h-4" />}
+                  <button onClick={() => setEditandoComida(isEditingComida ? null : c.id)} className="p-2 text-white/55 hover:text-electric transition-colors rounded-lg hover:bg-white/5" title={isEditingComida ? 'Guardar' : 'Editar comida'}>
+                    {isEditingComida ? <Save className="w-5 h-5" /> : <Edit3 className="w-5 h-5" />}
                   </button>
-                  <button onClick={() => setShowAddItem(c.id)} className="p-1.5 text-white/20 hover:text-emerald-400 transition-colors rounded-lg hover:bg-white/5">
-                    <Plus className="w-4 h-4" />
+                  <button onClick={() => setShowAddItem(c.id)} className="p-2 text-white/55 hover:text-emerald-400 transition-colors rounded-lg hover:bg-white/5" title="Agregar alimento">
+                    <Plus className="w-5 h-5" />
                   </button>
-                  <button onClick={() => deleteComida(c.id)} className="p-1.5 text-white/20 hover:text-danger transition-colors rounded-lg hover:bg-white/5">
-                    <Trash2 className="w-4 h-4" />
+                  <button onClick={() => deleteComida(c.id)} className="p-2 text-white/55 hover:text-danger transition-colors rounded-lg hover:bg-white/5" title="Eliminar comida">
+                    <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
               </div>
@@ -774,9 +774,9 @@ export default function Nutricion() {
                             const porcionMatch = base.porcionDefault.match(/(\d+)\s*g/);
                             const gramosBase = porcionMatch ? parseInt(porcionMatch[1]) : 100;
                             return (
-                              <div className="bg-electric/5 border border-electric/10 rounded-lg p-2">
-                                <label className="block text-[9px] text-electric uppercase tracking-wider mb-1">Ajustar gramos (recalcula autom&aacute;tico)</label>
-                                <div className="flex items-center gap-2">
+                              <div className="bg-electric/5 border border-electric/10 rounded-lg p-2.5">
+                                <label className="block text-[11px] text-electric uppercase tracking-wider mb-1.5 font-semibold">Ajustar gramos (recalcula autom&aacute;tico)</label>
+                                <div className="flex items-center gap-2 flex-wrap">
                                   {[50, 100, 150, 200, 250, 300].map(g => (
                                     <button key={g} type="button" onClick={() => {
                                       const factor = g / gramosBase;
@@ -790,7 +790,7 @@ export default function Nutricion() {
                                       } : it) } : cm);
                                       guardar(updated);
                                     }}
-                                      className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${gramosActuales === g ? 'bg-electric/20 text-electric border border-electric/30' : 'bg-black/40 text-white/40 border border-dark-border hover:text-white/60'}`}>
+                                      className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all ${gramosActuales === g ? 'bg-electric/20 text-electric border border-electric/30' : 'bg-black/40 text-white/55 border border-dark-border hover:text-white/80'}`}>
                                       {g}g
                                     </button>
                                   ))}
@@ -809,8 +809,8 @@ export default function Nutricion() {
                                       guardar(updated);
                                     }}
                                     onKeyDown={e => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
-                                    className="w-16 px-2 py-1 bg-black/60 border border-dark-border rounded-lg text-white text-[11px] text-center focus:outline-none focus:ring-2 focus:ring-electric/30" />
-                                  <span className="text-white/30 text-[10px]">g</span>
+                                    className="w-20 px-2 py-1.5 bg-black/60 border border-dark-border rounded-lg text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                                  <span className="text-white/50 text-xs font-semibold">g</span>
                                 </div>
                               </div>
                             );
@@ -823,20 +823,20 @@ export default function Nutricion() {
                               { field: 'grasa' as const, label: 'Grasa (g)', color: 'text-pink-400' },
                             ].map(f => (
                               <div key={f.field}>
-                                <label className={`block text-[9px] ${f.color} uppercase tracking-wider mb-0.5`}>{f.label}</label>
+                                <label className={`block text-[11px] ${f.color} uppercase tracking-wider mb-1 font-semibold`}>{f.label}</label>
                                 <input type="number" min="0" value={item[f.field]} onChange={e => updateItem(c.id, item.id, f.field, parseInt(e.target.value) || 0)}
-                                  className="w-full px-2 py-1.5 bg-black/60 border border-dark-border rounded-lg text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                                  className="w-full px-2 py-2 bg-black/60 border border-dark-border rounded-lg text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" />
                               </div>
                             ))}
                           </div>
-                          <button onClick={() => setEditandoItem(null)} className="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1"><Save className="w-3 h-3" /> Listo</button>
+                          <button onClick={() => setEditandoItem(null)} className="text-sm text-emerald-400 hover:text-emerald-300 flex items-center gap-1.5 font-bold"><Save className="w-4 h-4" /> Listo</button>
                         </div>
                       ) : (
                         <div>
                           <div className="flex items-center justify-between">
                             <button onClick={() => toggleCanasta(`${item.alimento} (${item.porcion})`)}
-                              className="p-0.5 shrink-0 text-white/15 hover:text-cyan-400 transition-colors" title="Agregar a canasta">
-                              {canasta.has(`${item.alimento} (${item.porcion})`) ? <CheckSquare className="w-3.5 h-3.5 text-cyan-400" /> : <Square className="w-3.5 h-3.5" />}
+                              className="p-1 shrink-0 text-white/40 hover:text-cyan-400 transition-colors" title="Agregar a canasta">
+                              {canasta.has(`${item.alimento} (${item.porcion})`) ? <CheckSquare className="w-4 h-4 text-cyan-400" /> : <Square className="w-4 h-4" />}
                             </button>
                             <button onClick={() => {
                               if (findAlternatives(item.alimento)) {
@@ -845,22 +845,22 @@ export default function Nutricion() {
                                 setEditandoItem(item.id);
                               }
                             }} className="text-white/80 text-sm truncate flex-1 mr-2 text-left hover:text-emerald-400 transition-colors cursor-pointer">
-                              {item.alimento} {findAlternatives(item.alimento) && <ArrowLeftRight className="w-3 h-3 inline ml-1 text-emerald-400/40" />}
+                              {item.alimento} {findAlternatives(item.alimento) && <ArrowLeftRight className="w-3.5 h-3.5 inline ml-1 text-emerald-400/60" />}
                             </button>
                             <div className="flex items-center gap-1 shrink-0">
-                              <button onClick={() => setShowAlternatives({ comidaId: c.id, itemId: item.id, nombre: item.alimento })} className="p-1 text-white/15 hover:text-emerald-400 transition-colors" title="Ver alternativas"><ArrowLeftRight className="w-3 h-3" /></button>
-                              <button onClick={() => setEditandoItem(item.id)} className="p-1 text-white/15 hover:text-electric transition-colors"><Edit3 className="w-3 h-3" /></button>
-                              <button onClick={() => deleteItem(c.id, item.id)} className="p-1 text-white/15 hover:text-danger transition-colors"><Trash2 className="w-3 h-3" /></button>
+                              <button onClick={() => setShowAlternatives({ comidaId: c.id, itemId: item.id, nombre: item.alimento })} className="p-1.5 text-white/45 hover:text-emerald-400 transition-colors rounded-lg hover:bg-white/5" title="Ver alternativas"><ArrowLeftRight className="w-4 h-4" /></button>
+                              <button onClick={() => setEditandoItem(item.id)} className="p-1.5 text-white/45 hover:text-electric transition-colors rounded-lg hover:bg-white/5" title="Editar"><Edit3 className="w-4 h-4" /></button>
+                              <button onClick={() => deleteItem(c.id, item.id)} className="p-1.5 text-white/45 hover:text-danger transition-colors rounded-lg hover:bg-white/5" title="Eliminar"><Trash2 className="w-4 h-4" /></button>
                             </div>
                           </div>
                           <div className="flex items-center gap-2 text-[11px] mt-0.5">
-                            <span className="text-white/25">{item.porcion}</span>
+                            <span className="text-white/45">{item.porcion}</span>
                             {showMacros && <>
-                              <span className="text-white/10">|</span>
-                              <span className="text-orange-400/70">{item.cal}cal</span>
-                              <span className="text-electric/70">{item.prot}gP</span>
-                              <span className="text-amber-400/70">{item.carb}gC</span>
-                              <span className="text-pink-400/70">{item.grasa}gG</span>
+                              <span className="text-white/15">|</span>
+                              <span className="text-white/40">{item.cal}cal</span>
+                              <span className="text-white/35">{item.prot}gP</span>
+                              <span className="text-white/35">{item.carb}gC</span>
+                              <span className="text-white/35">{item.grasa}gG</span>
                             </>}
                           </div>
                         </div>
@@ -952,14 +952,14 @@ export default function Nutricion() {
             <div className="space-y-3">
               {/* Buscar */}
               <div>
-                <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Buscar alimento</label>
+                <label className="block text-sm text-white/60 uppercase tracking-wider mb-1.5 font-semibold">Buscar alimento</label>
                 <div className="relative">
                   <input type="text" value={nuevoItem.alimento}
                     onChange={e => { setNuevoItem(p => ({ ...p, alimento: e.target.value })); setAlimentoBase(null); setCantidadItem(1); }}
                     placeholder="Ej: Pollo, Bife, Huevo, Avena..."
-                    className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                    className="w-full px-3.5 py-3 bg-black/60 border-2 border-dark-border rounded-xl text-white text-base placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-electric/40 focus:border-electric/40" />
                   {nuevoItem.alimento.length >= 2 && !alimentoBase && buscarAlimentos(nuevoItem.alimento).length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-dark-800 border border-dark-border rounded-xl shadow-2xl max-h-48 overflow-y-auto z-50">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-dark-800 border-2 border-dark-border rounded-xl shadow-2xl max-h-56 overflow-y-auto z-50">
                       {buscarAlimentos(nuevoItem.alimento, 12).map((a, i) => (
                         <button key={i} type="button"
                           onClick={() => {
@@ -974,9 +974,9 @@ export default function Nutricion() {
                               setNuevoItem({ id: 0, alimento: a.nombre, porcion: a.porcionDefault, cal: a.cal, prot: a.prot, carb: a.carb, grasa: a.grasa });
                             }
                           }}
-                          className="w-full px-3 py-2 text-left hover:bg-emerald-500/10 transition-colors border-b border-dark-border/30 last:border-0">
-                          <p className="text-white text-sm">{a.nombre}</p>
-                          <p className="text-white/40 text-[10px]">{a.porcionDefault} &middot; {a.cal} cal &middot; {a.prot}g P</p>
+                          className="w-full px-3.5 py-2.5 text-left hover:bg-emerald-500/10 transition-colors border-b border-dark-border/40 last:border-0">
+                          <p className="text-white text-sm font-semibold">{a.nombre}</p>
+                          <p className="text-white/55 text-xs mt-0.5">{a.porcionDefault} &middot; {a.cal} cal &middot; {a.prot}g P</p>
                         </button>
                       ))}
                     </div>
@@ -987,7 +987,7 @@ export default function Nutricion() {
               {/* Cantidad por unidad (huevo, banana, etc) */}
               {alimentoBase && alimentoBase.unidad && (
                 <div>
-                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Cantidad ({alimentoBase.unidad}{cantidadItem > 1 ? 's' : ''})</label>
+                  <label className="block text-sm text-white/60 uppercase tracking-wider mb-1.5 font-semibold">Cantidad ({alimentoBase.unidad}{cantidadItem > 1 ? 's' : ''})</label>
                   <div className="flex items-center gap-3">
                     <button type="button" onClick={() => {
                       const n = Math.max(1, cantidadItem - 1);
@@ -1022,11 +1022,11 @@ export default function Nutricion() {
                 };
                 return (
                   <div>
-                    <label className="block text-xs text-white/40 uppercase tracking-wider mb-1.5">Gramos (valores se recalculan)</label>
+                    <label className="block text-sm text-white/60 uppercase tracking-wider mb-1.5 font-semibold">Gramos (valores se recalculan)</label>
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {[50, 100, 150, 200, 250, 300, 400, 500].map(g => (
                         <button key={g} type="button" onClick={() => recalc(g)}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${cantidadItem === g ? 'bg-electric/20 text-electric border border-electric/30' : 'bg-black/40 text-white/40 border border-dark-border hover:text-white/60'}`}>
+                          className={`px-3 py-2 rounded-lg text-sm font-bold transition-all ${cantidadItem === g ? 'bg-electric/20 text-electric border border-electric/30' : 'bg-black/40 text-white/55 border border-dark-border hover:text-white/80'}`}>
                           {g}g
                         </button>
                       ))}
@@ -1035,8 +1035,8 @@ export default function Nutricion() {
                       <input type="number" min="10" max="2000" step="10" value={cantidadItem}
                         onChange={e => recalc(parseInt(e.target.value) || gramosBase)}
                         className="w-24 px-3 py-2.5 bg-black/60 border border-electric/30 rounded-xl text-white text-base text-center font-black focus:outline-none focus:ring-2 focus:ring-electric/30" />
-                      <span className="text-white/40 text-sm">gramos</span>
-                      <span className="text-white/20 text-xs ml-auto">(base: {alimentoBase.porcionDefault})</span>
+                      <span className="text-white/55 text-sm font-semibold">gramos</span>
+                      <span className="text-white/35 text-xs ml-auto">(base: {alimentoBase.porcionDefault})</span>
                     </div>
                   </div>
                 );
@@ -1045,9 +1045,9 @@ export default function Nutricion() {
               {/* Porcion manual si no hay alimentoBase */}
               {!alimentoBase && (
                 <div>
-                  <label className="block text-xs text-white/40 uppercase tracking-wider mb-1">Porci&oacute;n</label>
+                  <label className="block text-sm text-white/60 uppercase tracking-wider mb-1.5 font-semibold">Porci&oacute;n</label>
                   <input type="text" value={nuevoItem.porcion} onChange={e => setNuevoItem(p => ({ ...p, porcion: e.target.value }))} placeholder="Ej: 200g, 2 unidades"
-                    className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm placeholder-white/15 focus:outline-none focus:ring-2 focus:ring-electric/30" />
+                    className="w-full px-3.5 py-3 bg-black/60 border-2 border-dark-border rounded-xl text-white text-base placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-electric/40" />
                 </div>
               )}
 
@@ -1060,18 +1060,18 @@ export default function Nutricion() {
                   { field: 'grasa' as const, label: 'g G', color: 'text-pink-400' },
                 ].map(f => (
                   <div key={f.field}>
-                    <label className={`block text-[10px] ${f.color} uppercase tracking-wider mb-1`}>{f.label}</label>
+                    <label className={`block text-xs ${f.color} uppercase tracking-wider mb-1 font-semibold`}>{f.label}</label>
                     <input type="number" min="0" value={nuevoItem[f.field] || ''} onChange={e => setNuevoItem(p => ({ ...p, [f.field]: parseInt(e.target.value) || 0 }))}
                       className="w-full px-2 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm text-center focus:outline-none focus:ring-2 focus:ring-electric/30" />
                   </div>
                 ))}
               </div>
               {alimentoBase && (
-                <p className="text-emerald-400/60 text-[10px] text-center">
+                <p className="text-emerald-400/80 text-xs text-center">
                   {alimentoBase.nombre} &middot; {nuevoItem.porcion} = {nuevoItem.cal} cal, {nuevoItem.prot}g P, {nuevoItem.carb}g C, {nuevoItem.grasa}g G
                 </p>
               )}
-              {!alimentoBase && <p className="text-white/30 text-[10px] text-center">Los valores se completan al elegir un alimento. Pod&eacute;s ajustarlos manualmente.</p>}
+              {!alimentoBase && <p className="text-white/45 text-xs text-center">Los valores se completan al elegir un alimento. Pod&eacute;s ajustarlos manualmente.</p>}
               <div className="flex gap-3 pt-2">
                 <button onClick={() => { setShowAddItem(null); setAlimentoBase(null); setCantidadItem(1); }} className="flex-1 py-3 bg-white/5 text-white/50 rounded-xl text-sm font-semibold border border-dark-border">Cancelar</button>
                 <button onClick={() => { addItem(showAddItem); setAlimentoBase(null); setCantidadItem(1); }} disabled={!nuevoItem.alimento.trim()} className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-green-400 text-black rounded-xl text-sm font-black uppercase tracking-wider disabled:opacity-30">Agregar</button>
