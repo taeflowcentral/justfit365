@@ -73,10 +73,15 @@ export default function Dashboard() {
   const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
   const tdee = Math.round(tmb * (factores[nivel] || 1.55));
 
-  // Objetivo calorico del plan nutricional
+  // Objetivo calorico del plan nutricional (usa el mismo calculo que Nutricion.tsx)
   const calObjetivo = (() => {
     const saved = getUserItem('bc_plan_nutricional_cal_objetivo');
-    return saved ? parseInt(saved) : tdee;
+    if (saved) return parseInt(saved);
+    // Fallback: aplicar ajuste por objetivo igual que Nutricion
+    const obj = (perfil?.objetivo || '').toLowerCase();
+    if (obj.includes('grasa')) return tdee - 400;
+    if (obj.includes('hipertrofia') || obj.includes('fuerza')) return tdee + 300;
+    return tdee;
   })();
 
   // Objetivo proteico segun perfil (g/kg ISSN 2017)
