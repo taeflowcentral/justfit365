@@ -6,23 +6,22 @@ import { Link } from 'react-router-dom';
 import HidratacionWidget from '../components/HidratacionWidget';
 import FraseDelDia from '../components/FraseDelDia';
 import { getUserItem, setUserItem } from '../lib/storage';
+import { getUltimosNDias, archivarDiasPasados, fechaISO } from '../lib/historicoNutricion';
 
-// Datos semanales por defecto (se reemplazan con datos reales del plan nutricional si existen)
-function getWeekData(planKey: string): { dia: string; calorias: number }[] {
-  const DIAS = ['Lun', 'Mar', 'Mi\u00e9', 'Jue', 'Vie', 'S\u00e1b', 'Dom'];
-  try {
-    const saved = getUserItem(planKey + '_semanal');
-    if (saved) {
-      const plan = JSON.parse(saved);
-      return DIAS.map((dia, i) => {
-        const comidas = plan[i] || [];
-        const cal = comidas.reduce((a: number, c: { items: { cal: number }[] }) =>
-          a + c.items.reduce((b: number, it: { cal: number }) => b + (Number(it.cal) || 0), 0), 0);
-        return { dia, calorias: cal };
-      });
-    }
-  } catch { /* ignore */ }
-  return DIAS.map(dia => ({ dia, calorias: 0 }));
+// Datos diarios reales tomados del historico (por fecha, no por dia de semana)
+function getWeekData(): { dia: string; calorias: number; prot: number; fecha: string }[] {
+  const ultimos = getUltimosNDias(7);
+  return ultimos.map(d => {
+    const fecha = new Date(d.fecha + 'T00:00:00');
+    const dia = fecha.toLocaleDateString('es-AR', { weekday: 'short' }).slice(0, 3).replace('.', '');
+    const dia2 = dia.charAt(0).toUpperCase() + dia.slice(1);
+    return {
+      dia: dia2,
+      calorias: d.entry?.totales.cal || 0,
+      prot: d.entry?.totales.prot || 0,
+      fecha: d.fecha,
+    };
+  });
 }
 
 function getPesoHistory(): { sem: string; peso: number }[] {
@@ -41,26 +40,21 @@ export default function Dashboard() {
   const { user } = useAuth();
   const perfil = user?.perfil;
 
-  // Datos reales del plan nutricional
-  const weekData = getWeekData('bc_plan_nutricional');
-  const calHoy = (() => {
-    const jsDay = new Date().getDay();
-    const idx = jsDay === 0 ? 6 : jsDay - 1;
-    return weekData[idx]?.calorias || 0;
-  })();
-  const calSemana = weekData.reduce((a, d) => a + d.calorias, 0);
-  const protHoy = (() => {
+  // Asegurar archivado automatico de dias pasados antes de leer datos
+  useEffect(() => {
     try {
       const saved = getUserItem('bc_plan_nutricional_semanal');
-      if (!saved) return 0;
-      const plan = JSON.parse(saved);
-      const jsDay = new Date().getDay();
-      const idx = jsDay === 0 ? 6 : jsDay - 1;
-      const comidas = plan[idx] || [];
-      return comidas.reduce((a: number, c: { items: { prot: number }[] }) =>
-        a + c.items.reduce((b: number, it: { prot: number }) => b + (Number(it.prot) || 0), 0), 0);
-    } catch { return 0; }
-  })();
+      if (saved) archivarDiasPasados(JSON.parse(saved), 7);
+    } catch { /* ignore */ }
+  }, []);
+
+  // Datos diarios del historico (por fecha real, no por dia de semana)
+  const weekData = getWeekData();
+  const hoyISO = fechaISO();
+  const hoyEntry = weekData.find(d => d.fecha === hoyISO);
+  const calHoy = hoyEntry?.calorias || 0;
+  const protHoy = hoyEntry?.prot || 0;
+  const calSemana = weekData.reduce((a, d) => a + d.calorias, 0);
 
   // Calculos metabolicos reales
   const peso = perfil?.peso || 75;
@@ -527,6 +521,40 @@ export default function Dashboard() {
             )}
           </div>
         </div>
+
+        {/* Balance semanal acumulado */}
+        {diasConDatos > 0 && (() => {
+          const metaSemana = calObjetivo * diasConDatos;
+          const balance = calSemana - metaSemana; // negativo = deficit, positivo = superavit
+          const kgProyectados = balance / 7700; // 7700 kcal = 1 kg de grasa
+          const esDeficit = balance < 0;
+          return (
+            <div className="mt-3 bg-black/40 border border-dark-border rounded-xl p-3">
+              <p className="text-white/40 text-[10px] uppercase tracking-wider font-semibold mb-2">Balance semanal (últimos {diasConDatos} día{diasConDatos > 1 ? 's' : ''})</p>
+              <div className="grid grid-cols-3 gap-2 mb-2">
+                <div className="text-center">
+                  <p className="text-white/40 text-[10px]">Comiste</p>
+                  <p className="text-white font-black text-sm">{calSemana.toLocaleString('es-AR')}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-white/40 text-[10px]">Meta</p>
+                  <p className="text-electric font-black text-sm">{metaSemana.toLocaleString('es-AR')}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-white/40 text-[10px]">{esDeficit ? 'Déficit' : balance > 0 ? 'Superávit' : 'Justo'}</p>
+                  <p className={`font-black text-sm ${esDeficit ? 'text-emerald-400' : balance > 0 ? 'text-red-400' : 'text-white'}`}>
+                    {balance === 0 ? '0' : `${esDeficit ? '−' : '+'}${Math.abs(balance).toLocaleString('es-AR')}`}
+                  </p>
+                </div>
+              </div>
+              {Math.abs(balance) >= 500 && (
+                <p className="text-white/50 text-[11px] text-center leading-relaxed">
+                  Proyección: ≈ <strong className={esDeficit ? 'text-emerald-400' : 'text-red-400'}>{esDeficit ? '−' : '+'}{Math.abs(kgProyectados).toFixed(2)} kg</strong> de masa grasa esta semana
+                </p>
+              )}
+            </div>
+          );
+        })()}
       </div>
 
       {/* Meta de peso con indicador de progreso */}

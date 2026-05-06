@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, Zap, Sparkles, RotateCcw, Target, ArrowLeftRight, ShoppingCart, MessageCircle, CheckSquare, Square, X } from 'lucide-react';
+import { Apple, Flame, Droplets, Wheat, Droplet, Clock, Edit3, Save, Trash2, Plus, Zap, Sparkles, RotateCcw, Target, ArrowLeftRight, ShoppingCart, MessageCircle, CheckSquare, Square, X, History } from 'lucide-react';
 import FoodAlternatives, { findAlternatives } from '../components/FoodAlternatives';
 import { buscarAlimentos, buscarAlimentoExacto, analizarComida, type AlimentoBase } from '../lib/foodDB';
 import { useAuth } from '../context/AuthContext';
 import ShareButtons, { generateNutricionText, shareWhatsApp, printContent } from '../components/ShareButtons';
 import { getUserItem, setUserItem } from '../lib/storage';
+import { archivarDia, archivarDiasPasados, fechaISO, getUltimosNDias, type DiaHistorico } from '../lib/historicoNutricion';
 
 interface Alimento {
   id: number;
@@ -224,6 +225,21 @@ export default function Nutricion() {
   const [showMacros, setShowMacros] = useState(true);
   const [canasta, setCanasta] = useState<Set<string>>(new Set());
   const [showCanasta, setShowCanasta] = useState(false);
+  const [historialOpen, setHistorialOpen] = useState(false);
+  const [historialDetalle, setHistorialDetalle] = useState<{ fecha: string; entry: DiaHistorico } | null>(null);
+
+  // Archivo automatico de dias pasados sin snapshot (al montar el componente)
+  useEffect(() => {
+    archivarDiasPasados(planSemanal, 7);
+    // tambien archivar el dia de hoy con el plan vigente, asi queda al menos
+    // un snapshot inicial cuando el usuario nunca lo edito manualmente
+    const jsDay = new Date().getDay();
+    const idxHoy = jsDay === 0 ? 6 : jsDay - 1;
+    if ((planSemanal[idxHoy] || []).length > 0) {
+      archivarDia(fechaISO(), planSemanal[idxHoy]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggleCanasta = (alimento: string) => {
     setCanasta(prev => {
@@ -265,6 +281,10 @@ export default function Nutricion() {
     const updated = { ...planSemanal, [diaActivo]: c };
     setPlanSemanal(updated);
     setUserItem(PLAN_KEY + '_semanal', JSON.stringify(updated));
+    // Snapshot al historico solo si el dia activo es HOY
+    const jsDay = new Date().getDay();
+    const idxHoy = jsDay === 0 ? 6 : jsDay - 1;
+    if (diaActivo === idxHoy) archivarDia(fechaISO(), c);
   };
 
   const guardarNota = (n: string) => {
@@ -304,6 +324,10 @@ export default function Nutricion() {
         setPlanSemanal(semanal);
         localStorage.setItem(PLAN_KEY + '_semanal', JSON.stringify(semanal));
         guardarNota(notaFinal);
+        // Snapshot al historico del dia de hoy
+        const jsDay = new Date().getDay();
+        const idxHoy = jsDay === 0 ? 6 : jsDay - 1;
+        archivarDia(fechaISO(), semanal[idxHoy] || []);
       } else {
         guardar(plan);
         guardarNota(nota);
@@ -524,6 +548,10 @@ export default function Nutricion() {
           <button onClick={() => setShowMacros(!showMacros)}
             className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-colors ${showMacros ? 'bg-amber-500/15 border border-amber-500/20 text-amber-400' : 'bg-white/5 border border-dark-border text-white/40'}`}>
             {showMacros ? 'Ocultar macros' : 'Mostrar macros'}
+          </button>
+          <button onClick={() => setHistorialOpen(true)}
+            className="flex items-center gap-2 px-3 py-2 bg-violet-500/10 border border-violet-500/20 text-violet-300 rounded-xl text-xs font-bold hover:bg-violet-500/20 transition-colors">
+            <History className="w-3 h-3" /> Historial
           </button>
         </div>
       </div>
@@ -1134,6 +1162,82 @@ export default function Nutricion() {
                   </div>
                 </div>
               </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Modal Historial */}
+      {historialOpen && (
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-lg flex items-center justify-center z-50 p-4" onClick={() => { setHistorialOpen(false); setHistorialDetalle(null); }}>
+          <div className="bg-dark-800 border border-dark-border rounded-3xl w-full max-w-md max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="p-5 border-b border-dark-border flex items-center justify-between sticky top-0 bg-dark-800 z-10">
+              <div className="flex items-center gap-2">
+                <History className="w-5 h-5 text-violet-300" />
+                <h3 className="text-white font-black text-base">{historialDetalle ? historialDetalle.fecha : 'Historial nutricional'}</h3>
+              </div>
+              <button onClick={() => { if (historialDetalle) setHistorialDetalle(null); else setHistorialOpen(false); }}
+                className="p-1.5 text-white/40 hover:text-white rounded-lg">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {!historialDetalle ? (
+              <div className="p-4 space-y-2">
+                {(() => {
+                  const dias = getUltimosNDias(30).reverse(); // mas reciente primero
+                  const conDatos = dias.filter(d => d.entry !== null);
+                  if (conDatos.length === 0) {
+                    return <p className="text-white/40 text-sm text-center py-8">Todavía no hay días archivados. A medida que pasen los días, tu plan diario se irá guardando automáticamente acá.</p>;
+                  }
+                  return dias.map(d => {
+                    if (!d.entry) return null;
+                    const fecha = new Date(d.fecha + 'T00:00:00');
+                    const label = fecha.toLocaleDateString('es-AR', { weekday: 'short', day: 'numeric', month: 'short' });
+                    const t = d.entry.totales;
+                    return (
+                      <button key={d.fecha} onClick={() => setHistorialDetalle({ fecha: label, entry: d.entry! })}
+                        className="w-full bg-black/40 border border-dark-border rounded-xl p-3 text-left hover:border-violet-500/30 transition-colors">
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="text-white text-sm font-bold capitalize">{label}</p>
+                          <span className="text-violet-300 text-[10px]">Ver detalle ›</span>
+                        </div>
+                        <div className="flex gap-3 text-[11px] text-white/50">
+                          <span><strong className="text-orange-400">{Math.round(t.cal)}</strong> kcal</span>
+                          <span><strong className="text-electric">{Math.round(t.prot)}</strong>g prot</span>
+                          <span><strong className="text-amber-400">{Math.round(t.carb)}</strong>g carb</span>
+                          <span><strong className="text-emerald-400">{Math.round(t.grasa)}</strong>g grasa</span>
+                        </div>
+                      </button>
+                    );
+                  });
+                })()}
+              </div>
+            ) : (
+              <div className="p-4 space-y-3">
+                <div className="bg-violet-500/5 border border-violet-500/15 rounded-xl p-3">
+                  <p className="text-violet-300 text-[10px] uppercase tracking-wider mb-1">Totales del día</p>
+                  <div className="grid grid-cols-4 gap-2">
+                    <div><p className="text-orange-400 font-black text-sm">{Math.round(historialDetalle.entry.totales.cal)}</p><p className="text-white/40 text-[10px]">kcal</p></div>
+                    <div><p className="text-electric font-black text-sm">{Math.round(historialDetalle.entry.totales.prot)}</p><p className="text-white/40 text-[10px]">prot</p></div>
+                    <div><p className="text-amber-400 font-black text-sm">{Math.round(historialDetalle.entry.totales.carb)}</p><p className="text-white/40 text-[10px]">carb</p></div>
+                    <div><p className="text-emerald-400 font-black text-sm">{Math.round(historialDetalle.entry.totales.grasa)}</p><p className="text-white/40 text-[10px]">grasa</p></div>
+                  </div>
+                </div>
+                {historialDetalle.entry.comidas.map(c => (
+                  <div key={c.id} className="bg-black/40 border border-dark-border rounded-xl p-3">
+                    <p className="text-white font-bold text-sm mb-1.5">{c.nombre} <span className="text-white/30 text-xs font-normal">{c.hora}</span></p>
+                    <ul className="space-y-1">
+                      {c.items.map(it => (
+                        <li key={it.id} className="text-white/60 text-xs flex justify-between gap-2">
+                          <span>{it.alimento} <span className="text-white/30">({it.porcion})</span></span>
+                          <span className="text-white/40 shrink-0">{it.cal} kcal</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>
