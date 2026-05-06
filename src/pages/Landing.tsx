@@ -1,7 +1,8 @@
-import { Zap, Dumbbell, Utensils, TrendingUp, Timer, MessageSquare, Users, ChevronDown, Star, CheckCircle, ArrowRight } from 'lucide-react';
+import { Zap, Dumbbell, Utensils, TrendingUp, Timer, MessageSquare, Users, ChevronDown, Star, CheckCircle, ArrowRight, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import LanguageSelector from '../components/LanguageSelector';
+import InstallButton from '../components/InstallButton';
 
 const features = [
   { icon: Utensils, title: 'Plan Nutricional', desc: 'Planes personalizados según tu peso, objetivo y condiciones. Base de 400+ alimentos de 8 países. Avalado por profesionales UNLP y UCA.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
@@ -227,12 +228,16 @@ export default function Landing() {
             </div>
           </div>
 
-          <div className="text-center mt-8">
+          <div className="text-center mt-8 flex items-center justify-center gap-3 flex-wrap">
             <Link to="/login"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 text-white/60 font-bold text-sm uppercase tracking-widest rounded-xl hover:bg-white/10 hover:text-white transition-all">
               Ya tengo cuenta <ArrowRight className="w-4 h-4" />
             </Link>
+            <InstallButton variant="cta" />
           </div>
+          <p className="text-white/35 text-xs text-center mt-3 max-w-md mx-auto">
+            <Download className="w-3 h-3 inline mr-1" /> Inst&aacute;la JustFit365 directo en tu celular o computadora &mdash; te aparece como app nativa, sin abrir el navegador.
+          </p>
         </div>
       </section>
 
