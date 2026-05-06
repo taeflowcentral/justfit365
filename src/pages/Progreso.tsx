@@ -17,11 +17,136 @@ interface MediaEntry {
   analizando?: boolean;
 }
 
-const analisisRespuestas = [
-  `**An\u00e1lisis de tu progreso** \ud83d\udcaa\n\nMir\u00e1, comparando con tus registros anteriores se nota mejora:\n\n- **Definici\u00f3n muscular:** se ve m\u00e1s marcada la separaci\u00f3n de los deltoides y el pectoral superior\n- **Composici\u00f3n corporal:** aparente reducci\u00f3n de grasa subcut\u00e1nea en la zona media\n- **Volumen:** se nota aumento en brazos y hombros\n\n**Recomendaciones:**\n1. Segu\u00ed con la progresi\u00f3n de cargas, vas bien encaminado\n2. Si quer\u00e9s m\u00e1s definici\u00f3n, ajust\u00e1 un d\u00e9ficit suave (-200 kcal)\n3. Las fotos son la mejor herramienta de seguimiento, mejor que la balanza sola\n\nSegu\u00ed as\u00ed que se nota el laburo \ud83d\udd25`,
-  `**Evaluaci\u00f3n visual de progreso** \ud83d\udcf8\n\n**Observaciones positivas:**\n- Mejor postura general comparado con registros anteriores\n- Tren inferior con desarrollo visible\n- L\u00ednea abdominal m\u00e1s definida\n\n**\u00c1reas de oportunidad:**\n- Podr\u00edas trabajar un poco m\u00e1s el hombro posterior para mejor simetr\u00eda\n- El tren superior podr\u00eda beneficiarse de m\u00e1s volumen\n\n**Tip:** sacate las fotos siempre en las mismas condiciones (misma luz, misma hora, en ayunas) para que la comparaci\u00f3n sea m\u00e1s precisa.\n\nVa muy bien el progreso, banc\u00e1 el proceso \u2728`,
-  `**Seguimiento de cambios corporales** \ud83d\udcca\n\n**Lo que se nota:**\n- Reducci\u00f3n de grasa en flancos y espalda baja\n- Mejor tono muscular general\n- Hombros m\u00e1s redondeados\n\n**Estimaciones visuales:**\n- Porcentaje graso estimado: 15-18% (visual)\n- Tendencia: descendente vs registros anteriores\n\n**Siguiente paso:**\n- Si quer\u00e9s datos m\u00e1s precisos, hac\u00e9te una medici\u00f3n con plicometro o bioimpedancia\n- Registr\u00e1 tus medidas (cintura, cadera, brazo) cada 2 semanas\n- La balanza sola miente, las fotos + medidas son la verdad\n\nSegu\u00ed subiendo registros para poder hacer mejores comparativas \ud83d\udcaa`,
-];
+// Parse "dd/mm/yyyy HH:mm" o "dd/mm/yyyy" a timestamp
+function parseAlFecha(f: string): number {
+  const m = f.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[, ]+(\d{1,2}):(\d{1,2}))?/);
+  if (!m) return 0;
+  return new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0)).getTime();
+}
+
+function generarAnalisisPersonalizado(
+  actual: MediaEntry,
+  anterior: MediaEntry | null,
+  perfil?: { peso: number; altura: number; objetivo: string },
+): string {
+  const objetivo = (perfil?.objetivo || '').toLowerCase();
+  const esCut = objetivo.includes('grasa');
+  const esBulk = objetivo.includes('hipertrofia') || objetivo.includes('fuerza');
+  const objetivoLabel = esCut ? 'p\u00e9rdida de grasa' : esBulk ? 'ganancia muscular' : 'mantenimiento';
+  const partes: string[] = [];
+
+  partes.push(`**\ud83d\udcf8 An\u00e1lisis de tu registro del ${actual.fecha}**`);
+  partes.push(`Tu objetivo registrado: **${objetivoLabel}**`);
+
+  // Caso: primer registro
+  if (!anterior) {
+    partes.push(`\n**Punto de partida**`);
+    partes.push(`Este es tu primer registro de progreso. Lo guardamos como l\u00ednea base para comparar con futuros registros.`);
+    partes.push(`\n**Datos iniciales:**`);
+    if (actual.peso) partes.push(`\u2022 Peso: **${actual.peso} kg**`);
+    if (actual.grasaCorporal) partes.push(`\u2022 Grasa corporal: **${actual.grasaCorporal}%**`);
+    if (actual.medidas?.cintura) partes.push(`\u2022 Cintura: **${actual.medidas.cintura} cm**`);
+    if (actual.medidas?.cadera) partes.push(`\u2022 Cadera: **${actual.medidas.cadera} cm**`);
+    if (actual.medidas?.brazo) partes.push(`\u2022 Brazo: **${actual.medidas.brazo} cm**`);
+    if (!actual.peso && !actual.grasaCorporal && !actual.medidas?.cintura) {
+      partes.push(`\u2022 *No cargaste medidas. Te conviene cargar al menos peso para que pueda evaluar evoluci\u00f3n.*`);
+    }
+    partes.push(`\n**Para los pr\u00f3ximos registros:**`);
+    partes.push(`\u2022 Sacate las fotos en las mismas condiciones: luz natural, misma hora del d\u00eda y en ayunas`);
+    partes.push(`\u2022 Carg\u00e1 tus medidas cada 2 semanas para seguimiento real`);
+    partes.push(`\u2022 La balanza sola miente: peso + grasa + medidas + foto te dan la verdad`);
+    return partes.join('\n');
+  }
+
+  // Caso: hay registro anterior, calcular cambios reales
+  const tsActual = parseAlFecha(actual.fecha);
+  const tsAnterior = parseAlFecha(anterior.fecha);
+  const dias = Math.max(1, Math.round((tsActual - tsAnterior) / (1000 * 60 * 60 * 24)));
+  const semanas = Math.max(0.15, dias / 7);
+
+  partes.push(`\n**Comparaci\u00f3n con el registro del ${anterior.fecha}** (hace ${dias} d\u00eda${dias !== 1 ? 's' : ''})`);
+
+  const cambios: string[] = [];
+  let positivos = 0, negativos = 0;
+
+  if (actual.peso && anterior.peso) {
+    const diff = +(actual.peso - anterior.peso).toFixed(1);
+    const ritmo = +(diff / semanas).toFixed(2);
+    const s = diff > 0 ? '+' : '';
+    cambios.push(`\u2022 **Peso**: ${anterior.peso} \u2192 ${actual.peso} kg (**${s}${diff} kg**, ${s}${ritmo} kg/semana)`);
+    if (esCut) { if (diff < -0.1) positivos++; else if (diff > 0.3) negativos++; }
+    else if (esBulk) { if (diff > 0.1 && Math.abs(ritmo) < 0.7) positivos++; else if (diff < -0.3) negativos++; }
+    else { if (Math.abs(diff) < 1) positivos++; else negativos++; }
+  }
+  if (actual.grasaCorporal && anterior.grasaCorporal) {
+    const diff = +(actual.grasaCorporal - anterior.grasaCorporal).toFixed(1);
+    const s = diff > 0 ? '+' : '';
+    cambios.push(`\u2022 **Grasa corporal**: ${anterior.grasaCorporal}% \u2192 ${actual.grasaCorporal}% (**${s}${diff}%**)`);
+    if (diff < -0.3) positivos += 2; else if (diff > 0.5) negativos++;
+  }
+  if (actual.medidas?.cintura && anterior.medidas?.cintura) {
+    const diff = +(actual.medidas.cintura - anterior.medidas.cintura).toFixed(1);
+    const s = diff > 0 ? '+' : '';
+    cambios.push(`\u2022 **Cintura**: ${anterior.medidas.cintura} \u2192 ${actual.medidas.cintura} cm (**${s}${diff} cm**)`);
+    if (diff < -0.5) positivos++; else if (diff > 1) negativos++;
+  }
+  if (actual.medidas?.cadera && anterior.medidas?.cadera) {
+    const diff = +(actual.medidas.cadera - anterior.medidas.cadera).toFixed(1);
+    const s = diff > 0 ? '+' : '';
+    cambios.push(`\u2022 **Cadera**: ${anterior.medidas.cadera} \u2192 ${actual.medidas.cadera} cm (**${s}${diff} cm**)`);
+  }
+  if (actual.medidas?.brazo && anterior.medidas?.brazo) {
+    const diff = +(actual.medidas.brazo - anterior.medidas.brazo).toFixed(1);
+    const s = diff > 0 ? '+' : '';
+    cambios.push(`\u2022 **Brazo**: ${anterior.medidas.brazo} \u2192 ${actual.medidas.brazo} cm (**${s}${diff} cm**)`);
+    if (esBulk && diff > 0.2) positivos++;
+  }
+
+  if (cambios.length === 0) {
+    partes.push(``);
+    partes.push(`No cargaste medidas en uno o ambos registros, as\u00ed que no puedo comparar n\u00fameros. Pod\u00e9s ver las dos fotos lado a lado en la **Comparativa** de arriba. Para una evaluaci\u00f3n objetiva, carg\u00e1 peso, grasa y medidas en cada registro.`);
+  } else {
+    partes.push(``);
+    partes.push(...cambios);
+  }
+
+  // Evaluacion segun objetivo
+  if (cambios.length > 0) {
+    partes.push(`\n**Evaluaci\u00f3n seg\u00fan tu objetivo (${objetivoLabel}):**`);
+    if (positivos > negativos && positivos > 0) {
+      partes.push(`\u2705 **Vas en la direcci\u00f3n correcta.** Los n\u00fameros muestran progreso real hacia tu meta. Banc\u00e1 el proceso.`);
+    } else if (negativos > positivos) {
+      if (esCut) {
+        partes.push(`\u26a0\ufe0f **Retroceso respecto a tu objetivo.** El peso o las medidas subieron en lugar de bajar. Posibles causas: comer m\u00e1s de lo que pens\u00e1s (revis\u00e1 porciones reales), retenci\u00f3n por carbos/sodio (puede ser temporal), o falta de cardio. Antes de drasticar, esper\u00e1 1 semana m\u00e1s y volv\u00e9 a medir.`);
+      } else if (esBulk) {
+        partes.push(`\u26a0\ufe0f **Estancado o perdiendo masa.** Si quer\u00e9s ganar m\u00fasculo necesit\u00e1s super\u00e1vit cal\u00f3rico real (+200 a +400 kcal sobre tu mantenimiento) y prote\u00edna alta (1.8-2.2 g/kg). Tambi\u00e9n revis\u00e1: \u00bfdorm\u00eds 7+ horas? \u00bfprogres\u00e1 las cargas?`);
+      } else {
+        partes.push(`\u26a0\ufe0f Hay cambios que no acompa\u00f1an tu objetivo de mantenimiento. Peque\u00f1os ajustes a la dieta o entreno pueden traerte de vuelta al rango.`);
+      }
+    } else {
+      if (semanas < 2) {
+        partes.push(`\ud83d\udcca **Plazo corto.** Pasaron solo ${dias} d\u00eda${dias !== 1 ? 's' : ''}. No esper\u00e9s cambios visibles a\u00fan: lo recomendado es comparar entre 2-4 semanas para ver evoluci\u00f3n real.`);
+      } else {
+        partes.push(`\ud83d\udcca **Estancamiento.** Los n\u00fameros est\u00e1n casi iguales. Es normal a veces, pero si llev\u00e1s 3+ semanas as\u00ed: si quer\u00e9s bajar grasa rest\u00e1 100-200 kcal o sum\u00e1 cardio; si quer\u00e9s ganar masa sum\u00e1 100-200 kcal o aument\u00e1 cargas.`);
+      }
+    }
+  }
+
+  // Recomendacion especifica por ritmo
+  if (actual.peso && anterior.peso) {
+    const diff = actual.peso - anterior.peso;
+    const ritmo = Math.abs(diff) / semanas;
+    if (esCut && diff < 0 && ritmo > 1.0) {
+      partes.push(`\n**\u26a0\ufe0f Ritmo agresivo:** est\u00e1s bajando ${ritmo.toFixed(2)} kg/sem. Recomendado: 0.5-0.75 kg/sem. A este ritmo perd\u00e9s masa muscular adem\u00e1s de grasa. Sub\u00ed 200-300 kcal/d\u00eda.`);
+    } else if (esBulk && diff > 0 && ritmo > 0.7) {
+      partes.push(`\n**\u26a0\ufe0f Subiendo muy r\u00e1pido:** ${ritmo.toFixed(2)} kg/sem es probablemente m\u00e1s grasa que m\u00fasculo. Recomendado: 0.25-0.5 kg/sem. Baj\u00e1 200 kcal/d\u00eda.`);
+    }
+  }
+
+  partes.push(`\n*Tip: sacate las fotos siempre con la misma luz, hora y postura para que la comparaci\u00f3n sea precisa.*`);
+
+  return partes.join('\n');
+}
 
 function calcularIMC(peso: number, alturaCm: number): { valor: number; categoria: string; color: string } {
   const alturaM = alturaCm / 100;
@@ -117,11 +242,24 @@ export default function Progreso() {
   const analizarConIA = async (id: string) => {
     setMedia(prev => prev.map(m => m.id === id ? { ...m, analizando: true } : m));
     setTimeout(async () => {
-      const analisis = analisisRespuestas[Math.floor(Math.random() * analisisRespuestas.length)];
+      const actual = media.find(m => m.id === id);
+      if (!actual) {
+        setMedia(prev => prev.map(m => m.id === id ? { ...m, analizando: false } : m));
+        return;
+      }
+      // Buscar el registro inmediatamente anterior del mismo tipo (foto/video)
+      // por fecha cronologica real
+      const tsActual = parseAlFecha(actual.fecha);
+      const candidatos = media
+        .filter(m => m.id !== id && m.tipo === actual.tipo && parseAlFecha(m.fecha) < tsActual)
+        .sort((a, b) => parseAlFecha(b.fecha) - parseAlFecha(a.fecha));
+      const anterior = candidatos[0] || null;
+
+      const analisis = generarAnalisisPersonalizado(actual, anterior, user?.perfil);
       await updateProgresoIA(id, analisis);
       setMedia(prev => prev.map(m => m.id === id ? { ...m, analisisIA: analisis, analizando: false } : m));
       setExpandido(id);
-    }, 2000);
+    }, 1200);
   };
 
   const deleteMedia = async (id: string) => {
@@ -276,15 +414,20 @@ export default function Progreso() {
                     {m.medidas?.brazo && <span className="text-[10px] px-1.5 py-0.5 bg-white/5 text-white/40 rounded">Brazo: {m.medidas.brazo}cm</span>}
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5 mt-2">
+                <div className="flex items-center gap-1.5 mt-2 flex-wrap">
                   {m.analisisIA ? (
-                    <button onClick={() => setExpandido(expandido === m.id ? null : m.id)} className="flex items-center gap-1 px-2 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400 text-[10px] font-bold">
-                      <Sparkles className="w-3 h-3" /> Analisis <ChevronDown className={`w-2.5 h-2.5 transition-transform ${expandido === m.id ? 'rotate-180' : ''}`} />
-                    </button>
+                    <>
+                      <button onClick={() => setExpandido(expandido === m.id ? null : m.id)} className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400 text-xs font-bold">
+                        <Sparkles className="w-3.5 h-3.5" /> Análisis <ChevronDown className={`w-3 h-3 transition-transform ${expandido === m.id ? 'rotate-180' : ''}`} />
+                      </button>
+                      <button onClick={() => analizarConIA(m.id)} className="flex items-center gap-1 px-2 py-1.5 bg-white/5 border border-dark-border rounded-lg text-white/55 hover:text-electric hover:bg-white/10 text-xs font-semibold transition-colors" title="Volver a generar el análisis con datos actualizados">
+                        <Zap className="w-3 h-3" /> Re-analizar
+                      </button>
+                    </>
                   ) : m.analizando ? (
-                    <span className="flex items-center gap-1 px-2 py-1 bg-electric/10 rounded-lg text-electric text-[10px]"><Sparkles className="w-3 h-3 animate-spin" /> Analizando...</span>
+                    <span className="flex items-center gap-1.5 px-2.5 py-1.5 bg-electric/10 rounded-lg text-electric text-xs font-semibold"><Sparkles className="w-3.5 h-3.5 animate-spin" /> Analizando...</span>
                   ) : (
-                    <button onClick={() => analizarConIA(m.id)} className="flex items-center gap-1 px-2 py-1 bg-electric/10 border border-electric/20 rounded-lg text-electric text-[10px] font-bold"><Zap className="w-3 h-3" /> Analizar</button>
+                    <button onClick={() => analizarConIA(m.id)} className="flex items-center gap-1.5 px-2.5 py-1.5 bg-electric/10 border border-electric/20 rounded-lg text-electric text-xs font-bold hover:bg-electric/20 transition-colors"><Zap className="w-3.5 h-3.5" /> Analizar</button>
                   )}
                 </div>
               </div>
