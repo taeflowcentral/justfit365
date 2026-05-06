@@ -79,6 +79,29 @@ export default function Dashboard() {
     return saved ? parseInt(saved) : tdee;
   })();
 
+  // Objetivo proteico segun perfil (g/kg ISSN 2017)
+  const protObjetivo = (() => {
+    const obj = (perfil?.objetivo || '').toLowerCase();
+    let protKg = 1.6;
+    if (obj.includes('grasa')) protKg = 2.2;
+    else if (obj.includes('hipertrofia') || obj.includes('fuerza')) protKg = 2.0;
+    else if (obj.includes('tonifica')) protKg = 1.8;
+    return Math.round(peso * protKg);
+  })();
+
+  // Helper para delta vs objetivo (▼ falta, ▲ se paso, ✓ en meta)
+  const calcDelta = (actual: number, meta: number) => {
+    if (actual === 0 || meta === 0) return null;
+    const diff = actual - meta;
+    const tolerancia = Math.max(50, meta * 0.05);
+    if (Math.abs(diff) <= tolerancia) return { simbolo: '✓', valor: 'En tu meta', color: 'text-emerald-400' };
+    return diff < 0
+      ? { simbolo: '▼', valor: Math.abs(diff).toString(), color: 'text-amber-400' }
+      : { simbolo: '▲', valor: diff.toString(), color: 'text-red-400' };
+  };
+  const calDelta = calcDelta(calHoy, calObjetivo);
+  const protDelta = calcDelta(protHoy, protObjetivo);
+
   // Meta de peso y fecha
   const [pesoMeta, setPesoMeta] = useState(() => {
     const saved = getUserItem('jf365_peso_meta');
@@ -410,10 +433,10 @@ export default function Dashboard() {
       {/* Stats - compactos */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
         {[
-          { icon: Flame, label: 'Cal hoy', value: calHoy > 0 ? calHoy.toLocaleString('es-AR') : '-', unit: 'kcal', color: 'text-orange-400', bg: 'bg-orange-500/10' },
-          { icon: Droplets, label: 'Prote\u00edna', value: protHoy > 0 ? protHoy.toString() : '-', unit: 'g', color: 'text-electric', bg: 'bg-electric/10' },
-          { icon: Dumbbell, label: 'Entreno', value: entrenoHoy, unit: '', color: 'text-purple-400', bg: 'bg-purple-500/10' },
-          { icon: Target, label: 'Objetivo', value: perfil?.objetivo?.split(',')[0] || 'Definir', unit: '', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+          { icon: Flame, label: 'Cal hoy', value: calHoy > 0 ? calHoy.toLocaleString('es-AR') : '-', unit: 'kcal', color: 'text-orange-400', bg: 'bg-orange-500/10', delta: calDelta },
+          { icon: Droplets, label: 'Prote\u00edna', value: protHoy > 0 ? protHoy.toString() : '-', unit: 'g', color: 'text-electric', bg: 'bg-electric/10', delta: protDelta },
+          { icon: Dumbbell, label: 'Entreno', value: entrenoHoy, unit: '', color: 'text-purple-400', bg: 'bg-purple-500/10', delta: null },
+          { icon: Target, label: 'Objetivo', value: perfil?.objetivo?.split(',')[0] || 'Definir', unit: '', color: 'text-emerald-400', bg: 'bg-emerald-500/10', delta: null },
         ].map(s => (
           <div key={s.label} className="bg-dark-800 border border-dark-border rounded-2xl p-3.5 hover:border-white/10 transition-all">
             <div className={`w-8 h-8 ${s.bg} rounded-lg flex items-center justify-center mb-2`}>
@@ -421,6 +444,11 @@ export default function Dashboard() {
             </div>
             <p className="text-xl font-black text-white leading-tight truncate">{s.value}<span className="text-white/40 text-xs ml-1 font-normal">{s.unit}</span></p>
             <p className="text-white/40 text-[11px] mt-0.5 uppercase tracking-wider font-semibold">{s.label}</p>
+            {s.delta && (
+              <p className={`text-[11px] mt-1 font-bold ${s.delta.color}`}>
+                {s.delta.simbolo} {s.delta.valor}
+              </p>
+            )}
           </div>
         ))}
       </div>
