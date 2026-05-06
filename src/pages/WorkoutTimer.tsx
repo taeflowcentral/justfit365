@@ -119,7 +119,9 @@ export default function WorkoutTimer() {
       if (round !== tabataCurrentRound || phase !== tabataPhase) {
         setTabataCurrentRound(round);
         setTabataPhase(phase);
-        if (sound) { phase === 'work' ? playGo() : playRest(); }
+        if (sound) {
+          if (phase === 'work') playGo(); else playRest();
+        }
       }
 
       // Countdown beeps en ultimos 3 seg de cada fase
