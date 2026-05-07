@@ -4,6 +4,8 @@ import { getUserItem, setUserItem } from '../lib/storage';
 import { useAuth } from '../context/AuthContext';
 import { buscarAlimentos, analizarComida } from '../lib/foodDB';
 import { printContent } from '../components/ShareButtons';
+import MedidasCorporalesSection from '../components/MedidasCorporalesSection';
+import { type MedidaCorporal } from '../lib/medidasCorporales';
 
 // Plantillas de ejercicios por objetivo
 const DISCIPLINAS = ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body', 'Cardio', 'HIIT', 'Funcional', 'Running', 'Caminata Activa', 'Yoga', 'Spinning', 'Ciclismo'];
@@ -323,6 +325,7 @@ interface Cliente {
   nutricion: ClienteComida[];
   notas: string;
   historial: HistorialEntry[];
+  medidasCorporales?: MedidaCorporal[];
 }
 
 const CLIENTES_KEY = 'bc_gym_clientes';
@@ -339,7 +342,7 @@ export default function GymClientes() {
   });
   const [busqueda, setBusqueda] = useState('');
   const [clienteActivo, setClienteActivo] = useState<number | null>(null);
-  const [tab, setTab] = useState<'rutina' | 'nutricion' | 'perfil' | 'historial'>('rutina');
+  const [tab, setTab] = useState<'rutina' | 'nutricion' | 'perfil' | 'medidas' | 'historial'>('rutina');
   const [showAddCliente, setShowAddCliente] = useState(false);
   const [showAddEj, setShowAddEj] = useState(false);
   const [showAddComida, setShowAddComida] = useState(false);
@@ -792,6 +795,7 @@ export default function GymClientes() {
           { key: 'rutina' as const, label: 'Rutina', icon: Dumbbell },
           { key: 'nutricion' as const, label: 'Nutrici\u00f3n', icon: Utensils },
           { key: 'perfil' as const, label: 'Datos', icon: User },
+          { key: 'medidas' as const, label: 'Medidas', icon: Ruler },
           { key: 'historial' as const, label: 'Historial', icon: History },
         ].map(t => (
           <button key={t.key} onClick={() => setTab(t.key)}
@@ -1360,6 +1364,16 @@ export default function GymClientes() {
         </div>
         );
       })()}
+
+      {/* Tab Medidas Corporales */}
+      {tab === 'medidas' && cliente && (
+        <MedidasCorporalesSection
+          medidas={cliente.medidasCorporales || []}
+          onChange={(nuevas: MedidaCorporal[]) => updateCliente(cliente.id, { medidasCorporales: nuevas })}
+          perfil={{ peso: cliente.peso, altura: cliente.altura, objetivo: cliente.objetivo, genero: cliente.genero }}
+          titulo={`Medidas de ${cliente.nombre}`}
+        />
+      )}
 
       {/* Tab Historial */}
       {tab === 'historial' && (

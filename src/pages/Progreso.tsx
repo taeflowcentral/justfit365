@@ -3,6 +3,11 @@ import { Camera, Video, Upload, Calendar, Trash2, Zap, Sparkles, ChevronDown, Pl
 import { useAuth } from '../context/AuthContext';
 import { getProgreso, addProgreso, updateProgresoIA, deleteProgreso } from '../lib/datos';
 import { compressImage, base64SizeKB } from '../lib/imageCompress';
+import MedidasCorporalesSection from '../components/MedidasCorporalesSection';
+import { type MedidaCorporal } from '../lib/medidasCorporales';
+import { getUserItem, setUserItem } from '../lib/storage';
+
+const MEDIDAS_KEY = 'jf365_medidas_corporales';
 
 interface MediaEntry {
   id: string;
@@ -173,6 +178,14 @@ export default function Progreso() {
   const [uploadBrazo, setUploadBrazo] = useState('');
   const [filtro, setFiltro] = useState<'todos' | 'foto' | 'video'>('todos');
   const [showComparativa, setShowComparativa] = useState(false);
+  const [medidas, setMedidas] = useState<MedidaCorporal[]>(() => {
+    try { const saved = getUserItem(MEDIDAS_KEY); return saved ? JSON.parse(saved) : []; }
+    catch { return []; }
+  });
+  const handleMedidasChange = (nuevas: MedidaCorporal[]) => {
+    setMedidas(nuevas);
+    setUserItem(MEDIDAS_KEY, JSON.stringify(nuevas));
+  };
 
   // Cargar desde Supabase al montar
   useEffect(() => {
@@ -364,6 +377,13 @@ export default function Progreso() {
           )}
         </div>
       )}
+
+      {/* Medidas corporales */}
+      <MedidasCorporalesSection
+        medidas={medidas}
+        onChange={handleMedidasChange}
+        perfil={perfil ? { peso: perfil.peso, altura: perfil.altura, objetivo: perfil.objetivo, genero: perfil.genero } : undefined}
+      />
 
       {/* Filtros */}
       <div className="flex gap-2">
