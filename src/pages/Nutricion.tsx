@@ -552,15 +552,24 @@ export default function Nutricion() {
       <div className="flex gap-1.5">
         {DIAS.map((dia, i) => {
           const tieneComidas = (planSemanal[i] || []).length > 0;
+          const tipoDia = rutinaSemanal[i]?.tipo || 'Descanso';
+          const esDescansoDia = !tipoDia || tipoDia === 'Descanso';
+          // Etiqueta corta para mostrar en el tab
+          const tipoCorto = esDescansoDia
+            ? 'Descanso'
+            : tipoDia.split(' + ').map(t => t.length > 6 ? t.slice(0, 4) + '.' : t).join('+');
           return (
             <button key={dia} onClick={() => { setDiaActivo(i); setEditandoComida(null); setEditandoItem(null); }}
-              className={`flex-1 text-center py-2.5 rounded-xl text-xs font-bold transition-all ${
+              className={`flex-1 text-center py-2 px-1 rounded-xl text-xs font-bold transition-all ${
                 i === diaActivo ? 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-400' :
-                tieneComidas ? 'bg-dark-800 border border-dark-border text-white/50 hover:border-white/10' :
-                'bg-dark-800 border border-dark-border text-white/20 hover:border-white/10'
+                tieneComidas ? 'bg-dark-800 border border-dark-border text-white/55 hover:border-white/10' :
+                'bg-dark-800 border border-dark-border text-white/30 hover:border-white/10'
               }`}>
-              <p>{dia}</p>
-              {tieneComidas && <span className="block w-1.5 h-1.5 bg-emerald-400/50 rounded-full mx-auto mt-0.5" />}
+              <p className="leading-tight">{dia}</p>
+              <p className={`text-[9px] mt-0.5 leading-tight font-semibold uppercase tracking-wide truncate ${esDescansoDia ? 'text-white/30' : i === diaActivo ? 'text-emerald-400/70' : 'text-electric/50'}`} title={tipoDia}>
+                {tipoCorto}
+              </p>
+              {tieneComidas && <span className="block w-1.5 h-1.5 bg-emerald-400/50 rounded-full mx-auto mt-1" />}
             </button>
           );
         })}
@@ -607,6 +616,34 @@ export default function Nutricion() {
           )}
         </div>
       </div>
+
+      {/* Entreno del dia activo + kcal extra */}
+      {(() => {
+        const tipoDiaUI = rutinaSemanal[diaActivo]?.tipo || 'Descanso';
+        const actividadesUI = tipoDiaUI.split(' + ').filter(Boolean).filter(t => t !== 'Descanso');
+        const gastoUI = kcalExtraPorEntreno(actividadesUI, perfil?.peso || 75);
+        return (
+          <div className={`rounded-2xl p-3 border flex items-start gap-3 ${gastoUI.esDescanso ? 'bg-white/5 border-dark-border' : 'bg-electric/5 border-electric/20'}`}>
+            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${gastoUI.esDescanso ? 'bg-white/5 text-white/40' : 'bg-electric/15 text-electric'}`}>
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white text-sm font-bold leading-tight">
+                {DIAS_NOMBRE[diaActivo]} · {gastoUI.esDescanso ? 'Día de descanso' : `Entrenás ${actividadesUI.join(' + ')}`}
+              </p>
+              {gastoUI.esDescanso ? (
+                <p className="text-white/50 text-xs mt-0.5">Calorías reducidas un 10% sobre tu base ({calObjetivo} kcal).</p>
+              ) : (
+                <p className="text-white/65 text-xs mt-0.5">
+                  Gasto extra por entreno: <strong className="text-electric">+{gastoUI.extra} kcal</strong>
+                  {gastoUI.desglose.length > 1 && <span className="text-white/45"> ({gastoUI.desglose.map(d => `${d.actividad} ~${d.kcal}`).join(' · ')})</span>}
+                  {gastoUI.topeAplicado && <span className="text-amber-400"> · topeado por seguridad</span>}
+                </p>
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Macros calculados */}
       {showMacros && <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
