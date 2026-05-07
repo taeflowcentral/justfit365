@@ -7,6 +7,7 @@ import HidratacionWidget from '../components/HidratacionWidget';
 import FraseDelDia from '../components/FraseDelDia';
 import { getUserItem, setUserItem } from '../lib/storage';
 import { getUltimosNDias, archivarDiasPasados, fechaISO } from '../lib/historicoNutricion';
+import { kcalExtraPorEntreno, FACTOR_DESCANSO, tipoEntrenoHoy } from '../lib/gastoCalorico';
 
 // Datos diarios reales tomados del historico (por fecha, no por dia de semana)
 function getWeekData(): { dia: string; calorias: number; prot: number; fecha: string }[] {
@@ -67,8 +68,8 @@ export default function Dashboard() {
   const factores: Record<string, number> = { 'Sedentario': 1.2, 'Principiante': 1.375, 'Intermedio': 1.55, 'Avanzado': 1.725, 'Elite': 1.9 };
   const tdee = Math.round(tmb * (factores[nivel] || 1.55));
 
-  // Objetivo calorico del plan nutricional (usa el mismo calculo que Nutricion.tsx)
-  const calObjetivo = (() => {
+  // Objetivo calorico BASE (el target diario del plan, sin ajuste por entreno)
+  const calObjetivoBase = (() => {
     const saved = getUserItem('bc_plan_nutricional_cal_objetivo');
     if (saved) return parseInt(saved);
     // Fallback: aplicar ajuste por objetivo igual que Nutricion
@@ -77,6 +78,14 @@ export default function Dashboard() {
     if (obj.includes('hipertrofia') || obj.includes('fuerza')) return tdee + 300;
     return tdee;
   })();
+
+  // Ajuste segun el entreno de HOY (suma kcal por disciplina)
+  const tipoHoy = tipoEntrenoHoy(getUserItem);
+  const actividadesHoy = (tipoHoy || '').split(' + ').filter(Boolean);
+  const gastoHoy = kcalExtraPorEntreno(actividadesHoy, peso);
+  const calObjetivo = gastoHoy.esDescanso
+    ? Math.round(calObjetivoBase * FACTOR_DESCANSO)
+    : calObjetivoBase + gastoHoy.extra;
 
   // Objetivo proteico segun perfil (g/kg ISSN 2017)
   const protObjetivo = (() => {

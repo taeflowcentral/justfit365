@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import ShareButtons, { generateNutricionText, shareWhatsApp, printContent } from '../components/ShareButtons';
 import { getUserItem, setUserItem } from '../lib/storage';
 import { archivarDia, archivarDiasPasados, fechaISO, getUltimosNDias, type DiaHistorico } from '../lib/historicoNutricion';
+import { kcalExtraPorEntreno, FACTOR_DESCANSO } from '../lib/gastoCalorico';
 
 interface Alimento {
   id: number;
@@ -35,15 +36,13 @@ function generarPlanIA(peso: number, altura: number, edad: number, objetivo: str
 
   // Soporte para multiples actividades por dia (ej: "Push + Running")
   const actividades = (tipoEntreno || '').split(' + ').filter(Boolean);
-  const esDescanso = actividades.length === 0 || actividades.every(t => t === 'Descanso');
   const tieneCardio = actividades.some(t => ['Cardio', 'Running', 'Caminata Activa', 'Spinning', 'Ciclismo'].includes(t));
   const tieneFuerza = actividades.some(t => ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body'].includes(t));
-  const esYoga = actividades.some(t => t === 'Yoga');
-  const esHIIT = actividades.some(t => t === 'HIIT');
-  const tieneFuncional = actividades.some(t => t === 'Funcional');
-  // Para compatibilidad con logica existente
   const esCardio = tieneCardio && !tieneFuerza;
-  void tieneFuerza; void tieneFuncional;
+
+  // Gasto calorico por disciplina (helper compartido - ajustado por peso)
+  const gastoDia = kcalExtraPorEntreno(actividades, peso);
+  const esDescanso = gastoDia.esDescanso;
 
   // Ajuste por enfermedades
   const tieneHipo = enfermedades?.some(e => e.toLowerCase().includes('hipotiroidismo') || e.toLowerCase().includes('hashimoto'));
@@ -76,27 +75,20 @@ function generarPlanIA(peso: number, altura: number, edad: number, objetivo: str
     notaObj = `Plan equilibrado de mantenimiento.`;
   }
 
-  // Ajuste por tipo de entreno del dia (soporte multiple)
+  // Ajuste por tipo de entreno del dia
   if (esDescanso) {
-    calObjetivo = Math.round(calObjetivo * 0.9);
+    calObjetivo = Math.round(calObjetivo * FACTOR_DESCANSO);
     notasExtra.push('D\u00eda de descanso: calor\u00edas reducidas un 10%.');
   } else {
-    let extraKcal = 0;
-    const detalles: string[] = [];
-    if (tieneFuerza) detalles.push('fuerza');
-    if (tieneCardio) { extraKcal += 150; detalles.push('cardio'); }
-    if (tieneFuerza && tieneCardio) extraKcal += 100;
-    if (esHIIT) { extraKcal += 200; detalles.push('HIIT'); }
-    if (tieneFuncional) { extraKcal += 100; detalles.push('funcional'); }
-    if (esYoga && detalles.length === 0) detalles.push('yoga');
-    calObjetivo = Math.round(calObjetivo + extraKcal);
-    if (actividades.length > 1) {
-      notasExtra.push(`Combinaci\u00f3n ${actividades.join(' + ')}: +${extraKcal} kcal extra para cubrir el gasto de m\u00faltiples actividades.`);
-    } else if (extraKcal > 0) {
-      notasExtra.push(`D\u00eda de ${detalles.join(', ')}: +${extraKcal} kcal para energ\u00eda.`);
-    } else if (esYoga) {
-      notasExtra.push('D\u00eda de Yoga: plan equilibrado con alimentos antiinflamatorios.');
+    const desglose = gastoDia.desglose.map(d => `${d.actividad} ~${d.kcal} kcal`).join(' \u00b7 ');
+    if (gastoDia.topeAplicado) {
+      notasExtra.push(`Combinaci\u00f3n intensa (${actividades.join(' + ')}): gasto estimado superior, topeado a ${gastoDia.extra} kcal extra por seguridad nutricional.`);
+    } else if (actividades.length > 1) {
+      notasExtra.push(`D\u00eda de ${actividades.join(' + ')}: +${gastoDia.extra} kcal extra (desglose: ${desglose}).`);
+    } else if (gastoDia.extra > 0) {
+      notasExtra.push(`D\u00eda de ${actividades[0]}: +${gastoDia.extra} kcal para cubrir el gasto del entrenamiento (peso ~${peso}kg).`);
     }
+    calObjetivo = Math.round(calObjetivo + gastoDia.extra);
   }
 
   // Ajuste por enfermedades
