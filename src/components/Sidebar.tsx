@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import {
   Zap, LayoutDashboard, Utensils, Dumbbell, MessageSquare,
   Settings, LogOut, Building2, Users, CreditCard, ChevronLeft, ChevronRight, UserCog,
-  Camera, Stethoscope, ShieldCheck, LifeBuoy, Timer, DollarSign, Lightbulb
+  Camera, Stethoscope, ShieldCheck, LifeBuoy, Timer, DollarSign, Lightbulb, HeartHandshake
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -14,6 +14,7 @@ const userLinks = [
   { to: '/timer', icon: Timer, label: 'Timer' },
   { to: '/bio-coach', icon: MessageSquare, label: 'JustFit Coach' },
   { to: '/progreso', icon: Camera, label: 'Mi Progreso' },
+  { to: '/partner', icon: HeartHandshake, label: 'Partner Match' },
   { to: '/analisis', icon: Stethoscope, label: 'Analisis Medicos' },
   { to: '/perfil', icon: UserCog, label: 'Mi Perfil' },
   { to: '/suscripcion', icon: CreditCard, label: 'Suscripción' },
@@ -28,6 +29,7 @@ const gymLinks = [
   { to: '/timer', icon: Timer, label: 'Timer' },
   { to: '/bio-coach', icon: MessageSquare, label: 'JustFit Coach' },
   { to: '/progreso', icon: Camera, label: 'Progreso' },
+  { to: '/partner', icon: HeartHandshake, label: 'Partner Match' },
   { to: '/analisis', icon: Stethoscope, label: 'Analisis Medicos' },
   { to: '/config-gym', icon: Settings, label: 'Configuracion' },
   { to: '/perfil', icon: UserCog, label: 'Mi Perfil' },

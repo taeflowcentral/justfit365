@@ -25,6 +25,7 @@ const RecuperarPassword = lazy(() => import('./pages/RecuperarPassword'));
 const WorkoutTimer = lazy(() => import('./pages/WorkoutTimer'));
 const GymCobranzas = lazy(() => import('./pages/GymCobranzas'));
 const CompletarPerfil = lazy(() => import('./pages/CompletarPerfil'));
+const PartnerMatch = lazy(() => import('./pages/PartnerMatch'));
 
 function PageLoader() {
   return (
@@ -65,6 +66,7 @@ function AppRoutes() {
           <Route path="cobranzas" element={<GymCobranzas />} />
           <Route path="config-gym" element={<GymConfig />} />
           <Route path="timer" element={<WorkoutTimer />} />
+          <Route path="partner" element={<PartnerMatch />} />
           <Route path="admin" element={<AdminPanel />} />
         </Route>
       </Routes>
