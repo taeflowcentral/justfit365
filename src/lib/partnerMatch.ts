@@ -11,12 +11,15 @@ export interface PartnerData {
   nivel: number;       // 1-5
   objetivo: string;
   telefono: string;    // con codigo de pais, ej. +54 9 221 6806000
+  disciplinas: string[]; // ej: ["Push", "Running", "Yoga"]
 }
 
 export interface PartnerUsuario extends PartnerData {
   dni: string;
   nombre: string;     // solo primer nombre
   foto?: string;
+  genero?: string;
+  edad?: number;
   actualizado?: string;
 }
 
@@ -27,6 +30,12 @@ export interface MatchResult {
 }
 
 export const HORARIOS: Horario[] = ['Mañana', 'Tarde', 'Noche', 'Flexible'];
+
+export const DISCIPLINAS = [
+  'Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body',
+  'Cardio', 'Running', 'Caminata Activa', 'Spinning', 'Ciclismo',
+  'HIIT', 'Funcional', 'Yoga', 'Calistenia', 'Escalada Indoor',
+];
 
 export const OBJETIVOS = [
   'Perder peso',
@@ -59,6 +68,12 @@ export function calcularMatch(a: PartnerData, b: PartnerData): MatchResult['deta
   return { ...det, score };
 }
 
+export function disciplinasCompartidas(a: string[], b: string[]): string[] {
+  if (!a?.length || !b?.length) return [];
+  const setA = new Set(a);
+  return b.filter(d => setA.has(d));
+}
+
 export function rankear(propio: PartnerData, otros: PartnerUsuario[]): MatchResult[] {
   return otros
     .map(u => {
@@ -85,12 +100,15 @@ export function rowToPartner(row: Record<string, unknown>): PartnerUsuario | nul
     dni: String(row.dni || ''),
     nombre: (row.nombre as string) || '',
     foto: (row.foto as string) || undefined,
+    genero: (row.perfil_genero as string) || undefined,
+    edad: (row.perfil_edad as number) || undefined,
     activo: true,
     zona: (row.partner_zona as string) || '',
     horario: ((row.partner_horario as string) || 'Flexible') as Horario,
     nivel: (row.partner_nivel as number) || 3,
     objetivo: (row.partner_objetivo as string) || '',
     telefono: (row.partner_telefono as string) || '',
+    disciplinas: ((row.partner_disciplinas as string) || '').split(',').map(s => s.trim()).filter(Boolean),
     actualizado: (row.partner_actualizado as string) || undefined,
   };
 }

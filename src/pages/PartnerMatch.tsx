@@ -7,12 +7,12 @@ import {
 } from 'lucide-react';
 import {
   type PartnerData, type PartnerUsuario, type MatchResult, type Horario,
-  HORARIOS, OBJETIVOS, NIVELES,
-  rankear, whatsappLink, rowToPartner,
+  HORARIOS, OBJETIVOS, NIVELES, DISCIPLINAS,
+  rankear, whatsappLink, rowToPartner, disciplinasCompartidas,
 } from '../lib/partnerMatch';
 
 const PARTNER_DEFAULT: PartnerData = {
-  activo: false, zona: '', horario: 'Flexible', nivel: 3, objetivo: '', telefono: '',
+  activo: false, zona: '', horario: 'Flexible', nivel: 3, objetivo: '', telefono: '', disciplinas: [],
 };
 
 export default function PartnerMatch() {
@@ -25,6 +25,7 @@ export default function PartnerMatch() {
   const [cargando, setCargando] = useState(true);
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState('');
+  const [filtroDisciplinas, setFiltroDisciplinas] = useState(true); // por default: solo con disciplinas en comun
 
   useEffect(() => {
     if (user?.dni) cargar();
@@ -38,7 +39,7 @@ export default function PartnerMatch() {
       // Mi perfil
       const { data: yo } = await supabase
         .from('usuarios')
-        .select('partner_activo, partner_zona, partner_horario, partner_nivel, partner_objetivo, partner_telefono')
+        .select('partner_activo, partner_zona, partner_horario, partner_nivel, partner_objetivo, partner_telefono, partner_disciplinas')
         .eq('dni', user.dni).single();
       const mio: PartnerData = yo ? {
         activo: !!yo.partner_activo,
@@ -47,15 +48,16 @@ export default function PartnerMatch() {
         nivel: yo.partner_nivel || 3,
         objetivo: yo.partner_objetivo || '',
         telefono: yo.partner_telefono || '',
+        disciplinas: ((yo.partner_disciplinas as string) || '').split(',').map((s: string) => s.trim()).filter(Boolean),
       } : PARTNER_DEFAULT;
       setPropio(mio);
       setDraft(mio);
       if (!mio.activo) setEditando(true);
 
-      // Otros usuarios opt-in
+      // Otros usuarios opt-in (incluye foto, genero y edad del perfil)
       const { data: otrosRows } = await supabase
         .from('usuarios')
-        .select('dni, nombre, foto, partner_activo, partner_zona, partner_horario, partner_nivel, partner_objetivo, partner_telefono, partner_actualizado')
+        .select('dni, nombre, foto, perfil_genero, perfil_edad, partner_activo, partner_zona, partner_horario, partner_nivel, partner_objetivo, partner_telefono, partner_disciplinas, partner_actualizado')
         .eq('partner_activo', true)
         .neq('dni', user.dni);
       const otros: PartnerUsuario[] = (otrosRows || [])
@@ -89,6 +91,7 @@ export default function PartnerMatch() {
         partner_nivel: draft.activo ? draft.nivel : null,
         partner_objetivo: draft.activo ? draft.objetivo : null,
         partner_telefono: draft.activo ? draft.telefono : null,
+        partner_disciplinas: draft.activo ? draft.disciplinas.join(',') : null,
         partner_actualizado: new Date().toISOString(),
       }).eq('dni', user.dni);
       if (err) { setError('Error al guardar: ' + err.message); return; }
@@ -103,6 +106,11 @@ export default function PartnerMatch() {
   const enZonaPropia = propio.activo && propio.zona
     ? matches.filter(m => m.user.zona.toLowerCase().trim() === propio.zona.toLowerCase().trim()).length
     : 0;
+
+  // Filtrar matches por disciplinas en comun si el toggle esta activo
+  const matchesFiltrados = (filtroDisciplinas && propio.disciplinas.length > 0)
+    ? matches.filter(m => disciplinasCompartidas(propio.disciplinas, m.user.disciplinas).length > 0)
+    : matches;
 
   return (
     <div className="space-y-5 max-w-3xl mx-auto">
@@ -142,11 +150,23 @@ export default function PartnerMatch() {
           <label className="flex items-center justify-between gap-3 bg-black/40 rounded-xl p-3 cursor-pointer">
             <div className="flex-1">
               <p className="text-white font-bold text-sm flex items-center gap-2"><ToggleRight className="w-4 h-4 text-pink-400" /> Activar Partner Match</p>
-              <p className="text-white/55 text-xs mt-0.5">Si lo activás, otros usuarios opted-in pueden encontrarte y escribirte por WhatsApp.</p>
+              <p className="text-white/55 text-xs mt-0.5">Otros usuarios opted-in podrán verte y contactarte por WhatsApp.</p>
             </div>
             <input type="checkbox" checked={draft.activo} onChange={e => setDraft({ ...draft, activo: e.target.checked })}
               className="w-6 h-6 accent-pink-500" />
           </label>
+
+          {draft.activo && (
+            <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-3">
+              <p className="text-amber-400 text-xs font-bold mb-1.5">Qué se comparte cuando activás Partner Match</p>
+              <ul className="text-white/65 text-xs space-y-1 list-disc list-inside">
+                <li>Tu primer nombre, género, edad y foto de perfil (datos que ya cargaste).</li>
+                <li>Lo que completás abajo: zona, horario, nivel, objetivo y WhatsApp.</li>
+                <li>Solo lo ven personas que también activaron Partner Match.</li>
+                <li>Se borra todo si desactivás el toggle.</li>
+              </ul>
+            </div>
+          )}
 
           {draft.activo && (
             <>
@@ -194,6 +214,36 @@ export default function PartnerMatch() {
                   <option value="" className="bg-dark-800">Elegí uno...</option>
                   {OBJETIVOS.map(o => <option key={o} value={o} className="bg-dark-800">{o}</option>)}
                 </select>
+              </div>
+
+              {/* Disciplinas (multi-select) */}
+              <div>
+                <label className="block text-sm text-white/65 uppercase tracking-wider mb-1.5 font-semibold flex items-center gap-1.5"><Activity className="w-3.5 h-3.5" /> Disciplinas que te interesan</label>
+                <p className="text-white/45 text-xs mb-2">Elegí una o más. Lo usamos para mostrarte gente con intereses en común.</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                  {DISCIPLINAS.map(d => {
+                    const seleccionada = draft.disciplinas.includes(d);
+                    return (
+                      <button key={d} type="button"
+                        onClick={() => {
+                          const nuevas = seleccionada
+                            ? draft.disciplinas.filter(x => x !== d)
+                            : [...draft.disciplinas, d];
+                          setDraft({ ...draft, disciplinas: nuevas });
+                        }}
+                        className={`px-2.5 py-2 rounded-lg text-xs font-bold transition-all ${
+                          seleccionada
+                            ? 'bg-pink-500/20 text-pink-300 border-2 border-pink-500/40'
+                            : 'bg-black/40 text-white/55 border-2 border-dark-border hover:text-white/85'
+                        }`}>
+                        {d}
+                      </button>
+                    );
+                  })}
+                </div>
+                {draft.disciplinas.length > 0 && (
+                  <p className="text-white/45 text-xs mt-1.5">Seleccionadas: <strong className="text-pink-300">{draft.disciplinas.length}</strong></p>
+                )}
               </div>
 
               {/* WhatsApp */}
@@ -245,22 +295,38 @@ export default function PartnerMatch() {
       {/* Lista de matches */}
       {propio.activo && !editando && (
         <div className="space-y-3">
-          <div className="flex items-center gap-2 px-1">
-            <Users className="w-4 h-4 text-pink-400" />
-            <h2 className="text-white font-bold text-sm">Matches sugeridos</h2>
-            <span className="text-white/40 text-xs">({matches.length})</span>
+          <div className="flex items-center justify-between gap-2 px-1 flex-wrap">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-pink-400" />
+              <h2 className="text-white font-bold text-sm">Matches sugeridos</h2>
+              <span className="text-white/40 text-xs">({matchesFiltrados.length}{matches.length !== matchesFiltrados.length ? ` de ${matches.length}` : ''})</span>
+            </div>
+            {propio.disciplinas.length > 0 && (
+              <button onClick={() => setFiltroDisciplinas(!filtroDisciplinas)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                  filtroDisciplinas
+                    ? 'bg-pink-500/15 border border-pink-500/30 text-pink-300'
+                    : 'bg-white/5 border border-dark-border text-white/55 hover:text-white/85'
+                }`}>
+                {filtroDisciplinas ? '✓' : '○'} Solo con disciplinas en común
+              </button>
+            )}
           </div>
 
           {cargando ? (
             <div className="text-center py-8 text-white/40 text-sm">Cargando matches...</div>
-          ) : matches.length === 0 ? (
+          ) : matchesFiltrados.length === 0 ? (
             <div className="bg-dark-800 border border-dark-border rounded-2xl p-8 text-center">
               <Users className="w-12 h-12 text-white/10 mx-auto mb-3" />
-              <p className="text-white/55 font-bold mb-1">Sin matches todavía</p>
-              <p className="text-white/40 text-xs">A medida que más personas activen Partner Match en tu zona, vas a verlas acá. Compartí JustFit365 con tus amigos para empezar.</p>
+              <p className="text-white/55 font-bold mb-1">Sin matches con esos filtros</p>
+              <p className="text-white/40 text-xs">
+                {matches.length === 0
+                  ? 'A medida que más personas activen Partner Match en tu zona, vas a verlas acá. Compartí JustFit365 con tus amigos para empezar.'
+                  : 'Probá desactivar el filtro "Solo con disciplinas en común" para ver más perfiles.'}
+              </p>
             </div>
           ) : (
-            matches.map(m => <MatchCard key={m.user.dni} match={m} miNombre={user?.nombre || ''} />)
+            matchesFiltrados.map(m => <MatchCard key={m.user.dni} match={m} miNombre={user?.nombre || ''} misDisciplinas={propio.disciplinas} />)
           )}
         </div>
       )}
@@ -272,57 +338,76 @@ export default function PartnerMatch() {
   );
 }
 
-function MatchCard({ match, miNombre }: { match: MatchResult; miNombre: string }) {
+function MatchCard({ match, miNombre, misDisciplinas }: { match: MatchResult; miNombre: string; misDisciplinas: string[] }) {
   const { user: u, score, detalle } = match;
   const primero = u.nombre.split(/\s+/)[0] || u.nombre;
   const colorScore = score >= 70 ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30'
     : score >= 40 ? 'text-amber-400 bg-amber-500/10 border-amber-500/30'
     : 'text-white/55 bg-white/5 border-dark-border';
+  const generoLabel = u.genero === 'Hombre' ? '♂' : u.genero === 'Mujer' ? '♀' : u.genero ? '⚧' : '';
+  const misSet = new Set(misDisciplinas);
 
   return (
     <div className="bg-dark-800 border border-dark-border rounded-2xl p-4 flex items-start gap-3 hover:border-pink-500/20 transition-colors">
       {u.foto ? (
-        <img src={u.foto} alt="" className="w-12 h-12 rounded-full object-cover shrink-0" />
+        <img src={u.foto} alt={primero} className="w-16 h-16 rounded-2xl object-cover shrink-0 border border-dark-border" />
       ) : (
-        <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-500 rounded-full flex items-center justify-center text-white font-black shrink-0">
+        <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center text-white font-black text-xl shrink-0">
           {primero.charAt(0).toUpperCase()}
         </div>
       )}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <p className="text-white font-bold text-base">{primero}</p>
+          {u.edad && <span className="text-white/60 text-sm font-semibold">· {u.edad} años</span>}
+          {generoLabel && <span className="text-white/60 text-sm" title={u.genero}>{generoLabel}</span>}
           <span className={`px-2 py-0.5 rounded-full text-[11px] font-black border ${colorScore}`}>
             {score}% match
           </span>
         </div>
-        <div className="flex items-center gap-3 text-xs text-white/60 mt-1 flex-wrap">
+        <div className="flex items-center gap-3 text-xs text-white/60 mt-1.5 flex-wrap">
           {u.zona && (
-            <span className={`flex items-center gap-1 ${detalle.zona > 0 ? 'text-emerald-400' : ''}`}>
+            <span className={`flex items-center gap-1 ${detalle.zona > 0 ? 'text-emerald-400 font-semibold' : ''}`}>
               <MapPin className="w-3 h-3" /> {u.zona}
             </span>
           )}
           {u.horario && (
-            <span className={`flex items-center gap-1 ${detalle.horario > 0 ? 'text-emerald-400' : ''}`}>
+            <span className={`flex items-center gap-1 ${detalle.horario > 0 ? 'text-emerald-400 font-semibold' : ''}`}>
               <Clock className="w-3 h-3" /> {u.horario}
             </span>
           )}
           {typeof u.nivel === 'number' && (
-            <span className={`flex items-center gap-1 ${detalle.nivel > 0 ? 'text-emerald-400' : ''}`}>
+            <span className={`flex items-center gap-1 ${detalle.nivel > 0 ? 'text-emerald-400 font-semibold' : ''}`}>
               <Activity className="w-3 h-3" /> Nivel {u.nivel}
             </span>
           )}
           {u.objetivo && (
-            <span className={`flex items-center gap-1 ${detalle.objetivo > 0 ? 'text-emerald-400' : ''}`}>
+            <span className={`flex items-center gap-1 ${detalle.objetivo > 0 ? 'text-emerald-400 font-semibold' : ''}`}>
               <Target className="w-3 h-3" /> {u.objetivo}
             </span>
           )}
         </div>
+        {u.disciplinas.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-2">
+            {u.disciplinas.map(d => {
+              const compartida = misSet.has(d);
+              return (
+                <span key={d}
+                  className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                    compartida ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'bg-white/5 text-white/45 border border-dark-border'
+                  }`}>
+                  {d}
+                </span>
+              );
+            })}
+          </div>
+        )}
         <a
           href={whatsappLink(u.telefono, primero, miNombre)}
           target="_blank" rel="noopener noreferrer"
           className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-sm font-black transition-colors"
         >
-          <MessageCircle className="w-4 h-4" /> Conectar por WhatsApp
+          <MessageCircle className="w-4 h-4" /> Escribir por WhatsApp
         </a>
       </div>
     </div>
