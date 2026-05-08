@@ -21,6 +21,8 @@ export const KCAL_DISCIPLINA: Record<string, number> = {
   'HIIT': 330,
   'Funcional': 280,
   'Yoga': 160,
+  'Calistenia': 300,
+  'Escalada Indoor': 380,
 };
 
 export const TOPE_KCAL_DIARIO = 800;

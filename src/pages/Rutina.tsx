@@ -25,7 +25,7 @@ interface DiaEntrenamiento {
 const RUTINA_KEY = 'bc_rutina_semana';
 const EJERCICIOS_KEY = 'bc_rutina_ejercicios';
 
-const tiposEntrenamiento = ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body', 'Cardio', 'HIIT', 'Funcional', 'Running', 'Caminata Activa', 'Yoga', 'Spinning', 'Ciclismo', 'Descanso'];
+const tiposEntrenamiento = ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body', 'Cardio', 'HIIT', 'Funcional', 'Running', 'Caminata Activa', 'Yoga', 'Spinning', 'Ciclismo', 'Calistenia', 'Escalada Indoor', 'Descanso'];
 const gruposMusculares = ['Pecho', 'Pecho superior', 'Espalda', 'Espalda baja', 'Hombro anterior', 'Hombro lateral', 'Hombro posterior', 'B\u00edceps', 'Tr\u00edceps', 'Antebrazo', 'Cu\u00e1driceps', 'Isquiotibiales', 'Gl\u00fateos', 'Pantorrillas', 'Abdominales', 'Oblicuos', 'Core', 'Pecho / Tr\u00edceps', 'Espalda / B\u00edceps', 'Full Body'];
 
 // Plantillas de ejercicios por tipo de entrenamiento
@@ -147,6 +147,26 @@ const plantillas: Record<string, Ejercicio[]> = {
     { id: 173, nombre: 'Sprints cortos', series: 4, reps: '20 seg sprint / 40 seg suave', descanso: '0', peso: '-', musculo: 'Cu\u00e1driceps', completado: false, notas: 'Todo lo que puedas. Recuperar pedaleando suave.' },
     { id: 174, nombre: 'Vuelta a la calma + estiramientos', series: 1, reps: '10 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Pedaleo muy suave + elongar isquios, cu\u00e1driceps y cadera.' },
   ],
+  Calistenia: [
+    { id: 180, nombre: 'Movilidad de hombros + mu\u00f1ecas', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Hombros / Mu\u00f1ecas', completado: false, notas: 'Calentamiento clave. Rotaciones, dislocaciones con palo, c\u00edrculos de mu\u00f1eca.' },
+    { id: 181, nombre: 'Dominadas (pull ups)', series: 4, reps: '5-10', descanso: '90', peso: 'Corporal', musculo: 'Espalda', completado: false, notas: 'Si no salen: negativas (saltar arriba y bajar 3 seg) o con banda el\u00e1stica.' },
+    { id: 182, nombre: 'Fondos en paralelas (dips)', series: 4, reps: '6-12', descanso: '90', peso: 'Corporal', musculo: 'Pecho / Tr\u00edceps', completado: false, notas: 'Hombros bajos, codos pegados al cuerpo si quer\u00e9s m\u00e1s tr\u00edceps.' },
+    { id: 183, nombre: 'Pike push ups (camino al HSPU)', series: 3, reps: '8-12', descanso: '60', peso: 'Corporal', musculo: 'Hombros', completado: false, notas: 'Apoyar pies en banco para mayor inclinaci\u00f3n. Progresi\u00f3n a parado de manos.' },
+    { id: 184, nombre: 'L-sit en paralelas o suelo', series: 4, reps: '15-30 seg', descanso: '60', peso: 'Corporal', musculo: 'Core', completado: false, notas: 'Empez\u00e1 con tucked L-sit (rodillas dobladas) y progres\u00e1 a piernas extendidas.' },
+    { id: 185, nombre: 'Pistol squat (sentadilla a una pierna)', series: 3, reps: '5 c/pierna', descanso: '90', peso: 'Corporal', musculo: 'Cu\u00e1driceps', completado: false, notas: 'Si no sale: asistido con TRX, banda o sentadilla a banco.' },
+    { id: 186, nombre: 'Hollow body hold', series: 3, reps: '30 seg', descanso: '45', peso: 'Corporal', musculo: 'Core', completado: false, notas: 'Postura b\u00e1sica de gimnasia y calistenia. Lumbar pegada al suelo.' },
+    { id: 187, nombre: 'Skill / progresi\u00f3n libre', series: 1, reps: '10 min', descanso: '0', peso: '-', musculo: 'Skill', completado: false, notas: 'Trabajar muscle up, front lever, planche o handstand seg\u00fan tu nivel.' },
+  ],
+  'Escalada Indoor': [
+    { id: 190, nombre: 'Calentamiento din\u00e1mico (hombros, dedos, cadera)', series: 1, reps: '8 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Activaci\u00f3n de manguito rotador y movilidad de cadera son cr\u00edticas para escalar.' },
+    { id: 191, nombre: 'Boulders f\u00e1ciles de aproximaci\u00f3n', series: 4, reps: '4 v\u00edas', descanso: '60', peso: 'Corporal', musculo: 'Full Body', completado: false, notas: 'Grado bajo (V0-V2 o equivalente). Foco en t\u00e9cnica de pies y posici\u00f3n de cadera.' },
+    { id: 192, nombre: 'Boulders al l\u00edmite (proyecto)', series: 5, reps: '2-3 intentos', descanso: '3-5 min', peso: 'Corporal', musculo: 'Full Body', completado: false, notas: 'V\u00edas cerca de tu m\u00e1ximo. Recuperaci\u00f3n completa entre intentos.' },
+    { id: 193, nombre: 'V\u00edas de resistencia (pared larga)', series: 3, reps: '1 v\u00eda completa', descanso: '4 min', peso: 'Corporal', musculo: 'Espalda / Antebrazo', completado: false, notas: 'Top rope o lead. Buscar 15-25 movimientos sin caer. Bombeo controlado.' },
+    { id: 194, nombre: 'Suspensi\u00f3n en hangboard', series: 4, reps: '7 seg colgado / 3 seg descanso x 6', descanso: '2 min', peso: 'Corporal', musculo: 'Antebrazo / Dedos', completado: false, notas: 'Solo si llev\u00e1s 1+ a\u00f1o escalando. Regleta media (20mm). Ojo con poleas.' },
+    { id: 195, nombre: 'Dominadas + remos en anillas', series: 4, reps: '6-10 dom + 8 rem', descanso: '90', peso: 'Corporal', musculo: 'Espalda', completado: false, notas: 'Trabajo accesorio para tracci\u00f3n.' },
+    { id: 196, nombre: 'Front lever progression / core', series: 4, reps: '10-20 seg', descanso: '90', peso: 'Corporal', musculo: 'Core / Espalda', completado: false, notas: 'Tucked, advanced tucked o full seg\u00fan nivel. El core escalando es clave.' },
+    { id: 197, nombre: 'Estiramiento + recuperaci\u00f3n', series: 1, reps: '8 min', descanso: '0', peso: '-', musculo: 'Full Body', completado: false, notas: 'Antebrazos, hombros, cadera (rana), isquios. Auto-masaje con pelota si ten\u00e9s.' },
+  ],
   Descanso: [],
 };
 
@@ -254,6 +274,25 @@ const plantillasCorporal: Record<string, Omit<Ejercicio, 'id' | 'completado'>[]>
     { nombre: 'Salida en bicicleta', series: 1, reps: '60 min', descanso: '0', peso: '-', musculo: 'Cuadriceps', notas: 'Si tenes bici. Aire libre o estatica.' },
     { nombre: 'Sentadillas', series: 4, reps: '20', descanso: '60', peso: 'Corporal', musculo: 'Cuadriceps', notas: 'Si no hay bici.' },
     { nombre: 'Burpees', series: 4, reps: '10', descanso: '60', peso: 'Corporal', musculo: 'Full Body', notas: '' },
+  ],
+  Calistenia: [
+    { nombre: 'Movilidad de hombros y muñecas', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Hombros', notas: 'Rotaciones y dislocaciones con palo o toalla.' },
+    { nombre: 'Australian rows (filas en mesa baja)', series: 4, reps: '8-12', descanso: '60', peso: 'Corporal', musculo: 'Espalda', notas: 'Bajo una mesa solida o con dos sillas y un palo.' },
+    { nombre: 'Flexiones diamante', series: 4, reps: '8-12', descanso: '60', peso: 'Corporal', musculo: 'Triceps', notas: 'Manos juntas formando un diamante.' },
+    { nombre: 'Pike push ups', series: 3, reps: '8-10', descanso: '60', peso: 'Corporal', musculo: 'Hombros', notas: 'Pies elevados en silla para mas dificultad.' },
+    { nombre: 'Pistol squat asistido', series: 3, reps: '5 c/lado', descanso: '90', peso: 'Corporal', musculo: 'Cuadriceps', notas: 'Sostenete de un palo o pared al principio.' },
+    { nombre: 'Hollow body hold', series: 3, reps: '20-30 seg', descanso: '45', peso: 'Corporal', musculo: 'Core', notas: 'Lumbar pegada al suelo.' },
+    { nombre: 'Plancha lateral con elevacion', series: 3, reps: '10 c/lado', descanso: '45', peso: 'Corporal', musculo: 'Core', notas: '' },
+    { nombre: 'Skill libre (handstand contra pared)', series: 1, reps: '10 min', descanso: '0', peso: '-', musculo: 'Hombros', notas: 'Practicar parada de manos contra pared.' },
+  ],
+  'Escalada Indoor': [
+    { nombre: 'Movilidad y activacion (sin pared)', series: 1, reps: '10 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'En casa: hombros, muñecas, dedos, cadera.' },
+    { nombre: 'Australian rows', series: 4, reps: '10', descanso: '60', peso: 'Corporal', musculo: 'Espalda', notas: 'Simula traccion de escalada.' },
+    { nombre: 'Dead hang en barra', series: 4, reps: '20-40 seg', descanso: '90', peso: 'Corporal', musculo: 'Antebrazo', notas: 'Agarre que tengas (puerta, barra, rama).' },
+    { nombre: 'Flexion de dedos / pinzas', series: 3, reps: '15', descanso: '45', peso: '-', musculo: 'Antebrazo', notas: 'Con pelota anti-stress o pinza si tenes.' },
+    { nombre: 'Front lever progression', series: 3, reps: '10-15 seg', descanso: '90', peso: 'Corporal', musculo: 'Core / Espalda', notas: 'Tucked al principio.' },
+    { nombre: 'Pistol squat', series: 3, reps: '5 c/lado', descanso: '90', peso: 'Corporal', musculo: 'Piernas', notas: '' },
+    { nombre: 'Estiramiento de antebrazos y hombros', series: 1, reps: '5 min', descanso: '0', peso: '-', musculo: 'Full Body', notas: 'Crítico post-escalada.' },
   ],
 };
 

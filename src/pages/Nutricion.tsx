@@ -37,7 +37,7 @@ function generarPlanIA(peso: number, altura: number, edad: number, objetivo: str
   // Soporte para multiples actividades por dia (ej: "Push + Running")
   const actividades = (tipoEntreno || '').split(' + ').filter(Boolean);
   const tieneCardio = actividades.some(t => ['Cardio', 'Running', 'Caminata Activa', 'Spinning', 'Ciclismo'].includes(t));
-  const tieneFuerza = actividades.some(t => ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body'].includes(t));
+  const tieneFuerza = actividades.some(t => ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body', 'Calistenia', 'Escalada Indoor'].includes(t));
   const esCardio = tieneCardio && !tieneFuerza;
 
   // Gasto calorico por disciplina (helper compartido - ajustado por peso)

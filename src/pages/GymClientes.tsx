@@ -8,7 +8,7 @@ import MedidasCorporalesSection from '../components/MedidasCorporalesSection';
 import { type MedidaCorporal } from '../lib/medidasCorporales';
 
 // Plantillas de ejercicios por objetivo
-const DISCIPLINAS = ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body', 'Cardio', 'HIIT', 'Funcional', 'Running', 'Caminata Activa', 'Yoga', 'Spinning', 'Ciclismo'];
+const DISCIPLINAS = ['Push', 'Pull', 'Piernas', 'Upper', 'Lower', 'Full Body', 'Cardio', 'HIIT', 'Funcional', 'Running', 'Caminata Activa', 'Yoga', 'Spinning', 'Ciclismo', 'Calistenia', 'Escalada Indoor'];
 
 // Calentamientos especificos de 20 minutos por disciplina
 const calentamientos: Record<string, ClienteRutina[]> = {
