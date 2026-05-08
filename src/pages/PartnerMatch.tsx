@@ -972,8 +972,8 @@ function CrearEventoModal({ onClose, onCreated }: { onClose: () => void; onCreat
   const [disciplina, setDisciplina] = useState('');
   const [fecha, setFecha] = useState('');
   const [hora, setHora] = useState('');
-  const [duracion, setDuracion] = useState(60);
-  const [cupo, setCupo] = useState(5);
+  const [duracion, setDuracion] = useState('60');
+  const [cupo, setCupo] = useState('5');
   const [error, setError] = useState('');
   const [guardando, setGuardando] = useState(false);
 
@@ -996,8 +996,8 @@ function CrearEventoModal({ onClose, onCreated }: { onClose: () => void; onCreat
       punto_encuentro: puntoEncuentro.trim() || null,
       disciplina: disciplina || null,
       fecha_hora: fechaHora.toISOString(),
-      duracion_min: duracion,
-      cupo,
+      duracion_min: Math.max(5, parseInt(duracion) || 60),
+      cupo: Math.max(2, parseInt(cupo) || 5),
       participantes: user.dni,
       participantes_nombres: (user.nombre || '').split(' ')[0],
     });
@@ -1029,8 +1029,8 @@ function CrearEventoModal({ onClose, onCreated }: { onClose: () => void; onCreat
             </select>
           </Field>
           <div className="grid grid-cols-2 gap-2">
-            <Field label="Duración (min)"><input type="number" min="15" max="300" value={duracion} onChange={e => setDuracion(parseInt(e.target.value) || 60)} className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/40" /></Field>
-            <Field label="Cupo"><input type="number" min="2" max="50" value={cupo} onChange={e => setCupo(parseInt(e.target.value) || 5)} className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/40" /></Field>
+            <Field label="Duración (min)"><input type="number" min="5" value={duracion} onChange={e => setDuracion(e.target.value)} placeholder="60" className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/40 placeholder-white/30" /></Field>
+            <Field label="Cupo"><input type="number" min="2" value={cupo} onChange={e => setCupo(e.target.value)} placeholder="5" className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/40 placeholder-white/30" /></Field>
           </div>
           {error && <div className="bg-danger/10 border border-danger/30 rounded-xl p-3 text-danger text-sm">{error}</div>}
           <div className="flex gap-2 pt-1">
