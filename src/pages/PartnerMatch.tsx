@@ -14,7 +14,7 @@ import {
 } from '../lib/partnerMatch';
 
 const PARTNER_DEFAULT: PartnerData = {
-  activo: false, zona: '', horario: 'Flexible', nivel: 3, objetivo: '', telefono: '',
+  activo: false, zona: '', horario: 'Flexible', nivel: 3, objetivos: [], telefono: '',
   disciplinas: [], dias: [], prefGenero: 'Cualquiera',
 };
 
@@ -56,7 +56,7 @@ export default function PartnerMatch() {
         zona: yo.partner_zona || '',
         horario: (yo.partner_horario as Horario) || 'Flexible',
         nivel: yo.partner_nivel || 3,
-        objetivo: yo.partner_objetivo || '',
+        objetivos: ((yo.partner_objetivo as string) || '').split(',').map((s: string) => s.trim()).filter(Boolean),
         telefono: yo.partner_telefono || '',
         disciplinas: ((yo.partner_disciplinas as string) || '').split(',').map((s: string) => s.trim()).filter(Boolean),
         dias: ((yo.partner_dias as string) || '').split(',').map((s: string) => s.trim()).filter(Boolean),
@@ -102,7 +102,7 @@ export default function PartnerMatch() {
     setError('');
     if (draft.activo) {
       if (!draft.zona.trim()) { setError('Ingresá tu zona o barrio.'); return; }
-      if (!draft.objetivo) { setError('Elegí un objetivo.'); return; }
+      if (draft.objetivos.length === 0) { setError('Elegí al menos un objetivo.'); return; }
       if (!draft.telefono.trim() || draft.telefono.replace(/\D/g, '').length < 10) {
         setError('Ingresá un WhatsApp válido con código de país (ej: +54 9 221 6806000).'); return;
       }
@@ -117,7 +117,7 @@ export default function PartnerMatch() {
         partner_zona: draft.activo ? draft.zona : null,
         partner_horario: draft.activo ? draft.horario : null,
         partner_nivel: draft.activo ? draft.nivel : null,
-        partner_objetivo: draft.activo ? draft.objetivo : null,
+        partner_objetivo: draft.activo ? draft.objetivos.join(',') : null,
         partner_telefono: draft.activo ? draft.telefono : null,
         partner_disciplinas: draft.activo ? draft.disciplinas.join(',') : null,
         partner_dias: draft.activo ? draft.dias.join(',') : null,
@@ -288,7 +288,7 @@ export default function PartnerMatch() {
               <div className="flex-1 min-w-0">
                 <p className="text-white text-sm font-bold">Tu perfil está activo</p>
                 <p className="text-white/55 text-xs mt-0.5 truncate">
-                  {propio.zona} · {propio.horario} · Nivel {propio.nivel} · {propio.objetivo}
+                  {propio.zona} · {propio.horario} · Nivel {propio.nivel} · {propio.objetivos.join(', ') || 'Sin objetivos'}
                 </p>
               </div>
               <button onClick={() => setEditando(true)} className="p-2.5 text-white/55 hover:text-pink-400 transition-colors rounded-xl hover:bg-white/5" title="Editar mi perfil">
@@ -481,13 +481,24 @@ function FormPartner({ draft, setDraft, guardar, guardando, onCancel, error, can
             <p className="text-white/45 text-xs mt-1.5">{NIVELES.find(n => n.v === draft.nivel)?.label}</p>
           </Field>
 
-          {/* Objetivo */}
-          <Field label="Objetivo" icon={<Target className="w-3.5 h-3.5" />}>
-            <select value={draft.objetivo} onChange={e => setDraft({ ...draft, objetivo: e.target.value })}
-              className="w-full px-3.5 py-3 bg-black/60 border-2 border-dark-border rounded-xl text-white text-base focus:outline-none focus:ring-2 focus:ring-pink-500/40 appearance-none">
-              <option value="" className="bg-dark-800">Elegí uno...</option>
-              {OBJETIVOS.map(o => <option key={o} value={o} className="bg-dark-800">{o}</option>)}
-            </select>
+          {/* Objetivos (multi-select) */}
+          <Field label="Objetivos (uno o más)" icon={<Target className="w-3.5 h-3.5" />}>
+            <p className="text-white/45 text-xs mb-2">Elegí los que apliquen. Si compartís al menos uno con otra persona, suma puntos al match.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+              {OBJETIVOS.map(o => {
+                const sel = draft.objetivos.includes(o);
+                return (
+                  <button key={o} type="button"
+                    onClick={() => setDraft({ ...draft, objetivos: sel ? draft.objetivos.filter(x => x !== o) : [...draft.objetivos, o] })}
+                    className={`px-3 py-2.5 rounded-lg text-xs font-bold text-left transition-all ${sel ? 'bg-pink-500/20 text-pink-300 border-2 border-pink-500/40' : 'bg-black/40 text-white/55 border-2 border-dark-border hover:text-white/85'}`}>
+                    {sel ? '✓ ' : ''}{o}
+                  </button>
+                );
+              })}
+            </div>
+            {draft.objetivos.length > 0 && (
+              <p className="text-white/45 text-xs mt-1.5">Seleccionados: <strong className="text-pink-300">{draft.objetivos.length}</strong></p>
+            )}
           </Field>
 
           {/* Disciplinas */}
@@ -658,7 +669,7 @@ function MatchCard({ match, verificado, misDisciplinas, onEnviar, onReportar, on
           {u.zona && <span className={`flex items-center gap-1 ${detalle.zona > 0 ? 'text-emerald-400 font-semibold' : ''}`}><MapPin className="w-3 h-3" /> {u.zona}</span>}
           {u.horario && <span className={`flex items-center gap-1 ${detalle.horario > 0 ? 'text-emerald-400 font-semibold' : ''}`}><Clock className="w-3 h-3" /> {u.horario}</span>}
           {typeof u.nivel === 'number' && <span className={`flex items-center gap-1 ${detalle.nivel > 0 ? 'text-emerald-400 font-semibold' : ''}`}><Activity className="w-3 h-3" /> Nivel {u.nivel}</span>}
-          {u.objetivo && <span className={`flex items-center gap-1 ${detalle.objetivo > 0 ? 'text-emerald-400 font-semibold' : ''}`}><Target className="w-3 h-3" /> {u.objetivo}</span>}
+          {u.objetivos && u.objetivos.length > 0 && <span className={`flex items-center gap-1 ${detalle.objetivo > 0 ? 'text-emerald-400 font-semibold' : ''}`}><Target className="w-3 h-3" /> {u.objetivos.join(', ')}</span>}
         </div>
         {u.dias && u.dias.length > 0 && (
           <p className="text-white/45 text-xs mt-1.5">Entrena: <strong className="text-white/65">{u.dias.join(' · ')}</strong></p>

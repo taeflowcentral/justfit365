@@ -10,7 +10,7 @@ export interface PartnerData {
   zona: string;
   horario: Horario;
   nivel: number;       // 1-5
-  objetivo: string;
+  objetivos: string[]; // multi-select, ej: ["Perder peso", "Mejorar salud general"]
   telefono: string;    // con codigo de pais, ej. +54 9 221 6806000
   disciplinas: string[]; // ej: ["Push", "Running", "Yoga"]
   dias: string[];      // ej: ["Lun", "Mié", "Vie"]
@@ -94,7 +94,10 @@ export function calcularMatch(a: PartnerData, b: PartnerData): MatchResult['deta
   const hMatch = a.horario === b.horario || a.horario === 'Flexible' || b.horario === 'Flexible';
   if (hMatch) det.horario = 30;
   if (typeof a.nivel === 'number' && typeof b.nivel === 'number' && Math.abs(a.nivel - b.nivel) <= 1) det.nivel = 20;
-  if (a.objetivo && b.objetivo && a.objetivo === b.objetivo) det.objetivo = 10;
+  // Objetivo: 10 puntos si comparten al menos 1
+  const setA = new Set((a.objetivos || []).map(normaliza));
+  const compartido = (b.objetivos || []).some(o => setA.has(normaliza(o)));
+  if (compartido) det.objetivo = 10;
   const score = det.zona + det.horario + det.nivel + det.objetivo;
   return { ...det, score };
 }
@@ -142,7 +145,7 @@ export function rowToPartner(row: Record<string, unknown>): PartnerUsuario | nul
     zona: (row.partner_zona as string) || '',
     horario: ((row.partner_horario as string) || 'Flexible') as Horario,
     nivel: (row.partner_nivel as number) || 3,
-    objetivo: (row.partner_objetivo as string) || '',
+    objetivos: ((row.partner_objetivo as string) || '').split(',').map(s => s.trim()).filter(Boolean),
     telefono: (row.partner_telefono as string) || '',
     disciplinas: ((row.partner_disciplinas as string) || '').split(',').map(s => s.trim()).filter(Boolean),
     dias: ((row.partner_dias as string) || '').split(',').map(s => s.trim()).filter(Boolean),
