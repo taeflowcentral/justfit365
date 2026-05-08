@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Flame, Droplets, Dumbbell, TrendingUp, Target, Zap, Apple, Timer, ArrowUpRight, Edit3, Save, CheckCircle, AlertTriangle, XCircle, ArrowDown, ArrowUp, Minus, MessageCircle, Download } from 'lucide-react';
+import { Flame, Droplets, Dumbbell, TrendingUp, Target, Zap, Apple, Timer, ArrowUpRight, Edit3, Save, CheckCircle, AlertTriangle, XCircle, ArrowDown, ArrowUp, Minus, MessageCircle, Download, HeartHandshake, X } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, ReferenceLine } from 'recharts';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -127,6 +127,7 @@ export default function Dashboard() {
   // PWA Install prompt
   const [installPrompt, setInstallPrompt] = useState<Event | null>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
+  const [showPartnerPromo, setShowPartnerPromo] = useState(() => getUserItem('jf365_partner_promo_dismissed') !== '1');
   useEffect(() => {
     const handler = (e: Event) => { e.preventDefault(); setInstallPrompt(e); setShowInstallBanner(true); };
     window.addEventListener('beforeinstallprompt', handler);
@@ -396,6 +397,26 @@ export default function Dashboard() {
               </button>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Promo Partner Match */}
+      {showPartnerPromo && (
+        <div className="bg-pink-500/10 border border-pink-500/30 rounded-2xl p-4 flex items-center gap-3">
+          <div className="w-11 h-11 bg-pink-500/20 rounded-xl flex items-center justify-center shrink-0">
+            <HeartHandshake className="w-5 h-5 text-pink-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-white font-bold text-sm">Activá Partner Match</p>
+            <p className="text-white/65 text-xs mt-0.5">Encontrá compañero/a para entrenar gratis cerca tuyo. Es voluntario y dura 1 minuto activarlo.</p>
+          </div>
+          <Link to="/partner" className="px-4 py-2 bg-pink-500 hover:bg-pink-400 text-white rounded-xl text-xs font-black uppercase tracking-wider whitespace-nowrap transition-colors">
+            Probar
+          </Link>
+          <button onClick={() => { setUserItem('jf365_partner_promo_dismissed', '1'); setShowPartnerPromo(false); }}
+            className="p-2 text-white/40 hover:text-white transition-colors" title="No mostrar más">
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
 

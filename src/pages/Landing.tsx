@@ -1,4 +1,4 @@
-import { Zap, Dumbbell, Utensils, TrendingUp, Timer, MessageSquare, Users, ChevronDown, Star, CheckCircle, ArrowRight, Download } from 'lucide-react';
+import { Zap, Dumbbell, Utensils, TrendingUp, Timer, MessageSquare, Users, ChevronDown, Star, CheckCircle, ArrowRight, Download, HeartHandshake } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import LanguageSelector from '../components/LanguageSelector';
@@ -10,6 +10,7 @@ const features = [
   { icon: MessageSquare, title: 'JustFit Coach', desc: 'Tu coach virtual 24/7. Consultá sobre suplementos, ayuno, nutrición, lesiones y más.', color: 'text-electric', bg: 'bg-electric/10' },
   { icon: TrendingUp, title: 'Progreso Real', desc: 'Seguimiento de peso, medidas y fotos. Gráficos de evolución con metas y proyecciones.', color: 'text-amber-400', bg: 'bg-amber-500/10' },
   { icon: Timer, title: 'Workout Timer', desc: 'Cronómetro, Tabata, EMOM, For Time. Sonidos automáticos para entrenar sin mirar el celular.', color: 'text-red-400', bg: 'bg-red-500/10' },
+  { icon: HeartHandshake, title: 'Partner Match', desc: 'Encontrá compañero/a para entrenar gratis cerca tuyo. Activá tu zona, horario y nivel, y te conectamos por WhatsApp con quien matchea.', color: 'text-pink-400', bg: 'bg-pink-500/10' },
   { icon: Users, title: 'Panel Gimnasios', desc: 'Gestión de clientes, rutinas, nutrición, cobranzas y marca blanca. Todo en un solo lugar.', color: 'text-lime', bg: 'bg-lime/10' },
 ];
 
