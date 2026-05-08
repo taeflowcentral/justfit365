@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Eye, EyeOff, Zap, ShieldCheck, Fingerprint } from 'lucide-react';
+import { Eye, EyeOff, Zap, ShieldCheck, Fingerprint, Building2, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LanguageSelector from '../components/LanguageSelector';
 
+type Modo = 'normal' | 'gym-client';
+
 export default function Login() {
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, loginGymClient } = useAuth();
+  const [modo, setModo] = useState<Modo>('normal');
   const [apellido, setApellido] = useState('');
   const [dni, setDni] = useState('');
   const [password, setPassword] = useState('');
+  const [gimnasio, setGimnasio] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,15 +32,23 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
+    if (modo === 'gym-client') {
+      const r = await loginGymClient(gimnasio, dni);
+      if (!r.success) setError(r.error || 'No se pudo iniciar sesi\u00f3n.');
+      setLoading(false);
+      return;
+    }
     if (!apellido.trim() || !dni.trim() || !password.trim()) {
       setError('Todos los campos son obligatorios.');
+      setLoading(false);
       return;
     }
     if (!/^\d{7,8}$/.test(dni)) {
       setError('El DNI debe tener 7 u 8 d\u00edgitos num\u00e9ricos.');
+      setLoading(false);
       return;
     }
-    setLoading(true);
     const ok = await login(apellido, dni, password);
     if (!ok) {
       setError('Credenciales incorrectas. Verifique apellido, DNI y contrase\u00f1a.');
@@ -69,12 +81,32 @@ export default function Login() {
 
         {/* Login Card */}
         <div className="bg-dark-800/80 backdrop-blur-2xl border border-dark-border rounded-3xl shadow-2xl p-8">
-          <div className="flex items-center gap-2 mb-6">
+          <div className="flex items-center gap-2 mb-5">
             <ShieldCheck className="w-5 h-5 text-electric" />
             <h2 className="text-lg font-bold text-white tracking-tight">Acceso Seguro</h2>
           </div>
 
-          {/* Google OAuth */}
+          {/* Toggle modo */}
+          <div className="flex gap-1 bg-black/40 p-1 rounded-xl border border-dark-border mb-5">
+            <button type="button" onClick={() => { setModo('normal'); setError(''); }}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all ${modo === 'normal' ? 'bg-electric/15 text-electric' : 'text-white/40 hover:text-white/60'}`}>
+              <User className="w-3.5 h-3.5" /> Mi cuenta
+            </button>
+            <button type="button" onClick={() => { setModo('gym-client'); setError(''); }}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all ${modo === 'gym-client' ? 'bg-amber-500/15 text-amber-400' : 'text-white/40 hover:text-white/60'}`}>
+              <Building2 className="w-3.5 h-3.5" /> Cliente de gimnasio
+            </button>
+          </div>
+
+          {modo === 'gym-client' && (
+            <div className="bg-amber-500/5 border border-amber-500/15 rounded-xl p-3 mb-5 text-amber-400/80 text-xs">
+              <p className="font-bold mb-1">¿Sos cliente de un gimnasio?</p>
+              <p className="text-amber-400/65">Si tu gimnasio te dio de alta en JustFit365, accedé gratis con el nombre de tu gimnasio y tu DNI. Tu entrenador puede ver y editar tus rutinas y nutrición.</p>
+            </div>
+          )}
+
+          {/* Google OAuth - solo en modo normal */}
+          {modo === 'normal' && (
           <button
             type="button"
             onClick={handleGoogle}
@@ -90,15 +122,34 @@ export default function Login() {
               </>
             )}
           </button>
+          )}
 
           {/* Separador */}
+          {modo === 'normal' && (
           <div className="flex items-center gap-3 mb-5">
             <div className="flex-1 h-px bg-dark-border" />
             <span className="text-white/30 text-[10px] uppercase tracking-wider">o usá tu DNI</span>
             <div className="flex-1 h-px bg-dark-border" />
           </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {modo === 'gym-client' ? (
+              <div>
+                <label className="block text-xs font-semibold text-white/50 mb-2 uppercase tracking-wider">Nombre del gimnasio</label>
+                <div className="relative">
+                  <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-amber-400/40" />
+                  <input
+                    type="text"
+                    value={gimnasio}
+                    onChange={e => setGimnasio(e.target.value)}
+                    placeholder="Ej: Iron Gym"
+                    required
+                    className="w-full pl-10 pr-4 py-3.5 bg-black/60 border border-dark-border rounded-xl text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/50 transition-all text-sm"
+                  />
+                </div>
+              </div>
+            ) : (
             <div>
               <label className="block text-xs font-semibold text-white/50 mb-2 uppercase tracking-wider">Usuario</label>
               <input
@@ -110,6 +161,7 @@ export default function Login() {
                 className="w-full px-4 py-3.5 bg-black/60 border border-dark-border rounded-xl text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-electric/50 focus:border-electric/50 transition-all text-sm"
               />
             </div>
+            )}
 
             <div>
               <label className="block text-xs font-semibold text-white/50 mb-2 uppercase tracking-wider">DNI</label>
@@ -127,6 +179,7 @@ export default function Login() {
               </div>
             </div>
 
+            {modo === 'normal' && (
             <div>
               <label className="block text-xs font-semibold text-white/50 mb-2 uppercase tracking-wider">Contrase&ntilde;a</label>
               <div className="relative">
@@ -134,7 +187,7 @@ export default function Login() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  placeholder="Ingrese su contrase\u00f1a"
+                  placeholder="Ingrese su contrase&ntilde;a"
                   required
                   className="w-full px-4 py-3.5 bg-black/60 border border-dark-border rounded-xl text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-electric/50 focus:border-electric/50 transition-all pr-12 text-sm"
                 />
@@ -150,6 +203,7 @@ export default function Login() {
                 &iquest;Olvidaste tu contrase&ntilde;a?
               </Link>
             </div>
+            )}
 
             {error && (
               <div className="bg-danger/10 border border-danger/30 rounded-xl px-4 py-3 text-danger text-sm font-medium">

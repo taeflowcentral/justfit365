@@ -19,6 +19,8 @@ export interface User {
   mesesImpagos?: number;
   foto?: string;
   notas?: string;
+  esClienteGym?: boolean;
+  clientesMax?: number;
   perfil?: {
     edad: number;
     peso: number;
@@ -58,6 +60,7 @@ interface AuthContextType {
   pendingGoogle: PendingGoogle | null;
   login: (apellido: string, dni: string, password: string) => Promise<boolean>;
   loginWithGoogle: () => Promise<void>;
+  loginGymClient: (gimnasio: string, dni: string) => Promise<{ success: boolean; error?: string }>;
   register: (data: RegisterData) => Promise<{ success: boolean; error?: string }>;
   completeGoogleRegistration: (data: CompleteGoogleData) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
@@ -89,6 +92,8 @@ function dbRowToUser(row: Record<string, unknown>): User {
     mesesImpagos: (row.meses_impagos as number) || 0,
     foto: (row.foto as string) || undefined,
     notas: (row.notas as string) || undefined,
+    esClienteGym: !!row.es_cliente_gym,
+    clientesMax: typeof row.clientes_max === 'number' ? row.clientes_max : undefined,
     perfil: (row.perfil_peso as number) ? {
       edad: (row.perfil_edad as number) || 0,
       peso: (row.perfil_peso as number) || 0,
@@ -257,6 +262,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  // Login para clientes de gym: ingresan nombre del gimnasio + DNI
+  const loginGymClient = async (gimnasio: string, dni: string): Promise<{ success: boolean; error?: string }> => {
+    if (!/^\d{7,8}$/.test(dni)) return { success: false, error: 'El DNI debe tener 7 u 8 dígitos.' };
+    if (!gimnasio.trim()) return { success: false, error: 'Ingresá el nombre de tu gimnasio.' };
+    const { data, error } = await supabase
+      .from('usuarios')
+      .select('*')
+      .eq('dni', dni)
+      .eq('es_cliente_gym', true)
+      .maybeSingle();
+    if (error || !data) return { success: false, error: 'No encontramos un cliente de gimnasio con ese DNI.' };
+    // Match flexible del nombre del gimnasio
+    const norm = (s: string) => s.toLowerCase().trim().replace(/\s+/g, '');
+    const inputGym = norm(gimnasio);
+    const dbGym = norm((data.gimnasio_nombre as string) || '');
+    const match = inputGym === dbGym || dbGym.includes(inputGym) || inputGym.includes(dbGym);
+    if (!match) {
+      return { success: false, error: 'El nombre del gimnasio no coincide. Verificá con tu entrenador.' };
+    }
+    const u = dbRowToUser(data);
+    setUser(u);
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(u));
+    return { success: true };
+  };
+
   const completeGoogleRegistration = async (cgData: CompleteGoogleData): Promise<{ success: boolean; error?: string }> => {
     if (!pendingGoogle) return { success: false, error: 'No hay sesion pendiente.' };
     if (!/^\d{7,8}$/.test(cgData.dni)) {
@@ -358,7 +388,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, pendingGoogle, login, loginWithGoogle, register, completeGoogleRegistration, logout, acceptConsent, updateUser, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, pendingGoogle, login, loginWithGoogle, loginGymClient, register, completeGoogleRegistration, logout, acceptConsent, updateUser, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

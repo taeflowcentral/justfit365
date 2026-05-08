@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Users, Plus, Search, Dumbbell, Utensils, Trash2, User, Phone, Target, Activity, MessageCircle, Printer, Mail, History, Save, Clock, TrendingUp, ArrowDown, ArrowUp, Minus, CheckCircle, AlertTriangle, Weight, Ruler, Calendar, Zap, Camera } from 'lucide-react';
 import { getUserItem, setUserItem } from '../lib/storage';
 import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabase';
 import { buscarAlimentos, analizarComida } from '../lib/foodDB';
 import { printContent } from '../components/ShareButtons';
 import MedidasCorporalesSection from '../components/MedidasCorporalesSection';
@@ -362,8 +363,14 @@ export default function GymClientes() {
     guardar(clientes.map(c => c.id === id ? { ...c, ...data } : c));
   };
 
-  const addCliente = () => {
+  const addCliente = async () => {
     if (!nuevoCliente.nombre.trim()) return;
+    // Check de limite de membresia
+    const limite = user?.clientesMax ?? 50;
+    if (clientes.length >= limite) {
+      alert(`Llegaste al límite de ${limite} clientes incluidos en tu membresía. Para sumar más, contactanos.`);
+      return;
+    }
     const nuevo: Cliente = {
       id: Date.now(), nombre: nuevoCliente.nombre, dni: nuevoCliente.dni, direccion: nuevoCliente.direccion,
       telefono: nuevoCliente.telefono, email: nuevoCliente.email,
@@ -375,9 +382,62 @@ export default function GymClientes() {
       notas: '', rutina: [], nutricion: [], historial: [],
     };
     guardar([...clientes, nuevo]);
+
+    // Crear fila en usuarios para que el cliente pueda loguearse con gymName + DNI
+    if (nuevoCliente.dni && /^\d{7,8}$/.test(nuevoCliente.dni)) {
+      await crearUsuarioParaCliente(nuevo);
+    }
+
     setNuevoCliente({ nombre: '', dni: '', direccion: '', telefono: '', email: '', contactoEmergencia: '', telefonoEmergencia: '', objetivo: [], nivel: 'Principiante', peso: '', altura: '', edad: '', pesoMeta: '', fechaMeta: '', enfermedades: [], declaraBuenaSalud: false, esMayorDeEdad: false, genero: '', foto: '' });
     setShowAddCliente(false);
     setClienteActivo(nuevo.id);
+  };
+
+  // Crear usuarios row para que el cliente pueda acceder a la app gratis
+  const crearUsuarioParaCliente = async (c: Cliente): Promise<{ ok: boolean; mensaje: string }> => {
+    if (!c.dni || !/^\d{7,8}$/.test(c.dni)) return { ok: false, mensaje: 'DNI inválido.' };
+    if (!user?.gimnasioNombre) return { ok: false, mensaje: 'Gimnasio sin nombre.' };
+    // Verificar si ya existe
+    const { data: existing } = await supabase.from('usuarios').select('dni, es_cliente_gym, gimnasio_nombre').eq('dni', c.dni).maybeSingle();
+    if (existing) {
+      if (existing.es_cliente_gym && existing.gimnasio_nombre === user.gimnasioNombre) {
+        return { ok: true, mensaje: 'Ya tenía acceso a la app.' };
+      }
+      return { ok: false, mensaje: 'Ya existe una cuenta con ese DNI. No se puede crear acceso automático.' };
+    }
+    const partes = (c.nombre || '').trim().split(/\s+/);
+    const apellido = partes.length > 1 ? partes[partes.length - 1] : (user.gimnasioNombre || 'Cliente');
+    const nombre = partes.slice(0, -1).join(' ') || c.nombre;
+    const { error: err } = await supabase.from('usuarios').insert({
+      dni: c.dni,
+      apellido,
+      nombre: c.nombre,
+      email: c.email || null,
+      password_hash: '__gym_client__', // no se usa para login normal
+      role: 'usuario',
+      gimnasio_id: user.gimnasioId || null,
+      gimnasio_nombre: user.gimnasioNombre,
+      es_cliente_gym: true,
+      foto: c.foto || null,
+      suscripcion_pagada: true,
+      suscripcion_activa: true,
+      fecha_suscripcion: new Date().toISOString().split('T')[0],
+      fecha_ultimo_pago: new Date().toISOString().split('T')[0],
+      perfil_edad: c.edad || null,
+      perfil_peso: c.peso || null,
+      perfil_altura: c.altura || null,
+      perfil_objetivo: c.objetivo || null,
+      perfil_nivel: c.nivelActividad || null,
+      perfil_genero: c.genero || null,
+    });
+    if (err) return { ok: false, mensaje: 'Error: ' + err.message };
+    void nombre; // suppression
+    return { ok: true, mensaje: `Acceso creado. Puede entrar con "${user.gimnasioNombre}" + DNI ${c.dni}.` };
+  };
+
+  const activarAccesoCliente = async (c: Cliente) => {
+    const r = await crearUsuarioParaCliente(c);
+    alert(r.mensaje);
   };
 
   const deleteCliente = (id: number) => {
@@ -1018,6 +1078,48 @@ export default function GymClientes() {
 
         return (
         <div className="space-y-4">
+          {/* Acceso a la app del cliente */}
+          <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-4">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 bg-emerald-500/15 rounded-xl flex items-center justify-center shrink-0">
+                <Zap className="w-5 h-5 text-emerald-400" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-white font-bold text-sm mb-1">Acceso a la app JustFit365</p>
+                {c.dni && /^\d{7,8}$/.test(c.dni) ? (
+                  <>
+                    <p className="text-white/65 text-xs leading-relaxed">
+                      {c.nombre.split(' ')[0]} puede entrar gratis a JustFit365 con:
+                    </p>
+                    <div className="bg-black/40 border border-emerald-500/15 rounded-lg p-2.5 mt-2 text-xs">
+                      <p className="text-white/55"><strong className="text-emerald-400">Gimnasio:</strong> {user?.gimnasioNombre}</p>
+                      <p className="text-white/55"><strong className="text-emerald-400">DNI:</strong> {c.dni}</p>
+                    </div>
+                    <div className="flex gap-2 mt-2 flex-wrap">
+                      <button onClick={() => activarAccesoCliente(c)}
+                        className="px-3 py-1.5 bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold rounded-lg hover:bg-emerald-500/25 transition-colors">
+                        Activar / verificar acceso
+                      </button>
+                      <button onClick={() => {
+                        const texto = `Hola ${c.nombre.split(' ')[0]}, ya estás dado/a de alta en JustFit365. Entrá gratis en https://justfit365.com con:\nGimnasio: ${user?.gimnasioNombre}\nDNI: ${c.dni}`;
+                        const tel = (c.telefono || '').replace(/[^\d]/g, '');
+                        if (tel) window.open(`https://wa.me/${tel}?text=${encodeURIComponent(texto)}`, '_blank');
+                        else { navigator.clipboard.writeText(texto); alert('Mensaje copiado al portapapeles'); }
+                      }} className="px-3 py-1.5 bg-electric/10 border border-electric/30 text-electric text-xs font-bold rounded-lg hover:bg-electric/20 transition-colors">
+                        Mandar credenciales por WhatsApp
+                      </button>
+                    </div>
+                    <p className="text-white/35 text-[10px] mt-2">
+                      Tu plan incluye hasta {user?.clientesMax ?? 50} clientes con acceso. Tenés {clientes.length} cargados.
+                    </p>
+                  </>
+                ) : (
+                  <p className="text-amber-400/80 text-xs">Cargá un DNI válido para que el cliente pueda acceder a la app gratis con su gimnasio + DNI.</p>
+                )}
+              </div>
+            </div>
+          </div>
+
           {/* Foto de perfil */}
           <div className="bg-dark-800 border border-dark-border rounded-2xl p-5">
             <h3 className="text-white font-bold mb-4 flex items-center gap-2"><Camera className="w-4 h-4 text-electric" /> Foto de Perfil</h3>
