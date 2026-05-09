@@ -8,6 +8,7 @@ import FraseDelDia from '../components/FraseDelDia';
 import { getUserItem, setUserItem } from '../lib/storage';
 import { getUltimosNDias, archivarDiasPasados, fechaISO } from '../lib/historicoNutricion';
 import { kcalExtraPorEntreno, FACTOR_DESCANSO, tipoEntrenoHoy } from '../lib/gastoCalorico';
+import { type Comunicado, comunicadoActivoParaUsuario } from '../lib/comunicados';
 
 // Datos diarios reales tomados del historico (por fecha, no por dia de semana)
 function getWeekData(): { dia: string; calorias: number; prot: number; fecha: string }[] {
@@ -128,6 +129,20 @@ export default function Dashboard() {
   const [installPrompt, setInstallPrompt] = useState<Event | null>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
   const [showPartnerPromo, setShowPartnerPromo] = useState(() => getUserItem('jf365_partner_promo_dismissed') !== '1');
+  const [comunicado, setComunicado] = useState<Comunicado | null>(null);
+  const [comDismissedId, setComDismissedId] = useState<number | null>(() => {
+    const v = getUserItem('jf365_comunicado_dismissed');
+    return v ? parseInt(v) : null;
+  });
+
+  useEffect(() => {
+    if (!user) return;
+    comunicadoActivoParaUsuario(user.role, !!user.esClienteGym).then(c => {
+      if (c && c.id !== comDismissedId) setComunicado(c);
+      else setComunicado(null);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.dni]);
   useEffect(() => {
     const handler = (e: Event) => { e.preventDefault(); setInstallPrompt(e); setShowInstallBanner(true); };
     window.addEventListener('beforeinstallprompt', handler);
@@ -397,6 +412,34 @@ export default function Dashboard() {
               </button>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Comunicado del admin */}
+      {comunicado && (
+        <div className="bg-pink-500/10 border border-pink-500/30 rounded-2xl p-4 flex items-start gap-3">
+          <div className="w-11 h-11 bg-pink-500/20 rounded-xl flex items-center justify-center shrink-0">
+            <span className="text-2xl">📣</span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-white font-bold text-sm">{comunicado.titulo}</p>
+            <p className="text-white/75 text-xs mt-1 leading-relaxed whitespace-pre-line">{comunicado.mensaje}</p>
+            {comunicado.ctaUrl && comunicado.ctaLabel && (
+              comunicado.ctaUrl.startsWith('/') ? (
+                <Link to={comunicado.ctaUrl} className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 bg-pink-500 hover:bg-pink-400 text-white rounded-lg text-xs font-black">
+                  {comunicado.ctaLabel}
+                </Link>
+              ) : (
+                <a href={comunicado.ctaUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 bg-pink-500 hover:bg-pink-400 text-white rounded-lg text-xs font-black">
+                  {comunicado.ctaLabel}
+                </a>
+              )
+            )}
+          </div>
+          <button onClick={() => { setUserItem('jf365_comunicado_dismissed', String(comunicado.id)); setComDismissedId(comunicado.id); setComunicado(null); }}
+            className="p-2 text-white/40 hover:text-white transition-colors" title="Cerrar comunicado">
+            <X className="w-4 h-4" />
+          </button>
         </div>
       )}
 
