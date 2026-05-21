@@ -39,7 +39,7 @@ function savePesoHistory(data: { sem: string; peso: number }[]) {
 }
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const perfil = user?.perfil;
 
   // Asegurar archivado automatico de dias pasados antes de leer datos
@@ -162,7 +162,9 @@ export default function Dashboard() {
   // Historial de peso
   const [pesoHistory, setPesoHistory] = useState(getPesoHistory);
 
-  // Registrar peso actual si cambio (una vez por semana)
+  // Sincronizar peso del perfil con el historial.
+  // - Si no hay entrada de hoy: la crea
+  // - Si hay entrada de hoy con peso distinto: la actualiza
   useEffect(() => {
     if (!perfil?.peso) return;
     const hoy = new Date();
@@ -170,6 +172,10 @@ export default function Dashboard() {
     const last = pesoHistory[pesoHistory.length - 1];
     if (!last || last.sem !== semana) {
       const updated = [...pesoHistory, { sem: semana, peso: perfil.peso }].slice(-12);
+      setPesoHistory(updated);
+      savePesoHistory(updated);
+    } else if (last.peso !== perfil.peso) {
+      const updated = [...pesoHistory.slice(0, -1), { sem: semana, peso: perfil.peso }];
       setPesoHistory(updated);
       savePesoHistory(updated);
     }
@@ -648,20 +654,24 @@ export default function Dashboard() {
         </div>
 
         {editandoMeta ? (
-          <div className="grid grid-cols-2 gap-3 mb-3">
-            <div>
-              <label className="block text-white/50 text-[11px] uppercase tracking-wider font-semibold mb-1">Peso deseado (kg)</label>
-              <input type="number" min="30" max="250" step="0.5" value={pesoMeta}
-                onChange={e => setPesoMeta(parseFloat(e.target.value) || peso)}
-                className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-base font-bold focus:outline-none focus:ring-2 focus:ring-electric/30" />
+          <>
+            <div className="grid grid-cols-2 gap-3 mb-2">
+              <div>
+                <label className="block text-white/50 text-[11px] uppercase tracking-wider font-semibold mb-1">Peso deseado (kg)</label>
+                <input type="number" min="30" max="250" step="0.5" value={pesoMeta}
+                  onChange={e => setPesoMeta(parseFloat(e.target.value) || peso)}
+                  onBlur={() => setUserItem('jf365_peso_meta', pesoMeta.toString())}
+                  className="w-full px-3 py-2.5 bg-black/60 border border-electric/30 rounded-xl text-white text-base font-bold focus:outline-none focus:ring-2 focus:ring-electric/30" />
+              </div>
+              <div>
+                <label className="block text-white/50 text-[11px] uppercase tracking-wider font-semibold mb-1">Fecha objetivo</label>
+                <input type="date" value={fechaMeta}
+                  onChange={e => { setFechaMeta(e.target.value); if (e.target.value) setUserItem('jf365_fecha_meta', e.target.value); }}
+                  className="w-full px-3 py-2.5 bg-black/60 border border-electric/30 rounded-xl text-white text-base focus:outline-none focus:ring-2 focus:ring-electric/30" />
+              </div>
             </div>
-            <div>
-              <label className="block text-white/50 text-[11px] uppercase tracking-wider font-semibold mb-1">Fecha objetivo</label>
-              <input type="date" value={fechaMeta}
-                onChange={e => setFechaMeta(e.target.value)}
-                className="w-full px-3 py-2.5 bg-black/60 border border-dark-border rounded-xl text-white text-base focus:outline-none focus:ring-2 focus:ring-electric/30" />
-            </div>
-          </div>
+            <p className="text-emerald-400/70 text-[11px] mb-3">✓ Se guarda al salir del campo. Click en &laquo;Guardar&raquo; arriba para cerrar la edición.</p>
+          </>
         ) : (
           <div className="grid grid-cols-3 gap-2 mb-3">
             <div className="bg-black/40 rounded-xl p-2.5 text-center border border-dark-border">
@@ -781,6 +791,8 @@ export default function Dashboard() {
               }
               setPesoHistory(updated);
               savePesoHistory(updated);
+              // Sincronizar tambien a perfil.peso para que se vea en todos lados
+              if (perfil) updateUser({ perfil: { ...perfil, peso: val } });
               if (input) input.value = '';
             }} className="px-3 py-1.5 bg-electric/15 border border-electric/20 text-electric rounded-lg text-xs font-bold hover:bg-electric/25 transition-all">
               Registrar

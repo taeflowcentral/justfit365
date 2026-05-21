@@ -98,6 +98,7 @@ export default function Perfil() {
   };
 
   const handleSave = () => {
+    const pesoNum = parseFloat(form.peso) || 0;
     updateUser({
       nombre: form.nombre,
       apellido: form.apellido,
@@ -105,13 +106,30 @@ export default function Perfil() {
       notas: form.notas || undefined,
       perfil: {
         edad: parseInt(form.edad) || 0,
-        peso: parseFloat(form.peso) || 0,
+        peso: pesoNum,
         altura: parseInt(form.altura) || 0,
         objetivo: form.objetivo,
         nivelActividad: form.nivelActividad,
         genero: form.genero,
       }
     });
+    // Sincronizar peso al historial del Dashboard
+    if (pesoNum > 0) {
+      try {
+        const saved = getUserItem('jf365_peso_history');
+        const history: { sem: string; peso: number }[] = saved ? JSON.parse(saved) : [];
+        const hoy = new Date();
+        const label = `${hoy.getDate()}/${hoy.getMonth() + 1}`;
+        const last = history[history.length - 1];
+        let updated;
+        if (last && last.sem === label) {
+          updated = [...history.slice(0, -1), { sem: label, peso: pesoNum }];
+        } else {
+          updated = [...history, { sem: label, peso: pesoNum }].slice(-16);
+        }
+        setUserItem('jf365_peso_history', JSON.stringify(updated));
+      } catch { /* ignore */ }
+    }
     // Guardar meta de peso y fecha
     if (form.pesoMeta) setUserItem('jf365_peso_meta', form.pesoMeta);
     if (form.fechaMeta) setUserItem('jf365_fecha_meta', form.fechaMeta);

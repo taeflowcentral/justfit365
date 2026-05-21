@@ -201,12 +201,20 @@ export default function MedidasCorporalesSection({ medidas, onChange, perfil, ti
             return (
               <div key={m.id} className="bg-black/40 border border-dark-border rounded-xl p-3">
                 <div className="flex items-center justify-between gap-2">
-                  <div className="min-w-0 flex-1">
-                    <p className="text-white text-sm font-bold">{m.fecha}</p>
-                    <p className="text-white/55 text-xs">
-                      {cargados.length} parámetro{cargados.length !== 1 ? 's' : ''} cargado{cargados.length !== 1 ? 's' : ''}
-                      {m.nota && ` · ${m.nota}`}
-                    </p>
+                  <div className="min-w-0 flex-1 flex items-center gap-2">
+                    {m.fotoTicket && (
+                      <button onClick={() => setExpandido(expandido === m.id ? null : m.id)}
+                        className="shrink-0" title="Ver ticket en grande">
+                        <img src={m.fotoTicket} alt="ticket" className="w-10 h-10 rounded-lg object-cover border border-violet-500/30 hover:border-violet-400 transition-colors" />
+                      </button>
+                    )}
+                    <div className="min-w-0">
+                      <p className="text-white text-sm font-bold">{m.fecha}{m.fotoTicket && <span className="ml-1.5 text-[10px] text-violet-300 font-semibold">📸 con ticket</span>}</p>
+                      <p className="text-white/55 text-xs">
+                        {cargados.length} parámetro{cargados.length !== 1 ? 's' : ''} cargado{cargados.length !== 1 ? 's' : ''}
+                        {m.nota && ` · ${m.nota}`}
+                      </p>
+                    </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     {m.analisisIA ? (
@@ -232,18 +240,28 @@ export default function MedidasCorporalesSection({ medidas, onChange, perfil, ti
                     </button>
                   </div>
                 </div>
-                {expandido === m.id && m.analisisIA && (
-                  <div className="mt-3 pt-3 border-t border-dark-border/50">
-                    <div className="text-sm text-white/75 whitespace-pre-line leading-relaxed">
-                      {m.analisisIA.split(/(\*\*.*?\*\*)/).map((part, i) =>
-                        part.startsWith('**') && part.endsWith('**')
-                          ? <strong key={i} className="text-white font-bold">{part.slice(2, -2)}</strong>
-                          : <span key={i}>{part}</span>
-                      )}
-                    </div>
-                    <button onClick={() => analizar(m.id)} className="mt-2 text-xs text-electric/80 hover:text-electric font-semibold flex items-center gap-1">
-                      <Zap className="w-3 h-3" /> Re-analizar con datos actualizados
-                    </button>
+                {expandido === m.id && (
+                  <div className="mt-3 pt-3 border-t border-dark-border/50 space-y-3">
+                    {m.fotoTicket && (
+                      <div>
+                        <p className="text-white/45 text-[10px] uppercase tracking-wider font-semibold mb-1.5">Ticket de balanza</p>
+                        <img src={m.fotoTicket} alt="ticket de balanza" className="w-full max-h-80 object-contain rounded-lg border border-dark-border bg-black/40" />
+                      </div>
+                    )}
+                    {m.analisisIA && (
+                      <>
+                        <div className="text-sm text-white/75 whitespace-pre-line leading-relaxed">
+                          {m.analisisIA.split(/(\*\*.*?\*\*)/).map((part, i) =>
+                            part.startsWith('**') && part.endsWith('**')
+                              ? <strong key={i} className="text-white font-bold">{part.slice(2, -2)}</strong>
+                              : <span key={i}>{part}</span>
+                          )}
+                        </div>
+                        <button onClick={() => analizar(m.id)} className="text-xs text-electric/80 hover:text-electric font-semibold flex items-center gap-1">
+                          <Zap className="w-3 h-3" /> Re-analizar con datos actualizados
+                        </button>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
@@ -340,6 +358,33 @@ export default function MedidasCorporalesSection({ medidas, onChange, perfil, ti
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Foto del ticket de balanza */}
+              <div className="bg-violet-500/5 border border-violet-500/20 rounded-xl p-3">
+                <label className="block text-xs text-white/65 mb-1.5 font-semibold uppercase tracking-wider">📸 Foto del ticket de balanza (opcional)</label>
+                <p className="text-white/45 text-[11px] mb-2">Subí la foto del ticket de tu balanza Tanita/Omron como respaldo. Después completá manualmente los valores arriba.</p>
+                {draft.fotoTicket ? (
+                  <div className="space-y-2">
+                    <img src={draft.fotoTicket} alt="ticket" className="w-full max-h-48 object-contain rounded-lg border border-dark-border bg-black/40" />
+                    <button type="button" onClick={() => setField('fotoTicket', undefined)}
+                      className="text-danger text-xs font-bold hover:underline">Quitar foto</button>
+                  </div>
+                ) : (
+                  <label className="flex items-center justify-center gap-2 px-3 py-3 bg-black/40 border-2 border-dashed border-violet-500/30 rounded-xl text-violet-300 text-xs font-bold cursor-pointer hover:bg-violet-500/10">
+                    📎 Elegir foto
+                    <input type="file" accept="image/*" className="hidden"
+                      onChange={async e => {
+                        const f = e.target.files?.[0];
+                        if (!f) return;
+                        if (f.size > 5 * 1024 * 1024) { alert('La imagen es muy grande (max 5MB).'); return; }
+                        const reader = new FileReader();
+                        reader.onloadend = () => setField('fotoTicket', reader.result as string);
+                        reader.readAsDataURL(f);
+                      }}
+                    />
+                  </label>
+                )}
               </div>
 
               <div>

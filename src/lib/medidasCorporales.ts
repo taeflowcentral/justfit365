@@ -4,12 +4,15 @@
 export interface MedidaCorporal {
   id: string;
   fecha: string; // ISO YYYY-MM-DD
-  // Composicion corporal
+  // Composicion corporal (tickets de balanza electrónica Tanita/Omron)
   peso?: number;            // kg
   grasaCorporal?: number;   // %
-  masaMuscular?: number;    // kg o %
+  masaMuscular?: number;    // kg
+  masaOsea?: number;        // kg
   agua?: number;            // %
   grasaVisceral?: number;   // escala 1-30
+  edadMetabolica?: number;  // años
+  tmbBalanza?: number;      // kcal/día (TMB que reporta la balanza)
   // Perimetros (cm)
   cuello?: number;
   hombros?: number;
@@ -23,6 +26,8 @@ export interface MedidaCorporal {
   // Salud
   fcReposo?: number;        // bpm
   presionArterial?: string; // "120/80"
+  // Foto del ticket de balanza (base64)
+  fotoTicket?: string;
   // Otros
   nota?: string;
   analisisIA?: string;
@@ -46,6 +51,9 @@ export const PARAMS: ParamConfig[] = [
   { key: 'masaMuscular', label: 'Masa muscular', unidad: 'kg', grupo: 'composicion', mejoraEn: { cut: 'up', bulk: 'up' }, rango: { min: 10, max: 100, placeholder: '32' } },
   { key: 'agua', label: 'Agua corporal', unidad: '%', grupo: 'composicion', mejoraEn: { cut: 'neutral', bulk: 'neutral' }, rango: { min: 30, max: 80, placeholder: '55' } },
   { key: 'grasaVisceral', label: 'Grasa visceral', unidad: '', grupo: 'composicion', mejoraEn: { cut: 'down', bulk: 'down' }, rango: { min: 1, max: 30, placeholder: '8' } },
+  { key: 'masaOsea', label: 'Masa ósea', unidad: 'kg', grupo: 'composicion', mejoraEn: { cut: 'neutral', bulk: 'neutral' }, rango: { min: 1, max: 8, placeholder: '3.2' } },
+  { key: 'edadMetabolica', label: 'Edad metabólica', unidad: 'años', grupo: 'composicion', mejoraEn: { cut: 'down', bulk: 'down' }, rango: { min: 10, max: 99, placeholder: '28' } },
+  { key: 'tmbBalanza', label: 'TMB (balanza)', unidad: 'kcal', grupo: 'composicion', mejoraEn: { cut: 'neutral', bulk: 'up' }, rango: { min: 800, max: 3500, placeholder: '1850' } },
   { key: 'cuello', label: 'Cuello', unidad: 'cm', grupo: 'perimetro', mejoraEn: { cut: 'neutral', bulk: 'up' }, rango: { min: 25, max: 60, placeholder: '38' } },
   { key: 'hombros', label: 'Hombros', unidad: 'cm', grupo: 'perimetro', mejoraEn: { cut: 'up', bulk: 'up' }, rango: { min: 80, max: 160, placeholder: '115' } },
   { key: 'pecho', label: 'Pecho', unidad: 'cm', grupo: 'perimetro', mejoraEn: { cut: 'up', bulk: 'up' }, rango: { min: 70, max: 150, placeholder: '100' } },
