@@ -80,7 +80,7 @@ export default function MedidasCorporalesSection({ medidas, onChange, perfil, ti
     }, 1000);
   };
 
-  const setField = (key: keyof MedidaCorporal, value: string | number) => {
+  const setField = (key: keyof MedidaCorporal, value: string | number | undefined) => {
     setDraft(prev => ({ ...prev, [key]: value === '' ? undefined : value }));
   };
 
