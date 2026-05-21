@@ -37,25 +37,36 @@ export default function HidratacionWidget() {
   const litrosObjetivo = Math.round((peso * (factorBase + factorEntreno)) * 10) / 10;
   const vasosObjetivo = Math.max(6, Math.round(litrosObjetivo * 4)); // vasos de 250ml, minimo 6
 
-  // Clave persistente para hoy
-  const hoy = new Date().toISOString().split('T')[0];
-  const STORAGE_KEY = `hidratacion_${hoy}`;
+  // Clave persistente para hoy - usar fecha LOCAL (no UTC) para evitar
+  // que el dia "cambie" a las 21hs ARG por la diferencia horaria.
+  const fechaLocalHoy = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  };
+  const [hoyKey, setHoyKey] = useState(fechaLocalHoy);
+  const STORAGE_KEY = `hidratacion_${hoyKey}`;
 
-  // Cargar vasos al montar Y cuando cambia el usuario (para evitar leer 'anon')
+  // Cargar vasos al montar Y cuando cambia el usuario o la fecha.
+  // Si no hay entry para hoy, RESETEA a 0 (antes mantenia el valor viejo).
   useEffect(() => {
     const saved = getUserItem(STORAGE_KEY);
-    if (saved) setVasosConsumidos(parseInt(saved) || 0);
+    setVasosConsumidos(saved ? (parseInt(saved) || 0) : 0);
   }, [user?.dni, STORAGE_KEY]);
 
-  // Tambien re-cargar cuando la ventana recupera foco (por si se cerro y abrio)
+  // Al recuperar foco: revisar si cambio el dia y recargar
   useEffect(() => {
     const onFocus = () => {
-      const saved = getUserItem(STORAGE_KEY);
-      if (saved) setVasosConsumidos(parseInt(saved) || 0);
+      const nuevoHoy = fechaLocalHoy();
+      if (nuevoHoy !== hoyKey) {
+        setHoyKey(nuevoHoy); // dispara el useEffect anterior con el nuevo STORAGE_KEY
+      } else {
+        const saved = getUserItem(STORAGE_KEY);
+        setVasosConsumidos(saved ? (parseInt(saved) || 0) : 0);
+      }
     };
     window.addEventListener('focus', onFocus);
     return () => window.removeEventListener('focus', onFocus);
-  }, [STORAGE_KEY]);
+  }, [STORAGE_KEY, hoyKey]);
 
   const guardarVasos = (cantidad: number) => {
     const valor = Math.max(0, Math.min(vasosObjetivo + 4, cantidad));
