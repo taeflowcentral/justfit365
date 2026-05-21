@@ -101,7 +101,7 @@ export default function Dashboard() {
   // Helper para delta vs objetivo (▼ falta, ▲ se paso, ✓ en meta)
   const calcDelta = (actual: number, meta: number, tolerancia: number) => {
     if (actual === 0 || meta === 0) return null;
-    const diff = actual - meta;
+    const diff = Math.round(actual - meta); // redondeo para evitar floats tipo 20.6999
     if (Math.abs(diff) <= tolerancia) return { simbolo: '✓', valor: 'En tu meta', color: 'text-emerald-400' };
     return diff < 0
       ? { simbolo: '▼', valor: Math.abs(diff).toString(), color: 'text-amber-400' }
@@ -511,8 +511,8 @@ export default function Dashboard() {
       {/* Stats - compactos */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
         {[
-          { icon: Flame, label: 'Cal hoy', value: calHoy > 0 ? calHoy.toLocaleString('es-AR') : '-', unit: 'kcal', color: 'text-orange-400', bg: 'bg-orange-500/10', delta: calDelta },
-          { icon: Droplets, label: 'Prote\u00edna', value: protHoy > 0 ? protHoy.toString() : '-', unit: 'g', color: 'text-electric', bg: 'bg-electric/10', delta: protDelta },
+          { icon: Flame, label: 'Cal hoy', value: calHoy > 0 ? Math.round(calHoy).toLocaleString('es-AR') : '-', unit: 'kcal', color: 'text-orange-400', bg: 'bg-orange-500/10', delta: calDelta },
+          { icon: Droplets, label: 'Prote\u00edna', value: protHoy > 0 ? Math.round(protHoy).toString() : '-', unit: 'g', color: 'text-electric', bg: 'bg-electric/10', delta: protDelta },
           { icon: Dumbbell, label: 'Entreno', value: entrenoHoy, unit: '', color: 'text-purple-400', bg: 'bg-purple-500/10', delta: null },
           { icon: Target, label: 'Objetivo', value: perfil?.objetivo?.split(',')[0] || 'Definir', unit: '', color: 'text-emerald-400', bg: 'bg-emerald-500/10', delta: null },
         ].map(s => (

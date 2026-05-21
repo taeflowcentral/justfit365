@@ -33,9 +33,25 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Cleanup defensivo: borrar entradas viejas de hidratacion de dias pasados.
-// Esto evita que se vean valores fantasmas si por alguna razon el storage
-// quedo con keys de fechas anteriores (por ej. bug de fecha UTC vs local).
+// Reset forzado ONE-TIME de hidratacion: el bug previo guardaba con fecha UTC,
+// asi que entries con clave del "dia siguiente UTC" parecen validas hoy pero
+// en realidad son de ayer local. La unica solucion confiable es nukear todas
+// las entries y arrancar limpio. Se ejecuta una sola vez por dispositivo.
+const HIDRATACION_RESET_FLAG = 'jf365_hidratacion_reset_v2_utc_fix';
+(() => {
+  try {
+    if (localStorage.getItem(HIDRATACION_RESET_FLAG) === '1') return; // ya se hizo
+    const keysToDelete: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('hidratacion_')) keysToDelete.push(k);
+    }
+    keysToDelete.forEach(k => localStorage.removeItem(k));
+    localStorage.setItem(HIDRATACION_RESET_FLAG, '1');
+  } catch { /* ignore */ }
+})();
+
+// Cleanup recurrente: borra entradas de dias anteriores al actual (para limpieza diaria normal).
 (() => {
   try {
     const d = new Date();
@@ -44,7 +60,6 @@ if ('serviceWorker' in navigator) {
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
       if (!k) continue;
-      // matches hidratacion_YYYY-MM-DD__DNI o sin DNI
       const m = k.match(/^hidratacion_(\d{4}-\d{2}-\d{2})/);
       if (m && m[1] !== hoyLocal) keysToDelete.push(k);
     }
