@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Flame, Droplets, Dumbbell, TrendingUp, Target, Zap, Apple, Timer, ArrowUpRight, Edit3, Save, CheckCircle, AlertTriangle, XCircle, ArrowDown, ArrowUp, Minus, MessageCircle, Download, HeartHandshake, X } from 'lucide-react';
+import { Flame, Atom, Dumbbell, TrendingUp, Target, Zap, Apple, Timer, ArrowUpRight, Edit3, Save, CheckCircle, AlertTriangle, XCircle, ArrowDown, ArrowUp, Minus, MessageCircle, Download, HeartHandshake, X } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, ReferenceLine } from 'recharts';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -512,7 +512,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
         {[
           { icon: Flame, label: 'Cal hoy', value: calHoy > 0 ? Math.round(calHoy).toLocaleString('es-AR') : '-', unit: 'kcal', color: 'text-orange-400', bg: 'bg-orange-500/10', delta: calDelta },
-          { icon: Droplets, label: 'Prote\u00edna', value: protHoy > 0 ? Math.round(protHoy).toString() : '-', unit: 'g', color: 'text-electric', bg: 'bg-electric/10', delta: protDelta },
+          { icon: Atom, label: 'Prote\u00edna', value: protHoy > 0 ? Math.round(protHoy).toString() : '-', unit: 'g', color: 'text-electric', bg: 'bg-electric/10', delta: protDelta },
           { icon: Dumbbell, label: 'Entreno', value: entrenoHoy, unit: '', color: 'text-purple-400', bg: 'bg-purple-500/10', delta: null },
           { icon: Target, label: 'Objetivo', value: perfil?.objetivo?.split(',')[0] || 'Definir', unit: '', color: 'text-emerald-400', bg: 'bg-emerald-500/10', delta: null },
         ].map(s => (

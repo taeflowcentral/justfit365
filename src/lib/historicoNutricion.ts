@@ -53,7 +53,7 @@ export function diaSemanaJS(d: Date = new Date()): number {
 }
 
 export function calcularTotales(comidas: ComidaPlan[]): Totales {
-  return comidas.reduce<Totales>((acc, c) => {
+  const tot = comidas.reduce<Totales>((acc, c) => {
     c.items.forEach(it => {
       acc.cal += Number(it.cal) || 0;
       acc.prot += Number(it.prot) || 0;
@@ -62,6 +62,13 @@ export function calcularTotales(comidas: ComidaPlan[]): Totales {
     });
     return acc;
   }, { cal: 0, prot: 0, carb: 0, grasa: 0 });
+  // Redondear para evitar bugs de precision flotante (20.6999999... -> 21)
+  return {
+    cal: Math.round(tot.cal),
+    prot: Math.round(tot.prot),
+    carb: Math.round(tot.carb),
+    grasa: Math.round(tot.grasa),
+  };
 }
 
 export function getHistorico(): Historico {
