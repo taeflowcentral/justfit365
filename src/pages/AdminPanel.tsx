@@ -248,7 +248,7 @@ export default function AdminPanel() {
               <p>Te informamos que el precio de la suscripci&oacute;n anual de JustFit365 ha sido actualizado a <strong className="text-electric">${(parseFloat(precio) || precioActual).toLocaleString('es-AR')}</strong>.</p>
               <p>Este cambio aplica a partir de tu pr&oacute;xima renovaci&oacute;n. Tu suscripci&oacute;n actual contin&uacute;a vigente hasta su fecha de vencimiento.</p>
               <p>Datos de pago:<br />
-                Alias: <strong className="text-electric">justfit365</strong><br />
+                Alias: <strong className="text-electric">ventanasdepapel</strong><br />
                 Titular: Carlos Federico Cuevas<br />
                 Comprobante a: justfit365.com@gmail.com
               </p>
@@ -542,7 +542,7 @@ export default function AdminPanel() {
         <div className="grid grid-cols-2 gap-4 mb-5">
           <div className="p-3 bg-dark-700 rounded-xl">
             <p className="text-white/30 text-[10px] uppercase tracking-wider">Alias Mercado Pago</p>
-            <p className="text-electric font-mono font-bold">justfit365</p>
+            <p className="text-electric font-mono font-bold">ventanasdepapel</p>
           </div>
           <div className="p-3 bg-dark-700 rounded-xl">
             <p className="text-white/30 text-[10px] uppercase tracking-wider">Titular</p>

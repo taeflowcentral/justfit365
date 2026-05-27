@@ -49,15 +49,30 @@ export default function MedidasCorporalesSection({ medidas, onChange, perfil, ti
 
   const guardar = () => {
     if (!draft.fecha) return;
+    // Buscar entrada anterior cronologica para auto-comparar
+    const previas = ordenadas.filter(m => m.id !== editandoId && m.fecha < (draft.fecha || ''));
+    const prev = previas[0] || null;
+
+    let entradaFinal: MedidaCorporal;
+    let nuevasMedidas: MedidaCorporal[];
+
     if (editandoId) {
-      onChange(medidas.map(m => m.id === editandoId ? { ...m, ...draft } as MedidaCorporal : m));
+      entradaFinal = { ...medidas.find(m => m.id === editandoId)!, ...draft } as MedidaCorporal;
+      // Auto-generar analisis si hay alguna anterior
+      if (prev) entradaFinal.analisisIA = generarAnalisisMedidas(entradaFinal, prev, perfil);
+      nuevasMedidas = medidas.map(m => m.id === editandoId ? entradaFinal : m);
     } else {
-      const nueva = nuevaMedida(draft);
-      onChange([...medidas, nueva]);
+      entradaFinal = nuevaMedida(draft);
+      // Auto-generar analisis si hay alguna anterior
+      if (prev) entradaFinal.analisisIA = generarAnalisisMedidas(entradaFinal, prev, perfil);
+      nuevasMedidas = [...medidas, entradaFinal];
     }
+    onChange(nuevasMedidas);
     setShowForm(false);
     setEditandoId(null);
     setDraft(draftInicial);
+    // Expandir la entrada nueva para que el usuario vea el analisis al instante
+    if (entradaFinal.analisisIA) setExpandido(entradaFinal.id);
   };
 
   const eliminar = (id: string) => {
@@ -363,7 +378,12 @@ export default function MedidasCorporalesSection({ medidas, onChange, perfil, ti
               {/* Foto del ticket de balanza */}
               <div className="bg-violet-500/5 border border-violet-500/20 rounded-xl p-3">
                 <label className="block text-xs text-white/65 mb-1.5 font-semibold uppercase tracking-wider">📸 Foto del ticket de balanza (opcional)</label>
-                <p className="text-white/45 text-[11px] mb-2">Subí la foto del ticket de tu balanza Tanita/Omron como respaldo. Después completá manualmente los valores arriba.</p>
+                <p className="text-white/55 text-[11px] mb-2">La foto queda como respaldo. <strong className="text-amber-400">La app no lee el ticket sola</strong> — tenés que tipear los valores (peso, grasa, masa muscular, agua, etc.) en los campos de arriba para que el sistema los compare con tu medición anterior.</p>
+                {draft.fotoTicket && (!draft.peso && !draft.grasaCorporal && !draft.masaMuscular) && (
+                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-2 mb-2 text-amber-400 text-[11px] font-bold">
+                    ⚠️ Cargaste el ticket pero no completaste ningún valor numérico. Subí hasta el principio del form y tipeá lo que dice el ticket en los campos de Composición corporal.
+                  </div>
+                )}
                 {draft.fotoTicket ? (
                   <div className="space-y-2">
                     <img src={draft.fotoTicket} alt="ticket" className="w-full max-h-48 object-contain rounded-lg border border-dark-border bg-black/40" />
