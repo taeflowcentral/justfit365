@@ -66,7 +66,7 @@ export default function Sidebar({ onNavigate }: { onNavigate: () => void }) {
         {!collapsed && (
           <div>
             <h1 className="text-white font-black text-lg leading-tight tracking-tighter">JustFit<span className="text-lime">365</span></h1>
-            <p className="text-emerald-400 text-[10px] uppercase tracking-[0.2em] font-bold">build 2026-05-11-d</p>
+            <p className="text-emerald-400 text-[10px] uppercase tracking-[0.2em] font-bold">build 2026-05-29-promo</p>
           </div>
         )}
       </Link>
