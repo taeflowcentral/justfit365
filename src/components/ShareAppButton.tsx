@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Share2, MessageCircle, Send, Copy, X, Check } from 'lucide-react';
 import { usePromoActiva } from '../lib/appConfig';
 
-export default function ShareAppButton() {
+interface Props { compact?: boolean }
+export default function ShareAppButton({ compact = false }: Props) {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const promo = usePromoActiva();
@@ -34,10 +35,18 @@ export default function ShareAppButton() {
 
   return (
     <>
-      <button onClick={handleShare}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-sm uppercase tracking-widest rounded-xl hover:bg-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
-        <Share2 className="w-4 h-4" /> Compartir JustFit365
-      </button>
+      {compact ? (
+        <button onClick={handleShare}
+          title="Compartir JustFit365"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 border border-dark-border rounded-lg text-white/50 hover:text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500/30 transition-all">
+          <Share2 className="w-3.5 h-3.5" />
+        </button>
+      ) : (
+        <button onClick={handleShare}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-sm uppercase tracking-widest rounded-xl hover:bg-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+          <Share2 className="w-4 h-4" /> Compartir JustFit365
+        </button>
+      )}
 
       {/* Modal fallback para desktop o si navigator.share falla */}
       {open && (

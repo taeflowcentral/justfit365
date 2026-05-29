@@ -46,8 +46,9 @@ export default function Landing() {
             </div>
             <span className="text-white font-black text-sm tracking-tighter">JustFit<span className="text-lime">365</span></span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <LanguageSelector />
+            <ShareAppButton compact />
             <Link to="/login" className="px-4 py-1.5 bg-white/5 border border-white/10 text-white/60 text-xs font-bold rounded-lg hover:bg-white/10 transition-all">Ingresar</Link>
           </div>
         </div>
@@ -232,7 +233,6 @@ export default function Landing() {
               Ya tengo cuenta <ArrowRight className="w-4 h-4" />
             </Link>
             <InstallButton variant="cta" />
-            <ShareAppButton />
           </div>
           <p className="text-white/35 text-xs text-center mt-3 max-w-md mx-auto">
             <Download className="w-3 h-3 inline mr-1" /> Inst&aacute;la JustFit365 directo en tu celular o computadora &mdash; te aparece como app nativa, sin abrir el navegador.
