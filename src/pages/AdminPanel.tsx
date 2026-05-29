@@ -6,6 +6,7 @@ import { getPlanesGym as loadPlanesGym, setPlanesGym as savePlanesGym } from '..
 import { getAllUsers, type User } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { getPagos } from '../lib/pagos';
+import { setConfig, getPromoUntilFresh } from '../lib/appConfig';
 
 interface Pago {
   id: string;
@@ -51,10 +52,27 @@ export default function AdminPanel() {
   const [comprobanteVer, setComprobanteVer] = useState<Pago | null>(null);
   const [precio, setPrecio] = useState(getPrecioAnual().toString());
 
+  const [promoUntil, setPromoUntilState] = useState<string | null>(() => localStorage.getItem('jf365_app_config_promo_free_until') || localStorage.getItem('jf365_promo_free_until'));
+
   useEffect(() => {
     getAllUsers().then(users => setAllUsers(users));
     getPagos().then(p => setPagos(p as Pago[]));
+    // Refrescar promo desde DB (fuente de verdad)
+    getPromoUntilFresh().then(d => setPromoUntilState(d ? d.toISOString() : null));
   }, []);
+
+  const aplicarPromoHasta = async (until: Date) => {
+    await setConfig('promo_free_until', until.toISOString());
+    setPromoUntilState(until.toISOString());
+  };
+  const aplicarPromoDias = async (dias: number) => {
+    const until = new Date(Date.now() + dias * 86400000);
+    await aplicarPromoHasta(until);
+  };
+  const bajarPromo = async () => {
+    await setConfig('promo_free_until', null);
+    setPromoUntilState(null);
+  };
   const [precioSaved, setPrecioSaved] = useState(false);
   const [emailsSent, setEmailsSent] = useState(false);
   const [sending, setSending] = useState(false);
@@ -560,8 +578,7 @@ export default function AdminPanel() {
 
         {/* Barrera de Promocion */}
         {(() => {
-          const promoUntil = localStorage.getItem('jf365_promo_free_until');
-          const promoActiva = promoUntil && new Date(promoUntil) > new Date();
+          const promoActiva = !!(promoUntil && new Date(promoUntil) > new Date());
           const diasRestantes = promoActiva ? Math.ceil((new Date(promoUntil!).getTime() - Date.now()) / 86400000) : 0;
           return (
             <div className={`border rounded-2xl p-4 ${promoActiva ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-dark-700 border-dark-border'}`}>
@@ -569,7 +586,7 @@ export default function AdminPanel() {
                 <div className="flex items-center gap-2">
                   <span className="text-xl">{promoActiva ? '🎁' : '🚪'}</span>
                   <div>
-                    <p className="text-white font-bold text-sm">Barrera de Pago</p>
+                    <p className="text-white font-bold text-sm">Barrera de Pago <span className="text-emerald-400/60 text-[10px] font-normal">(global, en DB)</span></p>
                     <p className={`text-xs ${promoActiva ? 'text-emerald-400' : 'text-white/40'}`}>
                       {promoActiva
                         ? `Promoción FREE activa · ${diasRestantes} día${diasRestantes !== 1 ? 's' : ''} restantes`
@@ -586,45 +603,46 @@ export default function AdminPanel() {
               <p className="text-white/50 text-xs mb-3">
                 {promoActiva
                   ? 'Los nuevos usuarios que se registren en este período podrán usar la app sin pagar la suscripción hasta el vencimiento de la promoción.'
-                  : 'Activá una promoción FREE para que nuevos usuarios accedan sin pagar durante el período que decidas.'}
+                  : 'Activá una promoción FREE para que nuevos usuarios accedan sin pagar durante el período que decidas. Aplica globalmente a todos los registros desde cualquier dispositivo.'}
               </p>
               <div className="flex gap-2 flex-wrap">
                 {!promoActiva ? (
-                  <>
-                    <button onClick={() => {
-                      const dias = prompt('¿Cuántos días dura la promoción FREE?\n(7, 15, 30, 60, 90 días)', '30');
-                      if (!dias) return;
-                      const num = parseInt(dias);
-                      if (!num || num < 1 || num > 365) { alert('Ingresá un número entre 1 y 365'); return; }
-                      const until = new Date(Date.now() + num * 86400000);
-                      localStorage.setItem('jf365_promo_free_until', until.toISOString());
-                      alert(`✓ Promoción FREE activada hasta el ${until.toLocaleDateString('es-AR')}\n\nLos usuarios que se registren en este período no necesitan pagar.`);
-                      window.location.reload();
-                    }} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-sm font-black uppercase tracking-wider transition-all">
-                      🟢 Subir barrera (FREE)
-                    </button>
-                  </>
+                  <button onClick={async () => {
+                    const dias = prompt('¿Cuántos días dura la promoción FREE?', '30');
+                    if (!dias) return;
+                    const num = parseInt(dias);
+                    if (!num || num < 1 || num > 365) { alert('Ingresá un número entre 1 y 365'); return; }
+                    await aplicarPromoDias(num);
+                    const until = new Date(Date.now() + num * 86400000);
+                    alert(`✓ Promoción FREE activada hasta el ${until.toLocaleDateString('es-AR')}`);
+                  }} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-sm font-black uppercase tracking-wider transition-all">
+                    🟢 Subir barrera (FREE)
+                  </button>
                 ) : (
-                  <button onClick={() => {
+                  <button onClick={async () => {
                     if (!confirm('¿Bajar la barrera y terminar la promoción FREE?\n\nLos usuarios actuales mantienen su acceso. Los nuevos volverán a pagar.')) return;
-                    localStorage.removeItem('jf365_promo_free_until');
-                    alert('🚪 Barrera bajada. Promoción terminada. Nuevos usuarios pagan normalmente.');
-                    window.location.reload();
+                    await bajarPromo();
+                    alert('🚪 Barrera bajada. Promoción terminada.');
                   }} className="flex items-center gap-2 px-4 py-2.5 bg-red-500 hover:bg-red-400 text-white rounded-xl text-sm font-black uppercase tracking-wider transition-all">
                     🔴 Bajar barrera (cobrar)
                   </button>
                 )}
-                <div className="flex gap-1 ml-auto">
+                <div className="flex gap-1 ml-auto flex-wrap items-center">
                   {[7, 15, 30, 60].map(d => (
-                    <button key={d} onClick={() => {
+                    <button key={d} onClick={async () => {
                       if (promoActiva && !confirm(`Reemplazar promoción actual por una de ${d} días?`)) return;
-                      const until = new Date(Date.now() + d * 86400000);
-                      localStorage.setItem('jf365_promo_free_until', until.toISOString());
-                      window.location.reload();
+                      await aplicarPromoDias(d);
                     }} className="px-2.5 py-1 bg-white/5 border border-dark-border text-white/40 hover:text-white hover:border-white/20 rounded-lg text-[10px] font-bold transition-all">
                       {d}d
                     </button>
                   ))}
+                  <input type="date" onChange={async (e) => {
+                    if (!e.target.value) return;
+                    const until = new Date(e.target.value + 'T23:59:59');
+                    if (isNaN(until.getTime()) || until < new Date()) { alert('Fecha inválida o pasada'); return; }
+                    if (promoActiva && !confirm(`Reemplazar promoción actual por una hasta ${until.toLocaleDateString('es-AR')}?`)) return;
+                    await aplicarPromoHasta(until);
+                  }} className="px-2 py-1 bg-white/5 border border-dark-border text-white/60 rounded-lg text-[10px]" title="Fecha exacta hasta" />
                 </div>
               </div>
             </div>

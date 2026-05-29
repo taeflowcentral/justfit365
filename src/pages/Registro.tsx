@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Zap, Eye, EyeOff, Fingerprint, UserPlus, Building2, User, Mail } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getPrecioAnual, getPrecioMensualGym } from '../components/PaymentModal';
+import { isPromoActivaCached } from '../lib/appConfig';
 
 export default function Registro() {
   const { register, loginWithGoogle } = useAuth();
@@ -83,10 +84,10 @@ export default function Registro() {
         <div className="bg-dark-800/80 backdrop-blur-2xl border border-dark-border rounded-3xl shadow-2xl p-6">
           {/* Banner promocion FREE */}
           {(() => {
-            const promoUntil = localStorage.getItem('jf365_promo_free_until');
-            const promoActiva = !!(promoUntil && new Date(promoUntil) > new Date());
-            if (!promoActiva) return null;
-            const dias = Math.ceil((new Date(promoUntil!).getTime() - Date.now()) / 86400000);
+            const { activa, until } = isPromoActivaCached();
+            if (!activa || !until) return null;
+            const promoUntil = until.toISOString();
+            const dias = Math.ceil((until.getTime() - Date.now()) / 86400000);
             return (
               <div className="mb-5 bg-gradient-to-r from-emerald-500/15 to-lime/15 border border-emerald-500/30 rounded-2xl p-4 text-center">
                 <span className="text-3xl">🎁</span>

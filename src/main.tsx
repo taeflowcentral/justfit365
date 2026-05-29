@@ -3,9 +3,13 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { supabase } from './lib/supabase'
+import { refreshConfigCache } from './lib/appConfig'
 
 // Ping a Supabase para evitar que el proyecto se pause por inactividad
 supabase.from('usuarios').select('id', { count: 'exact', head: true }).then(() => {});
+
+// Refrescar cache de config global (promo, etc) desde Supabase
+refreshConfigCache();
 
 // Registrar Service Worker para PWA (instalar en pantalla de inicio)
 if ('serviceWorker' in navigator) {

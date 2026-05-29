@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import LanguageSelector from '../components/LanguageSelector';
 import InstallButton from '../components/InstallButton';
+import { isPromoActivaCached } from '../lib/appConfig';
 
 const features = [
   { icon: Utensils, title: 'Plan Nutricional', desc: 'Planes personalizados según tu peso, objetivo y condiciones. Base de 400+ alimentos de 8 países. Avalado por profesionales UNLP y UCA.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
@@ -68,10 +69,9 @@ export default function Landing() {
 
           {/* Banner promocion FREE (si esta activa) */}
           {(() => {
-            const promoUntil = localStorage.getItem('jf365_promo_free_until');
-            const promoActiva = !!(promoUntil && new Date(promoUntil) > new Date());
-            if (!promoActiva) return null;
-            const dias = Math.ceil((new Date(promoUntil!).getTime() - Date.now()) / 86400000);
+            const { activa, until } = isPromoActivaCached();
+            if (!activa || !until) return null;
+            const dias = Math.ceil((until.getTime() - Date.now()) / 86400000);
             return (
               <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-gradient-to-r from-emerald-500/20 to-lime/20 border border-emerald-500/40 rounded-full text-sm font-bold text-emerald-400 animate-pulse">
                 <span className="text-lg">🎁</span>

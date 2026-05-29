@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
+import { getPromoUntilFresh } from '../lib/appConfig';
 
 export interface User {
   id: string;
@@ -223,9 +224,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: false, error: 'Ya existe un usuario con ese DNI.' };
     }
 
-    // Verificar si hay promocion FREE activa
-    const promoUntil = localStorage.getItem('jf365_promo_free_until');
-    const promoActiva = !!(promoUntil && new Date(promoUntil) > new Date());
+    // Verificar si hay promocion FREE activa (lee fresco desde DB)
+    const promoUntilDate = await getPromoUntilFresh();
+    const promoActiva = !!(promoUntilDate && promoUntilDate > new Date());
 
     const { data, error } = await supabase.from('usuarios').insert({
       dni: regData.dni,
@@ -302,9 +303,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { success: false, error: 'Ya existe un usuario con ese DNI.' };
     }
 
-    // Promo FREE
-    const promoUntil = localStorage.getItem('jf365_promo_free_until');
-    const promoActiva = !!(promoUntil && new Date(promoUntil) > new Date());
+    // Promo FREE (lee fresco desde DB)
+    const promoUntilDate = await getPromoUntilFresh();
+    const promoActiva = !!(promoUntilDate && promoUntilDate > new Date());
 
     const { data, error } = await supabase.from('usuarios').insert({
       dni: cgData.dni,
