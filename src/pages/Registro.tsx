@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { Zap, Eye, EyeOff, Fingerprint, UserPlus, Building2, User, Mail } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { getPrecioAnual, getPrecioMensualGym } from '../components/PaymentModal';
-import { isPromoActivaCached } from '../lib/appConfig';
+import { usePromoActiva } from '../lib/appConfig';
 
 export default function Registro() {
   const { register, loginWithGoogle } = useAuth();
@@ -17,6 +17,7 @@ export default function Registro() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const promo = usePromoActiva();
 
   const handleGoogle = async () => {
     setError('');
@@ -83,20 +84,14 @@ export default function Registro() {
         {/* Form */}
         <div className="bg-dark-800/80 backdrop-blur-2xl border border-dark-border rounded-3xl shadow-2xl p-6">
           {/* Banner promocion FREE */}
-          {(() => {
-            const { activa, until } = isPromoActivaCached();
-            if (!activa || !until) return null;
-            const promoUntil = until.toISOString();
-            const dias = Math.ceil((until.getTime() - Date.now()) / 86400000);
-            return (
-              <div className="mb-5 bg-gradient-to-r from-emerald-500/15 to-lime/15 border border-emerald-500/30 rounded-2xl p-4 text-center">
-                <span className="text-3xl">🎁</span>
-                <p className="text-emerald-400 font-black text-lg mt-1">¡PROMOCIÓN FREE ACTIVA!</p>
-                <p className="text-white/70 text-xs mt-1">Registrate ahora y accedé GRATIS hasta el {new Date(promoUntil!).toLocaleDateString('es-AR')}</p>
-                <p className="text-white/40 text-[10px] mt-1">Quedan {dias} día{dias !== 1 ? 's' : ''} de promoción</p>
-              </div>
-            );
-          })()}
+          {promo.activa && promo.until && (
+            <div className="mb-5 bg-gradient-to-r from-emerald-500/15 to-lime/15 border border-emerald-500/30 rounded-2xl p-4 text-center">
+              <span className="text-3xl">🎁</span>
+              <p className="text-emerald-400 font-black text-lg mt-1">¡PROMOCIÓN FREE ACTIVA!</p>
+              <p className="text-white/70 text-xs mt-1">Registrate ahora y accedé GRATIS hasta el {promo.until.toLocaleDateString('es-AR')}</p>
+              <p className="text-white/40 text-[10px] mt-1">Quedan {Math.ceil((promo.until.getTime() - Date.now()) / 86400000)} día{Math.ceil((promo.until.getTime() - Date.now()) / 86400000) !== 1 ? 's' : ''} de promoción</p>
+            </div>
+          )}
           <div className="flex items-center gap-2 mb-5">
             <UserPlus className="w-5 h-5 text-electric" />
             <h2 className="text-lg font-bold text-white">Crear Cuenta</h2>

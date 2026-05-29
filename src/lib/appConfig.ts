@@ -60,3 +60,20 @@ export async function refreshConfigCache(): Promise<void> {
     await getConfig('promo_free_until');
   } catch { /* ignore */ }
 }
+
+// Hook para componentes: devuelve estado actualizado de la promo.
+// Hace fetch async en mount y re-renderiza cuando llega el dato.
+import { useState, useEffect } from 'react';
+export function usePromoActiva(): { activa: boolean; until?: Date } {
+  const [estado, setEstado] = useState(() => isPromoActivaCached());
+  useEffect(() => {
+    let cancel = false;
+    getPromoUntilFresh().then(d => {
+      if (cancel) return;
+      if (d && d > new Date()) setEstado({ activa: true, until: d });
+      else setEstado({ activa: false });
+    });
+    return () => { cancel = true; };
+  }, []);
+  return estado;
+}

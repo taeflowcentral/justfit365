@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import LanguageSelector from '../components/LanguageSelector';
 import InstallButton from '../components/InstallButton';
-import { isPromoActivaCached } from '../lib/appConfig';
+import { usePromoActiva } from '../lib/appConfig';
 
 const features = [
   { icon: Utensils, title: 'Plan Nutricional', desc: 'Planes personalizados según tu peso, objetivo y condiciones. Base de 400+ alimentos de 8 países. Avalado por profesionales UNLP y UCA.', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
@@ -32,6 +32,7 @@ const screenshots = [
 
 export default function Landing() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
+  const promo = usePromoActiva();
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
@@ -68,17 +69,12 @@ export default function Landing() {
           </h1>
 
           {/* Banner promocion FREE (si esta activa) */}
-          {(() => {
-            const { activa, until } = isPromoActivaCached();
-            if (!activa || !until) return null;
-            const dias = Math.ceil((until.getTime() - Date.now()) / 86400000);
-            return (
-              <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-gradient-to-r from-emerald-500/20 to-lime/20 border border-emerald-500/40 rounded-full text-sm font-bold text-emerald-400 animate-pulse">
-                <span className="text-lg">🎁</span>
-                <span>PROMO FREE · {dias} día{dias !== 1 ? 's' : ''} para registrarte gratis</span>
-              </div>
-            );
-          })()}
+          {promo.activa && promo.until && (
+            <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 bg-gradient-to-r from-emerald-500/20 to-lime/20 border border-emerald-500/40 rounded-full text-sm font-bold text-emerald-400 animate-pulse">
+              <span className="text-lg">🎁</span>
+              <span>PROMO FREE · {Math.ceil((promo.until.getTime() - Date.now()) / 86400000)} día{Math.ceil((promo.until.getTime() - Date.now()) / 86400000) !== 1 ? 's' : ''} para registrarte gratis</span>
+            </div>
+          )}
 
           <p className="text-xl sm:text-2xl text-white/50 max-w-2xl mx-auto mb-4 leading-relaxed">
             Tu cuerpo necesita un plan. Nosotros te damos <strong className="text-white">la ciencia, la tecnolog&iacute;a y el acompa&ntilde;amiento</strong> para lograrlo.
