@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import LanguageSelector from '../components/LanguageSelector';
 import InstallButton from '../components/InstallButton';
+import ShareAppButton from '../components/ShareAppButton';
 import { usePromoActiva } from '../lib/appConfig';
 
 const features = [
@@ -231,6 +232,7 @@ export default function Landing() {
               Ya tengo cuenta <ArrowRight className="w-4 h-4" />
             </Link>
             <InstallButton variant="cta" />
+            <ShareAppButton />
           </div>
           <p className="text-white/35 text-xs text-center mt-3 max-w-md mx-auto">
             <Download className="w-3 h-3 inline mr-1" /> Inst&aacute;la JustFit365 directo en tu celular o computadora &mdash; te aparece como app nativa, sin abrir el navegador.
