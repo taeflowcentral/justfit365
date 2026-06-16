@@ -1,6 +1,6 @@
 // Service Worker para JustFit365 PWA
 // Bump esta version cada vez que cambies este archivo o quieras invalidar cache
-const CACHE_VERSION = 'v6-rescue';
+const CACHE_VERSION = 'v7-clean';
 const CACHE_NAME = `justfit365-${CACHE_VERSION}`;
 
 self.addEventListener('install', (event) => {
